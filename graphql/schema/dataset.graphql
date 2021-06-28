@@ -9,7 +9,7 @@ extend type Mutation {
 extend type Query {
     datasets(name: String @eq orderBy: [OrderByClause!] @orderBy): [DataSet!]! @paginate(type: "paginator" model: "App\\Models\\DataSet")
     dataset(id: ID @eq): DataSet @find
-    my_dataset_list(name: String): JSON @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@my_dataset_list")
+    my_dataset_list(name: String): JSON @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@myDatasetList")
 }
 
 type DataSet{

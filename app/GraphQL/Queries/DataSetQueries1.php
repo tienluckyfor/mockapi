@@ -10,7 +10,7 @@ use App\Repositories\ResourceRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
-class DatasetQueries
+class DataSetQueries1
 {
     private $resource_repository;
     private $api_repository;
@@ -26,7 +26,7 @@ class DatasetQueries
         $this->resource_repository = $ResourceRepository;
     }
 
-    public function my_dataset_list($_, array $args)
+    public function myDatasetList($_, array $args)
     {
         // datasets
         $datasets = $this->dataset_repository
