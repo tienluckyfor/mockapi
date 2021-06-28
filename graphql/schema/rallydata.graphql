@@ -1,0 +1,50 @@
+extend type Mutation {
+    create_rallydata(input: CreateRallydataInput! @spread): Rallydata @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@createRallydata")
+    edit_rallydata(input: EditRallydataInput! @spread): Rallydata @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@editRallydata")
+    delete_rallydata(input: DeleteRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@deleteRallydata")
+    duplicate_rallydata(input: DuplicateRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@duplicateRallydata")
+}
+
+extend type Query {
+    #    rallydatas(name: String @eq orderBy: [OrderByClause!] @orderBy): [Rallydata!]! @paginate(type: "paginator" model: "App\\Models\\Rallydata")
+    #    rallydata(id: ID @eq): Rallydata @find
+    rallydata_list(dataset_id: ID!, resource_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@rallydataList")
+    my_rallydata_list(dataset_id: ID!, resource_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@myRallydataList")
+    detail_rallydata(dataset_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@detailRallydata")
+}
+
+type Rallydata{
+    id: ID
+    name: String
+    field_template: String
+    parents: JSON
+    statuses: JSON
+    fields: JSON
+    endpoints: JSON
+    api: Api!
+    user: User!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateRallydataInput{
+    dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
+    resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
+    data: JSON! @rules(apply:["required"])
+    data_children: JSON
+}
+
+input EditRallydataInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
+    dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
+    resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
+    data: JSON! @rules(apply:["required"])
+}
+
+input DeleteRallydataInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
+}
+
+input DuplicateRallydataInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
+}

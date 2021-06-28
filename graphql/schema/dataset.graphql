@@ -1,0 +1,47 @@
+
+extend type Mutation {
+    create_dataset(input: CreateDataSetInput! @spread): DataSet @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@createDataSet")
+    edit_dataset(input: EditDataSetInput! @spread): DataSet @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@editDataSet")
+    delete_dataset(input: DeleteDataSetInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@deleteDataSet")
+    duplicate_dataset(input: DuplicateDataSetInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@duplicateDataSet")
+}
+
+extend type Query {
+    datasets(name: String @eq orderBy: [OrderByClause!] @orderBy): [DataSet!]! @paginate(type: "paginator" model: "App\\Models\\DataSet")
+    dataset(id: ID @eq): DataSet @find
+    my_dataset_list(name: String): JSON @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@my_dataset_list")
+}
+
+type DataSet{
+    id: ID!
+    name: String!
+    locale: String!
+    api: Api!
+    user: User!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateDataSetInput{
+    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+    name: String! @rules(apply:["required"])
+    locale: String! @rules(apply:["required"])
+    amounts: JSON! @rules(apply:["required"])
+}
+
+input EditDataSetInput{
+    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckDataSet"])
+    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+    name: String! @rules(apply:["required"])
+    locale: String! @rules(apply:["required"])
+    amounts: JSON! @rules(apply:["required"])
+}
+
+input DeleteDataSetInput{
+    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckDataSet", "App\\Rules\\DeleteCheckDataset"])
+    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckDataSet"])
+}
+
+input DuplicateDataSetInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckDataSet"])
+}

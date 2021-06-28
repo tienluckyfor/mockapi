@@ -1,0 +1,54 @@
+
+#extend type Mutation {
+##    create_medium(input: CreateMediaInput! @spread): Media @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@createMedia")
+##    edit_medium(input: EditMediaInput! @spread): Media @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@editMedia")
+##    delete_medium(input: DeleteMediaInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@deleteMedia")
+##    duplicate_medium(input: DuplicateMediaInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@duplicateMedia")
+#}
+
+extend type Query {
+##    media(name: String @eq orderBy: [OrderByClause!] @orderBy): [Media!]! @paginate(type: "paginator" model: "App\\Models\\Media")
+##    medium(id: ID @eq): Media @find
+    my_media_list(name: String, dataset_id: ID): [Medium!]! @guard @field(resolver: "App\\GraphQL\\Queries\\MediaQueries@myMediaList")
+}
+
+type Medium{
+    id: ID!
+    source: String!
+    uid: String!
+    name_upload: String!
+    file_type: String!
+    file_name: String!
+    view: String!
+    stage: String!
+    user: User!
+    dataset: DataSet!
+    created_at: DateTime!
+    updated_at: DateTime!
+    image: String!
+    thumb_image: String!
+}
+#
+#input CreateMediaInput{
+#    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+#    name: String! @rules(apply:["required"])
+#    locale: String! @rules(apply:["required"])
+#    amounts: JSON! @rules(apply:["required"])
+#}
+#
+#input EditMediaInput{
+#    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckMedia"])
+#    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+#    name: String! @rules(apply:["required"])
+#    locale: String! @rules(apply:["required"])
+#    amounts: JSON! @rules(apply:["required"])
+#}
+#
+#input DeleteMediaInput{
+#    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckMedia", "App\\Rules\\DeleteCheckMedia"])
+#    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckMedia"])
+#}
+#
+#input DuplicateMediaInput{
+#    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckMedia"])
+#}

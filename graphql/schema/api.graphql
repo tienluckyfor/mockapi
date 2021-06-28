@@ -1,0 +1,40 @@
+
+extend type Mutation {
+    create_api(input: CreateApiInput! @spread): Api @guard @field(resolver: "App\\GraphQL\\Mutations\\ApiMutations@createApi")
+    edit_api(input: EditApiInput! @spread): Api @guard @field(resolver: "App\\GraphQL\\Mutations\\ApiMutations@editApi")
+    delete_api(input: DeleteApiInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ApiMutations@deleteApi")
+    duplicate_api(input: DuplicateApiInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ApiMutations@duplicateApi")
+}
+
+extend type Query {
+    apis(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Api!]! @paginate(type: "paginator" model: "App\\Models\\Api")
+#    apis(name: String @eq orderBy: [OrderByClause!] @orderBy): [Api!]! @paginate(type: "paginator" model: "App\\Models\\Api")
+    api(id: ID @eq): Api @find
+    my_api_list(name: String): [Api!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ApiQueries@my_api_list")
+}
+
+type Api{
+    id: ID
+    name: String
+    user: User!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateApiInput{
+    name: String! @rules(apply:["required"])
+}
+
+input EditApiInput{
+    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckApi"])
+    name: String! @rules(apply:["required"])
+}
+
+input DeleteApiInput{
+    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckApi", "App\\Rules\\DeleteCheckApi"])
+    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckApi", "App\\Rules\\DeleteCheckApi"])
+}
+
+input DuplicateApiInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckApi"])
+}

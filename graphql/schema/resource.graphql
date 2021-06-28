@@ -1,0 +1,59 @@
+extend type Mutation {
+    create_resource(input: CreateResourceInput! @spread): Resource @validator @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@createResource")
+    edit_resource(input: EditResourceInput! @spread): Resource @validator @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@editResource")
+    edit_parent_resource(input: EditParentResourceInput! @spread): Resource @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@editParentResource")
+    delete_resource(input: DeleteResourceInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@deleteResource")
+    duplicate_resource(input: DuplicateResourceInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@duplicateResource")
+
+}
+
+extend type Query {
+    resources(name: String @eq orderBy: [OrderByClause!] @orderBy): [Resource!]! @paginate(type: "paginator" model: "App\\Models\\Resource")
+    resource(id: ID @eq): Resource @find
+    my_resource_list(name: String, api_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\ResourceQueries@my_resource_list")
+}
+
+type Resource{
+    id: ID
+    name: String
+    field_template: String
+    parents: JSON
+    statuses: JSON
+    fields: JSON
+    endpoints: JSON
+    api: Api!
+    user: User!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateResourceInput{
+    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+    name: String!
+    field_template: String
+    fields: JSON! @rules(apply:["required"])
+    endpoints: JSON! @rules(apply:["required"])
+}
+
+input EditResourceInput{
+    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckResource"])
+    api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
+    name: String!
+    field_template: String
+    fields: JSON! @rules(apply:["required"])
+    endpoints: JSON! @rules(apply:["required"])
+}
+
+input EditParentResourceInput{
+    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckResource"])
+    parents: JSON
+}
+
+input DeleteResourceInput{
+    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckResource", "App\\Rules\\DeleteCheckResource"])
+    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckResource"])
+}
+
+input DuplicateResourceInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckResource"])
+}

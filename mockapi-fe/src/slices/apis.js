@@ -1,0 +1,219 @@
+import {createSlice} from "@reduxjs/toolkit";
+import gql from "graphql-tag";
+import {apolloClient, } from "services";
+
+export const initialState = {
+    cApi: {},
+    dApi: {},
+    eApi: {},
+    duApi: {},
+    mlApi: {isRefresh: true, search: {name: ``}},
+};
+
+const apisSlice = createSlice({
+    name: "apis",
+    initialState,
+    reducers: {
+        setData: (state, {payload}) => {
+            Object.entries(initialState).map(([key, value], i) => {
+                if (typeof payload[key] !== "undefined") {
+                    state[key] = payload[key];
+                }
+            })
+        },
+        setMerge: (state, {payload}) => {
+            Object.entries(initialState).map(([key, value], i) => {
+                if (typeof payload[key] !== "undefined") {
+                    state[key] = {...state[key], ...payload[key]}
+                }
+            })
+        },
+    },
+});
+
+
+export const {setData, setMerge} = apisSlice.actions
+export const apisSelector = (state) => state.apis
+export default apisSlice.reducer
+
+export function setApi(state) {
+    return async (dispatch) => {
+        dispatch(setData(state))
+    };
+}
+
+export function setApiMerge(key, item) {
+    return async (dispatch) => {
+        dispatch(setMerge({...{}, [key]: item}))
+    }
+}
+
+export function createApi(variables) {
+    return async (dispatch) => {
+        dispatch(setMerge({cApi: {isLoading: true}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($name: String!){
+  create_api(
+    input: {
+      name: $name,
+    }
+  ) {
+    id
+    name
+    created_at
+    updated_at
+  }
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    cApi: {isLoading: false, isOpen: false},
+                    mlApi: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({cApi: {isLoading: false}}))
+        }
+    }
+}
+
+export function editApi(api) {
+    return async (dispatch) => {
+        dispatch(setData({eApi: {isLoading: true, api}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($id: ID!, $name: String!){
+  edit_api(
+    input: {
+      id: $id,
+      name: $name,
+    }
+  ) {
+    id
+    name
+    created_at
+    updated_at
+  }
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: api
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    eApi: {isLoading: false, isOpen: false},
+                    mlApi: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({eApi: {isLoading: false}}))
+        }
+    }
+}
+
+export function deleteApi(api) {
+    return async (dispatch) => {
+        dispatch(setData({dApi: {isLoading: true, api}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($id: ID!){
+  delete_api(
+    input: {
+      id: $id,
+    }
+  )
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: api
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                const status = res?.data?.delete_api
+                dispatch(setMerge({
+                    dApi: {isLoading: false, status,},
+                    mlApi: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({
+                dApi: {isLoading: false, api:null},
+                mlApi: {isRefresh: true}
+            }))
+        }
+    }
+}
+
+export function myApiList() {
+    return async (dispatch, getState) => {
+        const {mlApi} = getState().apis
+        if (mlApi.isLoading) return;
+        dispatch(setMerge({mlApi: {isLoading: true, isRefresh: false}}))
+        const query = gql`
+        query {
+  my_api_list(name:"${mlApi.search.name}") {
+            id
+            name
+            updated_at
+  }
+}`;
+        const res = await apolloClient.query({
+            query
+        })
+        const myApiList = res?.data?.my_api_list ?? []
+        dispatch(setMerge({
+            mlApi:
+                {
+                    isLoading: false,
+                    data: myApiList,
+                    isRefresh: false,
+                    search: {...mlApi.search, total: myApiList.length},
+                }
+        }))
+    }
+}
+
+export function duplicateApi(api) {
+    return async (dispatch) => {
+        dispatch(setData({duApi: {isLoading: true, api}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($id: ID!){
+  duplicate_api(
+    input: {
+      id: $id,
+    }
+  )
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: api
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                const status = res?.data?.duplicate_api
+                dispatch(setMerge({
+                    duApi: {isLoading: false, status,},
+                    mlApi: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({duApi: {isLoading: false}}))
+        }
+    }
+}
+
