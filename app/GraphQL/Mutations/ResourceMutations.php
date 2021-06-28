@@ -5,12 +5,15 @@ namespace App\GraphQL\Mutations;
 
 
 use App\Models\Resource;
+use App\Services\StringService;
 use Illuminate\Support\Facades\Auth;
 
 class ResourceMutations
 {
-    public function __construct()
+    private $stringService;
+    public function __construct(StringService $stringService)
     {
+        $this->stringService = $stringService;
     }
 
     public function createResource($_, array $args): Resource
@@ -22,9 +25,9 @@ class ResourceMutations
     public function editResource($_, array $args): Resource
     {
         $args = array_diff_key($args, array_flip(['directive']));
-        if (!is_numeric($args['api_id'])) {
-            unset($args['api_id']);
-        }
+//        if (!is_numeric($args['api_id'])) {
+//            unset($args['api_id']);
+//        }
         return tap(Resource::findOrFail($args['id']))
             ->update($args);
     }
@@ -45,7 +48,7 @@ class ResourceMutations
     public function duplicateResource($_, array $args): bool
     {
         $resource = Resource::where('id', $args['id'])->first()->toArray();
-        $resource['name'] = "Copy of {$resource['name']}";
+        $resource['name'] = $this->stringService->duplicate($resource['name']);
         if (Resource::create($resource)) {
             return true;
         }

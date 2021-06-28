@@ -4,7 +4,7 @@ import {apolloClient, } from "services";
 import {setDataset, setDatasetMerge} from "./datasets";
 
 export const initialState = {
-    cResource: {isOpen: false},
+    cResource: {isOpen: true},
     dResource: {},
     eResource: {},
     epResource: {isOpen: false},

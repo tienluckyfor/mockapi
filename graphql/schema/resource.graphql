@@ -29,7 +29,7 @@ type Resource{
 
 input CreateResourceInput{
     api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
-    name: String!
+    name: String! @rules(apply:["regex:/^[a-zA-Z0-9_]+$/i"])
     field_template: String
     fields: JSON! @rules(apply:["required"])
     endpoints: JSON! @rules(apply:["required"])
@@ -38,7 +38,7 @@ input CreateResourceInput{
 input EditResourceInput{
     id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckResource"])
     api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
-    name: String!
+    name: String! @rules(apply:["regex:/^[a-zA-Z0-9_]+$/i"])
     field_template: String
     fields: JSON! @rules(apply:["required"])
     endpoints: JSON! @rules(apply:["required"])

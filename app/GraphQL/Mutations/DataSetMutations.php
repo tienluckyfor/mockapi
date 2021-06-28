@@ -7,6 +7,7 @@ namespace App\GraphQL\Mutations;
 use App\Models\DataSet;
 use App\Models\RallyData;
 use App\Models\Resource;
+use App\Services\StringService;
 use Carbon\Carbon;
 use Faker;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +16,13 @@ use App\Repositories\RallydataRepository;
 class DataSetMutations
 {
     private $rallydata_repository;
-    public function __construct(RallydataRepository $RallydataRepository)
+    private $stringService;
+    public function __construct(
+        RallydataRepository $RallydataRepository,
+        StringService $stringService)
     {
         $this->rallydata_repository = $RallydataRepository;
+        $this->stringService = $stringService;
     }
 
     public function createDataSet($_, array $args): DataSet
@@ -52,7 +57,7 @@ class DataSetMutations
     {
         $dataset = Dataset::where('id', $args['id'])->first();
         $datasetNew = $dataset;
-        $datasetNew->name = "Copy of {$datasetNew->name}";
+        $datasetNew->name = $this->stringService->duplicate($datasetNew->name);
         if ($datasetNew = Dataset::create($datasetNew->toArray())) {
             $this->rallydata_repository->duplicate($dataset, $datasetNew);
             return true;

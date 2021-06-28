@@ -5,12 +5,15 @@ namespace App\GraphQL\Mutations;
 
 
 use App\Models\Api;
+use App\Services\StringService;
 use Illuminate\Support\Facades\Auth;
 
 class ApiMutations
 {
-    public function __construct()
+    private $stringService;
+    public function __construct(StringService $stringService)
     {
+        $this->stringService = $stringService;
     }
 
     public function createApi($_, array $args): Api
@@ -35,7 +38,7 @@ class ApiMutations
     public function duplicateApi($_, array $args): bool
     {
         $api = Api::where('id', $args['id'])->first()->toArray();
-        $api['name'] = "Copy of {$api['name']}";
+        $api['name'] = $this->stringService->duplicate($api['name']);
         if (Api::create($api)) {
             return true;
         }
