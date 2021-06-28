@@ -10,7 +10,7 @@ use App\Repositories\ResourceRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
-class DataSetQueries1
+class DataSetQueries
 {
     private $resource_repository;
     private $api_repository;
