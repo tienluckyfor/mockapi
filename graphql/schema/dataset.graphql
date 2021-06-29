@@ -34,7 +34,7 @@ input EditDataSetInput{
     api_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckApi"])
     name: String! @rules(apply:["required"])
     locale: String! @rules(apply:["required"])
-    amounts: JSON! @rules(apply:["required"])
+    amounts: JSON
 }
 
 input DeleteDataSetInput{

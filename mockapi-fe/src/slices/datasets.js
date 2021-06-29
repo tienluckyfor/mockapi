@@ -94,7 +94,7 @@ export function editDataset(dataset) {
         dispatch(setMerge({eDataset: {isLoading: true, dataset}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($id: ID!, $api_id: ID!, $name: String!, $locale: String!, $amounts: JSON!){
+            mutation($id: ID!, $api_id: ID!, $name: String!, $locale: String!, $amounts: JSON){
   edit_dataset(
     input: {
       id: $id
