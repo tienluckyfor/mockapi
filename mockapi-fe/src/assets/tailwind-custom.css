@@ -1,5 +1,5 @@
 /*
-npx tailwindcss-cli@latest build src/assets/tailwind-custom.css -o src/assets/tailwind-output.css;
+npx tailwindcss-cli@latest build -i ./src/assets/tailwind-custom.css -o ./src/assets/tailwind-output.css;
 */
 
 @tailwind base;
@@ -367,4 +367,11 @@ npx tailwindcss-cli@latest build src/assets/tailwind-custom.css -o src/assets/ta
 
 .ant-upload-list-picture-card-container:first-child {
     margin-right: 0;
+}
+
+.ant-image-preview-img{
+    margin: auto;
+}
+.ant-image-preview-img-wrapper::before{
+    height: auto;
 }

@@ -4,7 +4,7 @@ import {apolloClient, } from "services";
 import {setRallydataMerge} from "./rallydatas";
 
 export const initialState = {
-    cDataset: {isOpen: true},
+    cDataset: {isOpen: false},
     dDataset: {},
     eDataset: {},
     epDataset: {isOpen: false},

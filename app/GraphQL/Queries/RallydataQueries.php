@@ -55,6 +55,7 @@ class RallydataQueries
         if (isset($args['resource_id'], $rallydatas[$args['resource_id']])) {
             $rallydatasCurrent = @$rallydatas[$args['resource_id']] ?? [];
             foreach ($rallydatasCurrent as &$item) {
+                if(!isset($item['data_children'])) continue;
                 foreach ($item['data_children'] as $data_child) {
                     $r = $resources[$data_child['resource_id']];
                     $rd = collect($rallydatas[$r['id']]);
