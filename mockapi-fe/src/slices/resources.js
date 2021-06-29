@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient, } from "services";
-import {setDataset, setDatasetMerge} from "./datasets";
+import {setDatasetMerge} from "./datasets";
 
 export const initialState = {
-    cResource: {isOpen: true},
+    cResource: {isOpen: false},
     dResource: {},
     eResource: {},
     epResource: {isOpen: false},
@@ -253,11 +253,11 @@ export function myResourceList(api_id = ``) {
             return;
         }
         // create dataset
-        let amounts = {};
-        (myResourceList?.resources ?? []).forEach(resource => {
-            amounts[resource.id] = 0
-        })
-        dispatch(setDataset({amounts}))
+        // let amounts = {};
+        // (myResourceList?.resources ?? []).forEach(resource => {
+        //     amounts[resource.id] = 0
+        // })
+        // dispatch(setDataset({amounts}))
         dispatch(setDatasetMerge(`cDataset`, {
             resources: myResourceList?.resources,
         }))

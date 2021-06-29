@@ -112,9 +112,10 @@ const DatasetListPage = () => {
                         <section className={`text-xs flex flex-col space-y-1`}>
                             {rallies.map((rally) => {
                                 const resource = mlDataset?.data?.resources[rally?.resource_id]
-                                return (
-                                    <p className={`flex space-x-1 items-center`}><span>{resource?.name}</span> <Badge
-                                        count={rally.count} className="site-badge-count-4" size="small"/></p>)
+                                return (<p className={`flex space-x-1 items-center`}>
+                                        <span className="truncate ">{resource?.name}</span>
+                                        <Badge count={rally.count} className="site-badge-count-4" size="small"/>
+                                    </p>)
                             })}
                         </section>
                     )

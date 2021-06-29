@@ -1,15 +1,10 @@
 import {useEffect, useState} from 'react'
 import {Modal, Form, } from 'antd';
-// import {PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined}
-//     from '@ant-design/icons'
 import {useDispatch, useSelector} from "react-redux";
-import {resourcesSelector, setResourceMerge} from "slices/resources";
+import {resourcesSelector, } from "slices/resources";
 import {apisSelector, myApiList} from "slices/apis";
-// import {fakerList, fieldTypes} from "./configResource";
 import FormResource from "./FormResource";
 
-// const {Option, OptGroup} = Select;
-// const {TextArea} = Input;
 const EditResourceForm = ({visible, onCreate, onCancel}) => {
     const dispatch = useDispatch()
     const {eResource} = useSelector(resourcesSelector)
@@ -33,7 +28,7 @@ const EditResourceForm = ({visible, onCreate, onCancel}) => {
         form.setFieldsValue({
             id: eResource?.resource?.id,
             name: eResource?.resource?.name,
-            api_id: parseInt(api?.id),
+            api_id: api?.id.toString(),
             field_template: eResource?.resource?.field_template,
             fields: eResource?.resource?.fields,
             endpoints: eResource?.resource?.endpoints,

@@ -29,7 +29,7 @@ const FormResource = ({formValue, resourceName}) => {
                     autoFocus
                 >
                     {(mlApi.data ?? []).map((api, key) =>
-                        <Option value={parseInt(api.id)}>{api.name}</Option>
+                        <Option value={api.id}>{api.name}</Option>
                     )}
                 </Select>
             </Form.Item>

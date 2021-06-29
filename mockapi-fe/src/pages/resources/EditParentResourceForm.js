@@ -1,18 +1,13 @@
-import {useRef, useEffect, useState} from 'react'
-import {Modal, Form, Input, Select, Space, Button, Switch, Checkbox, Row, Col} from 'antd';
-import {useDispatch, useSelector} from "react-redux";
-import {resourcesSelector, setResourceMerge} from "slices/resources";
+import {useEffect, useState} from 'react'
+import {Modal, Form, Space, Checkbox, Empty} from 'antd';
+import {useSelector} from "react-redux";
+import {resourcesSelector,} from "slices/resources";
 
-const {Option, OptGroup} = Select;
-const {TextArea} = Input;
 const CheckboxGroup = Checkbox.Group;
-// const plainOptions = ['Apple', 'Pear', 'Orange'];
-const defaultCheckedList = ['Apple', 'Orange'];
 
 const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
     const {epResource, mlResource} = useSelector(resourcesSelector)
     const [plainOptions, setPlainOptions] = useState([]);
-    const [checkedList, setCheckedList] = useState(defaultCheckedList);
 
     const [form] = Form.useForm()
     form.setFieldsValue({
@@ -21,7 +16,8 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
     });
 
     useEffect(() => {
-        const resources = (mlResource?.data?.resources ?? []).filter((resource) => resource?.id !== epResource?.resource?.id && resource?.api_id === epResource?.resource?.api_id)
+        const resources = (mlResource?.data?.resources ?? [])
+            .filter((resource) => resource?.id !== epResource?.resource?.id && resource?.api_id === epResource?.resource?.api_id)
         setPlainOptions(resources.map((item) => {
             return {
                 label: item.name,
@@ -61,6 +57,9 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
                         options={plainOptions}
                         value={checkedList}
                     />*/}
+                    {(plainOptions.length === 0) &&
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+                    }
                     <CheckboxGroup>
                         <Space direction={`vertical`}>
                             {plainOptions.map((item) =>

@@ -60,8 +60,8 @@ class PostmanService
             $amounts[$resource['id']] = 1;
             $rallydata = Arr::first($this->rallydata_repository->fillData($resource, $amounts, $resource['locale']));
 
-
             foreach ($resource['endpoints'] as $endpoint) {
+                if(!$endpoint['status']) continue;
                 switch ($endpoint['type']) {
                     case 'get_id':
                         $items[] = [

@@ -1,7 +1,6 @@
 import {Modal, Form, Input} from 'antd';
 import {useSelector} from "react-redux";
 import {apisSelector} from "slices/apis";
-import {useRef, useEffect} from 'react'
 
 const EditApiForm = ({visible, onCreate, onCancel}) => {
     const {eApi} = useSelector(apisSelector)
