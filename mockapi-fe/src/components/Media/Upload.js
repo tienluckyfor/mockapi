@@ -5,12 +5,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
 import {resfulClient} from "services"
 import {myMediaList, mediaSelector, } from "slices/media";
+import {commonOnChange, commonsSelector} from "../../slices/commons";
 
 const Upload = () => {
     const dispatch = useDispatch()
     const [fileObj, setFileObj] = useState({})
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
-    const {fileList,} = useSelector(mediaSelector)
+    const {fileList, mMedia} = useSelector(mediaSelector)
+    const {checkedList, } = useSelector(commonsSelector)
     const [fileList1, setFileList1] = useState([])
 
     useEffect(() => {
@@ -23,7 +25,9 @@ const Upload = () => {
     }, [fileObj])
 
     const onChange = (info) => {
+        console.log('info', info)
         const {file} = info
+        console.log('file', file)
         if (file?.status === 'uploading') {
             setFileObj({...fileObj, [file.uid]: 0})
             setFileList1([...fileList1, {uid: file.uid, status: file.status}])
@@ -49,6 +53,13 @@ const Upload = () => {
         formData.append('source', 'ant-upload')
         formData.append('uid', options.file.uid)
         const res = await resfulClient.post('/api/media', formData)
+        const list = checkedList[mMedia?.name] ?? []
+        console.log('list', list)
+        dispatch(commonOnChange(mMedia.name, [...list, res?.data?.id.toString()]))
+
+        // let checkedList1 = checkedList[mMedia.name]
+        // console.log('checkedList[mMedia.name]', checkedList[mMedia.name])
+        // console.log('res', res?.data?.id)
         // const file = {
         //     ...res.data,
         //     name: res.data.name_upload,

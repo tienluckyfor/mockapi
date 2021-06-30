@@ -1,22 +1,19 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype, getRallyData} from "./configRallydata";
 import moment from 'moment';
-import {rallydatasSelector, setRallydataMerge, createRallydata} from "slices/rallydatas";
-import {MediaModal} from "components";
+import {rallydatasSelector, setRallydataMerge, } from "slices/rallydatas";
 import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
-import ModalChildRallydata from "./ModalChildRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-const CreateRallydataForm = ({fields}) => {
+const FormRallydata = ({fields, setFieldsValue, form}) => {
     const dispatch = useDispatch()
-    const {cRallydata, dataset_id_RD, resource_id_RD, deRallydata, mRallydataData, cbRallydata, fieldsRallydata} = useSelector(rallydatasSelector)
+    const {dataset_id_RD, resource_id_RD, mRallydataData,
+        cbRallydata, fieldsRallydata, deRallydata} = useSelector(rallydatasSelector)
     const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
-
-    const [form] = Form.useForm()
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
@@ -33,6 +30,7 @@ const CreateRallydataForm = ({fields}) => {
             }
         })
         form.setFieldsValue(fieldsValue)
+        // setFieldsValue(fieldsValue)
     }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
@@ -66,6 +64,7 @@ const CreateRallydataForm = ({fields}) => {
             })
         }
         form.setFieldsValue(values)
+        // setFieldsValue(values)
     }, [checkedList])
 
     const [childResources, setChildResources] = useState([])
@@ -75,18 +74,13 @@ const CreateRallydataForm = ({fields}) => {
     }, [deRallydata])
 
     return (
-        <Form
-            form={form}
-            layout={`vertical`}
-            onFinish={(values) => dispatch(createRallydata(values))}
-            className="border border-indigo-200 p-4 mt-4 rounded-sm"
-        >
-            <MediaModal/>
-            <ModalChildRallydata/>
+        <>
             <Form.List name="data">
                 {(afields, {add, remove}) => (
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
+                        if(type==='Resource') return;
+                        console.log('type', type)
                         const iType = getItype(type, fakerjs)
                         switch (iType) {
                             case `Media`:
@@ -213,7 +207,6 @@ const CreateRallydataForm = ({fields}) => {
                                     resourceName={name}
                                 />
                                 }
-
                             </section>
                         </Form.Item>)
                     })
@@ -221,23 +214,8 @@ const CreateRallydataForm = ({fields}) => {
             </Form.List>
             <Form.Item hidden={true} name="dataset_id"/>
             <Form.Item hidden={true} name="resource_id"/>
-            <div className="flex items-center justify-end mt-3 ">
-                <Button
-                    onClick={(e) => dispatch(setRallydataMerge(`cRallydata`, {isOpen: false}))}
-                >
-                    Cancel
-                </Button>
-                <Button
-                    className="ml-3"
-                    type="primary"
-                    htmlType="submit"
-                    loading={cRallydata.isLoading}
-                >
-                    Submit
-                </Button>
-            </div>
-        </Form>
-    );
-};
+        </>
+    )
+}
 
-export default CreateRallydataForm
+export default FormRallydata

@@ -107,7 +107,6 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
             width: iType === `Boolean` ? 70 : 150,
             dataIndex: field.name,
             render: (text, rallydata, index) => {
-                console.log('iType', iType)
                 const val = rallydata[field.name]
                 if (iType === 'Boolean') {
                     const val1 = val ? 'true' : 'false'
@@ -150,6 +149,13 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                     </Image.PreviewGroup>
                 }
                 if (iType === 'Object') {
+                    return <Tooltip title={JSON.stringify(val)}>
+                        <p className="text-sm truncate-2y">
+                            {JSON.stringify(val, null, '  ')}
+                        </p>
+                    </Tooltip>
+                }
+                if (iType === 'Resource') {
                     return <Tooltip title={JSON.stringify(val)}>
                         <p className="text-sm truncate-2y">
                             {JSON.stringify(val, null, '  ')}

@@ -30,7 +30,7 @@ const Sidebar = ({device = `desktop`}) => {
             >
                 {device === 'desktop' &&
                 <>
-                    <Menu.Item disabled>
+                    <Menu.Item key="desktop-logo" disabled>
                         <h1 className="">
                             <b>MockAPI</b>
                             <span className="ml-2 text-gray-400">v1.0</span>

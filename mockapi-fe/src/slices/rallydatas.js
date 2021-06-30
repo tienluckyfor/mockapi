@@ -14,7 +14,7 @@ export const initialState = {
     mlRallydata: {isRefresh: true, search: {name: ``}},
     mlDRRallydata: {isRefresh: true},
     deRallydata: {},
-    dataset_id_RD: null,
+    dataset_id_RD: 1,
     resource_id_RD: null,
     mRallydata: {},
     mRallydataData: [],
@@ -218,8 +218,7 @@ export function myRallydataList() {
         const res = await apolloClient.query({
             query
         })
-        const myRallydataList = res?.data?.my_rallydata_list?.rallydatas ?? []
-        console.log('myRallydataList[resource_id_RD] ', myRallydataList[resource_id_RD] )
+        const myRallydataList = res?.data?.my_rallydata_list?.rallydatas ?? {};
         dispatch(setMerge({
             mlDRRallydata: {
                 isLoading: false,

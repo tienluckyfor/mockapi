@@ -11,6 +11,7 @@ import {getMe} from "slices/auths";
 import Cookies from "universal-cookie";
 import UploadPictureWall from "pages/rallydatas/UploadPictureWall"
 import CreatePostForm from "pages/CreatePostForm"
+import MediaModal from "components/Media/MediaModal"
 
 function App() {
     const dispatch = useDispatch()
@@ -61,6 +62,7 @@ function App() {
                             <Route exact path={`/`} render={() => <Redirect to="/ApiListPage"/>}/>
                             <Route exact path={`/UploadPictureWall`} component={UploadPictureWall}/>
                             <Route exact path={`/CreatePostForm`} component={CreatePostForm}/>
+                            <Route exact path={`/MediaModal`} component={MediaModal}/>
                         </Switch>
                     </React.Suspense>
                 </main>

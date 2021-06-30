@@ -48,7 +48,7 @@ class PostmanService
                 foreach ($resource['parents'] as $parent) {
                     $resources[$parent]['fields'][] = [
                         "name" => $resource['name'],
-                        "type" => "Object",
+                        "type" => "Resource",
                     ];
                 }
             }

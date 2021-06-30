@@ -50,6 +50,9 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
                 form={form}
                 layout="vertical"
             >
+                {(plainOptions.length === 0) &&
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+                }
                 <Form.Item
                     name={`parents`}
                 >
@@ -57,9 +60,6 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
                         options={plainOptions}
                         value={checkedList}
                     />*/}
-                    {(plainOptions.length === 0) &&
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
-                    }
                     <CheckboxGroup>
                         <Space direction={`vertical`}>
                             {plainOptions.map((item) =>

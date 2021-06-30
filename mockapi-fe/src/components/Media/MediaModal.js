@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {authsSelector,} from "slices/auths";
 import {rallydatasSelector} from "slices/rallydatas";
 import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
-import {commonsSelector, onChange, onCheckAllChange, setCommon} from "slices/commons";
+import {commonsSelector, commonOnChange, onCheckAllChange, setCommon} from "slices/commons";
 import {useEffect, useState} from "react"
 import moment from "moment"
 
@@ -22,17 +22,19 @@ export const MediaModal = () => {
     const {mlMedia, mMedia} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll, plainOptions} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState(dataset_id_RD)
+    // const [dataset_id, setDataset_id] = useState(1)
     const [viewMode, setViewMode] = useState('grid')
 
     useEffect(() => {
-        if (!mMedia.visible || dataset_id === null) return;
+        // if (!mMedia.visible || dataset_id === null) return;
+        // console.log('dataset_id', dataset_id)
         dispatch(myMediaList(dataset_id))
-    }, [dataset_id, mMedia])
+    }, [ dataset_id, mMedia])
 
-    useEffect(() => {
-        if (mMedia.visible && dataset_id_RD != dataset_id)
-            setDataset_id(dataset_id_RD)
-    }, [mMedia])
+    // useEffect(() => {
+    //     if (mMedia.visible && dataset_id_RD != dataset_id)
+    //         setDataset_id(dataset_id_RD)
+    // }, [mMedia])
 
     useEffect(() => {
         const plainOptions = (mlMedia.data ?? []).map((medium) => medium.id)
@@ -65,6 +67,7 @@ export const MediaModal = () => {
             </>
         )
     }
+
     const listView = () => {
         if (viewMode !== 'list') return;
         return (<List
@@ -90,15 +93,13 @@ export const MediaModal = () => {
                             <p className="truncate-2y ">{medium.name_upload}</p>
                             <p className="text-gray-400 ">{moment(medium.updated_at).fromNow()}</p>
                         </div>
-
                     </section>
-
                 </List.Item>
             )}
         />)
     }
 
-    return (<Modal
+    return (/*<Modal
         title={<Space>
             <h2>Media</h2>
             <Select
@@ -119,7 +120,8 @@ export const MediaModal = () => {
         onOk={(e) => dispatch(setMediaMerge('mMedia', {visible: !mMedia.visible}))}
         onCancel={(e) => dispatch(setMediaMerge('mMedia', {visible: !mMedia.visible}))}
         width={1000}
-    >
+    >*/
+        <>
         <div className={`flex items-center justify-between space-x-3 `}>
             <Space size={`middle`}>
                 {checkedList[mMedia.name] && checkedList[mMedia.name]?.length !== 0 &&
@@ -153,13 +155,15 @@ export const MediaModal = () => {
             <div className="pl-6">
                 <CheckboxGroup
                     value={checkedList[mMedia.name]}
-                    onChange={(list) => dispatch(onChange(mMedia.name, list))}
+                    onChange={(list) => dispatch(commonOnChange(mMedia.name, list))}
                 >
                     {gridView()}
                     {listView()}
                 </CheckboxGroup>
             </div>
         </div>
-
-    </Modal>)
+    </>)
+    // </Modal>)
 }
+
+export default MediaModal
