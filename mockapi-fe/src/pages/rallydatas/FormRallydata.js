@@ -44,6 +44,7 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
         for (const key in fmedia) {
             const f = fmedia[key]
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
+            console.log('mediaR', mediaR)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             values.data[f.name] = {
                 type: 'media',
@@ -65,7 +66,7 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
         }
         form.setFieldsValue(values)
         // setFieldsValue(values)
-    }, [checkedList])
+    }, [checkedList, mlMedia])
 
     const [childResources, setChildResources] = useState([])
     useEffect(() => {
@@ -105,10 +106,11 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
                                                         <Checkbox
                                                             onChange={() => {
                                                                 const checkedList1 = checkedList[name].filter((item) => item != medium.id)
+                                                                console.log('checkedList1', checkedList1)
                                                                 dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
                                                             }}
                                                             value={medium.id}
-                                                            defaultChecked
+                                                            checked
                                                             className={`absolute z-10 left-0 top-0 ml-1 mt-1 m-0 px-1 bg-white rounded`}/>
                                                         <Image
                                                             preview={false}

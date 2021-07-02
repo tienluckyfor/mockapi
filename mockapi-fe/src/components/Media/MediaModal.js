@@ -24,7 +24,7 @@ export const MediaModal = () => {
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState(dataset_id_RD)
     // const [dataset_id, setDataset_id] = useState(1)
-    const [viewMode, setViewMode] = useState('list')
+    const [viewMode, setViewMode] = useState('grid')
     const [plainOptions, setPlainOptions] = useState([])
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export const MediaModal = () => {
     //         setDataset_id(dataset_id_RD)
     // }, [mMedia])
     useEffect(() => {
-        if(mlMedia.isRefresh) {
+        if (mlMedia.isRefresh) {
             dispatch(setCommonMerge('checkedList', {[mMedia?.name]: []}))
             dispatch(myMediaList(dataset_id))
         }
@@ -192,7 +192,7 @@ export const MediaModal = () => {
                 size={`small`}
                 style={{width: 150}}
                 placeholder="Select a dataset"
-                value={dataset_id.toString()}
+                value={(dataset_id ?? 0).toString()}
                 onChange={(id) => setDataset_id(id)}
             >
                 {[{id: '0', name: "ALL"}, ...(me?.data?.datasets ?? [])].map((dataset) => (

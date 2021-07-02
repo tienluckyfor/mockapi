@@ -2,7 +2,7 @@ import {Checkbox, Modal,} from "antd";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {commonsSelector, commonOnCheck} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 import RenderTableRallydata from "./RenderTableRallydata";
 import {getRallyData} from "./configRallydata";
 
@@ -14,9 +14,15 @@ const ModalChildRallydata = () => {
     const {mRallydataData, fieldsRallydata} = useSelector(rallydatasSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
+    const [rallies, setRallies] = useState([])
+    const [plainOptions, setPlainOptions] = useState([])
+
     useEffect(() => {
-        console.log('useEffect checkedList', checkedList)
-    }, [checkedList])
+        const rallies = getRallyData(mRallydataData, mRallydata?.resource?.id)
+        const plainOptions = rallies.map((item) => item.id)
+        setRallies(rallies)
+        setPlainOptions(plainOptions)
+    }, [mRallydataData, mRallydata])
 
     return (<Modal
         title={mRallydata?.resource?.name}
@@ -32,13 +38,13 @@ const ModalChildRallydata = () => {
                     value={checkedList[mRallydata?.resource?.name]}
                     onChange={(list) => {
                         console.log('CheckboxGroup checkedList', checkedList)
-                        dispatch(commonOnCheck(mRallydata?.resource?.name, list))
+                        dispatch(commonOnCheck(mRallydata?.resource?.name, plainOptions, list))
                         console.log('CheckboxGroup checkedList 1', checkedList)
                     }}
                 >
                     <RenderTableRallydata
                         typeShow="checkbox"
-                        mlDRRallydata={{data: getRallyData(mRallydataData, mRallydata?.resource?.id)}}
+                        mlDRRallydata={{data: rallies}}
                         fieldsRallydata={fieldsRallydata[mRallydata?.resource?.id]}
                     />
                 </CheckboxGroup>

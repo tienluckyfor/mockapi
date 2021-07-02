@@ -7,14 +7,7 @@ export const initialState = {
     // modal
     visible: false,
     // checkbox
-    checkedList: {
-        child: [
-            44
-        ],
-        'child-2': [
-            1
-        ]
-    },
+    checkedList: {},
     indeterminate: true,
     checkAll: false,
     plainOptions: [],
