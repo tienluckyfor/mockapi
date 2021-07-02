@@ -1,10 +1,11 @@
 
-#extend type Mutation {
+extend type Mutation {
 ##    create_medium(input: CreateMediaInput! @spread): Media @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@createMedia")
 ##    edit_medium(input: EditMediaInput! @spread): Media @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@editMedia")
-##    delete_medium(input: DeleteMediaInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@deleteMedia")
+    ask_delete_media(input: AskDeleteMediaInput! @spread): JSON @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@askDeleteMedia")
+    delete_media(input: DeleteMediaInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@deleteMedia")
 ##    duplicate_medium(input: DuplicateMediaInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\MediaMutations@duplicateMedia")
-#}
+}
 
 extend type Query {
 ##    media(name: String @eq orderBy: [OrderByClause!] @orderBy): [Media!]! @paginate(type: "paginator" model: "App\\Models\\Media")
@@ -52,3 +53,11 @@ type Medium{
 #input DuplicateMediaInput{
 #    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckMedia"])
 #}
+
+input DeleteMediaInput{
+    ids: [ID]! #@rules(apply: ["required", "App\\Rules\\OwnerCheckMedia"])
+}
+
+input AskDeleteMediaInput{
+    ids: [ID]! #@rules(apply: ["required", "App\\Rules\\OwnerCheckMedia"])
+}

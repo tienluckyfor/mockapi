@@ -1,6 +1,6 @@
 import {Checkbox, Modal,} from "antd";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
-import {commonsSelector, commonOnChange} from "slices/commons";
+import {commonsSelector, commonOnCheck} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
 import RenderTableRallydata from "./RenderTableRallydata";
@@ -32,7 +32,7 @@ const ModalChildRallydata = () => {
                     value={checkedList[mRallydata?.resource?.name]}
                     onChange={(list) => {
                         console.log('CheckboxGroup checkedList', checkedList)
-                        dispatch(commonOnChange(mRallydata?.resource?.name, list))
+                        dispatch(commonOnCheck(mRallydata?.resource?.name, list))
                         console.log('CheckboxGroup checkedList 1', checkedList)
                     }}
                 >

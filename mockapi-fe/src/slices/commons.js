@@ -58,30 +58,24 @@ export function setCommonMerge(key, item) {
 }
 
 // checkbox
-export function commonOnChange(name, list) {
-    // console.log('onChange name, list', {name, list})
+export function commonOnCheck(name, plainOptions, listValue) {
     return async (dispatch, getState) => {
-        const {plainOptions, checkedList} = getState().commons
-        // const {mMedia} = getState().media
-        // dispatch(setMerge({checkedList: {[mMedia.name]: list}}))
-        // console.log('checkedList', checkedList)
-        console.log('{checkedList: {[name]: list}}', name, list)
-        // console.log('{checkedList: {[name]: list}}', {checkedList: {[name]: list}})
-        dispatch(setMerge({checkedList: {[name]: list}}))
-        // console.log('checkedList 1', checkedList)
+        // const {plainOptions, checkedList} = getState().commons
+        dispatch(setMerge({checkedList: {[name]: listValue}}))
         dispatch(setData({
-            // checkedList: list,
-            indeterminate: !!list.length && list.length < plainOptions.length,
-            checkAll: list.length === plainOptions.length,
+            indeterminate: !!listValue.length && listValue.length < plainOptions.length,
+            checkAll: listValue.length === plainOptions.length,
         }));
     }
 }
 
-export function onCheckAllChange(e) {
+export function commonOnCheckAll(name, plainOptions, e) {
     return async (dispatch, getState) => {
-        const {plainOptions} = getState().commons
+        // const {plainOptions} = getState().commons
+        const listValue = e.target.checked ? plainOptions : []
+        dispatch(setMerge({checkedList: {[name]: listValue}}))
         dispatch(setData({
-            checkedList: e.target.checked ? plainOptions : [],
+            // checkedList: e.target.checked ? plainOptions : [],
             indeterminate: false,
             checkAll: e.target.checked,
         }));

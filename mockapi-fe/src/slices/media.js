@@ -1,9 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient, } from "services";
+import {setDatasetMerge} from "./datasets";
 
 export const initialState = {
     cMedium: {isOpen: false},
+    adMedium: {},
     dMedium: {},
     eMedium: {},
     epMedium: {isOpen: false},
@@ -40,10 +42,9 @@ export const mediaSelector = (state) => state.media
 export default mediaSlice.reducer
 
 export function setMedia(state) {
-    console.log('setMedia', state)
     return async (dispatch) => {
         dispatch(setData(state))
-    };
+    }
 }
 
 export function setMediaMerge(key, item) {
@@ -52,143 +53,62 @@ export function setMediaMerge(key, item) {
     }
 }
 
-export function createMedium(medium) {
+export function askDeleteMedia(mediaIds) {
     return async (dispatch) => {
-        dispatch(setMerge({cMedium: {isLoading: true}}))
+        dispatch(setData({adMedium: {isLoading: true, }}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($api_id: ID!, $name: String!, $locale: String!, $amounts: JSON!){
-  create_medium(
+            mutation($ids: [ID]!) {
+  ask_delete_media(
     input: {
-      api_id: $api_id
-      name: $name
-      locale: $locale
-      amounts: $amounts
-    }
-  ) {
-    id
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: medium
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    cMedium: {isLoading: false, isOpen: false},
-                    mlMedia: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({cMedium: {isLoading: false}}))
-        }
-    }
-}
-
-export function editMedium(medium) {
-    return async (dispatch) => {
-        dispatch(setMerge({eMedium: {isLoading: true, medium}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!, $api_id: ID!, $name: String!, $locale: String!, $amounts: JSON!){
-  edit_medium(
-    input: {
-      id: $id
-      api_id: $api_id
-      name: $name
-      locale: $locale
-      amounts: $amounts
-    }
-  ) {
-    id
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: medium
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    eMedium: {isLoading: false, isOpen: false},
-                    mlMedia: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({eMedium: {isLoading: false}}))
-        }
-    }
-}
-
-export function editParentMedium(medium) {
-    console.log('editParentMedium', medium)
-    return async (dispatch) => {
-        dispatch(setMerge({epMedium: {isLoading: true, medium}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!, $parents:JSON){
-  edit_parent_medium(
-    input: {
-      id: $id,
-      parents: $parents,
-    }
-  ) {
-    id
-    parents
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: medium
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    epMedium: {isLoading: false, isOpen: false},
-                    mlMedia: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({epMedium: {isLoading: false}}))
-        }
-    }
-}
-
-export function deleteMedium(medium) {
-    return async (dispatch) => {
-        dispatch(setData({dMedium: {isLoading: true, medium}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!){
-  delete_medium(
-    input: {
-      id: $id,
+      ids: $ids
     }
   )
 }
 `;
             return apolloClient.mutate({
                 mutation,
-                variables: medium
+                variables: {ids: mediaIds}
             });
         }
         try {
             await mutationAPI().then(res => {
-                const status = res?.data?.delete_medium
-                dispatch(setMerge({
-                    dMedium: {isLoading: false, status,},
-                    mlMedia: {isRefresh: true}
-                }))
+                const ask_delete_media = res?.data?.ask_delete_media
+                dispatch(setData({adMedium: ask_delete_media}))
+                dispatch(setMerge({mlMedia: {isRefresh: ask_delete_media?.status}}))
             })
         } catch (e) {
-            dispatch(setMerge({dMedium: {isLoading: false, medium: null}}))
+            dispatch(setMerge({adMedium: {isLoading: false}}))
+        }
+    }
+}
+
+export function deleteMedia(mediaIds) {
+    return async (dispatch) => {
+        dispatch(setData({adMedium: {isLoading: true, }}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($ids: [ID]!) {
+  delete_media(
+    input: {
+      ids: $ids
+    }
+  )
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: {ids: mediaIds}
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                const delete_media = res?.data?.delete_media
+                dispatch(setData({dMedium: delete_media}))
+                dispatch(setMerge({mlMedia: {isRefresh: delete_media?.status}}))
+            })
+        } catch (e) {
+            dispatch(setMerge({adMedium: {isLoading: false}}))
         }
     }
 }
@@ -223,38 +143,6 @@ export function myMediaList(dataset_id) {
                     search: {...mlMedia.search, total: myMediaList.length},
                 }
         }))
-    }
-}
-
-export function duplicateMedium(medium) {
-    return async (dispatch) => {
-        dispatch(setData({duMedium: {isLoading: true, medium}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!){
-  duplicate_medium(
-    input: {
-      id: $id,
-    }
-  )
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: medium
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                const status = res?.data?.duplicate_medium
-                dispatch(setMerge({
-                    duMedium: {isLoading: false, status,},
-                    mlMedia: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({duMedium: {isLoading: false}}))
-        }
     }
 }
 

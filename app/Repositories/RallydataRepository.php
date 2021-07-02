@@ -7,6 +7,7 @@ use App\Services\MediaService;
 use Carbon\Carbon;
 use Faker;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RallydataRepository
@@ -333,6 +334,25 @@ class RallydataRepository
             ->map(function ($item) {
                 return $item->data;
             });
+    }
+
+    public function getByMediaIds($mediaIds)
+    {
+        $wRaw = "data REGEXP 'media_ids.+?(\"" . implode('"|"', $mediaIds) . "\")'";
+        return RallyData::select("*")
+            ->where('user_id', Auth::id())
+            ->whereRaw($wRaw)
+            ->get();
+    }
+
+    public function updateDataByList($rallies)
+    {
+        $updateCount = 0;
+        foreach ($rallies as $rally) {
+            $updateCount += RallyData::where('id', $rally['id'])
+                ->update(['data' => json_encode($rally['data'])]);
+        }
+        return $updateCount;
     }
 
 }
