@@ -70,7 +70,7 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
 
     const [childResources, setChildResources] = useState([])
     useEffect(() => {
-        const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(resource_id_RD) !== -1)
+        const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
     }, [deRallydata])
 

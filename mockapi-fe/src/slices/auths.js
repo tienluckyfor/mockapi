@@ -137,8 +137,11 @@ export function getMe(href = ``) {
       updated_at
       total
       datasets{
-        id 
-        name
+          id 
+          name 
+          resources{
+              id
+          }
       }
   }
 }`;

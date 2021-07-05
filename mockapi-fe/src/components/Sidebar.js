@@ -51,7 +51,7 @@ const Sidebar = ({device = `desktop`}) => {
                     {(me?.data?.datasets || []).map((dataset, key) => {
                         if (key >= 5) return;
                         return (<Menu.Item key={dataset.id}>
-                            <Link to={`/RallydataPage/${dataset.id}`} >
+                            <Link to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`} >
                                 {dataset.name}
                             </Link>
                         </Menu.Item>)

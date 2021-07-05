@@ -6,10 +6,20 @@ namespace App\GraphQL\Queries;
 use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Resource;
+use App\Repositories\ResourceRepository;
 use Illuminate\Support\Facades\Auth;
 
 class UserQueries
 {
+
+    private $resource_repository;
+
+    public function __construct(
+        ResourceRepository $ResourceRepository
+    ) {
+        $this->resource_repository = $ResourceRepository;
+    }
+
     public function getMe($_, $args)
     {
         $total = collect([
@@ -21,7 +31,12 @@ class UserQueries
         $me->total = $total;
         $me->datasets = DataSet::where('user_id', Auth::id())
             ->orderBy('id', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($dataset) {
+                $dataset->resources =
+                    $this->resource_repository->getByApiId($dataset->api_id);
+                return $dataset;
+            });
         return $me;
     }
 }
