@@ -208,11 +208,14 @@ class RallydataRepository
         return [$rallyDatas, $total, $isPrev, $isNext];
     }
 
-    public function getMyDatasetId($userId, $datasetId, $select = '*')
+    public function getByDatasetId($datasetId, $rallyIds = [], $select = '*')
     {
         $rallyDatas = RallyData::selectRaw($select)
-            ->where('user_id', $userId)
-            ->where('dataset_id', $datasetId)
+            ->where('dataset_id', $datasetId);
+        if (!empty($rallyIds)) {
+            $rallyDatas = $rallyDatas->whereIn('id', $rallyIds);
+        }
+        $rallyDatas = $rallyDatas
             ->orderBy('id', 'desc')
             ->get();
         return $rallyDatas;
@@ -326,15 +329,15 @@ class RallydataRepository
         return $rallydatas;
     }
 
-    public function getDataByIds($ids)
-    {
-        return RallyData::selectRaw('data')
-            ->whereIn('id', $ids)
-            ->get()
-            ->map(function ($item) {
-                return $item->data;
-            });
-    }
+//    public function getDataByIds($ids)
+//    {
+//        return RallyData::selectRaw('data')
+//            ->whereIn('id', $ids)
+//            ->get()
+//            ->map(function ($item) {
+//                return $item->data;
+//            });
+//    }
 
     public function getByMediaIds($mediaIds)
     {

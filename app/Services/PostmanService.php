@@ -17,13 +17,16 @@ class PostmanService
     private $resource_repository;
     private $rallydata_repository;
     private $api_repository;
+    private $stringService;
 
     public function __construct(
+        StringService $stringService,
         RallydataRepository $RallydataRepository,
         DatasetRepository $DatasetRepository,
         ResourceRepository $ResourceRepository,
         ApiRepository $ApiRepository
     ) {
+        $this->stringService = $stringService;
         $this->rallydata_repository = $RallydataRepository;
         $this->dataset_repository = $DatasetRepository;
         $this->resource_repository = $ResourceRepository;
@@ -32,10 +35,10 @@ class PostmanService
 
     private function _rawHandle($rallydata)
     {
-        $raw = json_encode($rallydata);
-        $raw = str_replace(',"', ",\n\"", $raw);
-        $raw = str_replace('{"', "{\n\"", $raw);
-        $raw = str_replace('"}', "\"\n}", $raw);
+        $raw = json_encode($rallydata, JSON_PRETTY_PRINT);
+//        $raw = str_replace(',"', ",\n\t\"", $raw);
+//        $raw = str_replace('{"', "{\n\t\"", $raw);
+//        $raw = str_replace('"}', "\"\n\t}", $raw);
         return $raw;
     }
 
@@ -61,14 +64,28 @@ class PostmanService
             $rallydata = Arr::first($this->rallydata_repository->fillData($resource, $amounts, $resource['locale']));
 
             foreach ($resource['endpoints'] as $endpoint) {
-                if(!$endpoint['status']) continue;
+                if (!$endpoint['status']) {
+                    continue;
+                }
+                $headers = [
+                    [
+                        "key"   => "Accept",
+                        "value" => "application/json",
+                        "type"  => "text"
+                    ],
+                    [
+                        "key"   => "Authorization",
+                        "value" => "Bearer {{restful_token}}",
+                        "type"  => "text"
+                    ],
+                ];
                 switch ($endpoint['type']) {
                     case 'get_id':
                         $items[] = [
                             "name"     => "{{api_url}}/{$resource['name']}/1",
                             "request"  => [
                                 "method" => "GET",
-                                "header" => [],
+                                "header" => $headers,
                                 "url"    => [
                                     "raw"  => "{{api_url}}/{$resource['name']}/1",
                                     "host" => [
@@ -92,7 +109,7 @@ class PostmanService
                             "name"     => "{{api_url}}/{$resource['name']}",
                             "request"  => [
                                 "method" => "GET",
-                                "header" => [],
+                                "header" => $headers,
                                 "url"    => [
                                     "raw"   => "{{api_url}}/{$resource['name']}?per_page=20&current_page=1&sort=id,desc&search=name,&fields={$fields}",
                                     "host"  => [
@@ -133,7 +150,7 @@ class PostmanService
                             "name"     => "{{api_url}}/{$resource['name']}",
                             "request"  => [
                                 "method" => "POST",
-                                "header" => [],
+                                "header" => $headers,
                                 "body"   => [
                                     "mode"    => "raw",
                                     "raw"     => self::_rawHandle($rallydata),
@@ -149,8 +166,7 @@ class PostmanService
                                         "{{api_url}}"
                                     ],
                                     "path" => [
-                                        $resource['name'],
-                                        "1"
+                                        $resource['name']
                                     ]
                                 ]
                             ],
@@ -162,7 +178,7 @@ class PostmanService
                             "name"     => "{{api_url}}/{$resource['name']}/{id}",
                             "request"  => [
                                 "method" => "PUT",
-                                "header" => [],
+                                "header" => $headers,
                                 "body"   => [
                                     "mode"    => "raw",
                                     "raw"     => self::_rawHandle($rallydata),
@@ -191,7 +207,7 @@ class PostmanService
                             "name"     => "{{api_url}}/{$resource['name']}/{id}",
                             "request"  => [
                                 "method" => "DELETE",
-                                "header" => [],
+                                "header" => $headers,
                                 "body"   => [
                                     "mode"    => "raw",
                                     "raw"     => "",
@@ -254,6 +270,11 @@ class PostmanService
                 [
                     "key"     => "api_url",
                     "value"   => $apiUrl,
+                    "enabled" => true
+                ],
+                [
+                    "key"     => "restful_token",
+                    "value"   => $this->stringService->JWT_encode(['dataset_id' => $datasetId]),
                     "enabled" => true
                 ],
             ],

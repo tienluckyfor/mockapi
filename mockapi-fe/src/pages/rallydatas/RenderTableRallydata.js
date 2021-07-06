@@ -4,6 +4,7 @@ import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} f
 import {deleteRallydata, duplicateRallydata, setRallydataMerge} from "slices/rallydatas";
 import {getItype} from "./configRallydata";
 import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useRef} from "react";
 
 const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, resourceName}) => {
     const dispatch = useDispatch()
@@ -35,6 +36,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                     onConfirm={(e) => dispatch(deleteRallydata({id: rallydata.originalId}))}
                     okText="Yes"
                     cancelText="No"
+                    okButtonProps={{autoFocus: true}}
                 >
                     <Button
                         size={`small`}

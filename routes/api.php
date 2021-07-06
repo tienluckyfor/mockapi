@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\PostmanController;
+use App\Http\Controllers\Api\RestfulController;
+use App\Http\Middleware\RestfulTokenIsValid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\RallydataController;
-use App\Http\Controllers\Api\PostmanController;
-use App\Http\Controllers\Api\MediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,18 +18,28 @@ use App\Http\Controllers\Api\MediaController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')
+    ->get('/user', function (Request $request) {
+        return $request->user();
+    });
 
 Route::resource('media', MediaController::class)
     ->middleware('auth:api');
 
-Route::resource('restful', RallydataController::class);
-Route::get('restful/{datasetId}/{resourceName}', [RallydataController::class, 'list']);
-Route::get('restful/{datasetId}/{resourceName}/{dataId}', [RallydataController::class, 'detail']);
 
-Route::group(['prefix' => 'postman'], function() {
+Route::group(['prefix' => 'restful/{datasetId}/{resourceName}'], function () {
+    Route::get('/', [RestfulController::class, 'list']);
+    Route::get('/{dataId}', [RestfulController::class, 'detail']);
+
+    Route::middleware(RestfulTokenIsValid::class)->group(function () {
+        Route::post('/', [RestfulController::class, 'store']);
+        Route::put('/{dataId}', [RestfulController::class, 'update']);
+        Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
+    });
+});
+
+
+Route::group(['prefix' => 'postman'], function () {
     Route::get('{dataset_id}-c/{file_name}', [PostmanController::class, 'collection']);
     Route::get('{dataset_id}-e/{file_name}', [PostmanController::class, 'environment']);
 });

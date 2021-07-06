@@ -70,6 +70,7 @@ const DatasetListPage = () => {
                         onConfirm={(e) => dispatch(deleteDataset(dataset))}
                         okText="Yes"
                         cancelText="No"
+                        okButtonProps={{autoFocus: true}}
                     >
                         <Button
                             size={`small`}

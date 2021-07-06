@@ -39,7 +39,7 @@ class RallydataQueries
     public function myRallydataList($_, array $args)
     {
         $rallydatas = $this->rallydata_repository
-            ->getMyDatasetId(Auth::id(), $args['dataset_id'])
+            ->getByDatasetId($args['dataset_id'])
             ->groupBy('resource_id');
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
         $media = $this->media_repository
@@ -55,10 +55,9 @@ class RallydataQueries
         if (isset($args['resource_id'], $rallydatas[$args['resource_id']])) {
             $rallydatasCurrent = @$rallydatas[$args['resource_id']] ?? [];
             foreach ($rallydatasCurrent as &$item) {
-                if(!isset($item['data_children'])) continue;
-                foreach ($item['data_children'] as $data_child) {
+                $data_children = @$item['data_children'] ?? [];
+                foreach ($data_children as $data_child) {
                     $r = $resources[$data_child['resource_id']];
-                    if(!isset($rallydatas[$r['id']])) continue;
                     $rd = collect($rallydatas[$r['id']]);
                     $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
                         ->map(function ($item1) {

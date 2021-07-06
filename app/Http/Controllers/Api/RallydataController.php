@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\DatasetRepository;
-use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
 use App\Repositories\ResourceRepository;
 use Illuminate\Http\Request;
@@ -16,15 +15,12 @@ class RallydataController extends Controller
     private $dataset_repository;
     private $resource_repository;
     private $rallydata_repository;
-    private $media_repository;
 
     public function __construct(
-        MediaRepository $MediaRepository,
         RallydataRepository $RallydataRepository,
         DatasetRepository $DatasetRepository,
         ResourceRepository $ResourceRepository
     ) {
-        $this->media_repository = $MediaRepository;
         $this->rallydata_repository = $RallydataRepository;
         $this->dataset_repository = $DatasetRepository;
         $this->resource_repository = $ResourceRepository;
@@ -159,98 +155,6 @@ class RallydataController extends Controller
         //
     }
 
-    /**
-     * @param $datasetId
-     * @param $resourceName
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function list($datasetId, $resourceName, Request $request)
-    {
-        //
-//        $resourceId = $this->resource_repository->findByName($resourceName);
-        $perPage = $request->per_page && is_numeric($request->per_page)
-            ? abs((int)$request->per_page) : 20;
-        $currentPage = $request->current_page && is_numeric($request->current_page) && $request->current_page >= -1
-            ? (int)$request->current_page : 1;
-
-        $sorts = ['id', 'desc'];
-        if ($request->sort) {
-            $sorts = explode(',', $request->sort);
-        }
-        $searchs = [];
-        if ($request->search) {
-            $searchs = explode(',', $request->search);
-        }
-        [$rallydatas, $total, $isPrev, $isNext] = $this->rallydata_repository
-            ->getByDatasetIdResourceName($datasetId, $resourceName,
-                [$perPage, $currentPage, $sorts, $searchs]);
-        $rallydatas = array_map(function ($rally) {
-            $data = json_decode($rally['data'], true);
-            $data_children = json_decode($rally['data_children'], true);
-            return ['data' => $data, 'data_children' => $data_children];
-        }, $rallydatas);
-// handle parent
-        $childrenIds = [];
-        foreach ($rallydatas as $rallydata) {
-            foreach ($rallydata['data_children'] as $data_child) {
-                $childrenIds = array_merge($childrenIds, $data_child['rallydata_ids']);
-            }
-        }
-        $children = $this->rallydata_repository->getDataByIds($childrenIds);
-        $mediaIds = $this->rallydata_repository->getMediaIds($children->toArray());
-        $media = $this->media_repository
-            ->getByIds($mediaIds, 'id, file_name')
-            ->keyBy('id')
-            ->toArray();
-        $rd = collect($this->rallydata_repository->mappingMedia($children->toArray(), $media));
-        $resources = $this->resource_repository
-            ->getByDatasetId($datasetId)
-            ->keyBy('id')
-            ->toArray();
-        $fields = $request->fields ? explode(',', $request->fields) : false;
-        foreach ($rallydatas as &$item) {
-            foreach ($item['data_children'] as $data_child) {
-                $r = $resources[$data_child['resource_id']];
-                $item['data'][$r['name']] = $rd
-                    ->whereIn('id', $data_child['rallydata_ids'])
-                    ->map(function ($item1) {
-                        return $item1;
-                    });
-            }
-            $item = $item['data'];
-            if ($fields) {
-                array_unshift($fields, 'id');
-                $item = array_intersect_key($item, array_flip($fields));
-            }
-        }
-
-        $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas);
-        $media = $this->media_repository
-            ->getByIds($mediaIds, 'id, file_name')
-            ->keyBy('id')
-            ->toArray();
-        $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas, $media);
-        $totalPage = ceil($total / $perPage);
-        if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
-            $isPrev = false;
-            $isNext = false;
-        }
-        $res = [
-            "data"       => $rallydatas,
-            "pageInfo"   => [
-                "per_page"     => $currentPage == -1 ? $total : $perPage,
-                "current_page" => $currentPage,
-                "total_item"   => $total,
-                "total_page"   => $currentPage == -1 ? 1 : ceil($total / $perPage),
-                "is_prev"      => $isPrev,
-                "is_next"      => $isNext,
-            ],
-            "sortInfo"   => $sorts,
-            "searchInfo" => $searchs,
-        ];
-        return response()->json($res);
-    }
 
 
 }
