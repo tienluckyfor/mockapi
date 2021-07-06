@@ -8,14 +8,14 @@ import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-const FormRallydata = ({fields, setFieldsValue, form}) => {
+const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
     const dispatch = useDispatch()
     const {dataset_id_RD, resource_id_RD, mRallydataData,
         cbRallydata, fieldsRallydata, deRallydata} = useSelector(rallydatasSelector)
     const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
         let fieldsValue = {
             "dataset_id": dataset_id_RD,
@@ -30,17 +30,19 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
             }
         })
         form.setFieldsValue(fieldsValue)
-        // setFieldsValue(fieldsValue)
-    }, [dataset_id_RD, resource_id_RD, fields])
+        console.log('22')
+    }, [dataset_id_RD, resource_id_RD, fields])*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         // media
         const fmedia = (fields ?? []).filter((field) => {
             const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             return iType === "Media"
         })
+        console.log('fmedia', fmedia)
         let values = form.getFieldsValue()
+        console.log('11 values', values)
         for (const key in fmedia) {
             const f = fmedia[key]
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
@@ -66,13 +68,13 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
         }
         form.setFieldsValue(values)
         // setFieldsValue(values)
-    }, [checkedList, mlMedia])
+    }, [checkedList, mlMedia])*/
 
-    const [childResources, setChildResources] = useState([])
+    /*const [childResources, setChildResources] = useState([])
     useEffect(() => {
         const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
-    }, [deRallydata])
+    }, [deRallydata])*/
 
     return (
         <>
@@ -81,7 +83,7 @@ const FormRallydata = ({fields, setFieldsValue, form}) => {
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
                         if(type==='Resource') return;
-                        console.log('type', type)
+                        // console.log('type', type)
                         const iType = getItype(type, fakerjs)
                         switch (iType) {
                             case `Media`:

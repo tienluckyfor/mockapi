@@ -48,6 +48,7 @@ export function setMedia(state) {
 }
 
 export function setMediaMerge(key, item) {
+    console.log('setMediaMerge', {key, item})
     return async (dispatch) => {
         dispatch(setMerge({...{}, [key]: item}))
     }
@@ -114,14 +115,17 @@ export function deleteMedia(mediaIds) {
 }
 
 export function myMediaList(dataset_id) {
-    console.log('myMediaList', dataset_id)
+    // console.log('myMediaList dataset_id', dataset_id)
     return async (dispatch, getState) => {
         const {mlMedia} = getState().media
         if (mlMedia.isLoading) return;
         dispatch(setMerge({mlMedia: {isLoading: true, isRefresh: false}}))
         const query = gql`
-        query {
-  my_media_list(name:"${mlMedia.search.name}", dataset_id:"${dataset_id}"){
+        query($name:String, $dataset_id:ID) {
+  my_media_list(
+      name:$name
+      dataset_id:$dataset_id
+  ){
     id
     file_type
     image
@@ -130,8 +134,10 @@ export function myMediaList(dataset_id) {
     updated_at
   }
 }`;
+        console.log('myMediaList dataset_id', dataset_id)
         const res = await apolloClient.query({
-            query
+            query,
+            variables: {dataset_id}
         })
         const myMediaList = res?.data?.my_media_list ?? []
         dispatch(setMerge({

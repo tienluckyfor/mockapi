@@ -39,6 +39,7 @@ input EditRallydataInput{
     dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
     resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
     data: JSON! @rules(apply:["required"])
+    data_children: JSON
 }
 
 input DeleteRallydataInput{

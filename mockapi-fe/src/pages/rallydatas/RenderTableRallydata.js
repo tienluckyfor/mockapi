@@ -65,14 +65,11 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         return <Space>
                             <Checkbox
                                 onChange={() => {
-                                    // console.warn('resourceName', resourceName)
-                                    // console.log('rallydata.id', rallydata.id)
                                     const checkedList1 = checkedList[resourceName].filter((item) => item != rallydata.id)
-                                    // console.log('checkedList1', checkedList1)
                                     dispatch(setCommonMerge('checkedList', {[resourceName]: checkedList1}))
                                 }}
                                 value={val}
-                                defaultChecked
+                                checked={true}
                             >{val}</Checkbox>
                         </Space>
                     }
@@ -158,6 +155,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                 if (iType === 'Resource') {
                     return <Tooltip title={JSON.stringify(val)}>
                         <p className="text-sm truncate-2y">
+                            <b className="mr-1 text-red-500">{(val ?? []).length}</b>
                             {JSON.stringify(val, null, '  ')}
                         </p>
                     </Tooltip>

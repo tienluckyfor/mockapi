@@ -58,11 +58,13 @@ class RallydataQueries
                 if(!isset($item['data_children'])) continue;
                 foreach ($item['data_children'] as $data_child) {
                     $r = $resources[$data_child['resource_id']];
+                    if(!isset($rallydatas[$r['id']])) continue;
                     $rd = collect($rallydatas[$r['id']]);
                     $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
                         ->map(function ($item1) {
                             return $item1['data'];
-                        });
+                        })
+                    ->values();
                 }
             }
             $rallydatas[$args['resource_id']] = $rallydatasCurrent;

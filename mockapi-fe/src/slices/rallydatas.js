@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import {diffObject} from "../services/convert";
 
 export const initialState = {
-    cRallydata: {isOpen: true},
+    cRallydata: {isOpen: false},
     dRallydata: {},
     eRallydata: {},
     epRallydata: {isOpen: false},
@@ -101,6 +101,47 @@ export function createRallydata(rallydata) {
 
 export function editRallydata(rallydata) {
     return async (dispatch) => {
+        dispatch(setMerge({eRallydata: {isLoading: true}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($id: ID!, $dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
+  edit_rallydata(
+    input: {
+      id: $id
+      dataset_id: $dataset_id
+      resource_id: $resource_id
+      data: $data
+      data_children: $data_children
+    }
+  ) {
+    id
+  }
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: rallydata
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    eRallydata: {isLoading: false, isOpen: false},
+                    mlDRRallydata: {isRefresh: true}
+                }))
+                // dispatch(setDatasetMerge(`mlDataset`, {
+                //     isRefresh: true
+                // }))
+            })
+        } catch (e) {
+            dispatch(setMerge({eRallydata: {isLoading: false}}))
+        }
+    }
+}
+
+/*
+export function editRallydata(rallydata) {
+    return async (dispatch) => {
         dispatch(setMerge({eRallydata: {isLoading: true, rallydata}}))
         const mutationAPI = () => {
             const mutation = gql`
@@ -133,7 +174,7 @@ export function editRallydata(rallydata) {
             dispatch(setMerge({eRallydata: {isLoading: false}}))
         }
     }
-}
+}*/
 
 export function editParentRallydata(rallydata) {
     console.log('editParentRallydata', rallydata)
@@ -235,6 +276,7 @@ export function myRallydataList() {
         // }))
     }
 }
+
 /*
 
 export function myRallydataList1(resource_id = null) {

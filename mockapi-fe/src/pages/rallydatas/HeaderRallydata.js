@@ -6,7 +6,7 @@ import {useHistory,} from "react-router-dom";
 import InfoDatasetModal from "pages/datasets/InfoDatasetModal";
 import EditDatasetForm from "pages/datasets/EditDatasetForm";
 import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} from "slices/rallydatas";
-import {datasetsSelector, setDataset, editDataset, setDatasetMerge} from "slices/datasets";
+import {datasetsSelector, setDataset, editDataset, setDatasetMerge, myDatasetList} from "slices/datasets";
 import {authsSelector} from "slices/auths";
 
 const {Option} = Select
@@ -97,10 +97,13 @@ const HeaderRallydata = () => {
                 {renderBreadcrumb()}
                 <Space>
                     <Button
-                        onClick={(e) => dispatch(setDatasetMerge(`eDataset`, {
-                            isOpen: true,
-                            dataset: deRallydata?.data?.dataset
-                        }))}
+                        onClick={(e) => {
+                            dispatch(setDatasetMerge(`eDataset`, {
+                                isOpen: true,
+                                dataset: deRallydata?.data?.dataset
+                            }))
+                            // dispatch(myDatasetList())
+                        }}
                         type="dashed"
                         icon={<FormOutlined/>}
                     />

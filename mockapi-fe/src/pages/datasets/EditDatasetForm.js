@@ -24,12 +24,14 @@ const EditDatasetForm = ({visible, onCreate, onCancel}) => {
     useEffect(() => {
         const dataset = eDataset?.dataset
         const rallies = mlDataset?.data?.rallies[dataset.id]
+        console.log('rallies', rallies)
+        console.log('mlDataset', mlDataset)
         let amounts1 = {};
         (rallies ?? []).forEach(rally => {
             amounts1[rally.resource_id] = rally.count
         })
         dispatch(setDataset({amounts: amounts1}))
-    }, [eDataset])
+    }, [eDataset, mlDataset])
 
     useEffect(() => {
         if (mlDataset.isRefresh) {

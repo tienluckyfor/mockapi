@@ -22,21 +22,18 @@ export const MediaModal = () => {
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
     const {mlMedia, mMedia, adMedium} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
-    const [dataset_id, setDataset_id] = useState(dataset_id_RD)
-    // const [dataset_id, setDataset_id] = useState(1)
+    const [dataset_id, setDataset_id] = useState()
     const [viewMode, setViewMode] = useState('grid')
     const [plainOptions, setPlainOptions] = useState([])
 
     useEffect(() => {
-        // if (!mMedia.visible || dataset_id === null) return;
-        // console.log('dataset_id', dataset_id)
-        dispatch(myMediaList(dataset_id))
+        dispatch(myMediaList(dataset_id??dataset_id_RD))
     }, [dataset_id, mMedia])
 
-    // useEffect(() => {
-    //     if (mMedia.visible && dataset_id_RD != dataset_id)
-    //         setDataset_id(dataset_id_RD)
-    // }, [mMedia])
+    useEffect(() => {
+        setDataset_id(dataset_id_RD)
+    }, [dataset_id_RD])
+
     useEffect(() => {
         if (mlMedia.isRefresh) {
             dispatch(setCommonMerge('checkedList', {[mMedia?.name]: []}))

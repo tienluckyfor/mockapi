@@ -1,10 +1,7 @@
-import {useEffect, useState} from 'react'
+import {useEffect, } from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {useLocation} from "react-router-dom";
 import {
-    rallydatasSelector,
-    setRallydata,
-    myRallydataList,
+    rallydatasSelector, setRallydata, myRallydataList,
     setRallydataMerge, editRallydata, setFieldsRallydata
 } from "slices/rallydatas";
 
@@ -15,10 +12,9 @@ import HeaderRallydata from "./HeaderRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {getURLParams} from "services";
 
-const RallydataPage = ({match}) => {
+const RallydataPage = () => {
     const dispatch = useDispatch()
     const {deRallydata, dataset_id_RD, resource_id_RD, cRallydata, eRallydata, mlDRRallydata, fieldsRallydata} = useSelector(rallydatasSelector)
-    // const location = useLocation()
 
     useEffect(() => {
         dispatch(setFieldsRallydata())
@@ -34,28 +30,12 @@ const RallydataPage = ({match}) => {
         }
     }, [mlDRRallydata])
 
-    // useEffect(() => {
-    //     dispatch(setRallydata({
-    //         dataset_id_RD: match.params?.dataset_id,
-    //         resource_id_RD: null,
-    //     }))
-    // }, [location])
-
     const url = getURLParams()
     useEffect(() => {
-        // console.log('dataset_id_RD, resource_id_RD', {dataset_id_RD, resource_id_RD})
-        // console.log('url', url)
-        // if (!(dataset_id_RD == url.dataset_id_RD && resource_id_RD == url.resource_id_RD)) {
-            dispatch(setRallydata({
-                dataset_id_RD: url.dataset_id_RD,
-                resource_id_RD: url.resource_id_RD,
-            }))
-        // }
-
-        // console.log('aa', {
-        //     dataset_id_RD: url.dataset_id_RD,
-        //     resource_id_RD: url.resource_id_RD,
-        // })
+        dispatch(setRallydata({
+            dataset_id_RD: url.dataset_id_RD,
+            resource_id_RD: url.resource_id_RD,
+        }))
     }, [])
 
     return (
