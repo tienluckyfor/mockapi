@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
 import {resfulClient} from "services"
 import {myMediaList, mediaSelector,} from "slices/media";
-import {commonOnCheck, commonsSelector} from "../../slices/commons";
+import {commonOnCheck, commonsSelector} from "slices/commons";
 
 const Upload = ({listType, children, plainOptions}) => {
     const dispatch = useDispatch()

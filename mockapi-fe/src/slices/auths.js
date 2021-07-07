@@ -123,40 +123,40 @@ export function loginHandle(variables) {
     }
 }
 
-export function getMe(href = ``) {
-    return async (dispatch) => {
-        if(href.match(/Login|Register/gim)) return;
-        dispatch(setMerge({me: {isLoading: true}}))
-        const query = gql`
-        query {
-  me {
-      id
-      name
-      email
-      created_at
-      updated_at
-      total
-      datasets{
-          id 
-          name 
-          resources{
-              id
-          }
-      }
-  }
-}`;
-        const res = await apolloClient.query({
-            query
-        })
-        const me = res?.data?.me
-        if (me) {
-            dispatch(setMerge({me: {isLoading: false, data: me}}))
-        } else {
-            dispatch(setMerge({me: {isLoading: false, data: null}}))
-            cookies.remove('mockapi-token')
-            if (!href.match(/Login|Register/gim)) {
-                window.location.assign(`/LoginPage`)
-            }
-        }
-    }
-}
+// export function getMe(href = ``) {
+//     return async (dispatch) => {
+//         if(href.match(/Login|Register/gim)) return;
+//         dispatch(setMerge({me: {isLoading: true}}))
+//         const query = gql`
+//         query {
+//   me {
+//       id
+//       name
+//       email
+//       created_at
+//       updated_at
+//       total
+//       datasets{
+//           id
+//           name
+//           resources{
+//               id
+//           }
+//       }
+//   }
+// }`;
+//         const res = await apolloClient.query({
+//             query
+//         })
+//         const me = res?.data?.me
+//         if (me) {
+//             dispatch(setMerge({me: {isLoading: false, data: me}}))
+//         } else {
+//             dispatch(setMerge({me: {isLoading: false, data: null}}))
+//             cookies.remove('mockapi-token')
+//             if (!href.match(/Login|Register/gim)) {
+//                 window.location.assign(`/LoginPage`)
+//             }
+//         }
+//     }
+// }

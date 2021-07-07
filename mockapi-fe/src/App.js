@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import authRoutes from "routes/authRoutes";
 import appRoutes from "routes/appRoutes";
 import {Loading, Sidebar} from "components";
-import {getMe} from "slices/auths";
+import {queryMe} from "slices/users";
 import Cookies from "universal-cookie";
 import UploadPictureWall from "pages/rallydatas/UploadPictureWall"
 import CreatePostForm from "pages/CreatePostForm"
@@ -19,7 +19,7 @@ function App() {
     const cookies = new Cookies()
 
     useEffect(() => {
-        dispatch(getMe(window.location.href))
+        dispatch(queryMe(window.location.href))
     }, [dispatch])
 
     if (!cookies.get('mockapi-token') && !href.match(/Login|Register/gim)) {

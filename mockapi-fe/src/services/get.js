@@ -6,3 +6,9 @@ export const getURLParams = () => {
     }
     return obj;
 }
+
+export const getThumbImage = (thumb_image) => {
+    if (thumb_image)
+        return thumb_image
+    return '/assets/images/default.jpeg'
+};

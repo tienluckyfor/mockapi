@@ -6,6 +6,7 @@ namespace App\GraphQL\Queries;
 use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Resource;
+use App\Repositories\MediaRepository;
 use App\Repositories\ResourceRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +14,13 @@ class UserQueries
 {
 
     private $resource_repository;
+    private $mediaRepository;
 
     public function __construct(
-        ResourceRepository $ResourceRepository
+        ResourceRepository $ResourceRepository,
+        MediaRepository $mediaRepository
     ) {
+        $this->mediaRepository = $mediaRepository;
         $this->resource_repository = $ResourceRepository;
     }
 
@@ -37,6 +41,8 @@ class UserQueries
                     $this->resource_repository->getByApiId($dataset->api_id);
                 return $dataset;
             });
+        $mediaIds = $this->mediaRepository->getByIds($me->media_ids ?? []);
+        $me->media = $this->mediaRepository->mappingMedia($mediaIds);
         return $me;
     }
 }

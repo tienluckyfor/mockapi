@@ -46,7 +46,3 @@ Route::get('/pusher', function () {
     pushSocket('my-channel', 'my-event', $data);
 });
 
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-});

@@ -46,6 +46,9 @@ class MediaRepository
             'user_id' => Auth::id(),
             'stage'   => 'first upload',
         ]);
+        $media['dataset_id'] = (int)@$media['dataset_id'];
+        \Illuminate\Support\Facades\Log::channel('single')->info('$media', [$media]);
+
         $create = Media::create($media);
         if ($create) {
             return $create;
@@ -68,6 +71,16 @@ class MediaRepository
             ->get();
     }
 
+    public function mappingMedia($media)
+    {
+        return $media->map(function ($medium) {
+            $image = asset('storage/' . $medium->file_name);
+            $medium->image = $image;
+            $medium->thumb_image = $this->media_service->get_thumb($image);
+            return $medium;
+        });
+    }
+
     public function getByDatasetId($datasetId, $select = '*')
     {
         $media = Media::selectRaw($select)
@@ -75,14 +88,16 @@ class MediaRepository
         if ($datasetId) {
             $media->where('dataset_id', $datasetId);
         }
-        $media = $media
-            ->get()
-            ->map(function ($medium) {
-                $image = asset('storage/'.$medium->file_name);
-                $medium->image = $image;
-                $medium->thumb_image = $this->media_service->get_thumb($image);
-                return $medium;
-            });
+        $media = $this->mappingMedia($media->get());
+        return $media;
+    }
+
+    public function getByUserId($userId, $select = '*')
+    {
+        $media = Media::selectRaw($select)
+            ->orderBy('id', 'desc')
+            ->where('user_id', $userId);
+        $media = $this->mappingMedia($media->get());
         return $media;
     }
 

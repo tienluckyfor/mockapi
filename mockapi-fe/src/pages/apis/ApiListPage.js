@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {apisSelector, editApi, deleteApi, duplicateApi, myApiList, setApiMerge} from "slices/apis";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
-import {getMe} from "slices/auths";
+import {queryMe} from "slices/users";
 
 import {Header, Loading} from "components";
 import CreateApiForm from "./CreateApiForm";
@@ -20,7 +20,7 @@ const ApiListPage = () => {
     useEffect(() => {
         if (mlApi.isRefresh) {
             dispatch(myApiList())
-            dispatch(getMe(window.location.href))
+            dispatch(queryMe(window.location.href))
         }
     }, [dispatch, mlApi])
 

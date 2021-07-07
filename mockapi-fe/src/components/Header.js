@@ -9,13 +9,14 @@ import {apisSelector, myApiList, setApiMerge} from "slices/apis"
 import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resources"
 import {Sidebar} from "./index"
 import {datasetsSelector, myDatasetList, setDatasetMerge} from "slices/datasets";
+import {usersSelector} from "../slices/users";
 
 const Header = ({page}) => {
     const dispatch = useDispatch()
     const {mlApi, cApi} = useSelector(apisSelector)
     const {mlResource, cResource} = useSelector(resourcesSelector)
     const {mlDataset, cDataset} = useSelector(datasetsSelector)
-    const {me} = useSelector(authsSelector)
+    const {qMe} = useSelector(usersSelector)
     const [isMenu, setIsMenu] = useState(false)
     const [isSearch, setIsSearch] = useState(false)
     const [show, setShow] = useState({
@@ -106,7 +107,7 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Api`,
                     isLoading: mlApi?.isLoading,
-                    total: me?.data?.total?.api,
+                    total: qMe?.data?.total?.api,
                     search: mlApi?.search,
                     cIsOpen: cApi?.isOpen,
                     cIsLoading: cApi?.isLoading,
@@ -116,7 +117,7 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Resource`,
                     isLoading: mlResource?.isLoading,
-                    total: me?.data?.total?.resource,
+                    total: qMe?.data?.total?.resource,
                     search: mlResource?.search,
                     cIsOpen: cResource?.isOpen,
                     cIsLoading: cResource?.isLoading,
@@ -126,14 +127,14 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Dataset`,
                     isLoading: mlDataset?.isLoading,
-                    total: me?.data?.total?.dataset,
+                    total: qMe?.data?.total?.dataset,
                     search: mlDataset?.search,
                     cIsOpen: cDataset?.isOpen,
                     cIsLoading: cDataset?.isLoading,
                 })
                 break;
         }
-    }, [mlApi, cApi, mlResource, cResource, mlDataset, cDataset, me])
+    }, [mlApi, cApi, mlResource, cResource, mlDataset, cDataset, qMe])
 
     const onAdd = () => {
         switch (page) {

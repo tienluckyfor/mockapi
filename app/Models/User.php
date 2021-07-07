@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends \TCG\Voyager\Models\User
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasApiTokens;
@@ -23,6 +23,7 @@ class User extends \TCG\Voyager\Models\User
         'name',
         'email',
         'password',
+        'media_ids',
     ];
 
     /**
@@ -42,6 +43,7 @@ class User extends \TCG\Voyager\Models\User
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'media_ids' => 'array',
     ];
 
 

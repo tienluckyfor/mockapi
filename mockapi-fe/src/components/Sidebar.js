@@ -1,12 +1,14 @@
-import {Menu, Button, Badge} from 'antd';
+import {Menu, Image, Badge} from 'antd';
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {authsSelector} from "slices/auths";
 import {useEffect} from "react"
+import {usersSelector} from "../slices/users";
+import {getThumbImage} from "../services/get";
 
 const Sidebar = ({device = `desktop`}) => {
-    const {me} = useSelector(authsSelector)
+    const {qMe} = useSelector(usersSelector)
     const [menuSelected, setMenuSelected] = useState()
     const location = useLocation()
     const menu = {
@@ -30,11 +32,21 @@ const Sidebar = ({device = `desktop`}) => {
             >
                 {device === 'desktop' &&
                 <>
-                    <Menu.Item key="desktop-logo" disabled>
-                        <h1 className="">
-                            <b>MockAPI</b>
-                            <span className="ml-2 text-gray-400">v1.0</span>
-                        </h1>
+                    <Menu.Item key="desktop-logo ">
+                        <div className="flex items-center justify-between">
+                            <h1>
+                                <b>MockAPI</b>
+                                <span className="ml-2 text-gray-400">v1.0</span>
+                            </h1>
+                            <Link to={`/UserPage`} className="flex items-center">
+                                <Image
+                                    className="rounded-full overflow-hidden "
+                                    preview={false}
+                                    width={30}
+                                    src={getThumbImage(qMe?.data?.media[0]?.thumb_image)}
+                                />
+                            </Link>
+                        </div>
                     </Menu.Item>
                     <Menu.Divider/>
                 </>
@@ -43,15 +55,16 @@ const Sidebar = ({device = `desktop`}) => {
                     <Menu.Item key={key}>
                         <Link to={`/${key}`} className={`capitalize`}>
                             {item}
-                            <Badge count={me?.data?.total[item]} className="ml-3" size="small"/>
+                            <Badge count={qMe?.data?.total[item]} className="ml-3" size="small"/>
                         </Link>
                     </Menu.Item>
                 )}
                 <Menu.ItemGroup key="g1" title="Rallydata">
-                    {(me?.data?.datasets || []).map((dataset, key) => {
+                    {(qMe?.data?.datasets || []).map((dataset, key) => {
                         if (key >= 5) return;
                         return (<Menu.Item key={dataset.id}>
-                            <Link to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`} >
+                            <Link
+                                to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
                                 {dataset.name}
                             </Link>
                         </Menu.Item>)

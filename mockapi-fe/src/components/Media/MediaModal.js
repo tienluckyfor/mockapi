@@ -2,7 +2,6 @@ import {Modal, Input, Space, Image, Radio, Checkbox, Select, Button, List, Spin,
 import {BorderInnerOutlined, UnorderedListOutlined, DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined}
     from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
-import {authsSelector,} from "slices/auths";
 import {rallydatasSelector} from "slices/rallydatas";
 import {askDeleteMedia, deleteMedia, mediaSelector, myMediaList, setMediaMerge} from "slices/media";
 import {commonsSelector, commonOnCheck, commonOnCheckAll, setCommon, setCommonMerge} from "slices/commons";
@@ -10,6 +9,7 @@ import {useEffect, useState} from "react"
 import moment from "moment"
 
 import Upload from "./Upload";
+import {usersSelector} from "slices/users";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -18,7 +18,7 @@ const CheckboxGroup = Checkbox.Group;
 export const MediaModal = () => {
     const dispatch = useDispatch()
 
-    const {me} = useSelector(authsSelector)
+    const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
     const {mlMedia, mMedia, adMedium} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
@@ -192,7 +192,7 @@ export const MediaModal = () => {
                 value={(dataset_id ?? 0).toString()}
                 onChange={(id) => setDataset_id(id)}
             >
-                {[{id: '0', name: "ALL"}, ...(me?.data?.datasets ?? [])].map((dataset) => (
+                {[{id: '0', name: "ALL"}, ...(qMe?.data?.datasets ?? [])].map((dataset) => (
                     <Option key={dataset.id} value={dataset.id}>{dataset.name}</Option>
                 ))}
             </Select>

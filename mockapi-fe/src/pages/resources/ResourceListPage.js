@@ -14,7 +14,7 @@ import {
     editParentResource,
 } from "slices/resources";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
-import {getMe} from "slices/auths";
+import {queryMe} from "slices/users";
 
 import {Header, Loading} from "components";
 import EditParentResourceForm from "./EditParentResourceForm";
@@ -29,7 +29,7 @@ const ResourceListPage = () => {
     useEffect(() => {
         if (mlResource.isRefresh) {
             dispatch(myResourceList())
-            dispatch(getMe(window.location.href))
+            dispatch(queryMe(window.location.href))
         }
     }, [dispatch, mlResource])
 

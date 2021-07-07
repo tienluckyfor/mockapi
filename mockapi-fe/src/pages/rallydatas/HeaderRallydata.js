@@ -7,13 +7,13 @@ import InfoDatasetModal from "pages/datasets/InfoDatasetModal";
 import EditDatasetForm from "pages/datasets/EditDatasetForm";
 import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} from "slices/rallydatas";
 import {datasetsSelector, setDataset, editDataset, setDatasetMerge, myDatasetList} from "slices/datasets";
-import {authsSelector} from "slices/auths";
+import {usersSelector} from "slices/users";
 
 const {Option} = Select
 
 const HeaderRallydata = () => {
     const dispatch = useDispatch()
-    const {me} = useSelector(authsSelector)
+    const {qMe} = useSelector(usersSelector)
     const {deRallydata, mlRallydata, dataset_id_RD, resource_id_RD, cRallydata,} = useSelector(rallydatasSelector)
     const {eDataset} = useSelector(datasetsSelector)
     const history = useHistory()
@@ -23,12 +23,12 @@ const HeaderRallydata = () => {
         setInfo({
             name: `Rallydata`,
             isLoading: mlRallydata?.isLoading,
-            total: me?.data?.total?.api,
+            total: qMe?.data?.total?.api,
             search: mlRallydata?.search,
             cIsOpen: cRallydata?.isOpen,
             cIsLoading: cRallydata?.isLoading,
         })
-    }, [me, mlRallydata, cRallydata])
+    }, [qMe, mlRallydata, cRallydata])
 
     useEffect(() => {
         if (dataset_id_RD)
@@ -53,7 +53,7 @@ const HeaderRallydata = () => {
                     dispatch(setRallydata({dataset_id_RD: id}))
                 }}
             >
-                {(me?.data?.datasets ?? []).map((dataset) => (
+                {(qMe?.data?.datasets ?? []).map((dataset) => (
                     <Option key={dataset.id} value={dataset.id.toString()}>{dataset.name}</Option>
                 ))}
             </Select>)

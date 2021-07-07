@@ -7,8 +7,8 @@ import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
 import {getItype, getRallyData} from "./configRallydata";
 import moment from "moment";
-import {mediaSelector, setMediaMerge} from "../../slices/media";
-import {commonsSelector} from "../../slices/commons";
+import {mediaSelector, setMediaMerge} from "slices/media";
+import {commonsSelector} from "slices/commons";
 
 const CreateRallydataForm = ({fields}) => {
     const dispatch = useDispatch()

@@ -14,7 +14,7 @@ import {
     setDataset,
 } from "slices/datasets"
 import {commonsSelector, handleMenuClick, handleVisibleChange, setCommon, setCommonMerge} from "slices/commons";
-import {getMe} from "slices/auths"
+import {queryMe} from "slices/users"
 
 import {Header, Loading} from "components"
 import CreateDatasetForm from "./CreateDatasetForm"
@@ -29,7 +29,7 @@ const DatasetListPage = () => {
     useEffect(() => {
         if (mlDataset.isRefresh) {
             dispatch(myDatasetList())
-            dispatch(getMe(window.location.href))
+            dispatch(queryMe(window.location.href))
         }
     }, [dispatch, mlDataset])
 

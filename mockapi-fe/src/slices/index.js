@@ -7,8 +7,10 @@ import datasetsReducer from "./datasets";
 import rallydatasReducer from "./rallydatas";
 import commonsReducer from "./commons";
 import mediaReducer from "./media";
+import usersReducer from "./users";
 
 const rootReducer = combineReducers({
+    users: usersReducer,
     media: mediaReducer,
     commons: commonsReducer,
     rallydatas: rallydatasReducer,

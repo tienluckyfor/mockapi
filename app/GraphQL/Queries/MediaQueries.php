@@ -6,6 +6,7 @@ namespace App\GraphQL\Queries;
 use App\Repositories\ApiRepository;
 use App\Repositories\MediaRepository;
 use App\Repositories\ResourceRepository;
+use Illuminate\Support\Facades\Auth;
 
 class MediaQueries
 {
@@ -25,6 +26,9 @@ class MediaQueries
 
     public function myMediaList($_, array $args)
     {
-        return $this->media_repository->getByDatasetId($args['dataset_id']);
+        if(!empty($args['dataset_id'])){
+            return $this->media_repository->getByDatasetId($args['dataset_id']);
+        }
+        return $this->media_repository->getByUserId(Auth::id());
     }
 }

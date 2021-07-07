@@ -1,19 +1,10 @@
+#
+#type Query {
+##    users: [User!]! @paginate(defaultCount: 10)
+##    user(id: ID @eq): User @find
+##    me: User @guard @field(resolver: "App\\GraphQL\\Queries\\UserQueries@getMe")
+#}
 
-type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
-    me: User @guard @field(resolver: "App\\GraphQL\\Queries\\UserQueries@getMe")
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
-    created_at: DateTime!
-    updated_at: DateTime!
-    total: JSON
-    datasets: [DataSet]
-}
 
 
 type Mutation {
