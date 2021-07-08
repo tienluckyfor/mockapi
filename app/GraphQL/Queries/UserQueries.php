@@ -6,8 +6,10 @@ namespace App\GraphQL\Queries;
 use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Resource;
+use App\Models\User;
 use App\Repositories\MediaRepository;
 use App\Repositories\ResourceRepository;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class UserQueries
@@ -41,8 +43,22 @@ class UserQueries
                     $this->resource_repository->getByApiId($dataset->api_id);
                 return $dataset;
             });
-        $mediaIds = $this->mediaRepository->getByIds($me->media_ids ?? []);
-        $me->media = $this->mediaRepository->mappingMedia($mediaIds);
+        $media = $this->mediaRepository->getByIds($me->media_ids ?? []);
+        $me->media = $this->mediaRepository->mappingMedia($media);
         return $me;
+    }
+
+    public function getUsers($_, $args)
+    {
+        $users = User::where('name', 'like', "%{$args['name']}%")
+            ->get()
+            ->map(function ($user) {
+                $mediaIds = [Arr::first($user->media_ids)];
+                $media = $this->mediaRepository->getByIds($mediaIds);
+                $media = $this->mediaRepository->mappingMedia($media);
+                $user->medium = Arr::first($media);
+                return $user;
+            });
+        return $users;
     }
 }

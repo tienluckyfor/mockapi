@@ -9,7 +9,7 @@ import {apisSelector, myApiList, setApiMerge} from "slices/apis"
 import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resources"
 import {Sidebar} from "./index"
 import {datasetsSelector, myDatasetList, setDatasetMerge} from "slices/datasets";
-import {usersSelector} from "../slices/users";
+import {usersSelector} from "slices/users";
 
 const Header = ({page}) => {
     const dispatch = useDispatch()

@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\Api;
+use App\Models\Share;
 use Illuminate\Contracts\Validation\Rule;
 
-class OwnerCheckApi implements Rule
+class OwnerCheckShare implements Rule
 {
     /**
      * Create a new rule instance.
@@ -27,7 +27,7 @@ class OwnerCheckApi implements Rule
     public function passes($attribute, $value)
     {
         //
-        return Api::where('user_id', \auth()->id())
+        return Share::where('user_id', \auth()->id())
             ->where('id', $value)
             ->exists();
     }

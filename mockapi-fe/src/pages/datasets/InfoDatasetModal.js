@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
-import {Button, List, Modal} from "antd";
-import {CopyOutlined, CheckOutlined} from '@ant-design/icons';
+import React, {useEffect, useState} from 'react';
+import {Button, Divider, List, Modal,} from "antd";
+import {CopyOutlined, CheckOutlined, } from '@ant-design/icons';
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
 import {commonsSelector, setCommonMerge} from "slices/commons";
+import {Share} from "components";
 
 const InfoDatasetModal = () => {
     const dispatch = useDispatch()
@@ -13,7 +14,7 @@ const InfoDatasetModal = () => {
 
     const [visible, setVisible] = useState()
     const [dataset, setDataset] = useState({})
-    const [data, setData] = useState([])
+    const [listData, setListData] = useState([])
 
     useEffect(() => {
         setVisible(modalDataset?.visible)
@@ -21,12 +22,8 @@ const InfoDatasetModal = () => {
     }, [modalDataset])
 
     useEffect(() => {
-        if(!dataset?.api_url) return;
-        const data = [
-            {
-                title: `Api Url`,
-                url: dataset?.api_url,
-            },
+        if (!dataset?.api_url) return;
+        const listData = [
             {
                 title: `Postman Collection`,
                 url: dataset?.postman?.collection,
@@ -36,19 +33,12 @@ const InfoDatasetModal = () => {
                 url: dataset?.postman?.environment,
             },
         ]
-        console.log('data', data)
-        setData(data)
+        setListData(listData)
     }, [dataset])
 
-    return (<Modal
-        title={dataset?.name}
-        visible={visible}
-        cancelButtonProps={{style: {display: 'none'}}}
-        onOk={(e) => dispatch(setDatasetMerge('modalDataset', {visible:false}))}
-        onCancel={(e) => dispatch(setDatasetMerge('modalDataset', {visible:false}))}
-    >
-        <List
-            dataSource={data}
+    const renderList = () => {
+        return <List
+            dataSource={listData}
             renderItem={(item, i) => (
                 <List.Item>
                     <List.Item.Meta
@@ -72,6 +62,18 @@ const InfoDatasetModal = () => {
                 </List.Item>
             )}
         />
+    }
+
+    return (<Modal
+        title={dataset?.name}
+        visible={visible}
+        cancelButtonProps={{style: {display: 'none'}}}
+        onOk={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
+        onCancel={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
+    >
+        <Share type="dataset" type_id={dataset?.id}/>
+        <Divider/>
+        {renderList()}
     </Modal>)
 }
 

@@ -1,6 +1,6 @@
-import {Tooltip, Button, Divider, Popconfirm, Badge, Table, Dropdown, Menu, Modal, List} from 'antd';
-import {MoreOutlined, CopyOutlined, CheckOutlined} from '@ant-design/icons';
-import {useEffect, useState} from 'react';
+import {Tooltip, Button, Divider, Popconfirm, Badge, Table, Dropdown, Menu, } from 'antd';
+import {MoreOutlined, } from '@ant-design/icons';
+import {useEffect, } from 'react';
 import moment from "moment"
 import {useDispatch, useSelector} from "react-redux"
 
@@ -13,7 +13,7 @@ import {
     setDatasetMerge,
     setDataset,
 } from "slices/datasets"
-import {commonsSelector, handleMenuClick, handleVisibleChange, setCommon, setCommonMerge} from "slices/commons";
+import {commonsSelector, handleMenuClick, handleVisibleChange, } from "slices/commons";
 import {queryMe} from "slices/users"
 
 import {Header, Loading} from "components"

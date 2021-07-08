@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import {apolloClient,} from "services";
 import {setDatasetMerge} from "./datasets";
 import {useSelector} from "react-redux";
-import {diffObject} from "../services/convert";
+import {diffObject} from "services/convert";
 
 export const initialState = {
     cRallydata: {isOpen: false},

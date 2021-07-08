@@ -11,7 +11,22 @@ export const initialState = {
     duDataset: {},
     mlDataset: {isRefresh: true, search: {name: ``}},
     amounts: {},
-    modalDataset: {},
+    modalDataset: {dataset:{
+            "id": 1,
+            "user_id": 4,
+            "api_id": 1,
+            "name": "Tallulah Bowers",
+            "locale": "en_US",
+            "created_at": "2021-07-07T07:38:00.000000Z",
+            "updated_at": "2021-07-07T07:38:00.000000Z",
+            "deleted_at": null,
+            "api_url": "http://mockapi.test/api/restful/1",
+            "postman": {
+                "collection": "http://mockapi.test/api/postman/1-c/Alea_Travis.postman_collection.json",
+                "environment": "http://mockapi.test/api/postman/1-e/Alea_Travis.postman_environment.json"
+            }
+        },
+        visible:true},
 };
 
 const datasetsSlice = createSlice({

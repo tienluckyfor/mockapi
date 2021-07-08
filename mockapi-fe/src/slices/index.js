@@ -8,8 +8,10 @@ import rallydatasReducer from "./rallydatas";
 import commonsReducer from "./commons";
 import mediaReducer from "./media";
 import usersReducer from "./users";
+import sharesReducer from "./shares";
 
 const rootReducer = combineReducers({
+    shares: sharesReducer,
     users: usersReducer,
     media: mediaReducer,
     commons: commonsReducer,

@@ -23,4 +23,16 @@ class Media extends Model
         'stage',
     ];
 
+    public function getFileAttribute()
+    {
+        return asset('storage/' . $this->file_name);
+    }
+
+    public function getThumbImageAttribute()
+    {
+        $media_service = app(\App\Services\MediaService::class);
+        $file_name = asset('storage/' . $this->file_name);
+        return $media_service->get_thumb($file_name);
+    }
+
 }

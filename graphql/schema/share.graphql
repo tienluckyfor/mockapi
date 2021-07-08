@@ -1,0 +1,43 @@
+
+extend type Mutation {
+    create_share(input: CreateShareInput! @spread): Share @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@createShare")
+#    edit_share(input: EditShareInput! @spread): Share @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@editShare")
+    delete_share(input: DeleteShareInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@deleteShare")
+#    duplicate_share(input: DuplicateShareInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@duplicateShare")
+}
+
+extend type Query {
+#    shares(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
+##    shares(name: String @eq orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
+#    share(id: ID @eq): Share @find
+#    my_share_list(name: String): [Share!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@my_share_list")
+    shares(type: String!, type_id: ID!): [Share] @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@getShares")
+}
+
+type Share{
+    id: ID
+    user: User
+    user_invite: User
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreateShareInput{
+    user_invite_id: ID! @rules(apply:["required"])
+    type: String! @rules(apply:["required"])
+    type_id: ID! @rules(apply:["required"])
+}
+
+input EditShareInput{
+    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckShare"])
+    name: String! @rules(apply:["required"])
+}
+
+input DeleteShareInput{
+    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckShare", ])
+    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckShare", ])
+}
+
+input DuplicateShareInput{
+    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckShare"])
+}

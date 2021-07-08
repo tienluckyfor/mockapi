@@ -1,11 +1,10 @@
-import {Menu, Image, Badge} from 'antd';
+import {Menu, Badge} from 'antd';
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {authsSelector} from "slices/auths";
 import {useEffect} from "react"
-import {usersSelector} from "../slices/users";
-import {getThumbImage} from "../services/get";
+import {usersSelector} from "slices/users";
+import Avatar from "react-avatar";
 
 const Sidebar = ({device = `desktop`}) => {
     const {qMe} = useSelector(usersSelector)
@@ -39,11 +38,11 @@ const Sidebar = ({device = `desktop`}) => {
                                 <span className="ml-2 text-gray-400">v1.0</span>
                             </h1>
                             <Link to={`/UserPage`} className="flex items-center">
-                                <Image
-                                    className="rounded-full overflow-hidden "
-                                    preview={false}
-                                    width={30}
-                                    src={getThumbImage(qMe?.data?.media[0]?.thumb_image)}
+                                <Avatar
+                                    className="rounded-full"
+                                    size="30"
+                                    name={qMe?.data?.name}
+                                    src={qMe?.data?.media[0]?.thumb_image}
                                 />
                             </Link>
                         </div>

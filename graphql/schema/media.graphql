@@ -26,6 +26,7 @@ type Medium{
     dataset: DataSet!
     created_at: DateTime!
     updated_at: DateTime!
+    file: String!
     image: String!
     thumb_image: String!
 }

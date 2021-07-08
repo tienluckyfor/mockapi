@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
-import {apolloClient, } from "services";
+import {apolloClient,} from "services";
 import Cookies from "universal-cookie";
 
 export const initialState = {
@@ -9,6 +9,7 @@ export const initialState = {
     eUser: {},
     duUser: {},
     mlUser: {isRefresh: true, search: {name: ``}},
+    lUser: {isRefresh: true, },
     qMe: {}
 };
 
@@ -51,9 +52,10 @@ export function setUserMerge(key, item) {
 }
 
 const cookies = new Cookies()
+
 export function queryMe(href = ``) {
     return async (dispatch) => {
-        if(href.match(/Login|Register/gim)) return;
+        if (href.match(/Login|Register/gim)) return;
         dispatch(setMerge({qMe: {isLoading: true}}))
         const query = gql`
         query {
@@ -97,7 +99,7 @@ export function queryMe(href = ``) {
 export function editUser(user) {
     user.media_ids = user.avatar
     return async (dispatch) => {
-        dispatch(setData({eUser: {isLoading: true, }}))
+        dispatch(setData({eUser: {isLoading: true,}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($name: String!, $email: String!, $media_ids: [ID], $password: String, $password_confirmation: String){
@@ -121,8 +123,8 @@ export function editUser(user) {
             await mutationAPI().then(res => {
                 console.log('res', res)
                 dispatch(setMerge({
-                    eUser: {isLoading: false, status:res?.data?.edit_user},
-                //     mlUser: {isRefresh: true}
+                    eUser: {isLoading: false, status: res?.data?.edit_user},
+                    //     mlUser: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -131,3 +133,25 @@ export function editUser(user) {
     }
 }
 
+export function userList(variables) {
+    return async (dispatch) => {
+        const query = gql`
+        query($name: String, $dataset_id: ID) {
+  users(name: $name, dataset_id: $dataset_id) {
+    id
+    name
+    email
+    medium{
+        id
+        image
+        thumb_image
+    }
+  }
+}`;
+        const res = await apolloClient.query({
+            query,
+            variables
+        })
+        dispatch(setMerge({lUser: {isLoading: false, data: res?.data}}))
+    }
+}
