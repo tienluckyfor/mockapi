@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    $d = \App\Models\DataSet::find(1);
+    dd($d->shares->toArray());
+    dd($d->shares->toArray());
+    dd($d->toArray());
     return view('welcome');
 });
 

@@ -20,7 +20,7 @@ class ShareMutations
     {
         $args['user_id'] = Auth::id();
         return Share::updateOrCreate(
-            array_intersect_key($args, array_flip(['user_invite_id', 'type', 'type_id'])),
+            array_intersect_key($args, array_flip(['user_invite_id', 'shareable_type', 'shareable_id'])),
             $args
         );
     }

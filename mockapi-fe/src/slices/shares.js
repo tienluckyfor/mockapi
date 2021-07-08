@@ -52,12 +52,12 @@ export function createShare(variables) {
         dispatch(setData({cShare: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($user_invite_id: ID!, $type: String!, $type_id: ID!){
+            mutation($user_invite_id: ID!, $shareable_type: String!, $shareable_id: ID!){
   create_share(
     input: {
       user_invite_id: $user_invite_id
-      type: $type
-      type_id: $type_id
+      shareable_type: $shareable_type
+      shareable_id: $shareable_id
     }
   ) {
     id
@@ -113,16 +113,14 @@ export function deleteShare(id) {
     }
 }
 
-export function shareList(type, type_id) {
-    return async (dispatch, getState) => {
-        const {mlApi} = getState().apis
-        if (mlApi.isLoading) return;
-        dispatch(setMerge({mlApi: {isLoading: true, isRefresh: false}}))
+export function shareList(shareable_type, shareable_id) {
+    return async (dispatch) => {
+        dispatch(setData({lShare: {isLoading: true, }}))
         const query = gql`
-        query($type: String!, $type_id: ID!){
+        query($shareable_type: String!, $shareable_id: ID!){
   shares(
-      type: $type
-      type_id: $type_id
+      shareable_type: $shareable_type
+      shareable_id: $shareable_id
     ) {
     id
     user_invite{
@@ -139,10 +137,8 @@ export function shareList(type, type_id) {
 }`;
         const res = await apolloClient.query({
             query,
-            variables: {type, type_id}
+            variables: {shareable_type, shareable_id}
         })
-        dispatch(setData({
-            lShare: {isLoading: false, data: res?.data,}
-        }))
+        dispatch(setData({lShare: {isLoading: false, data: res?.data,}}))
     }
 }

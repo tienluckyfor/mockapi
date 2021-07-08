@@ -17,8 +17,8 @@ class CreateSharesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('user_invite_id')->nullable();
-            $table->string('type')->nullable();
-            $table->unsignedBigInteger('type_id')->nullable();
+            $table->string('shareable_type')->nullable();
+            $table->unsignedBigInteger('shareable_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

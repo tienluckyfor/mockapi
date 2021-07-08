@@ -71,7 +71,7 @@ const InfoDatasetModal = () => {
         onOk={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
         onCancel={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
     >
-        <Share type="dataset" type_id={dataset?.id}/>
+        <Share shareable_type="App\Models\DataSet" shareable_id={dataset?.id}/>
         <Divider/>
         {renderList()}
     </Modal>)

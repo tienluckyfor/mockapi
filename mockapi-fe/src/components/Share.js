@@ -2,20 +2,20 @@ import {Button, Popconfirm, Form, List, Select, Space} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import React from "react";
 import Avatar from "react-avatar";
-import {userList, usersSelector} from "slices/users";
+import {shareSearchUsers, userList, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
 import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
 import moment from "moment";
 
-export const Share = ({type, type_id}) => {
+export const Share = ({shareable_type, shareable_id}) => {
     const dispatch = useDispatch()
-    const {lUser} = useSelector(usersSelector)
+    const {lsUser} = useSelector(usersSelector)
     const {cShare, lShare, dShare} = useSelector(sharesSelector)
 
     const RenderForm = () => {
         const debounceUserList = debounce(name => {
-            dispatch(userList({name}))
+            dispatch(shareSearchUsers(shareable_type, shareable_id, name))
         }, 500);
 
         React.useEffect(() => {
@@ -25,15 +25,15 @@ export const Share = ({type, type_id}) => {
         }, [cShare])
 
         React.useEffect(() => {
-            if (lShare.isRefresh && type_id) {
-                dispatch(shareList(type, type_id))
+            if (lShare.isRefresh && shareable_id) {
+                dispatch(shareList(shareable_type, shareable_id))
             }
-        }, [lShare, type_id])
+        }, [lShare, shareable_id])
 
         const [form] = Form.useForm()
         form.setFieldsValue({
-            type,
-            type_id,
+            shareable_type,
+            shareable_id,
         })
 
         return (
@@ -53,7 +53,7 @@ export const Share = ({type, type_id}) => {
                         placeholder="Share to..."
                         allowClear={true}
                     >
-                        {(lUser?.data?.users ?? []).map((user) =>
+                        {(lsUser?.data?.share_search_users ?? []).map((user) =>
                             <Select.Option key={user.id}>
                                 <Space>
                                     <Avatar
@@ -76,8 +76,8 @@ export const Share = ({type, type_id}) => {
                         loading={cShare.isLoading}
                     />
                 </Form.Item>
-                <Form.Item hidden={true} name="type"/>
-                <Form.Item hidden={true} name="type_id"/>
+                <Form.Item hidden={true} name="shareable_type"/>
+                <Form.Item hidden={true} name="shareable_id"/>
             </Form>
         )
     }

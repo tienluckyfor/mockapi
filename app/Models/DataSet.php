@@ -29,4 +29,9 @@ class DataSet extends Model
     {
         return $this->belongsTo(Api::class);
     }
+
+    public function shares()
+    {
+        return $this->morphMany(Share::class, 'shareable');
+    }
 }

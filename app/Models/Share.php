@@ -13,8 +13,8 @@ class Share extends Model
     protected $fillable = [
         'user_id',
         'user_invite_id',
-        'type',
-        'type_id',
+        'shareable_type',
+        'shareable_id',
     ];
 
     public function user()
@@ -25,6 +25,11 @@ class Share extends Model
     public function user_invite()
     {
         return $this->belongsTo(User::class, 'user_invite_id', 'id');
+    }
+
+    public function shareable()
+    {
+        return $this->morphTo();
     }
 
 }

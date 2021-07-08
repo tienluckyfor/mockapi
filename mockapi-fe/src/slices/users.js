@@ -10,7 +10,8 @@ export const initialState = {
     duUser: {},
     mlUser: {isRefresh: true, search: {name: ``}},
     lUser: {isRefresh: true, },
-    qMe: {}
+    qMe: {},
+    lsUser: {}
 };
 
 const usersSlice = createSlice({
@@ -153,5 +154,30 @@ export function userList(variables) {
             variables
         })
         dispatch(setMerge({lUser: {isLoading: false, data: res?.data}}))
+    }
+}
+
+
+export function shareSearchUsers(shareable_type, shareable_id, name) {
+    return async (dispatch) => {
+        dispatch(setData({lsUser: {isLoading: true}}))
+        const query = gql`
+        query($name: String, $shareable_type: String!, $shareable_id: ID!) {
+  share_search_users(name: $name, shareable_type: $shareable_type, shareable_id: $shareable_id) {
+    id
+    name
+    email
+    medium{
+        id
+        file
+        thumb_image
+    }
+  }
+}`;
+        const res = await apolloClient.query({
+            query,
+            variables: {shareable_type, shareable_id, name}
+        })
+        dispatch(setMerge({lsUser: {isLoading: false, data: res?.data}}))
     }
 }

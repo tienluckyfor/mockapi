@@ -11,6 +11,7 @@ extend type Query {
 #    users(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [User!]! @paginate(type: "paginator" model: "App\\Models\\User")
 #    users(name: String @eq orderBy: [OrderByClause!] @orderBy): [User!]! @paginate(type: "paginator" model: "App\\Models\\User")
     users(name: String, dataset_id: ID): [User] @field(resolver: "App\\GraphQL\\Queries\\UserQueries@getUsers")
+    share_search_users(shareable_type: String!, shareable_id: ID!, name: String): [User] @guard @field(resolver: "App\\GraphQL\\Queries\\UserQueries@shareSearchUsers")
     user(id: ID @eq): User @find
 #    my_user_list(name: String): [User!]! @guard @field(resolver: "App\\GraphQL\\Queries\\UserQueries@my_user_list")
 }

@@ -6,10 +6,10 @@ namespace App\GraphQL\Queries;
 use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Resource;
+use App\Models\Share;
 use App\Models\User;
 use App\Repositories\MediaRepository;
 use App\Repositories\ResourceRepository;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class UserQueries
@@ -51,14 +51,28 @@ class UserQueries
     public function getUsers($_, $args)
     {
         $users = User::where('name', 'like', "%{$args['name']}%")
-            ->get()
-            ->map(function ($user) {
-                $mediaIds = [Arr::first($user->media_ids)];
-                $media = $this->mediaRepository->getByIds($mediaIds);
-                $media = $this->mediaRepository->mappingMedia($media);
-                $user->medium = Arr::first($media);
-                return $user;
-            });
+            ->get();
         return $users;
     }
+
+    public function shareSearchUsers($_, $args)
+    {
+        $users = User::selectRaw('*')
+            ->where('name', 'like', "%{$args['name']}%")
+            ->where('users.id', '!=', Auth::id())
+            ->get();
+        $userIds = $users->pluck('id')->toArray();
+        $userInviteIds = Share::select('user_invite_id')
+            ->where('shareable_type', $args['shareable_type'])
+            ->where('shareable_id', $args['shareable_id'])
+            ->whereIn('user_invite_id', $userIds)
+            ->get()
+            ->pluck('user_invite_id')
+            ->toArray();
+        $users = $users->whereNotIn('id', $userInviteIds);
+
+        return $users;
+    }
+
+
 }

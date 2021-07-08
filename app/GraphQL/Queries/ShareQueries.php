@@ -11,8 +11,8 @@ class ShareQueries
 {
     public function getShares($_, array $args)
     {
-        $shares = Share::where('type', $args['type'])
-            ->where('type_id', $args['type_id']);
+        $shares = Share::where('shareable_type', $args['shareable_type'])
+            ->where('shareable_id', $args['shareable_id']);
         return $shares->get();
     }
 }
