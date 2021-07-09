@@ -15,7 +15,7 @@ const Header = ({page}) => {
     const dispatch = useDispatch()
     const {mlApi, cApi} = useSelector(apisSelector)
     const {mlResource, cResource} = useSelector(resourcesSelector)
-    const {lDataset, cDataset} = useSelector(datasetsSelector)
+    const {mlDataset, cDataset} = useSelector(datasetsSelector)
     const {qMe} = useSelector(usersSelector)
     const [isMenu, setIsMenu] = useState(false)
     const [isSearch, setIsSearch] = useState(false)
@@ -94,7 +94,7 @@ const Header = ({page}) => {
                 dispatch(myResourceList())
                 break;
             case 'DatasetListPage':
-                dispatch(setDatasetMerge(`lDataset`, {search: {name: value}}))
+                dispatch(setDatasetMerge(`mlDataset`, {search: {name: value}}))
                 dispatch(myDatasetList())
                 break;
         }
@@ -126,15 +126,15 @@ const Header = ({page}) => {
             case 'DatasetListPage':
                 setInfo({
                     name: `Dataset`,
-                    isLoading: lDataset?.isLoading,
+                    isLoading: mlDataset?.isLoading,
                     total: qMe?.data?.datasets_count,
-                    search: lDataset?.search,
+                    search: mlDataset?.search,
                     cIsOpen: cDataset?.isOpen,
                     cIsLoading: cDataset?.isLoading,
                 })
                 break;
         }
-    }, [mlApi, cApi, mlResource, cResource, lDataset, cDataset, qMe])
+    }, [mlApi, cApi, mlResource, cResource, mlDataset, cDataset, qMe])
 
     const onAdd = () => {
         switch (page) {

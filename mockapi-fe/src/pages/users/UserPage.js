@@ -26,10 +26,13 @@ const UserPage = () => {
     }, []);
 
     const [form] = Form.useForm()
-    form.setFieldsValue(qMe?.data)
     useEffect(() => {
-        const checkedList1 = (qMe?.data?.media ?? []).map((item) => item.id)
-        dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
+        if (!qMe.isLoading) {
+            form.setFieldsValue(qMe?.data)
+            dispatch(setCommonMerge('checkedList', {[name]: [qMe?.data?.medium?.id]}))
+        }
+        // const checkedList1 = (qMe?.data?.media ?? []).map((item) => item.id)
+        // dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
     }, [qMe]);
 
     useEffect(() => {
@@ -59,7 +62,8 @@ const UserPage = () => {
     return (
         <>
             <Space size="middle">
-                <h1 className="text-xl capitalize font-light">Hello <span className="text-gray-500">{qMe?.data?.name}!</span></h1>
+                <h1 className="text-xl capitalize font-light">Hello <span
+                    className="text-gray-500">{qMe?.data?.name}!</span></h1>
                 <Button
                     onClick={() => dispatch(authLogout())}
                     loading={loAuth.isLoading}
@@ -73,28 +77,51 @@ const UserPage = () => {
                 // className="py-4 mt-4 rounded-sm"
             >
                 <Form.Item
-                    name="name"
+                    className="mt-3"
                     label="Name"
-                    rules={[{required: true}]}
+                    name="name"
+                    rules={[{
+                        required: true,
+                        message: 'The name is required.'
+                    }]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
-                    name="email"
+                    className="mt-3"
                     label="Email"
-                    rules={[{required: true}]}
+                    name="email"
+                    rules={[{
+                        required: true,
+                        type: "email",
+                        message: 'The email is not valid.'
+                    }]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
-                    name="password"
+                    className="mt-3"
                     label="Password"
+                    name="password"
                 >
                     <Input.Password/>
                 </Form.Item>
                 <Form.Item
+                    className="mt-3"
+                    label="Confirm Password"
                     name="password_confirmation"
-                    label="Re-password"
+                    dependencies={['password']}
+                    hasFeedback
+                    rules={[
+                        ({getFieldValue}) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                            },
+                        }),
+                    ]}
                 >
                     <Input.Password/>
                 </Form.Item>

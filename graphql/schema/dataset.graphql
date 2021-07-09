@@ -7,10 +7,17 @@ extend type Mutation {
 }
 
 extend type Query {
-    datasets(name: String @eq orderBy: [OrderByClause!] @orderBy): [DataSet!]! @paginate(type: "paginator" model: "App\\Models\\DataSet")
+#    datasets(name: String @eq orderBy: [OrderByClause!] @orderBy): [DataSet!]! @paginate(type: "paginator" model: "App\\Models\\DataSet")
     dataset(id: ID @eq): DataSet @find
     my_dataset_list(name: String): JSON @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@myDatasetList")
+    datasets(name: String): [DataSet] @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@getDatasets")
+    #    datasets(name: String): MixDataSet @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@getDatasets")
+#    datasets(name: String): JSON @guard @field(resolver: "App\\GraphQL\\Queries\\DataSetQueries@getDatasets")
 }
+
+#type MixDataSet{
+#    datasets: [DataSet]
+#}
 
 type DataSet{
     id: ID!
@@ -22,6 +29,19 @@ type DataSet{
     updated_at: DateTime!
     resources: [Resource]
     shares: [Share]
+    postman: Postman
+    rallydatas: [Rallies]
+}
+
+type Rallies{
+    id: ID
+    resource_name: String
+    aggregate: Int
+}
+
+type Postman{
+    collection: String
+    environment: String
 }
 
 input CreateDataSetInput{

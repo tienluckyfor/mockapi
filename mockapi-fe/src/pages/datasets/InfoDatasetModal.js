@@ -22,15 +22,14 @@ const InfoDatasetModal = () => {
     }, [modalDataset])
 
     useEffect(() => {
-        if (!dataset?.api_url) return;
         const listData = [
             {
                 title: `Postman Collection`,
-                url: dataset?.postman?.collection,
+                url: dataset?.postman?.collection ?? ``,
             },
             {
                 title: `Postman Environment`,
-                url: dataset?.postman?.environment,
+                url: dataset?.postman?.environment ?? ``,
             },
         ]
         setListData(listData)

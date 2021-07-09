@@ -61,6 +61,12 @@ class User extends Authenticatable
         return $this->hasMany(DataSet::class);
     }
 
+    public function share_datasets(): HasMany
+    {
+        return $this->hasMany(Share::class, 'user_invite_id', 'id')
+            ->where('shareable_type', '=', 'App\Models\DataSet');
+    }
+
     public function media()
     {
         return $this->belongsToJson(Media::class, "media_ids");

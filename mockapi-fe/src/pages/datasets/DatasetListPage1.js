@@ -10,7 +10,6 @@ import {
     deleteDataset,
     duplicateDataset,
     myDatasetList,
-    listDataset,
     setDatasetMerge,
     setDataset,
 } from "slices/datasets"
@@ -25,14 +24,14 @@ import InfoDatasetModal from "./InfoDatasetModal";
 const DatasetListPage = () => {
     const dispatch = useDispatch()
     const {visibles,} = useSelector(commonsSelector)
-    const {cDataset, eDataset, lDataset, dDataset, duDataset,} = useSelector(datasetsSelector)
+    const {cDataset, eDataset, mlDataset, dDataset, duDataset,} = useSelector(datasetsSelector)
 
     useEffect(() => {
-        if (lDataset.isRefresh) {
-            dispatch(listDataset())
+        if (mlDataset.isRefresh) {
+            dispatch(myDatasetList())
             dispatch(queryMe(window.location.href))
         }
-    }, [dispatch, lDataset])
+    }, [dispatch, mlDataset])
 
     const renderTable = () => {
         const menu = (dataset) => (
@@ -98,7 +97,7 @@ const DatasetListPage = () => {
                 dataIndex: 'api',
                 ellipsis: true,
                 render: (text, dataset, index) => {
-                    const {api} = dataset
+                    const api = mlDataset?.data?.apis[dataset?.api_id]
                     return (<Tooltip title={api?.name}>
                         <p className="text-gray-400">{api?.name}</p>
                     </Tooltip>)
@@ -108,22 +107,22 @@ const DatasetListPage = () => {
                 title: 'Rally datas',
                 dataIndex: 'rally_datas',
                 render: (text, dataset, index) => {
-                    const {rallydatas} = dataset
-                    if (!rallydatas) return;
+                    const rallies = mlDataset?.data?.rallies[dataset?.id]
+                    if (!rallies) return;
                     return (
                         <section className={`text-xs flex flex-col space-y-1`}>
-                            {(rallydatas??[]).map((rally) => {
-                                // const resource = mlDataset?.data?.resources[rally?.resource_id]
+                            {rallies.map((rally) => {
+                                const resource = mlDataset?.data?.resources[rally?.resource_id]
                                 return (<p className={`flex space-x-1 items-center`}>
-                                        <span className="truncate ">{rally?.resource_name}</span>
-                                        <Badge count={rally?.aggregate} className="site-badge-count-4" size="small"/>
+                                        <span className="truncate ">{resource?.name}</span>
+                                        <Badge count={rally.count} className="site-badge-count-4" size="small"/>
                                     </p>)
                             })}
                         </section>
                     )
-                    // return (<Tooltip title={dataset?.api?.name}>
-                    //     <p className="text-gray-400">{dataset?.api?.name}</p>
-                    // </Tooltip>)
+                    return (<Tooltip title={dataset?.api?.name}>
+                        <p className="text-gray-400">{dataset?.api?.name}</p>
+                    </Tooltip>)
                 },
             },
             {
@@ -154,7 +153,7 @@ const DatasetListPage = () => {
             <>
                 <Table
                     columns={columns}
-                    dataSource={lDataset?.data?.datasets}
+                    dataSource={mlDataset?.data?.datasets}
                     pagination={{pageSize: 20, hideOnSinglePage: true}}
                 />
             </>
@@ -177,10 +176,10 @@ const DatasetListPage = () => {
                     }}
                 />
                 }
-                {lDataset?.search?.name &&
+                {mlDataset?.search?.name &&
                 <h3 className="text-xl mt-3 text-gray-400">
-                    {lDataset?.search?.total} results of search <span
-                    className="bg-yellow-400 text-black px-1">{lDataset?.search?.name}</span>
+                    {mlDataset?.search?.total} results of search <span
+                    className="bg-yellow-400 text-black px-1">{mlDataset?.search?.name}</span>
                 </h3>
                 }
                 <Divider className="mt-4 mb-0"/>
@@ -192,10 +191,10 @@ const DatasetListPage = () => {
 
     return (
         <>
-            {lDataset.isLoading && !lDataset.data &&
+            {mlDataset.isLoading && !mlDataset.data &&
             <Loading/>
             }
-            {!(lDataset.isLoading && !lDataset.data) &&
+            {!(mlDataset.isLoading && !mlDataset.data) &&
             renderMain()
             }
         </>

@@ -45,24 +45,21 @@ class PostmanService
     private function _getItems($resources)
     {
         $data = [];
-
-        foreach ($resources as &$resource) {
+        foreach ($resources as $key => $resource) {
             if (!empty($resource['parents'])) {
                 foreach ($resource['parents'] as $parent) {
-                    $resources[$parent]['fields'][] = [
+                    $resources[$key][$parent]['fields'][] = [
                         "name" => $resource['name'],
                         "type" => "Resource",
                     ];
                 }
             }
         }
-
         foreach ($resources as $resource) {
             $items = [];
             $amounts = [];
             $amounts[$resource['id']] = 1;
             $rallydata = Arr::first($this->rallydata_repository->fillData($resource, $amounts, $resource['locale']));
-
             foreach ($resource['endpoints'] as $endpoint) {
                 if (!$endpoint['status']) {
                     continue;

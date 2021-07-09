@@ -79,7 +79,7 @@ class RallydataQueries
             'id, name, fields, parents, resources.name as resource_name')
             ->keyBy('id')
             ->toArray();
-        $dataset = $this->dataset_repository->postman_mapping($dataset, Arr::first($resources));
+//        $dataset = $this->dataset_repository->postman_mapping($dataset, Arr::first($resources));
 //        dd($resources);
         foreach ($resources as &$resource) {
             if (!empty($resource['parents'])) {

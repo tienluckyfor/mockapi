@@ -49,7 +49,6 @@ class DatasetRepository
             ->getByDatasetIds($datasetIds, 'datasets.*, resources.name as resource_name')
             ->keyBy('id')
             ->toArray();
-
         return $datasets
             ->map(function ($dataset) use ($resources) {
                 $resource = $resources[$dataset->id];
@@ -58,21 +57,21 @@ class DatasetRepository
 //                    'collection'  => URL::to("/api/postman/{$dataset->id}-c/{$resource['resource_name']}.postman_collection.json"),
 //                    'environment' => URL::to("/api/postman/{$dataset->id}-e/{$resource['resource_name']}.postman_environment.json"),
 //                ];
-                $dataset = self::postman_mapping($dataset, $resource);
+//                $dataset = self::postman_mapping($dataset, $resource);
                 return $dataset;
             });
 
     }
 
 
-    public function postman_mapping($dataset, $resource){
-        if(!isset($dataset->id)) return;
-        $dataset->api_url = URL::to("/api/restful/{$dataset->id}");
-        $dataset->postman = [
-            'collection'  => URL::to("/api/postman/{$dataset->id}-c/{$resource['resource_name']}.postman_collection.json"),
-            'environment' => URL::to("/api/postman/{$dataset->id}-e/{$resource['resource_name']}.postman_environment.json"),
-        ];
-        return $dataset;
-    }
+//    public function postman_mapping($dataset, $resource){
+//        if(!isset($dataset->id)) return;
+//        $dataset->api_url = URL::to("/api/restful/{$dataset->id}");
+//        $dataset->postman = [
+//            'collection'  => URL::to("/api/postman/{$dataset->id}-c/{$resource['resource_name']}.postman_collection.json"),
+//            'environment' => URL::to("/api/postman/{$dataset->id}-e/{$resource['resource_name']}.postman_environment.json"),
+//        ];
+//        return $dataset;
+//    }
 
 }

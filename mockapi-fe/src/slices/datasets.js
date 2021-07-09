@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
-import {apolloClient, } from "services";
+import {apolloClient,} from "services";
 import {setRallydataMerge} from "./rallydatas";
 import _slice_common from "./_slice_common";
 
@@ -11,6 +11,7 @@ export const initialState = {
     epDataset: {isOpen: false},
     duDataset: {},
     mlDataset: {isRefresh: true, search: {name: ``}},
+    lDataset: {isRefresh: true, search: {name: ``}},
     amounts: {},
     modalDataset: {},
 };
@@ -188,6 +189,7 @@ export function deleteDataset(dataset) {
     }
 }
 
+
 export function myDatasetList() {
     return async (dispatch, getState) => {
         const {mlDataset} = getState().datasets
@@ -208,6 +210,49 @@ export function myDatasetList() {
                     data: myDatasetList,
                     isRefresh: false,
                     search: {...mlDataset.search, total: myDatasetList?.datasets.length},
+                }
+        }))
+    }
+}
+
+export function listDataset() {
+    return async (dispatch, getState) => {
+        const {lDataset} = getState().datasets
+        if (lDataset.isLoading) return;
+        dispatch(setMerge({mlDataset: {isLoading: true, isRefresh: false}}))
+        const query = gql`
+        query($name: String) {
+  datasets(name:$name){
+    id
+    name
+    locale
+    updated_at
+    postman{
+        collection
+        environment
+    }
+    api{
+        id
+        name
+    }
+    rallydatas{
+        resource_name
+        aggregate
+    }
+  }
+}`;
+        const res = await apolloClient.query({
+            query,
+            variables: {name: lDataset.search.name}
+        })
+        // const myDatasetList = res?.data?.my_dataset_list ?? []
+        dispatch(setMerge({
+            lDataset:
+                {
+                    isLoading: false,
+                    data: res?.data,
+                    isRefresh: false,
+                    search: {...lDataset.search, total: (res?.data?.datasets ?? []).length},
                 }
         }))
     }
