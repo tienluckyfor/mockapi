@@ -2,11 +2,12 @@ import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient} from "services";
 import Cookies from "universal-cookie";
+import _slice_common from "./_slice_common";
 
 export const initialState = {
-    register: {},
-    login: {},
-    me: {},
+    rAuth: {},
+    lAuth: {},
+    loAuth: {},
 };
 
 const authsSlice = createSlice({
@@ -14,18 +15,10 @@ const authsSlice = createSlice({
     initialState,
     reducers: {
         setData: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = payload[key];
-                }
-            })
+            state = _slice_common.setData(initialState, state, payload);
         },
         setMerge: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = {...state[key], ...payload[key]}
-                }
-            })
+            state = _slice_common.setMerge(initialState, state, payload);
         },
     },
 });
@@ -49,9 +42,9 @@ export function setAuthMerge(key, item) {
 
 const cookies = new Cookies()
 
-export function registerHandle(variables) {
+export function authRegister(variables) {
     return async (dispatch) => {
-        dispatch(setMerge({register: {isLoading: true}}))
+        dispatch(setMerge({rAuth: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($name: String!, $email: String!, $password: String!, $password_confirmation:String!){
@@ -76,21 +69,19 @@ export function registerHandle(variables) {
         }
         try {
             await mutationAPI().then(res => {
-                const access_token = res?.data?.register?.tokens?.access_token
-                console.log('access_token', access_token)
-                cookies.set('mockapi-token', access_token,
+                cookies.set('mockapi-token', res?.data?.register?.tokens?.access_token,
                     {path: '/', expires: new Date(Date.now() + 99999999999)})
                 window.location.assign(`/`)
             })
         } catch (e) {
-            dispatch(setMerge({register: {isLoading: false}}))
+            dispatch(setMerge({rAuth: {isLoading: false}}))
         }
     }
 }
 
-export function loginHandle(variables) {
+export function authLogin(variables) {
     return async (dispatch) => {
-        dispatch(setMerge({login: {isLoading: true}}))
+        dispatch(setMerge({lAuth: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($username: String!, $password: String!){
@@ -111,52 +102,49 @@ export function loginHandle(variables) {
         }
         try {
             await mutationAPI().then(res => {
-                const access_token = res?.data?.login?.access_token
-                console.log('access_token', access_token)
-                cookies.set('mockapi-token', access_token,
+                cookies.set('mockapi-token', res?.data?.login?.access_token,
                     {path: '/', expires: new Date(Date.now() + 99999999999)})
                 window.location.assign(`/`)
             })
         } catch (e) {
-            dispatch(setMerge({login: {isLoading: false}}))
+            dispatch(setMerge({lAuth: {isLoading: false}}))
         }
     }
 }
 
-// export function getMe(href = ``) {
-//     return async (dispatch) => {
-//         if(href.match(/Login|Register/gim)) return;
-//         dispatch(setMerge({me: {isLoading: true}}))
-//         const query = gql`
-//         query {
-//   me {
-//       id
-//       name
-//       email
-//       created_at
-//       updated_at
-//       total
-//       datasets{
-//           id
-//           name
-//           resources{
-//               id
-//           }
-//       }
-//   }
-// }`;
-//         const res = await apolloClient.query({
-//             query
-//         })
-//         const me = res?.data?.me
-//         if (me) {
-//             dispatch(setMerge({me: {isLoading: false, data: me}}))
-//         } else {
-//             dispatch(setMerge({me: {isLoading: false, data: null}}))
-//             cookies.remove('mockapi-token')
-//             if (!href.match(/Login|Register/gim)) {
-//                 window.location.assign(`/LoginPage`)
-//             }
-//         }
-//     }
-// }
+export function authLogout() {
+    return async (dispatch) => {
+        dispatch(setData({loAuth: {isLoading: true}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation {
+  logout {
+    status
+    message
+  }
+}
+`;
+            return apolloClient.mutate({
+                mutation
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                if (res?.data?.logout?.status === 'TOKEN_REVOKED') {
+                    cookies.remove('mockapi-token');
+                    window.location.assign(`/LoginPage`);
+                    return;
+                }
+                dispatch(setMerge({loAuth: {isLoading: false}}))
+                // const access_token = res?.data?.logout?.status
+                // console.log('access_token', access_token)
+                // cookies.set('mockapi-token', access_token,
+                //     {path: '/', expires: new Date(Date.now() + 99999999999)})
+                // window.location.assign(`/`)
+            })
+        } catch (e) {
+            dispatch(setMerge({loAuth: {isLoading: false}}))
+        }
+    }
+}
+

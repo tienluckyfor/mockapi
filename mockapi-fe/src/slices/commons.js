@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import _slice_common from "./_slice_common";
 
 export const initialState = {
     // menu
@@ -18,18 +19,10 @@ const commonsSlice = createSlice({
     initialState,
     reducers: {
         setData: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = payload[key];
-                }
-            })
+            state = _slice_common.setData(initialState, state, payload);
         },
         setMerge: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = {...state[key], ...payload[key]}
-                }
-            })
+            state = _slice_common.setMerge(initialState, state, payload);
         },
     },
 });

@@ -1,11 +1,11 @@
 import {Form, Input, Button, Divider} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {registerHandle, authsSelector} from "slices/auths";
+import {authRegister, authsSelector} from "slices/auths";
 import {Link} from "react-router-dom";
 
 const RegisterPage = () => {
     const dispatch = useDispatch()
-    const {register} = useSelector(authsSelector)
+    const {rAuth} = useSelector(authsSelector)
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -16,7 +16,7 @@ const RegisterPage = () => {
             <Form
                 className="mx-auto max-w-sm border border-indigo-200 py-5 shadow-lg relative"
                 initialValues={{remember: true}}
-                onFinish={(values) => dispatch(registerHandle(values))}
+                onFinish={(values) => dispatch(authRegister(values))}
                 onFinishFailed={onFinishFailed}
                 layout={`vertical`}
             >
@@ -81,7 +81,7 @@ const RegisterPage = () => {
                             block
                             type="primary"
                             htmlType="submit"
-                            loading={register.isLoading}
+                            loading={rAuth.isLoading}
                         >Create Account</Button>
                     </div>
                 </section>

@@ -1,11 +1,11 @@
 import {Form, Input, Button, Divider} from "antd";
 import {useDispatch, useSelector} from "react-redux";
-import {loginHandle, authsSelector} from "slices/auths";
+import {authLogin, authsSelector} from "slices/auths";
 import {Link} from 'react-router-dom'
 
 const LoginPage = () => {
     const dispatch = useDispatch()
-    const {login} = useSelector(authsSelector)
+    const {lAuth} = useSelector(authsSelector)
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -16,7 +16,7 @@ const LoginPage = () => {
             <Form
                 className="mx-auto max-w-sm border border-indigo-200 py-5 shadow-lg relative"
                 initialValues={{remember: true}}
-                onFinish={(values) => dispatch(loginHandle(values))}
+                onFinish={(values) => dispatch(authLogin(values))}
                 onFinishFailed={onFinishFailed}
                 layout={`vertical`}
             >
@@ -47,7 +47,7 @@ const LoginPage = () => {
                             block
                             type="primary"
                             htmlType="submit"
-                            loading={login.isLoading}
+                            loading={lAuth.isLoading}
                         >Sign in</Button>
                     </div>
                 </section>

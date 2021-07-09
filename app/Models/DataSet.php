@@ -36,11 +36,6 @@ class DataSet extends Model
             ->get();
     }
 
-//    public function resource()
-//    {
-//        return $this->hasOneThrough(Api::class, Resource::class);
-//    }
-
     public function shares()
     {
         return $this->morphMany(Share::class, 'shareable')

@@ -11,6 +11,7 @@ import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {editUser, queryMe, usersSelector} from "slices/users";
+import {authLogout, authsSelector} from "slices/auths";
 
 const UserPage = () => {
     const {qMe} = useSelector(usersSelector)
@@ -18,6 +19,7 @@ const UserPage = () => {
     const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
     const {eUser,} = useSelector(usersSelector)
+    const {loAuth,} = useSelector(authsSelector)
 
     useEffect(() => {
         dispatch(myMediaList())
@@ -56,9 +58,13 @@ const UserPage = () => {
     const name = 'avatar';
     return (
         <>
-            <div className="flex items-center space-x-2">
-                <h1 className="text-2xl capitalize">Hi <span className="text-gray-500">{qMe?.data?.name}</span>!</h1>
-            </div>
+            <Space size="middle">
+                <h1 className="text-xl capitalize font-light">Hello <span className="text-gray-500">{qMe?.data?.name}!</span></h1>
+                <Button
+                    onClick={() => dispatch(authLogout())}
+                    loading={loAuth.isLoading}
+                    type="dashed" danger size="small">Logout</Button>
+            </Space>
             <Form
                 form={form}
                 layout={`vertical`}

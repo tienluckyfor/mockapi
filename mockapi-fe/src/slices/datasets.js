@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient, } from "services";
 import {setRallydataMerge} from "./rallydatas";
+import _slice_common from "./_slice_common";
 
 export const initialState = {
     cDataset: {isOpen: false},
@@ -19,18 +20,10 @@ const datasetsSlice = createSlice({
     initialState,
     reducers: {
         setData: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = payload[key];
-                }
-            })
+            state = _slice_common.setData(initialState, state, payload);
         },
         setMerge: (state, {payload}) => {
-            Object.entries(initialState).map(([key, value], i) => {
-                if (typeof payload[key] !== "undefined") {
-                    state[key] = {...state[key], ...payload[key]}
-                }
-            })
+            state = _slice_common.setMerge(initialState, state, payload);
         },
     },
 });

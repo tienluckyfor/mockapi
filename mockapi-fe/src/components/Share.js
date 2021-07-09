@@ -2,7 +2,7 @@ import {Button, Popconfirm, Form, List, Select, Space} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import React from "react";
 import Avatar from "react-avatar";
-import {queryMe, shareSearchUsers, userList, usersSelector} from "slices/users";
+import {queryMe, shareSearchUsers, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
 import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
@@ -14,7 +14,7 @@ export const Share = ({shareable_type, shareable_id}) => {
     const {cShare, lShare, dShare} = useSelector(sharesSelector)
 
     const RenderForm = () => {
-        const debounceUserList = debounce(name => {
+        const debounceFetch = debounce(name => {
             dispatch(shareSearchUsers(shareable_type, shareable_id, name))
         }, 500);
 
@@ -53,7 +53,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                         showSearch
                         filterOption={false}
                         onSearch={(value) => {
-                            debounceUserList(value)
+                            debounceFetch(value)
                         }}
                         notFoundContent={null}
                         placeholder="Share to..."
