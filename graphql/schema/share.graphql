@@ -11,7 +11,7 @@ extend type Query {
 ##    shares(name: String @eq orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
 #    share(id: ID @eq): Share @find
 #    my_share_list(name: String): [Share!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@my_share_list")
-    shares(type: String!, type_id: ID!): [Share] @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@getShares")
+    shares(shareable_type: String!, shareable_id: ID!): [Share] @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@getShares")
 }
 
 type Share{
@@ -24,8 +24,8 @@ type Share{
 
 input CreateShareInput{
     user_invite_id: ID! @rules(apply:["required"])
-    type: String! @rules(apply:["required"])
-    type_id: ID! @rules(apply:["required"])
+    shareable_type: String! @rules(apply:["required"])
+    shareable_id: ID! @rules(apply:["required"])
 }
 
 input EditShareInput{

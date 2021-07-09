@@ -2,7 +2,7 @@ import {Button, Popconfirm, Form, List, Select, Space} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import React from "react";
 import Avatar from "react-avatar";
-import {shareSearchUsers, userList, usersSelector} from "slices/users";
+import {queryMe, shareSearchUsers, userList, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
 import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
@@ -26,9 +26,15 @@ export const Share = ({shareable_type, shareable_id}) => {
 
         React.useEffect(() => {
             if (lShare.isRefresh && shareable_id) {
+                dispatch(queryMe())
                 dispatch(shareList(shareable_type, shareable_id))
             }
         }, [lShare, shareable_id])
+
+        React.useEffect(() => {
+            if (shareable_id)
+                dispatch(shareList(shareable_type, shareable_id))
+        }, [shareable_id])
 
         const [form] = Form.useForm()
         form.setFieldsValue({

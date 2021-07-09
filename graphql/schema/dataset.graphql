@@ -21,6 +21,7 @@ type DataSet{
     created_at: DateTime!
     updated_at: DateTime!
     resources: [Resource]
+    shares: [Share]
 }
 
 input CreateDataSetInput{

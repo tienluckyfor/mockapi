@@ -22,10 +22,13 @@ type User {
     email: String!
     created_at: DateTime!
     updated_at: DateTime!
-    total: JSON
+#    total: JSON
     datasets: [DataSet]
     media: [Medium]
     medium: Medium
+    apis_count: Int
+    resources_count: Int
+    datasets_count: Int
 }
 
 #input CreateUserInput{

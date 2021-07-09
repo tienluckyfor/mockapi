@@ -30,8 +30,20 @@ class DataSet extends Model
         return $this->belongsTo(Api::class);
     }
 
+    public function getResourcesAttribute()
+    {
+        return Resource::where('api_id', $this->api_id)
+            ->get();
+    }
+
+//    public function resource()
+//    {
+//        return $this->hasOneThrough(Api::class, Resource::class);
+//    }
+
     public function shares()
     {
-        return $this->morphMany(Share::class, 'shareable');
+        return $this->morphMany(Share::class, 'shareable')
+            ->orderBy('id', 'desc');
     }
 }

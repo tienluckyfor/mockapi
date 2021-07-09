@@ -107,7 +107,7 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Api`,
                     isLoading: mlApi?.isLoading,
-                    total: qMe?.data?.total?.api,
+                    total: qMe?.data?.apis_count,
                     search: mlApi?.search,
                     cIsOpen: cApi?.isOpen,
                     cIsLoading: cApi?.isLoading,
@@ -117,7 +117,7 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Resource`,
                     isLoading: mlResource?.isLoading,
-                    total: qMe?.data?.total?.resource,
+                    total: qMe?.data?.resources_count,
                     search: mlResource?.search,
                     cIsOpen: cResource?.isOpen,
                     cIsLoading: cResource?.isLoading,
@@ -127,7 +127,7 @@ const Header = ({page}) => {
                 setInfo({
                     name: `Dataset`,
                     isLoading: mlDataset?.isLoading,
-                    total: qMe?.data?.total?.dataset,
+                    total: qMe?.data?.datasets_count,
                     search: mlDataset?.search,
                     cIsOpen: cDataset?.isOpen,
                     cIsLoading: cDataset?.isLoading,

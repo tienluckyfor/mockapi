@@ -34,6 +34,11 @@ class Resource extends Model
         return $this->belongsTo(Api::class);
     }
 
+    public function dataset()
+    {
+        return $this->hasOneThrough(DataSet::class, Api::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

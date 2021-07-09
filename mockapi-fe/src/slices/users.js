@@ -66,10 +66,12 @@ export function queryMe(href = ``) {
       email
       created_at
       updated_at
-      total
-      media{
+      apis_count
+      resources_count
+      datasets_count
+      medium{
           id
-          image
+          file
           thumb_image
       }
       datasets{
@@ -77,6 +79,18 @@ export function queryMe(href = ``) {
           name 
           resources{
               id
+          }
+          shares{
+              id
+              user_invite{
+                  id
+                  name
+                  medium{
+                      id
+                      file
+                      thumb_image
+                  }
+              }
           }
       }
   }

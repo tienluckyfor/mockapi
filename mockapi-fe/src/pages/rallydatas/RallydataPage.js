@@ -1,4 +1,4 @@
-import {useEffect, } from 'react'
+import {useEffect,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
     rallydatasSelector, setRallydata, myRallydataList,
@@ -32,11 +32,12 @@ const RallydataPage = () => {
 
     const url = getURLParams()
     useEffect(() => {
+        if (dataset_id_RD == url.dataset_id_RD) return;
         dispatch(setRallydata({
             dataset_id_RD: url.dataset_id_RD,
             resource_id_RD: url.resource_id_RD,
         }))
-    }, [])
+    }, [url])
 
     return (
         <>

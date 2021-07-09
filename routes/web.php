@@ -14,8 +14,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+//    $resource = \App\Models\Resource::find(1);
+//    dd($resource->dataset->toArray());
+//    dd($resource->toArray());
+//    $user = \App\Models\User::where('id', 4)
+////    ->withCount(['apis', 'resources', 'datasets'])
+//    ->first()
+//    ->loadCount(['apis', 'resources', 'datasets']);
+//
+//    dd($user->toArray());
+//    dd($user->datasets->shares);
+//    dd($user->datasets->toArray());
     $d = \App\Models\DataSet::find(1);
-    dd($d->shares->toArray());
+    dd($d->resources->toArray());
     dd($d->shares->toArray());
     dd($d->toArray());
     return view('welcome');

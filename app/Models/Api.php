@@ -32,7 +32,7 @@ class Api extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function datasources(): HasMany
+    public function resources(): HasMany
     {
         return $this->hasMany(Resource::class);
     }

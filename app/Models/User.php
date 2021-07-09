@@ -51,6 +51,16 @@ class User extends Authenticatable
         return $this->hasMany(Api::class);
     }
 
+    public function resources(): HasMany
+    {
+        return $this->hasMany(Resource::class);
+    }
+
+    public function datasets(): HasMany
+    {
+        return $this->hasMany(DataSet::class);
+    }
+
     public function media()
     {
         return $this->belongsToJson(Media::class, "media_ids");

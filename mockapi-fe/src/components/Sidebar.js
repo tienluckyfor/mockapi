@@ -1,10 +1,12 @@
-import {Menu, Badge} from 'antd';
+import {Menu, Badge, Avatar as AntAvatar, Tooltip} from 'antd';
+import {UserOutlined, AntDesignOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useEffect} from "react"
 import {usersSelector} from "slices/users";
 import Avatar from "react-avatar";
+import {getURLParams} from "../services";
 
 const Sidebar = ({device = `desktop`}) => {
     const {qMe} = useSelector(usersSelector)
@@ -16,8 +18,13 @@ const Sidebar = ({device = `desktop`}) => {
         DatasetListPage: "dataset",
     }
 
+    const url = getURLParams()
+
     useEffect(() => {
-        const menuSelected = window.location.href.replace(/^.+?\/(\w+)$/gim, '$1')
+        let menuSelected = window.location.href.replace(/^.+?\/(\w+)$/gim, '$1')
+        if(url.dataset_id_RD){
+            menuSelected = url.dataset_id_RD
+        }
         setMenuSelected(menuSelected)
     }, [location])
 
@@ -42,7 +49,7 @@ const Sidebar = ({device = `desktop`}) => {
                                     className="rounded-full"
                                     size="30"
                                     name={qMe?.data?.name}
-                                    src={qMe?.data?.media[0]?.thumb_image}
+                                    src={qMe?.data?.medium?.thumb_image}
                                 />
                             </Link>
                         </div>
@@ -54,18 +61,31 @@ const Sidebar = ({device = `desktop`}) => {
                     <Menu.Item key={key}>
                         <Link to={`/${key}`} className={`capitalize`}>
                             {item}
-                            <Badge count={qMe?.data?.total[item]} className="ml-3" size="small"/>
+                            <Badge count={qMe?.data ? qMe?.data[`${item}s_count`] : 0} className="ml-3" size="small"/>
                         </Link>
                     </Menu.Item>
                 )}
                 <Menu.ItemGroup key="g1" title="Rallydata">
                     {(qMe?.data?.datasets || []).map((dataset, key) => {
-                        if (key >= 5) return;
+                        // if (key >= 5) return;
                         return (<Menu.Item key={dataset.id}>
                             <Link
+                                className="flex items-center space-x-1"
                                 to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
-                                {dataset.name}
+                                <span>{dataset.name}</span>
+                                <AntAvatar.Group
+                                    size="small" maxCount={2}
+                                    maxStyle={{color: '#f56a00', backgroundColor: '#fde3cf'}}>
+                                    {(dataset.shares ?? []).map(({user_invite}) =>
+                                        <AntAvatar src={user_invite?.medium?.thumb_image}>
+                                            {user_invite?.medium ? null : user_invite?.name.match(/\b(\w)/g).join('')}
+                                        </AntAvatar>
+                                    )}
+                                </AntAvatar.Group>
                             </Link>
+                            <pre className="text-sm">
+                                {JSON.stringify(dataset, null, '  ')}
+                            </pre>
                         </Menu.Item>)
                     })}
                 </Menu.ItemGroup>
