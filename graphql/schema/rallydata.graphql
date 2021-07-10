@@ -10,9 +10,13 @@ extend type Query {
     #    rallydata(id: ID @eq): Rallydata @find
     rallydata_list(dataset_id: ID!, resource_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@rallydataList")
     my_rallydata_list(dataset_id: ID!, resource_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@myRallydataList")
-    detail_rallydata(dataset_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@detailRallydata")
+    detail_rallydata(dataset_id: ID!): DetailRallydata @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@detailRallydata")
 }
 
+type DetailRallydata{
+    dataset: DataSet
+    resources: JSON
+}
 type Rallydata{
     id: ID
     name: String

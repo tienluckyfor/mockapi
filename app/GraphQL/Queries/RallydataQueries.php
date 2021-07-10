@@ -3,6 +3,7 @@
 
 namespace App\GraphQL\Queries;
 
+use App\Models\DataSet;
 use App\Repositories\DatasetRepository;
 use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
@@ -74,7 +75,8 @@ class RallydataQueries
 
     public function detailRallydata($_, array $args)
     {
-        $dataset = $this->dataset_repository->find($args['dataset_id'], '*');
+//        $dataset = $this->dataset_repository->find($args['dataset_id'], '*');
+        $dataset = DataSet::find($args['dataset_id']);
         $resources = $this->resource_repository->getByApiId(@$dataset->api_id,
             'id, name, fields, parents, resources.name as resource_name')
             ->keyBy('id')

@@ -70,6 +70,9 @@ export function queryMe(href = ``) {
       datasets{
           id 
           name 
+          user{
+            id
+          }
           resources{
               id
           }

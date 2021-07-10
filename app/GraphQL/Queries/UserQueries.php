@@ -28,27 +28,11 @@ class UserQueries
 
     public function getMe($_, $args)
     {
-        return Auth::user()
+        $user = Auth::user()
             ->loadCount(['apis', 'resources', 'datasets']);
-//        $total = collect([
-//            'api'      => Api::where('user_id', Auth::id())->count(),
-//            'resource' => Resource::where('user_id', Auth::id())->count(),
-//            'dataset'  => DataSet::where('user_id', Auth::id())->count(),
-//        ]);
-//        $me = Auth::user()
-//            ->loadCount(['apis', 'resources', 'datasets']);
-//        $me->total = $total;
-//        $me->datasets = DataSet::where('user_id', Auth::id())
-//            ->orderBy('id', 'desc')
-//            ->get()
-//            ->map(function ($dataset) {
-//                $dataset->resources =
-//                    $this->resource_repository->getByApiId($dataset->api_id);
-//                return $dataset;
-//            });
-//        $media = $this->mediaRepository->getByIds($me->media_ids ?? []);
-//        $me->media = $this->mediaRepository->mappingMedia($media);
-//        return $me;
+        $shareDatasetIds = $user->share_datasets->pluck('shareable_id')->toArray();
+        $user->datasets_count += count($shareDatasetIds);
+        return $user;
     }
 
     public function getUsers($_, $args)

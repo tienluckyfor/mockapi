@@ -11,7 +11,7 @@ import {locales} from "./configDataset"
 const {Option} = Select;
 const FormDataset = ({apiId, setApiId, amounts}) => {
     const dispatch = useDispatch()
-    const {cDataset, mlDataset, } = useSelector(datasetsSelector)
+    const {cDataset, lDataset, } = useSelector(datasetsSelector)
     const {mlApi} = useSelector(apisSelector)
 
     useEffect(() => {
@@ -61,7 +61,7 @@ const FormDataset = ({apiId, setApiId, amounts}) => {
         return (
             <>
                 <Table
-                    loading={mlDataset.isLoading}
+                    loading={lDataset.isLoading}
                     columns={columns}
                     dataSource={cDataset?.resources}
                     pagination={{disabled: true, hideOnSinglePage: true}}

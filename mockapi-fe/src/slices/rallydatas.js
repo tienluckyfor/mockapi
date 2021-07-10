@@ -314,11 +314,31 @@ export function detailRallydata(dataset_id) {
         if (deRallydata.isLoading) return;
         dispatch(setMerge({deRallydata: {isLoading: true}}))
         const query = gql`
-        query {
-  detail_rallydata(dataset_id:"${dataset_id}")
+        query($dataset_id: ID!) {
+  detail_rallydata(dataset_id: $dataset_id){
+      dataset{
+          id
+
+    user{
+        id
+        name
+        medium{
+            id
+            file
+            thumb_image
+        }
+    }
+    postman{
+        collection
+        environment
+    }
+      }
+      resources
+  }
 }`;
         const res = await apolloClient.query({
-            query
+            query,
+            variables: {dataset_id}
         })
         const detailRallydata = res?.data?.detail_rallydata ?? {}
         dispatch(setMerge({

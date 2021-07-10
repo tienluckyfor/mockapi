@@ -9,7 +9,6 @@ import {
     editDataset,
     deleteDataset,
     duplicateDataset,
-    myDatasetList,
     listDataset,
     setDatasetMerge,
     setDataset,
@@ -153,6 +152,7 @@ const DatasetListPage = () => {
         return (
             <>
                 <Table
+                    // loading={lDataset.isLoading}
                     columns={columns}
                     dataSource={lDataset?.data?.datasets}
                     pagination={{pageSize: 20, hideOnSinglePage: true}}

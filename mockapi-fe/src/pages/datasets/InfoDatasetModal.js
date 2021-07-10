@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Divider, List, Modal,} from "antd";
-import {CopyOutlined, CheckOutlined, } from '@ant-design/icons';
+import {CopyOutlined, CheckOutlined,} from '@ant-design/icons';
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
@@ -12,28 +12,31 @@ const InfoDatasetModal = () => {
     const {modalDataset,} = useSelector(datasetsSelector)
     const {copied} = useSelector(commonsSelector)
 
-    const [visible, setVisible] = useState()
-    const [dataset, setDataset] = useState({})
-    const [listData, setListData] = useState([])
+    // const [listData, setListData] = useState([])
+    // useEffect(() => {
+    //     const listData = [
+    //         {
+    //             title: `Postman Collection`,
+    //             url: modalDataset?.dataset?.postman?.collection ?? ``,
+    //         },
+    //         {
+    //             title: `Postman Environment`,
+    //             url: modalDataset?.dataset?.postman?.environment ?? ``,
+    //         },
+    //     ]
+    //     setListData(listData)
+    // }, [modalDataset])
 
-    useEffect(() => {
-        setVisible(modalDataset?.visible)
-        setDataset(modalDataset?.dataset)
-    }, [modalDataset])
-
-    useEffect(() => {
-        const listData = [
-            {
-                title: `Postman Collection`,
-                url: dataset?.postman?.collection ?? ``,
-            },
-            {
-                title: `Postman Environment`,
-                url: dataset?.postman?.environment ?? ``,
-            },
-        ]
-        setListData(listData)
-    }, [dataset])
+    const listData = [
+        {
+            title: `Postman Collection`,
+            url: modalDataset?.dataset?.postman?.collection ?? ``,
+        },
+        {
+            title: `Postman Environment`,
+            url: modalDataset?.dataset?.postman?.environment ?? ``,
+        },
+    ]
 
     const renderList = () => {
         return <List
@@ -64,13 +67,17 @@ const InfoDatasetModal = () => {
     }
 
     return (<Modal
-        title={dataset?.name}
-        visible={visible}
-        cancelButtonProps={{style: {display: 'none'}}}
+        title={modalDataset?.dataset?.name}
+        visible={modalDataset?.visible}
+        okButtonProps={{style: {display: 'none'}}}
+        closable={false}
         onOk={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
         onCancel={(e) => dispatch(setDatasetMerge('modalDataset', {visible: false}))}
+        cancelText="Close"
     >
-        <Share shareable_type="App\Models\DataSet" shareable_id={dataset?.id}/>
+        <Share
+            shareable_type="App\Models\DataSet"
+            shareable_id={modalDataset?.dataset?.id}/>
         <Divider/>
         {renderList()}
     </Modal>)

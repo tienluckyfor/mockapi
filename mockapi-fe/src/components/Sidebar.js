@@ -1,5 +1,5 @@
-import {Menu, Badge, Avatar as AntAvatar, Tooltip} from 'antd';
-import {UserOutlined, AntDesignOutlined} from '@ant-design/icons';
+import {Menu, Badge, Avatar as AntAvatar, Tooltip, Space} from 'antd';
+import {CrownOutlined, ShareAltOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
@@ -68,11 +68,22 @@ const Sidebar = ({device = `desktop`}) => {
                 <Menu.ItemGroup key="g1" title="Rallydata">
                     {(qMe?.data?.datasets || []).map((dataset, key) => {
                         // if (key >= 5) return;
+                        console.log('qMe?.data?.id', qMe?.data?.id)
+                        console.log('dataset?.user?.id', dataset?.user?.id)
+                        const isOwner = qMe?.data?.id == dataset?.user?.id
                         return (<Menu.Item key={dataset.id}>
                             <Link
                                 className="flex items-center space-x-1"
                                 to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
-                                <span>{dataset.name}</span>
+                                <Space>
+                                    {isOwner &&
+                                    <CrownOutlined />
+                                    }
+                                    {!isOwner &&
+                                    <ShareAltOutlined />
+                                    }
+                                    <span>{dataset.name}</span>
+                                </Space>
                                 <AntAvatar.Group
                                     size="small" maxCount={2}
                                     maxStyle={{color: '#f56a00', backgroundColor: '#fde3cf'}}>

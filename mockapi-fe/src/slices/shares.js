@@ -110,24 +110,23 @@ export function shareList(shareable_type, shareable_id) {
     return async (dispatch) => {
         dispatch(setData({lShare: {isLoading: true, }}))
         const query = gql`
-        query($shareable_type: String!, $shareable_id: ID!){
-  shares(
-      shareable_type: $shareable_type
-      shareable_id: $shareable_id
-    ) {
+       query ($shareable_type: String!, $shareable_id: ID!) {
+  shares(shareable_type: $shareable_type, shareable_id: $shareable_id) {
     id
-    user_invite{
-        id
-        name
-        medium{
-            id
-            file
-            thumb_image
-        }
-    }
+    is_owner
     updated_at
+    user_invite {
+      id
+      name
+      medium {
+        id
+        file
+        thumb_image
+      }
+    }
   }
-}`;
+}
+`;
         const res = await apolloClient.query({
             query,
             variables: {shareable_type, shareable_id}

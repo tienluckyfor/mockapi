@@ -61,6 +61,15 @@ class User extends Authenticatable
         return $this->hasMany(DataSet::class);
     }
 
+    public function getDatasetsAttribute()
+    {
+        $shareDatasetIds = $this->share_datasets->pluck('shareable_id')->toArray();
+        $datasets = DataSet::where('user_id', $this->id)
+            ->orWhereIn('id', $shareDatasetIds)
+            ->get();
+        return $datasets;
+    }
+
     public function share_datasets(): HasMany
     {
         return $this->hasMany(Share::class, 'user_invite_id', 'id')

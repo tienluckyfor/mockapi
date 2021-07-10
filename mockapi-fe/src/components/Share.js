@@ -1,17 +1,26 @@
 import {Button, Popconfirm, Form, List, Select, Space} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
-import React from "react";
+import React, {useState} from "react";
 import Avatar from "react-avatar";
 import {queryMe, shareSearchUsers, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
 import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
 import moment from "moment";
+import {datasetsSelector} from "slices/datasets";
 
 export const Share = ({shareable_type, shareable_id}) => {
     const dispatch = useDispatch()
     const {lsUser} = useSelector(usersSelector)
     const {cShare, lShare, dShare} = useSelector(sharesSelector)
+    const {modalDataset,} = useSelector(datasetsSelector)
+    const {qMe,} = useSelector(usersSelector)
+
+    const [isOwner, setIsOwner] = useState()
+    React.useEffect(() => {
+        const isOwner = qMe?.data?.id == modalDataset?.dataset?.user?.id
+        setIsOwner(isOwner)
+    }, [qMe, modalDataset])
 
     const RenderForm = () => {
         const debounceFetch = debounce(name => {
@@ -19,7 +28,8 @@ export const Share = ({shareable_type, shareable_id}) => {
         }, 500);
 
         React.useEffect(() => {
-            if (cShare.data) {
+            console.log('cShare', cShare)
+            if (cShare?.data) {
                 form.setFieldsValue({user_invite_id: null});
             }
         }, [cShare])
@@ -47,6 +57,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                 form={form}
                 onFinish={(values) => dispatch(createShare(values))}
                 layout="inline"
+                className={isOwner ? '' : 'hidden'}
             >
                 <Form.Item name="user_invite_id" style={{width: "89.5%"}}>
                     <Select
@@ -93,7 +104,7 @@ export const Share = ({shareable_type, shareable_id}) => {
             <List
                 loading={lShare.isLoading}
                 dataSource={(lShare?.data?.shares ?? [])}
-                renderItem={({id, user_invite, updated_at}) => (
+                renderItem={({id, is_owner, user_invite, updated_at}) => (
                     <List.Item>
                         <section className="flex justify-between w-full">
                             <Space>
@@ -103,12 +114,20 @@ export const Share = ({shareable_type, shareable_id}) => {
                                     name={user_invite.name}
                                     src={user_invite?.medium?.thumb_image}
                                 />
-                                {user_invite.name}
+
+                                {is_owner &&
+                                <span className="text-indigo-600">{user_invite.name}</span>
+                                }
+                                {!is_owner && user_invite.name}
                             </Space>
                             <Space>
-                                <span className="text-gray-400">
-                                    {moment(updated_at).fromNow()}
-                                </span>
+                                {is_owner &&
+                                <span className="text-indigo-600">Owner</span>
+                                }
+                                {!is_owner &&
+                                <span className="text-gray-400">{moment(updated_at).fromNow()}</span>
+                                }
+                                { isOwner && !is_owner &&
                                 <Popconfirm
                                     title="Are you sure to delete?"
                                     onConfirm={() => dispatch(deleteShare(id))}
@@ -121,6 +140,8 @@ export const Share = ({shareable_type, shareable_id}) => {
                                         loading={dShare.isLoading && dShare.id === id}
                                     />
                                 </Popconfirm>
+                                }
+
                             </Space>
                         </section>
                     </List.Item>

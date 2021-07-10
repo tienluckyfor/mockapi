@@ -1,31 +1,37 @@
-
 extend type Mutation {
-    create_share(input: CreateShareInput! @spread): Share @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@createShare")
-#    edit_share(input: EditShareInput! @spread): Share @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@editShare")
+    create_share(input: CreateShareInput! @spread): Share @validator @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@createShare")
+    #    edit_share(input: EditShareInput! @spread): Share @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@editShare")
     delete_share(input: DeleteShareInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@deleteShare")
-#    duplicate_share(input: DuplicateShareInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@duplicateShare")
+    #    duplicate_share(input: DuplicateShareInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ShareMutations@duplicateShare")
 }
 
 extend type Query {
-#    shares(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
-##    shares(name: String @eq orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
-#    share(id: ID @eq): Share @find
-#    my_share_list(name: String): [Share!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@my_share_list")
+    #    shares(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
+    ##    shares(name: String @eq orderBy: [OrderByClause!] @orderBy): [Share!]! @paginate(type: "paginator" model: "App\\Models\\Share")
+    #    share(id: ID @eq): Share @find
+    #    my_share_list(name: String): [Share!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@my_share_list")
     shares(shareable_type: String!, shareable_id: ID!): [Share] @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@getShares")
+    shares_owner_invite(shareable_type: String!, shareable_id: ID!): SharesOwnerInvite @field(resolver: "App\\GraphQL\\Queries\\ShareQueries@getSharesOwnerInvite")
+}
+
+type SharesOwnerInvite{
+    owners: [User]
+    invites: [User]
 }
 
 type Share{
     id: ID
     user: User
     user_invite: User
-    created_at: DateTime!
-    updated_at: DateTime!
+    created_at: DateTime
+    updated_at: DateTime
+    is_owner: Boolean
 }
 
 input CreateShareInput{
-    user_invite_id: ID! @rules(apply:["required"])
+    user_invite_id: ID! @rules(apply:["required", "App\\Rules\\UserInviteCheckShare"])
     shareable_type: String! @rules(apply:["required"])
-    shareable_id: ID! @rules(apply:["required"])
+    shareable_id: ID!
 }
 
 input EditShareInput{

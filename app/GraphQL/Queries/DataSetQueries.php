@@ -62,48 +62,10 @@ class DataSetQueries
     public function getDatasets($_, array $args)
     {
         $user = Auth::user();
-        $shareDatasetIds = $user->share_datasets->pluck('shareable_id')->toArray();
-        $datasets = DataSet::select('*');
+        $datasets = $user->datasets;
         if (!empty($args['name'])) {
             $datasets = $datasets->where('name', 'like', "%{$args['name']}%");
         }
-        $datasets = $datasets
-            ->where('user_id', Auth::id())
-            ->orWhereIn('id', $shareDatasetIds)
-            ->get();
         return $datasets;
-//        return ['datasets' => $datasets,];
-////        dd($datasets->toArray());
-////        dd($shareDatasetIds);
-////        // datasets
-////        $datasets = $this->dataset_repository
-////            ->getByUserIdNameApiId(Auth::id(), @$args['name'], @$args['api_id']);
-////        dd($datasets->toArray());
-//
-//        // api
-//        $apiIds = $datasets->pluck('api_id')->toArray();
-//        $apis = $this->api_repository->getByIds($apiIds, 'id, name')->keyBy('id');
-//
-//        // rally
-//        $datasetIds = $datasets->pluck('id')->toArray();
-//        $rallies = RallyData::selectRaw('count(1) as count, dataset_id, resource_id')
-//            ->whereIn('dataset_id', $datasetIds)
-//            ->groupBy('dataset_id')
-//            ->groupBy('resource_id')
-//            ->get();
-//
-//        // resource
-//        $resourceIds = $rallies->pluck('resource_id')->toArray();
-//        $resources = $this->resource_repository->getByIds($resourceIds, 'id, name')->keyBy('id');
-//        $rallies = $rallies
-//            ->groupBy('dataset_id')
-//            ->toArray();
-//        $data = [
-//            'datasets'  => $datasets,
-//            'apis'      => $apis->toArray(),
-//            'resources' => $resources->toArray(),
-//            'rallies'   => $rallies,
-//        ];
-//        return $data;
     }
 }

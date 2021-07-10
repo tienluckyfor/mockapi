@@ -73,7 +73,7 @@ export function createDataset(dataset) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     cDataset: {isLoading: false, isOpen: false},
-                    mlDataset: {isRefresh: true}
+                    lDataset: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -227,6 +227,15 @@ export function listDataset() {
     name
     locale
     updated_at
+    user{
+        id
+        name
+        medium{
+            id
+            file
+            thumb_image
+        }
+    }
     postman{
         collection
         environment
