@@ -58,8 +58,15 @@ class RallydataQueries
             foreach ($rallydatasCurrent as &$item) {
                 $data_children = @$item['data_children'] ?? [];
                 foreach ($data_children as $data_child) {
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$resources', [$resources]);
+                    
                     $r = $resources[$data_child['resource_id']];
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$r', [$r]);
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$rallydatas', [$rallydatas]);
+                    
                     $rd = collect($rallydatas[$r['id']]);
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$rd', [$rd]);
+                    
                     $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
                         ->map(function ($item1) {
                             return $item1['data'];
