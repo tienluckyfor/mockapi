@@ -22,6 +22,8 @@ import EditDatasetForm from "./EditDatasetForm"
 import InfoDatasetModal from "./InfoDatasetModal";
 
 const DatasetListPage = () => {
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
     const dispatch = useDispatch()
     const {visibles,} = useSelector(commonsSelector)
     const {cDataset, eDataset, lDataset, dDataset, duDataset,} = useSelector(datasetsSelector)

@@ -17,6 +17,8 @@ const CheckboxGroup = Checkbox.Group;
 
 export const MediaModal = () => {
     const dispatch = useDispatch()
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
 
     const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)

@@ -22,6 +22,8 @@ import CreateResourceForm from "./CreateResourceForm";
 import EditResourceForm from "./EditResourceForm";
 
 const ResourceListPage = () => {
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
     const dispatch = useDispatch()
     const {visibles} = useSelector(commonsSelector)
     const {cResource, eResource, mlResource, dResource, duResource, epResource} = useSelector(resourcesSelector)

@@ -11,6 +11,8 @@ import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 
 const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
     const dispatch = useDispatch()
     const {eRallydata, dataset_id_RD, resource_id_RD, mRallydataData, deRallydata} = useSelector(rallydatasSelector)
     const [form] = Form.useForm()

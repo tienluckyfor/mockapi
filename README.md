@@ -21,3 +21,6 @@ cd codeby/codeby/mockapi_be-laravel/
 
 php artisan optimize:clear; php artisan lighthouse:clear-cache;
 ```
+
+php artisan storage:link
+mkdir -m 777 -p storage/app/public/media/images storage/app/public/media/thumb-images

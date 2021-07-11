@@ -10,6 +10,8 @@ import moment from "moment";
 import {datasetsSelector} from "slices/datasets";
 
 export const Share = ({shareable_type, shareable_id}) => {
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
     const dispatch = useDispatch()
     const {lsUser} = useSelector(usersSelector)
     const {cShare, lShare, dShare} = useSelector(sharesSelector)

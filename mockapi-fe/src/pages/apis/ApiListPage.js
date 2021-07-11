@@ -13,6 +13,8 @@ import CreateApiForm from "./CreateApiForm";
 import EditApiForm from "./EditApiForm";
 
 const ApiListPage = () => {
+    moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
+
     const dispatch = useDispatch()
     const {visibles} = useSelector(commonsSelector)
     const {cApi, eApi, mlApi, dApi, duApi} = useSelector(apisSelector)
