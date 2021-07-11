@@ -66,7 +66,7 @@ class RallydataQueries
                     \Illuminate\Support\Facades\Log::channel('single')->info('$r', [$r]);
                     \Illuminate\Support\Facades\Log::channel('single')->info('$rallydatas', [$rallydatas]);
                     
-                    $rd = collect($rallydatas[$r['id']]);
+                    $rd = collect(@$rallydatas[$r['id']] ?? []);
                     \Illuminate\Support\Facades\Log::channel('single')->info('$rd', [$rd]);
                     
                     $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
