@@ -57,6 +57,8 @@ class RallydataQueries
             $rallydatasCurrent = @$rallydatas[$args['resource_id']] ?? [];
             foreach ($rallydatasCurrent as &$item) {
                 $data_children = @$item['data_children'] ?? [];
+                \Illuminate\Support\Facades\Log::channel('single')->info('$data_children', [$data_children]);
+                
                 foreach ($data_children as $data_child) {
                     \Illuminate\Support\Facades\Log::channel('single')->info('$resources', [$resources]);
                     
