@@ -3,7 +3,8 @@ import {UploadOutlined,} from '@ant-design/icons';
 import {useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
 import {getItype} from "./configRallydata";
-import moment from "moment";
+import moment from "moment"
+import "moment-timezone";
 import {useEffect, useState} from 'react'
 
 const EditRallydataForm = ({visible, onCreate, onCancel, fields}) => {

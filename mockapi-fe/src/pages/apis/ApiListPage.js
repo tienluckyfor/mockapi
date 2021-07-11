@@ -1,7 +1,8 @@
 import {Tooltip, Button, Divider, Popconfirm, Menu, Dropdown, Table} from 'antd';
 import {MoreOutlined,} from '@ant-design/icons'
 import {useEffect} from 'react';
-import moment from "moment";
+import moment from "moment"
+import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
 
 import {apisSelector, editApi, deleteApi, duplicateApi, myApiList, setApiMerge} from "slices/apis";

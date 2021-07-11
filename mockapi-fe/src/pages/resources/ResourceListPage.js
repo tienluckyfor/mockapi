@@ -1,7 +1,8 @@
 import {Tooltip, Button, Divider, Popconfirm, Table, Dropdown, Menu, Tree} from 'antd';
 import {MoreOutlined, DownOutlined} from '@ant-design/icons'
 import {useEffect} from 'react';
-import moment from "moment";
+import moment from "moment"
+import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
 
 import {

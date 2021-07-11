@@ -6,7 +6,8 @@ import {MediaModal} from "components";
 import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
 import {getItype, getRallyData} from "./configRallydata";
-import moment from "moment";
+import moment from "moment"
+import "moment-timezone";
 import {mediaSelector, setMediaMerge} from "slices/media";
 import {commonsSelector} from "slices/commons";
 

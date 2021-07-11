@@ -6,7 +6,8 @@ import {queryMe, shareSearchUsers, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
 import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
-import moment from "moment";
+import moment from "moment"
+import "moment-timezone";
 import {datasetsSelector} from "slices/datasets";
 
 export const Share = ({shareable_type, shareable_id}) => {
