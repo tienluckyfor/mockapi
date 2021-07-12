@@ -54,7 +54,7 @@ const HeaderRallydata = () => {
                 }}
             >
                 {(qMe?.data?.datasets ?? []).map((dataset) => (
-                    <Option key={dataset.id} value={dataset.id.toString()}>{dataset.name}</Option>
+                    <Option key={dataset.id} value={(dataset?.id??0).toString()}>{dataset.name}</Option>
                 ))}
             </Select>)
         }
@@ -73,7 +73,7 @@ const HeaderRallydata = () => {
                 }}
             >
                 {resources.map((resource) => (
-                    <Option key={resource.id} value={resource.id.toString()}>{resource.name}</Option>
+                    <Option key={resource.id} value={(resource?.id??0).toString()}>{resource.name}</Option>
                 ))}
             </Select>)
         }

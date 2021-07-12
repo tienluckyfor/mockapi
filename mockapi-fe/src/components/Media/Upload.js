@@ -57,7 +57,7 @@ const Upload = ({listType, children, plainOptions}) => {
         const res = await resfulClient.post('/api/media', formData)
         if (res?.data?.id) {
             const list = checkedList[mMedia?.name] ?? []
-            checkedList1 = [...list, ...checkedList1, res?.data?.id.toString()]
+            checkedList1 = [...list, ...checkedList1, (res?.data?.id??0).toString()]
             checkedList1 = checkedList1.filter((v, i, a) => a.indexOf(v) === i);
             dispatch(commonOnCheck(mMedia.name, plainOptions, checkedList1))
         }

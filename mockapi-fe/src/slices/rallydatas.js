@@ -318,6 +318,9 @@ export function detailRallydata(dataset_id) {
   detail_rallydata(dataset_id: $dataset_id){
       dataset{
           id
+          api{
+          id
+          }
 
     user{
         id

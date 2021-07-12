@@ -16,7 +16,7 @@ const EditDatasetForm = ({visible, onCreate, onCancel}) => {
     const [form] = Form.useForm()
     const values = {
         ...eDataset?.dataset,
-        api_id: eDataset?.dataset?.api_id.toString(),
+        api_id: (eDataset?.dataset?.api?.id ?? 0).toString(),
         amounts,
     }
     form.setFieldsValue(values)

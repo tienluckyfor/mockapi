@@ -112,7 +112,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         <p className={val ? `text-indigo-700` : `text-red-700`}>{val1}</p>
                     </Tooltip>
                 }
-                if (!val || val && !val.toString().length)
+                if (!val || val && !(val??0).toString().length)
                     return <Tooltip title={val}>
                         <p className={`text-gray-500`}>-</p>
                     </Tooltip>
