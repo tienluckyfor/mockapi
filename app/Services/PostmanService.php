@@ -130,7 +130,8 @@ class PostmanService
                                         ],
                                         [
                                             "key"   => "search",
-                                            "value" => "name,"
+                                            "value" => "name,",
+                                            "disabled" => true
                                         ],
                                         [
                                             "key"   => "fields",
