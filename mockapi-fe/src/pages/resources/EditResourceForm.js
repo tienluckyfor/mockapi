@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
-import {Modal, Form, } from 'antd';
+import {Modal, Form,} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
-import {resourcesSelector, } from "slices/resources";
+import {resourcesSelector,} from "slices/resources";
 import {apisSelector, myApiList} from "slices/apis";
 import FormResource from "./FormResource";
 
@@ -28,7 +28,7 @@ const EditResourceForm = ({visible, onCreate, onCancel}) => {
         form.setFieldsValue({
             id: eResource?.resource?.id,
             name: eResource?.resource?.name,
-            api_id: api?.id.toString(),
+            api_id: (api?.id ?? 0).toString(),
             field_template: eResource?.resource?.field_template,
             fields: eResource?.resource?.fields,
             endpoints: eResource?.resource?.endpoints,
