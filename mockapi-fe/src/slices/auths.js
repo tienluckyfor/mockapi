@@ -137,7 +137,6 @@ export function authLogout() {
                 }
                 dispatch(setMerge({loAuth: {isLoading: false}}))
                 // const access_token = res?.data?.logout?.status
-                // console.log('access_token', access_token)
                 // cookies.set('mockapi-token', access_token,
                 //     {path: '/', expires: new Date(Date.now() + 99999999999)})
                 // window.location.assign(`/`)

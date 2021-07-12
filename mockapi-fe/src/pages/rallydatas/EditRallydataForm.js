@@ -19,11 +19,6 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
     const [form] = Form.useForm()
     const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
-    // useEffect(() => {
-    //     form.setFieldsValue(eRallydata.rallydata)
-    //     console.log('11')
-    // }, [eRallydata])
-
 
     useEffect(() => {
         const rally = eRallydata.rallydata
@@ -53,15 +48,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             "resource_id": resource_id_RD,
             "data": {}
         };
-        // (fields ?? []).map((field) => {
-        //     const {name, type, fakerjs} = field
-        //     const iType = getItype(type, fakerjs)
-        //     if (iType === `Date`) {
-        //         fieldsValue.data[name] = moment()
-        //     }
-        // })
         form.setFieldsValue(fieldsValue)
-        // console.log('myMediaList dataset_id_RD',  dataset_id_RD)
 
     }, [dataset_id_RD, resource_id_RD, fields])
 
@@ -86,7 +73,6 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         fieldsValue.data_children = []
         for (const key in childResources) {
             const r = childResources[key]
-            console.log('getRallyData(mRallydataData, r.id)', getRallyData(mRallydataData, r.id))
             const childrenR = getRallyData(mRallydataData, r.id).filter((rally) => checkedList[r.name] && checkedList[r.name].indexOf(rally.data.id) !== -1)
             dispatch(setRallydataMerge('cbRallydata', {[r.name]: childrenR}))
             fieldsValue.data_children.push({

@@ -83,7 +83,6 @@ export function createDataset(dataset) {
 }
 
 export function editDataset(dataset) {
-    console.log('editDataset dataset', dataset)
     return async (dispatch) => {
         dispatch(setMerge({eDataset: {isLoading: true, dataset}}))
         const mutationAPI = () => {

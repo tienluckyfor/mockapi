@@ -37,7 +37,6 @@ export const ParentAmountData = ({resource}) => {
 
     const [amount, setAmount] = useState()
     useEffect(()=>{
-        console.log('cDataset', cDataset)
         const amount = amounts && amounts[resource.id] ? amounts[resource.id] : 0;
         setAmount(amount)
         // const amount = cDataset?.amounts && cDataset?.amounts[resource.id] ? cDataset?.amounts[resource.id] : 0;

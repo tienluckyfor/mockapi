@@ -37,9 +37,7 @@ const ModalChildRallydata = () => {
                 <CheckboxGroup
                     value={checkedList[mRallydata?.resource?.name]}
                     onChange={(list) => {
-                        console.log('CheckboxGroup checkedList', checkedList)
                         dispatch(commonOnCheck(mRallydata?.resource?.name, plainOptions, list))
-                        console.log('CheckboxGroup checkedList 1', checkedList)
                     }}
                 >
                     <RenderTableRallydata

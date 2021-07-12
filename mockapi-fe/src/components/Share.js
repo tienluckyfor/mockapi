@@ -31,7 +31,6 @@ export const Share = ({shareable_type, shareable_id}) => {
         }, 500);
 
         React.useEffect(() => {
-            console.log('cShare', cShare)
             if (cShare?.data) {
                 form.setFieldsValue({user_invite_id: null});
             }

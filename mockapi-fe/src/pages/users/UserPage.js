@@ -44,17 +44,12 @@ const UserPage = () => {
         // media
         const fmedia = {[name]: {name}};
         let fieldsValue = form.getFieldsValue()
-        console.log('fmedia', fmedia)
         for (const key in fmedia) {
             const f = fmedia[key]
-            console.log('mlMedia.data', mlMedia.data)
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
-            console.log('mediaR', mediaR)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             fieldsValue[f.name] = mediaR.map((medium) => medium.id)
         }
-        console.log('fieldsValue', fieldsValue)
-        // console.log('fieldsValue', fieldsValue)
         form.setFieldsValue(fieldsValue);
     }, [mlMedia, checkedList]);
 
@@ -157,7 +152,6 @@ const UserPage = () => {
                                         <Checkbox
                                             onChange={() => {
                                                 const checkedList1 = checkedList[name].filter((item) => item != medium.id)
-                                                console.log('checkedList1', checkedList1)
                                                 dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
                                             }}
                                             value={medium.id}

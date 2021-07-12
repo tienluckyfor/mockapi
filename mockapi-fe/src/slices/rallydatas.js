@@ -253,16 +253,17 @@ export function myRallydataList() {
             query
         })
         const myRallydataList = res?.data?.my_rallydata_list?.rallydatas ?? {};
+        console.log('myRallydataList', myRallydataList[resource_id_RD])
         dispatch(setMerge({
-            mlDRRallydata: {
-                isLoading: false,
-                data: myRallydataList[resource_id_RD] ?? [],
-                isRefresh: false,
-            },
-            mRallydataData: {
-                isLoading: false,
-                data: diffObject([resource_id_RD], myRallydataList),
-            }
+            // mlDRRallydata: {
+            //     isLoading: false,
+            //     data: myRallydataList && myRallydataList[resource_id_RD] ? myRallydataList[resource_id_RD]: [],
+            //     isRefresh: false,
+            // },
+            // mRallydataData: {
+            //     isLoading: false,
+            //     data: diffObject([resource_id_RD], myRallydataList),
+            // }
         }))
         // dispatch(setData({
         //     mRallydataData: myRallydataList,

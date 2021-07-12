@@ -30,7 +30,6 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
             }
         })
         form.setFieldsValue(fieldsValue)
-        console.log('22')
     }, [dataset_id_RD, resource_id_RD, fields])*/
 
     /*useEffect(() => {
@@ -40,13 +39,10 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
             const iType = getItype(type, fakerjs)
             return iType === "Media"
         })
-        console.log('fmedia', fmedia)
         let values = form.getFieldsValue()
-        console.log('11 values', values)
         for (const key in fmedia) {
             const f = fmedia[key]
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
-            console.log('mediaR', mediaR)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             values.data[f.name] = {
                 type: 'media',
@@ -83,7 +79,6 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
                         if(type==='Resource') return;
-                        // console.log('type', type)
                         const iType = getItype(type, fakerjs)
                         switch (iType) {
                             case `Media`:
@@ -108,7 +103,6 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
                                                         <Checkbox
                                                             onChange={() => {
                                                                 const checkedList1 = checkedList[name].filter((item) => item != medium.id)
-                                                                console.log('checkedList1', checkedList1)
                                                                 dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
                                                             }}
                                                             value={medium.id}

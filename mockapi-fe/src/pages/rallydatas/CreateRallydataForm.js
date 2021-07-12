@@ -12,6 +12,7 @@ import {mediaSelector, setMediaMerge} from "slices/media";
 import {commonsSelector} from "slices/commons";
 
 const CreateRallydataForm = ({fields}) => {
+    console.log('CreateRallydataForm', fields)
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
     const dispatch = useDispatch()
@@ -49,6 +50,7 @@ const CreateRallydataForm = ({fields}) => {
             const f = fmedia[key]
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
+            console.log('mediaR', mediaR)
             fieldsValue.data[f.name] = {
                 type: 'media',
                 media_ids: mediaR.map((medium) => medium.id)

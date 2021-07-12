@@ -1,4 +1,5 @@
 export const getItype = (type, fakerjs = ``) => {
+    // console.log('type, fakerjs', {type, fakerjs})
     if (type === 'Faker.js') {
         if (fakerjs.match(/date/gim))
             return `Date`

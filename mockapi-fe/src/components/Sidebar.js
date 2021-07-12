@@ -68,8 +68,6 @@ const Sidebar = ({device = `desktop`}) => {
                 <Menu.ItemGroup key="g1" title="Rallydata">
                     {(qMe?.data?.datasets || []).map((dataset, key) => {
                         // if (key >= 5) return;
-                        console.log('qMe?.data?.id', qMe?.data?.id)
-                        console.log('dataset?.user?.id', dataset?.user?.id)
                         const isOwner = qMe?.data?.id == dataset?.user?.id
                         return (<Menu.Item key={dataset.id}>
                             <Link

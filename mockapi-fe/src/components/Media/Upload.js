@@ -25,9 +25,7 @@ const Upload = ({listType, children, plainOptions}) => {
     }, [fileObj])
 
     const onChange = (info) => {
-        console.log('info', info)
         const {file} = info
-        console.log('file', file)
         if (file?.status === 'uploading') {
             setFileObj({...fileObj, [file.uid]: 0})
             setFileList1([...fileList1, {uid: file.uid, status: file.status}])
