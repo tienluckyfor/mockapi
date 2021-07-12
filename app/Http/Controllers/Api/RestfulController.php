@@ -109,6 +109,7 @@ class RestfulController extends Controller
     {
         //
         $rallydata = $this->_findRallyByDataId($datasetId, $resourceName, $dataId);
+        dd($rallydata);
         $isUpdate = RallyData::where('id', $rallydata['id'])
             ->update([
                 'data' => $request->all(),
