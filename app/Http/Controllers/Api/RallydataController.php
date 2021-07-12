@@ -67,7 +67,7 @@ class RallydataController extends Controller
     protected function _getEndpoint($endpoint, $datasetId, $resource, $rallydata)
     {
         $method = $endpoint['name'];
-        $url = URL::to("/api/restful/{$datasetId}/{$resource->name}");
+        $url = URL::to("/api/restful/{$resource->name}");
         if (in_array($endpoint['type'], ['get_id', 'put', 'delete_id'])) {
             $url .= "/1";
             $method .= $endpoint['type'] == 'get_id' ? ' detail' : '';

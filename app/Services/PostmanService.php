@@ -260,7 +260,7 @@ class PostmanService
     public function environment($datasetId)
     {
         $dataset = $this->dataset_repository->find($datasetId);
-        $apiUrl = URL::to("/api/restful/{$datasetId}");
+        $apiUrl = URL::to("/api/restful");
         $data = [
             "id"                      => "8d782980-878b-40ec-8c74-7f80aabca4f9",
             "name"                    => $dataset->name,//$dataset['name'],

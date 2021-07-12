@@ -26,16 +26,13 @@ Route::middleware('auth:api')
 Route::resource('media', MediaController::class)
     ->middleware('auth:api');
 
-
-Route::group(['prefix' => 'restful/{datasetId}/{resourceName}'], function () {
+Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulTokenIsValid::class]],
+    function () {
     Route::get('/', [RestfulController::class, 'list']);
     Route::get('/{dataId}', [RestfulController::class, 'detail']);
-
-    Route::middleware(RestfulTokenIsValid::class)->group(function () {
-        Route::post('/', [RestfulController::class, 'store']);
-        Route::put('/{dataId}', [RestfulController::class, 'update']);
-        Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
-    });
+    Route::post('/', [RestfulController::class, 'store']);
+    Route::put('/{dataId}', [RestfulController::class, 'update']);
+    Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
 });
 
 

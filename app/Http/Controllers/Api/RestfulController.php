@@ -56,14 +56,13 @@ class RestfulController extends Controller
     }
 
     /**
-     * @param $datasetId
      * @param $resourceName
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store($datasetId, $resourceName, Request $request)
+    public function store($resourceName, Request $request)
     {
-        //
+        $datasetId = $request->dataset_id;
         $resource = $this->resource_repository->findByName($resourceName);
         $rallydata = [
             'dataset_id'  => $datasetId,
@@ -100,15 +99,19 @@ class RestfulController extends Controller
     }
 
     /**
-     * @param $datasetId
      * @param $resourceName
      * @param $dataId
      * @param Request $request
      */
-    public function update($datasetId, $resourceName, $dataId, Request $request)
+    public function update($resourceName, $dataId, Request $request)
     {
-        //
+        $datasetId = $request->dataset_id;
         $rallydata = $this->_findRallyByDataId($datasetId, $resourceName, $dataId);
+        if (!$rallydata) {
+            return response()->json([
+                'status' => false,
+            ]);
+        }
         $newData = $request->all();
         $data = array_merge($rallydata['data'], $newData);
         $isUpdate = RallyData::where('id', $rallydata['id'])
@@ -121,15 +124,14 @@ class RestfulController extends Controller
     }
 
     /**
-     * @param $datasetId
      * @param $resourceName
      * @param $dataId
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($datasetId, $resourceName, $dataId, Request $request)
+    public function destroy($resourceName, $dataId, Request $request)
     {
-        //
+        $datasetId = $request->dataset_id;
         $rallydata = $this->_findRallyByDataId($datasetId, $resourceName, $dataId);
         $isDelete = RallyData::where('id', $rallydata['id'])
             ->delete();
@@ -201,14 +203,14 @@ class RestfulController extends Controller
     }
 
     /**
-     * @param $datasetId
      * @param $resourceName
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function list($datasetId, $resourceName, Request $request)
+    public function list($resourceName, Request $request)
     {
         //
+        $datasetId = $request->dataset_id;
         $perPage = $request->per_page && is_numeric($request->per_page)
             ? abs((int)$request->per_page) : 20;
         $currentPage = $request->current_page && is_numeric($request->current_page) && $request->current_page >= -1
@@ -256,14 +258,14 @@ class RestfulController extends Controller
     }
 
     /**
-     * @param $datasetId
      * @param $resourceName
      * @param $dataId
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detail($datasetId, $resourceName, $dataId, Request $request)
+    public function detail($resourceName, $dataId, Request $request)
     {
+        $datasetId = $request->dataset_id;
         $rallydata = $this->_findRallyByDataId($datasetId, $resourceName, $dataId);
         $rallydata = @$this->_handleParentMedia([$rallydata], $datasetId, $request)[0];
         $res = ['status' => true, 'data' => $rallydata];
