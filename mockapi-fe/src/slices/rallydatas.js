@@ -316,28 +316,29 @@ export function detailRallydata(dataset_id) {
         const query = gql`
         query($dataset_id: ID!) {
   detail_rallydata(dataset_id: $dataset_id){
-      dataset{
-          id
-          api{
-          id
-          }
-
-    user{
+    dataset{
         id
         name
-        medium{
+        locale
+        api{
             id
-            file
-            thumb_image
+        }
+        user{
+            id
+            name
+            medium{
+                id
+                file
+                thumb_image
+            }
+        }
+        postman{
+            collection
+            environment
         }
     }
-    postman{
-        collection
-        environment
-    }
-      }
-      resources
-  }
+    resources
+}
 }`;
         const res = await apolloClient.query({
             query,
