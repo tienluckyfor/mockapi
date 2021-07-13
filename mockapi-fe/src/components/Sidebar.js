@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import {useEffect} from "react"
 import {usersSelector} from "slices/users";
 import Avatar from "react-avatar";
-import {getURLParams} from "../services";
+import {getURLParams} from "services";
 
 const Sidebar = ({device = `desktop`}) => {
     const {qMe} = useSelector(usersSelector)

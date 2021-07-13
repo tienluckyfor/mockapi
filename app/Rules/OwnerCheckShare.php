@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\DataSet;
+use App\Models\Share;
 use Illuminate\Contracts\Validation\Rule;
 
 class OwnerCheckShare implements Rule
@@ -13,7 +14,8 @@ class OwnerCheckShare implements Rule
      * @return void
      */
     protected $shareableType, $shareableId;
-    public function __construct($shareableType, $shareableId)
+
+    public function __construct($shareableType=null, $shareableId=null)
     {
         //
         $this->shareableType = $shareableType;
@@ -30,19 +32,18 @@ class OwnerCheckShare implements Rule
     public function passes($attribute, $value)
     {
         //
-        switch ($this->shareableType){
-            case 'App\Models\DataSet':
-                return DataSet::where('user_id', \auth()->id())
-                    ->where('id', $this->shareableId)
-                    ->exists();
-                break;
+        if ($this->shareableType) {
+            switch ($this->shareableType) {
+                case 'App\Models\DataSet':
+                    return DataSet::where('user_id', \auth()->id())
+                        ->where('id', $this->shareableId)
+                        ->exists();
+                    break;
+            }
         }
-//        return User::find(\auth()->id())
-//
-//
-//            Share::where('user_id', \auth()->id())
-//            ->where('id', $value)
-//            ->exists();
+        return Share::where('user_id', \auth()->id())
+            ->where('id', $value)
+            ->exists();
     }
 
     /**

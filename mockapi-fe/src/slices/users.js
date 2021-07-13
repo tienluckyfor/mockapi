@@ -101,7 +101,8 @@ export function queryMe(href = ``) {
             dispatch(setMerge({qMe: {isLoading: false, data: null}}))
             cookies.remove('mockapi-token')
             if (!href.match(/Login|Register/gim)) {
-                window.location.assign(`/LoginPage`)
+                const ref = btoa(window.location.href)
+                window.location.assign(`/LoginPage?ref=${ref}`)
             }
         }
     }

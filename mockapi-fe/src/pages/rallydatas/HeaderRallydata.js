@@ -8,6 +8,7 @@ import EditDatasetForm from "pages/datasets/EditDatasetForm";
 import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} from "slices/rallydatas";
 import {datasetsSelector, setDataset, editDataset, setDatasetMerge, myDatasetList} from "slices/datasets";
 import {usersSelector} from "slices/users";
+import {isMobile} from 'react-device-detect';
 
 const {Option} = Select
 
@@ -46,7 +47,7 @@ const HeaderRallydata = () => {
             return (<Select
                 // showSearch
                 size={`small`}
-                style={{width: 150}}
+                style={{width: isMobile ? 100 : 150}}
                 placeholder="Select a dataset"
                 value={dataset_id_RD}
                 onChange={(id) => {
@@ -54,7 +55,7 @@ const HeaderRallydata = () => {
                 }}
             >
                 {(qMe?.data?.datasets ?? []).map((dataset) => (
-                    <Option key={dataset.id} value={(dataset?.id??0).toString()}>{dataset.name}</Option>
+                    <Option key={dataset.id} value={(dataset?.id ?? 0).toString()}>{dataset.name}</Option>
                 ))}
             </Select>)
         }
@@ -65,7 +66,7 @@ const HeaderRallydata = () => {
             return (<Select
                 // showSearch
                 size={`small`}
-                style={{width: 150}}
+                style={{width: isMobile ? 100 : 150}}
                 placeholder="Select a resource"
                 value={resource_id_RD}
                 onChange={(id) => {
@@ -73,14 +74,16 @@ const HeaderRallydata = () => {
                 }}
             >
                 {resources.map((resource) => (
-                    <Option key={resource.id} value={(resource?.id??0).toString()}>{resource.name}</Option>
+                    <Option key={resource.id} value={(resource?.id ?? 0).toString()}>{resource.name}</Option>
                 ))}
             </Select>)
         }
 
         return (
             <Breadcrumb>
-                <Breadcrumb.Item>Rallydata</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                    R<span className="lg:inline hidden">allydata</span>
+                </Breadcrumb.Item>
                 <Breadcrumb.Item>
                     {datasetSelect()}
                 </Breadcrumb.Item>
@@ -93,7 +96,7 @@ const HeaderRallydata = () => {
 
     return (
         <>
-            <section className="flex items-center justify-between">
+            <section className="lg:flex block items-center justify-between space-y-3">
                 {renderBreadcrumb()}
                 <Space>
                     <Button

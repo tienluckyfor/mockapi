@@ -9,6 +9,7 @@ import debounce from "lodash/debounce"
 import moment from "moment"
 import "moment-timezone";
 import {datasetsSelector} from "slices/datasets";
+import {isMobile} from 'react-device-detect';
 
 export const Share = ({shareable_type, shareable_id}) => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -61,7 +62,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                 layout="inline"
                 className={isOwner ? '' : 'hidden'}
             >
-                <Form.Item name="user_invite_id" style={{width: "89.5%"}}>
+                <Form.Item name="user_invite_id" style={{width: isMobile ? '80%': '89.5%'}}>
                     <Select
                         showSearch
                         filterOption={false}

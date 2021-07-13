@@ -29,6 +29,10 @@ const InfoDatasetModal = () => {
 
     const listData = [
         {
+            title: `Data Management`,
+            url: `${window.location.origin.toString()}/RallydataPage?dataset_id_RD=${modalDataset?.dataset?.id}`,
+        },
+        {
             title: `Postman Collection`,
             url: modalDataset?.dataset?.postman?.collection ?? ``,
         },

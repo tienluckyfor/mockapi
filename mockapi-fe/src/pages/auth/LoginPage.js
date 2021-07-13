@@ -1,75 +1,68 @@
-import {Form, Input, Button, Divider} from "antd";
+import {Form, Input, Button, Space} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {authLogin, authsSelector} from "slices/auths";
 import {Link} from 'react-router-dom'
+import AuthLayout from "pages/layouts/AuthLayout";
+import {getURLParams} from "services";
 
 const LoginPage = () => {
     const dispatch = useDispatch()
     const {lAuth} = useSelector(authsSelector)
+    const {ref} = getURLParams()
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    const renderMain = () => {
-        return (
+    return (
+        <AuthLayout
+            title="Login"
+            linkButton={<Link to={`/RegisterPage?ref=${ref}`}>
+                <Button block className={`-mt-4`} type="dashed">
+                    <p className="truncate space-x-2">
+                        <span className="lg:inline hidden">Don't have an account?</span>
+                        <span className={`text-indigo-700`}>Create a Free Account</span>
+                    </p>
+                </Button>
+            </Link>}>
             <Form
-                className="mx-auto max-w-sm border border-indigo-200 py-5 shadow-lg relative"
                 initialValues={{remember: true}}
-                onFinish={(values) => dispatch(authLogin(values))}
-                onFinishFailed={onFinishFailed}
+                onFinish={(values) => dispatch(authLogin({...values, ref}))}
                 layout={`vertical`}
             >
-                <section className="px-5">
-                    <h2 className="text-2xl font-semibold">Login</h2>
-                    <Form.Item
-                        className="mt-3"
-                        label="Email"
-                        name="username"
-                        rules={[{
-                            required: true,
-                            type: "email",
-                            message: 'The email is not valid.'
-                        }]}
-                    >
-                        <Input type={`email`}/>
-                    </Form.Item>
-                    <Form.Item
-                        className="mt-3"
-                        label="Password"
-                        name="password"
-                        rules={[{required: true, message: 'Please input your Password.'}]}
-                    >
-                        <Input.Password/>
-                    </Form.Item>
-                    <div className="flex items-center justify-between mt-3 ">
-                        <Button
-                            block
-                            type="primary"
-                            htmlType="submit"
-                            loading={lAuth.isLoading}
-                        >Sign in</Button>
-                    </div>
-                </section>
-                <Divider plain/>
-                <section className="px-5 ">
-                    <Link to="/RegisterPage">
-                    <Button block className={`-mt-4`} type="dashed">
-                        Don't have an account? <span className={`text-indigo-700 ml-2`}>Create a Free Account</span>
-                    </Button>
-                    </Link>
-                    <div className="flex items-center justify-between mt-4 ">
-                        <Button className="w-1/2 mr-2">Facebook</Button>
-                        <Button className="w-1/2 ml-2">Google</Button>
-                    </div>
-                </section>
+                <Form.Item
+                    label="Email"
+                    name="username"
+                    rules={[{
+                        required: true,
+                        type: "email",
+                        message: 'The email is not valid.'
+                    }]}
+                >
+                    <Input type={`email`}/>
+                </Form.Item>
+                <Form.Item
+                    className=" "
+                    label={<section className="flex items-center justify-between w-screen max-w-sm">
+                        <span>Password</span>
+                        <Link to={`/ForgotPasswordPage?ref=${ref}`} className="flex justify-end">
+                            <Button className={`px-0 mr-16`} style={{marginRight: `3.2rem`}} type="link">
+                                <p className="truncate space-x-2">
+                                    <span className={`text-indigo-700`}>Forgot password?</span>
+                                </p>
+                            </Button>
+                        </Link>
+                    </section>}
+                    name="password"
+                    rules={[{required: true, message: 'Please input your Password.'}]}
+                >
+                    <Input.Password/>
+                </Form.Item>
+
+                <Button
+                    block
+                    type="primary"
+                    htmlType="submit"
+                    loading={lAuth.isLoading}
+                >Sign in</Button>
             </Form>
-        )
-    }
-    return (
-        <section className="pt-20">
-            {renderMain()}
-        </section>
+        </AuthLayout>
     );
 }
 export default LoginPage

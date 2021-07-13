@@ -80,6 +80,7 @@ export function authRegister(variables) {
 }
 
 export function authLogin(variables) {
+    console.log('variables', variables)
     return async (dispatch) => {
         dispatch(setMerge({lAuth: {isLoading: true}}))
         const mutationAPI = () => {
