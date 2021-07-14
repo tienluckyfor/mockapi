@@ -8,6 +8,8 @@ export const initialState = {
     rAuth: {},
     lAuth: {},
     loAuth: {},
+    foAuth: {},
+    reAuth: {},
 };
 
 const authsSlice = createSlice({
@@ -42,6 +44,13 @@ export function setAuthMerge(key, item) {
 
 const cookies = new Cookies()
 
+const _getRefUrl = (ref) => {
+    try {
+        return atob(ref)
+    }catch (e) {}
+    return '/'
+}
+
 export function authRegister(variables) {
     return async (dispatch) => {
         dispatch(setMerge({rAuth: {isLoading: true}}))
@@ -71,7 +80,7 @@ export function authRegister(variables) {
             await mutationAPI().then(res => {
                 cookies.set('mockapi-token', res?.data?.register?.tokens?.access_token,
                     {path: '/', expires: new Date(Date.now() + 99999999999)})
-                window.location.assign(`/`)
+                window.location.assign(_getRefUrl(variables?.ref))
             })
         } catch (e) {
             dispatch(setMerge({rAuth: {isLoading: false}}))
@@ -105,7 +114,7 @@ export function authLogin(variables) {
             await mutationAPI().then(res => {
                 cookies.set('mockapi-token', res?.data?.login?.access_token,
                     {path: '/', expires: new Date(Date.now() + 99999999999)})
-                window.location.assign(`/`)
+                window.location.assign(_getRefUrl(variables?.ref))
             })
         } catch (e) {
             dispatch(setMerge({lAuth: {isLoading: false}}))
@@ -137,13 +146,76 @@ export function authLogout() {
                     return;
                 }
                 dispatch(setMerge({loAuth: {isLoading: false}}))
-                // const access_token = res?.data?.logout?.status
-                // cookies.set('mockapi-token', access_token,
-                //     {path: '/', expires: new Date(Date.now() + 99999999999)})
-                // window.location.assign(`/`)
             })
         } catch (e) {
             dispatch(setMerge({loAuth: {isLoading: false}}))
+        }
+    }
+}
+
+export function authForgotPassword(user) {
+    return async (dispatch) => {
+        dispatch(setData({foAuth: {isLoading: true}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($email: String!) {
+  forgotPassword(
+    input: {
+      email: $email
+    }
+  ) {
+    status
+    message
+  }
+}
+
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: user
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({foAuth: {isLoading: false, data: res?.data?.forgotPassword}}))
+            })
+        } catch (e) {
+            dispatch(setMerge({foAuth: {isLoading: false}}))
+        }
+    }
+}
+
+export function authResetPassword(user) {
+    return async (dispatch) => {
+        dispatch(setData({reAuth: {isLoading: true}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($email: String!, $token: String, $code: String, $password: String!, $password_confirmation: String!) {
+  reset_user_password(
+    input: {
+      email: $email
+      token: $token
+      code: $code
+      password: $password
+      password_confirmation: $password_confirmation
+    }
+  ) {
+    status
+    message
+  }
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: user
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({reAuth: {isLoading: false, data: res?.data?.reset_user_password}}))
+            })
+        } catch (e) {
+            dispatch(setMerge({reAuth: {isLoading: false}}))
         }
     }
 }

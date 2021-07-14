@@ -49,7 +49,7 @@ const cookies = new Cookies()
 
 export function queryMe(href = ``) {
     return async (dispatch) => {
-        if (href.match(/Login|Register/gim)) return;
+        if (href.match(/Login|Register|PasswordPage/gim)) return;
         dispatch(setMerge({qMe: {isLoading: true}}))
         const query = gql`
         query {

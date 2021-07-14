@@ -1,7 +1,6 @@
-export const objToParams = (params) => {
-    const str = JSON.stringify(params)
-    const result = str.replace(/\{|\}|\"(\w+)\"/g, '$1')
-    return result
+
+export const objToUrlParams = (obj) => {
+    return new URLSearchParams(obj).toString();
 }
 
 export const diffObject = (keys, obj) => {

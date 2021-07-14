@@ -13,6 +13,7 @@ class User extends Authenticatable
     use \Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
     use HasFactory, Notifiable;
     use HasApiTokens;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,6 +45,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'media_ids' => 'array',
     ];
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\ResetPassword($token));
+    }
 
 
     public function apis(): HasMany

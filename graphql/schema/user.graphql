@@ -2,7 +2,8 @@
 extend type Mutation {
 #    create_user(input: CreateUserInput! @spread): User @guard @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@createUser")
     edit_user(input: EditUserInput! @spread): Boolean @guard @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@editUser")
-#    delete_user(input: DeleteUserInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@deleteUser")
+    reset_user_password(input: resetUserPasswordInput @spread): ForgotPasswordResponse! @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@resetUserPassword")
+    #    delete_user(input: DeleteUserInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@deleteUser")
 #    duplicate_user(input: DuplicateUserInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\UserMutations@duplicateUser")
 }
 
@@ -34,6 +35,15 @@ type User {
 #input CreateUserInput{
 #    name: String! @rules(apply:["required"])
 #}
+
+
+input resetUserPasswordInput {
+    email: String! @rules(apply: ["required", "email"])
+    token: String
+    code: String
+    password: String! @rules(apply: ["required", "confirmed", "min:8"])
+    password_confirmation: String!
+}
 
 input EditUserInput{
     name: String!

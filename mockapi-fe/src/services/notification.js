@@ -14,4 +14,11 @@ const error = (description) => {
     });
 };
 
-export {warning, error}
+const success = (description) => {
+    antd_notification['success']({
+        message: `Success`,
+        description
+    });
+};
+
+export {warning, error, success}

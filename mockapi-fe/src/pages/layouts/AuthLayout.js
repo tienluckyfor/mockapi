@@ -2,7 +2,7 @@ import {Button, Divider, PageHeader} from "antd";
 
 const AuthLayout = ({onBack, title, children, linkButton}) => {
     return (
-        <main className=" mx-auto max-w-sm lg:border border-indigo-200 py-5 lg:shadow-lg relative">
+        <main className="lg:mt-20 mt-0 mx-auto max-w-sm lg:border border-indigo-200 py-5 lg:shadow-lg relative">
             <PageHeader
                 // onBack={() => null}
                 onBack={onBack}

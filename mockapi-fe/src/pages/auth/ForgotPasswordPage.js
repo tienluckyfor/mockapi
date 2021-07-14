@@ -1,24 +1,46 @@
-import {Form, Input, Button, PageHeader} from "antd";
+import {Form, Input, Button, Modal} from "antd";
+import {CheckCircleOutlined} from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
-import {authRegister, authsSelector} from "slices/auths";
+import {authForgotPassword, authsSelector} from "slices/auths";
 import {Link, useHistory} from "react-router-dom";
 import AuthLayout from "pages/layouts/AuthLayout";
-import {getURLParams} from "services";
+import {error, getURLParams, objToUrlParams,} from "services";
+import {useEffect} from "react";
 
 const ForgotPasswordPage = () => {
     const dispatch = useDispatch()
-    const {rAuth} = useSelector(authsSelector)
+    const {foAuth} = useSelector(authsSelector)
     const {ref} = getURLParams()
     const history = useHistory();
 
+    useEffect(() => {
+        if(!foAuth?.data) return;
+        if (foAuth?.data?.status === 'EMAIL_SENT') {
+            Modal.confirm({
+                title: 'Success',
+                icon: <CheckCircleOutlined />,
+                content: foAuth?.data?.message,
+                cancelButtonProps:{style: {display: 'none'}},
+                onOk() {
+                    let values = form.getFieldsValue()
+                    const url = objToUrlParams({...values, ref})
+                    history.push(`/ResetPasswordPage?${url}`)
+                },
+            });
+            return;
+        }
+        error(foAuth?.data?.message)
+    }, [foAuth])
+
+    const [form] = Form.useForm()
     return (
         <AuthLayout
             onBack={() => history.goBack()}
             title="Forgot Password"
         >
             <Form
-                initialValues={{remember: true}}
-                onFinish={(values) => dispatch(authRegister({...values, ref}))}
+                form={form}
+                onFinish={(values) => dispatch(authForgotPassword({...values, ref}))}
                 layout={`vertical`}
             >
                 <Form.Item
@@ -36,7 +58,7 @@ const ForgotPasswordPage = () => {
                     block
                     type="primary"
                     htmlType="submit"
-                    loading={rAuth.isLoading}
+                    loading={foAuth.isLoading}
                 >Submit</Button>
             </Form>
         </AuthLayout>

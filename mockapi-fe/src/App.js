@@ -22,22 +22,22 @@ function App() {
         dispatch(queryMe(window.location.href))
     }, [dispatch])
 
-    if (!cookies.get('mockapi-token') && !href.match(/Login|Register/gim)) {
-        return (
-            <div className={`App`}>
-                <Router>
-                    <React.Suspense fallback={<Loading/>}>
-                        <Switch>
-                            {authRoutes.map((props, key) => <Route key={key} {...props} />)}
-                            <Route exact path={`/`} render={() => <Redirect to="/LoginPage"/>}/>
-                        </Switch>
-                    </React.Suspense>
-                </Router>
-            </div>
-        )
-    }
+    // if (!cookies.get('mockapi-token') && !href.match(/Login|Register/gim)) {
+    //     return (
+    //         <div className={`App`}>
+    //             <Router>
+    //                 <React.Suspense fallback={<Loading/>}>
+    //                     <Switch>
+    //                         {authRoutes.map((props, key) => <Route key={key} {...props} />)}
+    //                         <Route exact path={`/`} render={() => <Redirect to="/LoginPage"/>}/>
+    //                     </Switch>
+    //                 </React.Suspense>
+    //             </Router>
+    //         </div>
+    //     )
+    // }
 
-    if (href.match(/Login|Register/gim)) {
+    if (href.match(/Login|Register|PasswordPage/gim)) {
         return (
             <div className={`App`}>
                 <Router>
@@ -60,9 +60,9 @@ function App() {
                         <Switch>
                             {appRoutes.map((props, key) => <Route key={key} {...props} />)}
                             <Route exact path={`/`} render={() => <Redirect to="/ApiListPage"/>}/>
-                            <Route exact path={`/UploadPictureWall`} component={UploadPictureWall}/>
-                            <Route exact path={`/CreatePostForm`} component={CreatePostForm}/>
-                            <Route exact path={`/MediaModal`} component={MediaModal}/>
+                            {/*<Route exact path={`/UploadPictureWall`} component={UploadPictureWall}/>*/}
+                            {/*<Route exact path={`/CreatePostForm`} component={CreatePostForm}/>*/}
+                            {/*<Route exact path={`/MediaModal`} component={MediaModal}/>*/}
                         </Switch>
                     </React.Suspense>
                 </main>
