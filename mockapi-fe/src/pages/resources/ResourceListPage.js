@@ -21,6 +21,7 @@ import {Header, Loading} from "components";
 import EditParentResourceForm from "./EditParentResourceForm";
 import CreateResourceForm from "./CreateResourceForm";
 import EditResourceForm from "./EditResourceForm";
+import AppHelmet from "shared/AppHelmet";
 
 const ResourceListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -231,6 +232,7 @@ const ResourceListPage = () => {
 
     return (
         <>
+            <AppHelmet title="Resource's list"/>
             {mlResource.isLoading && !mlResource.data &&
             <Loading/>
             }

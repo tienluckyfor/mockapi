@@ -1,4 +1,4 @@
-import {useEffect,} from 'react'
+import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
     rallydatasSelector, setRallydata, myRallydataList,
@@ -11,10 +11,13 @@ import EditRallydataForm from "./EditRallydataForm";
 import HeaderRallydata from "./HeaderRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {getURLParams} from "services";
+import {usersSelector} from "slices/users";
+import AppHelmet from "shared/AppHelmet";
 
 const RallydataPage = () => {
     const dispatch = useDispatch()
     const {deRallydata, dataset_id_RD, resource_id_RD, cRallydata, eRallydata, mlDRRallydata, fieldsRallydata} = useSelector(rallydatasSelector)
+    const {qMe} = useSelector(usersSelector)
 
     useEffect(() => {
         dispatch(setFieldsRallydata())
@@ -39,8 +42,17 @@ const RallydataPage = () => {
         }))
     }, [url])
 
+    const [seoTitle, setSeoTitle] = useState()
+    useEffect(() => {
+        const datasets = (qMe?.data?.datasets ?? []).filter((item) => item.id == dataset_id_RD)
+        const resources = (deRallydata?.data?.resources ?? []).filter((item) => item.id == resource_id_RD)
+        const seoTitle = [datasets[0]?.name, resources[0]?.name].join(', ')
+        setSeoTitle(seoTitle)
+    }, [dataset_id_RD, resource_id_RD, qMe, deRallydata])
+
     return (
         <>
+            <AppHelmet title={seoTitle}/>
             <HeaderRallydata/>
             {mlDRRallydata.isLoading && mlDRRallydata.data &&
             <Loading/>

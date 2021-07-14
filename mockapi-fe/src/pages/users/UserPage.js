@@ -1,10 +1,4 @@
-import {
-    Button,
-    Form,
-    Input,
-    Space,
-    Checkbox, Image
-} from 'antd';
+import {Button, Form, Input, Space, Checkbox, Image} from 'antd';
 import React, {useEffect} from 'react';
 import {MediaModal} from "components";
 import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
@@ -12,6 +6,8 @@ import {commonsSelector, setCommonMerge} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {editUser, queryMe, usersSelector} from "slices/users";
 import {authLogout, authsSelector} from "slices/auths";
+import {useHistory} from "react-router-dom";
+import AppHelmet from "shared/AppHelmet";
 
 const UserPage = () => {
     const {qMe} = useSelector(usersSelector)
@@ -24,6 +20,7 @@ const UserPage = () => {
     useEffect(() => {
         dispatch(myMediaList())
     }, []);
+    const history = useHistory();
 
     const [form] = Form.useForm()
     useEffect(() => {
@@ -31,8 +28,6 @@ const UserPage = () => {
             form.setFieldsValue(qMe?.data)
             dispatch(setCommonMerge('checkedList', {[name]: [qMe?.data?.medium?.id]}))
         }
-        // const checkedList1 = (qMe?.data?.media ?? []).map((item) => item.id)
-        // dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
     }, [qMe]);
 
     useEffect(() => {
@@ -54,16 +49,8 @@ const UserPage = () => {
     }, [mlMedia, checkedList]);
 
     const name = 'avatar';
-    return (
-        <>
-            <Space size="middle">
-                <h1 className="text-xl capitalize font-light">Hello <span
-                    className="text-gray-500">{qMe?.data?.name}!</span></h1>
-                <Button
-                    onClick={() => dispatch(authLogout())}
-                    loading={loAuth.isLoading}
-                    type="dashed" danger size="small">Logout</Button>
-            </Space>
+    const RenderForm = () => {
+        return (
             <Form
                 form={form}
                 layout={`vertical`}
@@ -173,9 +160,7 @@ const UserPage = () => {
                 </Form.Item>
 
                 <div className="flex items-center justify-end mt-3 ">
-                    <Button
-                        // onClick={(e) => dispatch(setApiMerge(`cApi`, {isOpen: false}))}
-                    >
+                    <Button onClick={() => history.push(`/`)}>
                         Cancel
                     </Button>
                     <Button
@@ -188,8 +173,28 @@ const UserPage = () => {
                     </Button>
                 </div>
             </Form>
-            {/*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusantium aperiam blanditiis consectetur culpa ea est, fuga illum, in iusto laudantium minus, nihil non nulla provident quia quod similique velit.*/}
+        );
+    }
+
+    const RenderHeader = () => {
+        return (
+            <Space size="middle">
+                <h1 className="text-xl capitalize font-light">Hello <span
+                    className="text-gray-500">{qMe?.data?.name}!</span></h1>
+                <Button
+                    onClick={() => dispatch(authLogout())}
+                    loading={loAuth.isLoading}
+                    type="dashed" danger size="small">Logout</Button>
+            </Space>
+        )
+    }
+
+    return (
+        <>
+            <AppHelmet title={`${qMe?.data?.name} setting`}/>
+            {RenderHeader()}
+            {RenderForm()}
         </>
-    );
+    )
 }
 export default UserPage

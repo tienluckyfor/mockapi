@@ -21,6 +21,7 @@ import {Header, Loading} from "components"
 import CreateDatasetForm from "./CreateDatasetForm"
 import EditDatasetForm from "./EditDatasetForm"
 import InfoDatasetModal from "./InfoDatasetModal";
+import AppHelmet from "shared/AppHelmet";
 
 const DatasetListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -195,6 +196,7 @@ const DatasetListPage = () => {
 
     return (
         <>
+            <AppHelmet title="Dataset's list"/>
             {lDataset.isLoading && !lDataset.data &&
             <Loading/>
             }

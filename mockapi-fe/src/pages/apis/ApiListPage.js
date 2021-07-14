@@ -12,6 +12,7 @@ import {queryMe} from "slices/users";
 import {Header, Loading} from "components";
 import CreateApiForm from "./CreateApiForm";
 import EditApiForm from "./EditApiForm";
+import AppHelmet from "shared/AppHelmet";
 
 const ApiListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -132,60 +133,13 @@ const ApiListPage = () => {
                 }
                 <Divider className="mt-4 mb-0"/>
                 {renderTable()}
-                {/*<List
-                    itemLayout="vertical"
-                    pagination={{
-                        hideOnSinglePage: true,
-                        pageSize: 10,
-                    }}
-                    dataSource={mlApi?.data}
-                    renderItem={api => (
-                        <List.Item
-                            key={api.id}
-                            actions={[
-                                <Button
-                                    type="link" className="text-gray-600 pl-0"
-                                    onClick={(e) => dispatch(duplicateApi(api))}
-                                    loading={duApi.isLoading && duApi?.api?.id === api.id}
-                                >Duplicate</Button>,
-                                <Button
-                                    type="link"
-                                    onClick={(e) => dispatch(setApiMerge(`eApi`, {isOpen: true, api}))}
-                                    loading={eApi.isLoading && eApi?.api?.id === api.id}
-                                >Edit</Button>,
-                                <Popconfirm
-                                    title={`Are you sure delete.`}
-                                    onConfirm={(e) => dispatch(deleteApi(api))}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button
-                                        type="link"
-                                        danger
-                                        loading={dApi?.api?.id === api.id}
-                                    >Delete</Button>
-                                </Popconfirm>,
-                            ]}
-                        >
-                            <List.Item.Meta
-                                title={
-                                    <Button
-                                        type="link"
-                                        className="px-0"
-                                        onClick={(e) => dispatch(setApiMerge(`eApi`, {isOpen: true, api}))}
-                                    >{api.name}</Button>
-                                }
-                                description={moment(api.created_at).fromNow()}
-                            />
-                        </List.Item>
-                    )}
-                />*/}
             </>
         )
     }
 
     return (
         <>
+            <AppHelmet title="API's list"/>
             {mlApi.isLoading && !mlApi.data &&
             <Loading/>
             }
