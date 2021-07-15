@@ -20,10 +20,10 @@ const AuthLayout = ({onBack, title, children, linkButton}) => {
                     <Divider plain/>
                     <section className="px-5 ">
                         {linkButton}
-                        <div className="flex items-center justify-between mt-4 ">
+                        {/*<div className="flex items-center justify-between mt-4 ">
                             <Button className="w-1/2 mr-2">Facebook</Button>
                             <Button className="w-1/2 ml-2">Google</Button>
-                        </div>
+                        </div>*/}
                     </section>
                 </>
                 }
