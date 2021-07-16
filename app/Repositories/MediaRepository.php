@@ -47,7 +47,7 @@ class MediaRepository
             ->get();
     }
 
-    public function mappingMedia($media)
+    /*public function mappingMedia($media)
     {
         return $media->map(function ($medium) {
             $image = asset('storage/' . $medium->file_name);
@@ -55,26 +55,27 @@ class MediaRepository
             $medium->thumb_image = $this->media_service->get_thumb($image);
             return $medium;
         });
-    }
+    }*/
 
-    public function getByDatasetId($datasetId, $select = '*')
-    {
-        $media = Media::selectRaw($select)
-            ->orderBy('id', 'desc');
-        if ($datasetId) {
-            $media->where('dataset_id', $datasetId);
-        }
-        $media = $this->mappingMedia($media->get());
-        return $media;
-    }
+//    public function getByDatasetId($datasetId, $select = '*')
+//    {
+//        $media = Media::selectRaw($select)
+//            ->orderBy('id', 'desc');
+//        if ($datasetId) {
+//            $media->where('dataset_id', $datasetId);
+//        }
+////        $media = $this->mappingMedia($media->get());
+//        return $media;
+//    }
 
-    public function getByUserId($userId, $select = '*')
-    {
-        $media = Media::selectRaw($select)
-            ->orderBy('id', 'desc')
-            ->where('user_id', $userId);
-        $media = $this->mappingMedia($media->get());
-        return $media;
-    }
+//    public function getByUserId($userId, $select = '*')
+//    {
+//        $media = Media::selectRaw($select)
+//            ->orderBy('id', 'desc')
+//            ->where('user_id', $userId)
+//        ->get();
+////        $media = $this->mappingMedia($media->get());
+//        return $media;
+//    }
 
 }

@@ -121,7 +121,7 @@ export function myMediaList(dataset_id) {
   ){
     id
     file_type
-    image
+    file
     thumb_image
     name_upload
     updated_at

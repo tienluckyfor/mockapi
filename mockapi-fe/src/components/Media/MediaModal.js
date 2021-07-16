@@ -30,7 +30,7 @@ export const MediaModal = () => {
     const [plainOptions, setPlainOptions] = useState([])
 
     useEffect(() => {
-        dispatch(myMediaList(dataset_id??dataset_id_RD))
+        dispatch(myMediaList(dataset_id ?? dataset_id_RD))
     }, [dataset_id, mMedia])
 
     useEffect(() => {
@@ -59,15 +59,26 @@ export const MediaModal = () => {
                             <Checkbox
                                 value={medium.id}
                                 className={`absolute z-10 left-0 top-0 ml-2 mt-2 px-1 bg-white rounded`}/>
-                            {/*{medium.file_type === `image` &&*/}
+                            {medium.file_type === `image` &&
                             <Image
-                                preview={{src: medium.image, mask: <EyeOutlined/>}}
+                                preview={{src: medium.file, mask: <EyeOutlined/>}}
                                 height={90}
                                 width={90}
                                 style={{objectFit: "cover"}}
                                 src={medium.thumb_image}
                             />
-                            {/*}*/}
+                            }
+                            {medium.file_type !== `image` &&
+                            <a target="_blank" href={medium.file}>
+                                <Image
+                                    preview={false}
+                                    height={90}
+                                    width={90}
+                                    style={{objectFit: "cover"}}
+                                    src={medium.thumb_image}
+                                />
+                            </a>
+                            }
                         </div>
                     )}
                 </Space>
@@ -98,6 +109,17 @@ export const MediaModal = () => {
                                         style={{objectFit: "cover"}}
                                         src={medium.thumb_image}
                                     />
+                                    }
+                                    {medium.file_type !== `image` &&
+                                    <a target="_blank" href={medium.file}>
+                                        <Image
+                                            preview={false}
+                                            height={60}
+                                            width={60}
+                                            style={{objectFit: "cover"}}
+                                            src={medium.thumb_image}
+                                        />
+                                    </a>
                                     }
                                 </div>
                                 <div className="w-96">

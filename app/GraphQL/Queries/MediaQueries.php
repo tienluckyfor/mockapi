@@ -3,6 +3,7 @@
 
 namespace App\GraphQL\Queries;
 
+use App\Models\Media;
 use App\Repositories\ApiRepository;
 use App\Repositories\MediaRepository;
 use App\Repositories\ResourceRepository;
@@ -26,9 +27,13 @@ class MediaQueries
 
     public function myMediaList($_, array $args)
     {
-        if(!empty($args['dataset_id'])){
-            return $this->media_repository->getByDatasetId($args['dataset_id']);
+        if (!empty($args['dataset_id'])) {
+            return Media::where('dataset_id', $args['dataset_id'])
+                ->orderBy('id', 'desc')
+                ->get();
         }
-        return $this->media_repository->getByUserId(Auth::id());
+        return Media::where('user_id', Auth::id())
+            ->orderBy('id', 'desc')
+            ->get();
     }
 }
