@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\URL;
 
 class Media extends Model
 {
@@ -19,20 +20,24 @@ class Media extends Model
         'name_upload',
         'file_type',
         'file_name',
+        'file_thumb',
         'view',
         'stage',
     ];
 
+    protected $appends = ['file', 'thumb_image'];
+
     public function getFileAttribute()
     {
-        return asset('storage/' . $this->file_name);
+        return asset('storage') . '/' . $this->file_name;
     }
 
     public function getThumbImageAttribute()
     {
-        $media_service = app(\App\Services\MediaService::class);
-        $file_name = asset('storage/' . $this->file_name);
-        return $media_service->get_thumb($file_name);
+        if (preg_match('#thumb-images#', $this->file_thumb)) {
+            return asset('storage') . '/' . $this->file_thumb;
+        }
+        return URL::to('') . '/' . $this->file_thumb;
     }
 
 }

@@ -1,10 +1,10 @@
 import {Modal, Input, Space, Image, Radio, Checkbox, Select, Button, List, Spin, Alert, Tooltip} from 'antd';
-import {BorderInnerOutlined, UnorderedListOutlined, DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined}
+import {BorderInnerOutlined, UnorderedListOutlined, DeleteOutlined, EyeOutlined, UploadOutlined}
     from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
 import {askDeleteMedia, deleteMedia, mediaSelector, myMediaList, setMediaMerge} from "slices/media";
-import {commonsSelector, commonOnCheck, commonOnCheckAll, setCommon, setCommonMerge} from "slices/commons";
+import {commonsSelector, commonOnCheck, commonOnCheckAll, setCommonMerge} from "slices/commons";
 import {useEffect, useState} from "react"
 import moment from "moment"
 import "moment-timezone"
@@ -112,7 +112,7 @@ export const MediaModal = () => {
     }
 
     const renderHeader = () => {
-        return (<section className={`flex items-center justify-between space-x-3 `}>
+        return (<section className={`lg:flex block items-center justify-between space-x-3 `}>
             <Space size={`middle`}>
                 {checkedList[mMedia.name] && checkedList[mMedia.name]?.length !== 0 &&
                 <span className="">{checkedList[mMedia.name]?.length} selected</span>
@@ -133,8 +133,9 @@ export const MediaModal = () => {
                 }
             </Space>
             <Space>
-                <Search placeholder="input search text" style={{width: 200}}/>
+                <Search placeholder="input search text" style={{width: 200}} className="lg:block hidden"/>
                 <Radio.Group
+                    className="lg:ml-0 -ml-4"
                     value={viewMode}
                     optionType="button"
                     onChange={(e) => setViewMode(e.target.value)}

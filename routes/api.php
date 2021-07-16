@@ -25,6 +25,7 @@ Route::middleware('auth:api')
 
 Route::resource('media', MediaController::class)
     ->middleware('auth:api');
+Route::get('media', [MediaController::class, 'index']);
 
 Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulTokenIsValid::class]],
     function () {

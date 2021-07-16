@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Image;
 use Imagick;
+use Intervention\Image\Exception\NotReadableException;
 
 class MediaService
 {
@@ -17,10 +18,14 @@ class MediaService
 
     public function thumb_image($path, $imagePath)
     {
-        $imagePath = self::get_thumb($imagePath);
-        return Image::make($path)
-            ->fit(90, 90)
-            ->save($imagePath, 100);
+        try{
+            $imagePath = self::get_thumb($imagePath);
+            Image::make($path)
+                ->fit(90, 90)
+                ->save($imagePath, 100);
+            return $imagePath;
+        }
+        catch (NotReadableException $e) {}
     }
 
     public function jcphp01_generate_webp_image($file, $outputFile, $compression_quality = 80)
@@ -50,7 +55,7 @@ class MediaService
                     $image = imagecreatefromgif($file);
                     break;
                 default:
-                    return false;
+                    return 'NOT_SUPPORT';
             }
             $result = imagewebp($image, $outputFile, $compression_quality);
             if (false === $result) {

@@ -18,28 +18,6 @@ class MediaRepository
         $this->media_service = $MediaService;
     }
 
-//    public function handle_media($args)
-//    {
-//        $mediaIds = [];
-//        foreach ($args['data'] as $key => &$datum) {
-//            if (isset($datum[0]['uid'])) {
-//                $media_ids = [];
-//                foreach ($datum as &$item) {
-//                    if (isset($item['response']['id'])) {
-//                        $media_ids[] = $item['response']['id'];
-//                    }
-//                }
-//                $mediaIds = array_merge($mediaIds, $media_ids);
-//                $datum = [
-//                    'type'      => 'media',
-//                    'media_ids' => $media_ids
-//                ];
-//            }
-//        }
-//        self::uploaded($mediaIds);
-//        return $args;
-//    }
-
     public function create_first_upload($media)
     {
         $media = array_merge($media, [
@@ -47,8 +25,6 @@ class MediaRepository
             'stage'   => 'first upload',
         ]);
         $media['dataset_id'] = (int)@$media['dataset_id'];
-        \Illuminate\Support\Facades\Log::channel('single')->info('$media', [$media]);
-
         $create = Media::create($media);
         if ($create) {
             return $create;

@@ -8,6 +8,8 @@ use App\Repositories\MediaRepository;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use Image;
 
 class MediaController extends Controller
 {
@@ -24,13 +26,39 @@ class MediaController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return mixed
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $img = Image::canvas(600, 600, '#5E00EF');
+        $img->text($request->text, ($img->getWidth() / 2), ($img->getHeight() / 2), function ($font) use ($img) {
+            $font->file(storage_path() . '/fonts/Open_Sans/OpenSans-Bold.ttf');
+            $font->color('#fff');
+            $font->align('center');
+            $font->valign('middle');
+            $image_width = $img->getWidth();
+            $font_size = 20;
+            $font->size($font_size);
+            $box_size = $font->getBoxSize();
+            $larger = $box_size["width"] > $image_width;
+
+            while (($larger && $box_size["width"] > $image_width) || (!$larger && $box_size["width"] < $image_width)) {
+                if ($larger) {
+                    $font_size--;
+                } else {
+                    $font_size++;
+                }
+                $font->size($font_size);
+                $box_size = $font->getBoxSize();
+            }
+            if ($box_size["width"] > $image_width) {
+                $font_size--;
+            }
+            $font_size -= 10;
+            $font->size($font_size);
+        });
+        return $img->response();
     }
 
     /**
@@ -51,35 +79,57 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        $req = $request->all();
-        $image = $request->file('file');
-        if (!$image->isValid()) {
+        $file = $request->file('file');
+        $extension = $file->extension();
+
+        if (!$file || !$file->isValid()) {
             return response()->json(['status' => false]);
         }
-
-        $type = preg_replace('#\/.*?$#mis', '', $image->getMimeType());
-        switch ($type) {
-            case 'image':
-                $path = $image->getRealPath();
-                $imageName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
-                $imagePath = storage_path() . "/app/public/$imageName";
-                $isConverted = $this->media_service->jcphp01_generate_webp_image($path, $imagePath);
-                $this->media_service->thumb_image($path, $imagePath);
-                if ($isConverted) {
-                    $media = array_merge($request->all(), [
-                        'name_upload' => $image->getClientOriginalName(),
-                        'file_type'   => $type,
-                        'file_name'   => $imageName,
-                    ]);
-                    if($create = $this->media_repository->create_first_upload($media)){
-                        $image = asset('storage/'.$create->file_name);
-                        $create->image = $image;
-                        $create->thumb_image = $this->media_service->get_thumb($image);
-                    }
+        switch ($file->getMimeType()) {
+            case (preg_match('#php#', $file->getMimeType()) ? true : false):
+                $fileType = 'php';
+                $extension = 'phpp';
+                $fileName = 'media/phps/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+                $file->move($filePath . '/media/phps', $fileName);
+                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                $convertStatus = true;
+                break;
+            case (preg_match('#image#', $file->getMimeType()) ? true : false):
+                $fileType = 'image';
+                $path = $file->getRealPath();
+                $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
+                $filePath = storage_path() . "/app/public/$fileName";
+                $convertStatus = $this->media_service->jcphp01_generate_webp_image($path, $filePath);
+                $this->media_service->thumb_image($path, $filePath);
+                $fileThumb = $this->media_service->get_thumb($fileName);
+                if ($convertStatus == 'NOT_SUPPORT') {
+                    $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                    $filePath = storage_path() . "/app/public";
+                    $file->move($filePath . '/media/images_NOT_SUPPORT', $fileName);
                 }
-                return response()->json(@$create);
+                break;
+            default:
+                $fileType = preg_replace('#\/.*?$#mis', '', $file->getMimeType());
+                $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+                $file->move($filePath . '/media/files', $fileName);
+                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                $convertStatus = true;
                 break;
         }
+        if (@$convertStatus) {
+            $media = array_merge($request->all(), [
+                'name_upload' => $file->getClientOriginalName(),
+                'file_type'   => @$fileType,
+                'file_name'   => @$fileName,
+                'file_thumb' => @$fileThumb,
+                'user_id' => Auth::id(),
+                'stage'   => 'first upload',
+            ]);
+            $create = Media::create($media);
+        }
+        return response()->json(@$create);
     }
 
     /**
