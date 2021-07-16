@@ -112,7 +112,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         <p className={val ? `text-indigo-700` : `text-red-700`}>{val1}</p>
                     </Tooltip>
                 }
-                if (!val || val && !(val??0).toString().length)
+                if (!val || val && !(val ?? 0).toString().length)
                     return <Tooltip title={val}>
                         <p className={`text-gray-500`}>-</p>
                     </Tooltip>
@@ -134,14 +134,25 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                 if (iType === 'Media') {
                     return <Image.PreviewGroup>
                         <Space size={[4, 4]} align="start" wrap>
-                            {(val.media ?? []).map((medium, key) =>
-                                <Image
-                                    preview={{src: medium.image, mask: <EyeOutlined/>}}
-                                    height={30}
-                                    width={30}
-                                    style={{objectFit: "cover"}}
-                                    src={medium.thumb_image}
-                                />
+                            {(val.media ?? []).map((medium, key) => {
+                                if (medium.file_type === 'image')
+                                    return <Image
+                                        preview={{src: medium.file, mask: <EyeOutlined/>}}
+                                        height={30}
+                                        width={30}
+                                        style={{objectFit: "cover"}}
+                                        src={medium.thumb_image}
+                                    />
+                                return <a target="_blank" href={medium.file}>
+                                    <Image
+                                        preview={false}
+                                        height={30}
+                                        width={30}
+                                        style={{objectFit: "cover"}}
+                                        src={medium.thumb_image}
+                                    />
+                                </a>
+                                }
                             )}
                         </Space>
                     </Image.PreviewGroup>

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Media;
 use App\Models\RallyData;
 use App\Services\MediaService;
 use Carbon\Carbon;
@@ -279,6 +280,31 @@ class RallydataRepository
         return $mediaIds;
     }
 
+    /**
+     * @param $rallydatas
+     * @param Media $media
+     * @return mixed
+     */
+    protected function _handleMediumItem($mediaId, $media)
+    {
+        $file = asset("storage/filldata-media/{$mediaId}.jpg");
+        $thumbImage = $this->media_service->get_thumb($file);
+        $fileType = 'image';
+        if ($mediaId > 0) {
+            $medium = $media->where('id', $mediaId)->first();
+            $file = $medium->file;
+            $thumbImage = $medium->thumb_image;
+            $fileType = $medium->file_type;
+        }
+        $item = [
+            'id'          => $mediaId,
+            'file'        => $file,
+            'thumb_image' => $thumbImage,
+            'file_type'   => $fileType,
+        ];
+        return $item;
+    }
+
     public function mappingMedia($rallydatas, $media)
     {
         foreach ($rallydatas as &$rallydata) {
@@ -289,19 +315,12 @@ class RallydataRepository
                 // restful
                 if (isset($rallydatum['media_ids'])) {
                     $rallydatum = array_merge($rallydatum, ['media' => []]);
-                    foreach ($rallydatum['media_ids'] as $media_id) {
-                        $image = asset("storage/filldata-media/{$media_id}.jpg");
-                        if ($media_id > 0) {
-                            $image = asset('storage/' . $media[$media_id]['file_name']);
-                        }
-                        $rallydatum['media'][] = [
-                            'image'       => $image,
-                            'thumb_image' => $this->media_service->get_thumb($image),
-                            'id'          => $media_id,
-                        ];
+                    foreach ($rallydatum['media_ids'] as $mediaId) {
+                        $rallydatum['media'][] = $this->_handleMediumItem($mediaId, $media);
                     }
                     continue;
                 }
+
                 // graphql
                 foreach ($rallydatum as &$item0) {
                     if (!is_array($item0)) {
@@ -310,16 +329,8 @@ class RallydataRepository
                     foreach ($item0 as &$item) {
                         if (isset($item['media_ids'])) {
                             $item = array_merge($item, ['media' => []]);
-                            foreach ($item['media_ids'] as $media_id) {
-                                $image = asset("storage/filldata-media/{$media_id}.jpg");
-                                if ($media_id > 0) {
-                                    $image = asset('storage/' . $media[$media_id]['file_name']);
-                                }
-                                $item['media'][] = [
-                                    'image'       => $image,
-                                    'thumb_image' => $this->media_service->get_thumb($image),
-                                    'id'          => $media_id,
-                                ];
+                            foreach ($item['media_ids'] as $mediaId) {
+                                $item['media'][] = $this->_handleMediumItem($mediaId, $media);
                             }
                         }
                     }
@@ -328,16 +339,6 @@ class RallydataRepository
         }
         return $rallydatas;
     }
-
-//    public function getDataByIds($ids)
-//    {
-//        return RallyData::selectRaw('data')
-//            ->whereIn('id', $ids)
-//            ->get()
-//            ->map(function ($item) {
-//                return $item->data;
-//            });
-//    }
 
     public function getByMediaIds($mediaIds)
     {

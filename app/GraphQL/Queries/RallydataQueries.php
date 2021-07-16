@@ -4,6 +4,7 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\DataSet;
+use App\Models\Media;
 use App\Repositories\DatasetRepository;
 use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
@@ -43,10 +44,11 @@ class RallydataQueries
             ->getByDatasetId($args['dataset_id'])
             ->groupBy('resource_id');
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
-        $media = $this->media_repository
-            ->getByIds($mediaIds, 'id, file_name')
-            ->keyBy('id')
-            ->toArray();
+        $media = Media::whereIn('id', $mediaIds)->get();
+//        $media = $this->media_repository
+//            ->getByIds($mediaIds, 'id, file_name');
+////            ->keyBy('id')
+////            ->toArray();
         $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
 // handle parent
         $resources = $this->resource_repository
@@ -57,18 +59,9 @@ class RallydataQueries
             $rallydatasCurrent = @$rallydatas[$args['resource_id']] ?? [];
             foreach ($rallydatasCurrent as &$item) {
                 $data_children = @$item['data_children'] ?? [];
-                \Illuminate\Support\Facades\Log::channel('single')->info('$data_children', [$data_children]);
-                
                 foreach ($data_children as $data_child) {
-                    \Illuminate\Support\Facades\Log::channel('single')->info('$resources', [$resources]);
-                    
                     $r = $resources[$data_child['resource_id']];
-                    \Illuminate\Support\Facades\Log::channel('single')->info('$r', [$r]);
-                    \Illuminate\Support\Facades\Log::channel('single')->info('$rallydatas', [$rallydatas]);
-                    
                     $rd = collect(@$rallydatas[$r['id']] ?? []);
-                    \Illuminate\Support\Facades\Log::channel('single')->info('$rd', [$rd]);
-                    
                     $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
                         ->map(function ($item1) {
                             return $item1['data'];

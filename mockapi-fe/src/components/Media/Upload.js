@@ -65,7 +65,7 @@ const Upload = ({listType, children, plainOptions}) => {
     }
 
     const uploadProps = {
-        accept: `image/*, video/*`,
+        accept: `*`,
         multiple: true,
         listType,
         name: 'file',

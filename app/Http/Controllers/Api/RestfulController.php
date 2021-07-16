@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\RallyData;
 use App\Repositories\DatasetRepository;
 use App\Repositories\MediaRepository;
@@ -159,10 +160,7 @@ class RestfulController extends Controller
             ->getByDatasetId($datasetId, $rallydataIds)
             ->groupBy('resource_id');
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
-        $media = $this->media_repository
-            ->getByIds($mediaIds, 'id, file_name')
-            ->keyBy('id')
-            ->toArray();
+        $media = Media::whereIn('id', $mediaIds)->get();
         $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
         $resources = $this->resource_repository
             ->getByDatasetId($datasetId)
@@ -171,13 +169,9 @@ class RestfulController extends Controller
         $fields = $request->fields ? explode(',', $request->fields) : false;
         foreach ($rallydatasCurrent as &$item) {
             $data_children = @$item['data_children'] ?? [];
-//            dd($data_children);
             foreach ($data_children as $data_child) {
                 $r = $resources[$data_child['resource_id']];
                 $rd = collect($rallydatas[$r['id']]);
-
-//                dd($data_child['rallydata_ids']);
-//                dd($rd);
                 $item['data'][$r['name']] = $rd
                     ->whereIn('id', $data_child['rallydata_ids'])
                     ->map(function ($item1) {
@@ -185,7 +179,6 @@ class RestfulController extends Controller
                     })
                     ->values();
             }
-//            dd($item);
             $item = $item['data'];
             if ($fields) {
                 array_unshift($fields, 'id');
@@ -194,10 +187,7 @@ class RestfulController extends Controller
         }
 
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatasCurrent);
-        $media = $this->media_repository
-            ->getByIds($mediaIds, 'id, file_name')
-            ->keyBy('id')
-            ->toArray();
+        $media = Media::whereIn('id', $mediaIds)->get();
         $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media);
         return $rallydatasCurrent;
     }

@@ -246,11 +246,18 @@ export function myRallydataList() {
             mRallydataData: {isLoading: true,},
         }))
         const query = gql`
-        query {
-  my_rallydata_list(dataset_id:"${dataset_id_RD}", resource_id:"${resource_id_RD}")
+        query($dataset_id: ID!, $resource_id: ID) {
+  my_rallydata_list(
+    dataset_id: $dataset_id
+    resource_id: $resource_id
+  ) 
 }`;
         const res = await apolloClient.query({
-            query
+            query,
+            variables: {
+                dataset_id: dataset_id_RD,
+                resource_id: resource_id_RD,
+            }
         })
         const myRallydataList = res?.data?.my_rallydata_list?.rallydatas ?? {};
         dispatch(setMerge({

@@ -59,7 +59,7 @@ export const MediaModal = () => {
                             <Checkbox
                                 value={medium.id}
                                 className={`absolute z-10 left-0 top-0 ml-2 mt-2 px-1 bg-white rounded`}/>
-                            {medium.file_type === `image` &&
+                            {/*{medium.file_type === `image` &&*/}
                             <Image
                                 preview={{src: medium.image, mask: <EyeOutlined/>}}
                                 height={90}
@@ -67,7 +67,7 @@ export const MediaModal = () => {
                                 style={{objectFit: "cover"}}
                                 src={medium.thumb_image}
                             />
-                            }
+                            {/*}*/}
                         </div>
                     )}
                 </Space>
