@@ -24,7 +24,8 @@ const RallydataPage = () => {
     }, [deRallydata, resource_id_RD])
 
     useEffect(() => {
-        dispatch(myRallydataList())
+        if (dataset_id_RD && resource_id_RD)
+            dispatch(myRallydataList())
     }, [dataset_id_RD, resource_id_RD])
 
     useEffect(() => {
