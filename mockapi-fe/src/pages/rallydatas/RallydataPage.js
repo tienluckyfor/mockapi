@@ -24,12 +24,13 @@ const RallydataPage = () => {
     }, [deRallydata, resource_id_RD])
 
     useEffect(() => {
-        if (dataset_id_RD && resource_id_RD)
+        if (dataset_id_RD && resource_id_RD) {
             dispatch(myRallydataList())
+        }
     }, [dataset_id_RD, resource_id_RD])
 
     useEffect(() => {
-        if (mlDRRallydata.isRefresh) {
+        if (dataset_id_RD && resource_id_RD && mlDRRallydata.isRefresh) {
             dispatch(myRallydataList())
         }
     }, [mlDRRallydata])
