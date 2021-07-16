@@ -86,15 +86,23 @@ class MediaController extends Controller
             return response()->json(['status' => false]);
         }
         switch ($file->getMimeType()) {
-            case (preg_match('#php#', $file->getMimeType()) ? true : false):
-                $fileType = 'php';
-                $extension = 'phpp';
-                $fileName = 'media/phps/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+            case (preg_match('#video#', $file->getMimeType()) ? true : false):
+                $fileType = 'video';
+                $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                 $filePath = storage_path() . "/app/public";
-                $file->move($filePath . '/media/phps', $fileName);
+                $file->move($filePath . '/media/videos', $fileName);
                 $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
                 $convertStatus = true;
                 break;
+//            case (preg_match('#php#', $file->getMimeType()) ? true : false):
+//                $fileType = 'php';
+//                $extension = 'php1';
+//                $fileName = 'media/phps/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+//                $filePath = storage_path() . "/app/public";
+//                $file->move($filePath . '/media/phps', $fileName);
+//                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+//                $convertStatus = true;
+//                break;
             case (preg_match('#image#', $file->getMimeType()) ? true : false):
                 $fileType = 'image';
                 $path = $file->getRealPath();
@@ -111,6 +119,8 @@ class MediaController extends Controller
                 break;
             default:
                 $fileType = preg_replace('#\/.*?$#mis', '', $file->getMimeType());
+                $extension = !empty($extension) ? $extension : $fileType;
+                $extension = in_array($extension, ['text']) ? 'txt' : $extension.'1';
                 $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                 $filePath = storage_path() . "/app/public";
                 $file->move($filePath . '/media/files', $fileName);
