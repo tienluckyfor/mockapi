@@ -23,4 +23,4 @@ php artisan optimize:clear; php artisan lighthouse:clear-cache;
 ```
 
 php artisan storage:link
-mkdir -m 777 -p storage/app/public/media/files storage/app/public/media/images storage/app/public/media/images_NOT_SUPPORT storage/app/public/media/phps storage/app/public/media/thumb-images
+mkdir -m 777 -p storage/app/public/media/files storage/app/public/media/images storage/app/public/media/images_NOT_SUPPORT storage/app/public/media/videos storage/app/public/media/thumb-images

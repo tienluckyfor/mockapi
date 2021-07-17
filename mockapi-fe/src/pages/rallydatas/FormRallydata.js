@@ -1,76 +1,55 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
 import React, {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {getItype, getRallyData} from "./configRallydata";
-import moment from 'moment';
-import {rallydatasSelector, setRallydataMerge, } from "slices/rallydatas";
+import {getItype,} from "./configRallydata";
+import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
+import ReactQuill from "react-quill";
+import Quill from "quill";
+import ResizeModule from "@ssumo/quill-resize-module";
+import QuillImageDropAndPaste from "quill-image-drop-and-paste";
+import "react-quill/dist/quill.snow.css";
+
+Quill.register("modules/resize", ResizeModule);
+Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
+
+const FormRallydata = ({fields, form, childResources}) => {
     const dispatch = useDispatch()
-    const {dataset_id_RD, resource_id_RD, mRallydataData,
-        cbRallydata, fieldsRallydata, deRallydata} = useSelector(rallydatasSelector)
-    const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
+    const {cbRallydata, fieldsRallydata} = useSelector(rallydatasSelector)
+    const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
-    /*useEffect(() => {
-        if (!(dataset_id_RD && resource_id_RD && fields)) return;
-        let fieldsValue = {
-            "dataset_id": dataset_id_RD,
-            "resource_id": resource_id_RD,
-            "data": {}
-        };
-        (fields ?? []).map((field) => {
-            const {name, type, fakerjs} = field
-            const iType = getItype(type, fakerjs)
-            if (iType === `Date`) {
-                fieldsValue.data[name] = moment()
+    const modules = {
+        resize: {
+            locale: {
+                altTip: "按住alt键比例缩放",
+                floatLeft: "left",
+                floatRight: "right",
+                center: "center",
+                restore: "res.."
             }
-        })
-        form.setFieldsValue(fieldsValue)
-    }, [dataset_id_RD, resource_id_RD, fields])*/
+        },
+        toolbar: [
+            [{'header': [1, 2, 3, false]}],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+            ['link', 'image', 'video'],
+            [{'align': []}, {'color': []}, {'background': []}],
+            ['clean']
+        ],
+    }
 
-    /*useEffect(() => {
-        // media
-        const fmedia = (fields ?? []).filter((field) => {
-            const {name, type, fakerjs} = field
-            const iType = getItype(type, fakerjs)
-            return iType === "Media"
-        })
-        let values = form.getFieldsValue()
-        for (const key in fmedia) {
-            const f = fmedia[key]
-            const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
-            dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
-            values.data[f.name] = {
-                type: 'media',
-                media_ids: mediaR.map((medium) => medium.id)
-            }
-        }
-
-        // children
-        values.data_children = []
-        for (const key in childResources) {
-            const r = childResources[key]
-            const childrenR = getRallyData(mRallydataData, r.id).filter((rally) => checkedList[r.name] && checkedList[r.name].indexOf(rally.data.id) !== -1)
-            dispatch(setRallydataMerge('cbRallydata', {[r.name]: childrenR}))
-            values.data_children.push({
-                type: 'rallydata',
-                resource_id: r.id,
-                rallydata_ids: childrenR.map((rally) => rally.id)
-            })
-        }
-        form.setFieldsValue(values)
-        // setFieldsValue(values)
-    }, [checkedList, mlMedia])*/
-
-    /*const [childResources, setChildResources] = useState([])
+    const [longText, setLongText] = useState({})
     useEffect(() => {
-        const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
-        setChildResources(resources)
-    }, [deRallydata])*/
+        let values = form.getFieldsValue()
+        Object.entries(longText).map(([key, item], i) => {
+            values.data[key] = item
+        })
+        form.setFieldsValue(values)
+    }, [longText])
 
     return (
         <>
@@ -78,9 +57,34 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
                 {(afields, {add, remove}) => (
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
-                        if(type==='Resource') return;
+                        if (type === 'Resource') return;
                         const iType = getItype(type, fakerjs)
                         switch (iType) {
+                            case `Object`:
+                            case `Array`:
+                                return (<Form.Item
+                                    name={name}
+                                    label={<span className="capitalize">{name}</span>}
+                                >
+                                    <Input.TextArea rows={6}/>
+                                </Form.Item>)
+                                break;
+                            case `LongText`:
+                                return (
+                                    <>
+                                        <p className="capitalize mb-2">{name}</p>
+                                        <ReactQuill
+                                            className="pb-10 mb-6"
+                                            style={{height: "400px",}}
+                                            modules={modules}
+                                            onChange={(value, delta, source, editor) => {
+                                                setLongText({...longText, [name]: editor.getHTML()})
+                                            }}
+                                        />
+                                        <Form.Item hidden={true} name={name}/>
+                                    </>
+                                )
+                                break;
                             case `Media`:
                                 return (<Form.Item
                                     name={name}
@@ -145,16 +149,6 @@ const FormRallydata = ({fields, setFieldsValue, form, childResources}) => {
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Input.TextArea/>
-                                </Form.Item>)
-                                break;
-                            case `LongText`:
-                            case `Object`:
-                            case `Array`:
-                                return (<Form.Item
-                                    name={name}
-                                    label={<span className="capitalize">{name}</span>}
-                                >
-                                    <Input.TextArea rows={6}/>
                                 </Form.Item>)
                                 break;
                             case `Number`:

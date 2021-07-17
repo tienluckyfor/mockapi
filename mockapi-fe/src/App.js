@@ -9,9 +9,6 @@ import appRoutes from "routes/appRoutes";
 import {Loading, Sidebar} from "components";
 import {queryMe} from "slices/users";
 import Cookies from "universal-cookie";
-import UploadPictureWall from "pages/rallydatas/UploadPictureWall"
-import CreatePostForm from "pages/CreatePostForm"
-import MediaModal from "components/Media/MediaModal"
 
 function App() {
     const dispatch = useDispatch()
@@ -60,9 +57,6 @@ function App() {
                         <Switch>
                             {appRoutes.map((props, key) => <Route key={key} {...props} />)}
                             <Route exact path={`/`} render={() => <Redirect to="/ApiListPage"/>}/>
-                            {/*<Route exact path={`/UploadPictureWall`} component={UploadPictureWall}/>*/}
-                            {/*<Route exact path={`/CreatePostForm`} component={CreatePostForm}/>*/}
-                            {/*<Route exact path={`/MediaModal`} component={MediaModal}/>*/}
                         </Switch>
                     </React.Suspense>
                 </main>
