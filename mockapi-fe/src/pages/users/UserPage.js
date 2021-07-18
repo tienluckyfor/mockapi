@@ -161,9 +161,9 @@ const UserPage = () => {
                 </Form.Item>
 
                 <div className="flex items-center justify-end mt-3 ">
-                    <Button onClick={() => history.push(`/`)}>
+                    {/*<Button onClick={() => history.push(`/`)}>
                         Cancel
-                    </Button>
+                    </Button>*/}
                     <Button
                         className="ml-3"
                         type="primary"

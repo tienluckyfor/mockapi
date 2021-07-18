@@ -111,7 +111,23 @@ const Sidebar = () => {
             {!isMobile &&
             <section className="relative" style={{width: 256}}>
                 <div className="fixed top-0" style={{width: 256}}>
-                    <div className="w-px bg-gray-200 absolute top-0 h-screen right-0"></div>
+                    {/*<div className="w-px bg-gray-200 absolute top-0 h-screen right-0"></div>*/}
+                    <PageHeader
+                        className="px-3 py-0 border-r"
+                        // onBack={() => history.goBack()}
+                        title="MockAPI"
+                        extra={[
+                            <Link to={`/UserPage`} className="flex items-center">
+                                <Avatar
+                                    className="rounded-full"
+                                    size="30"
+                                    name={qMe?.data?.name}
+                                    src={qMe?.data?.medium?.thumb_image}
+                                />
+                            </Link>
+                        ]}
+                    />
+                    <Divider className="my-1"/>
                     {mainMenu()}
                 </div>
             </section>
