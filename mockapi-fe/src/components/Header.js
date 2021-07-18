@@ -10,6 +10,7 @@ import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resour
 import {Sidebar} from "./index"
 import {datasetsSelector, myDatasetList, setDatasetMerge} from "slices/datasets";
 import {usersSelector} from "slices/users";
+import {Link} from "react-router-dom";
 
 const Header = ({page}) => {
     const dispatch = useDispatch()
@@ -194,18 +195,20 @@ const Header = ({page}) => {
                     />
                     }
                     {show.menu &&
-                    <Button
-                        type={isMenu ? `primary` : `dashed`}
-                        className={`lg:hidden`}
-                        icon={isMenu ? <CloseOutlined/> : <MenuOutlined/>}
-                        onClick={(e) => setIsMenu(!isMenu)}
-                    />
+                    <Link to={`/SidebarPage`}>
+                        <Button
+                            type={isMenu ? `primary` : `dashed`}
+                            className={`lg:hidden`}
+                            icon={isMenu ? <CloseOutlined/> : <MenuOutlined/>}
+                            // onClick={(e) => setIsMenu(!isMenu)}
+                        />
+                    </Link>
                     }
                 </div>
             </header>
-            {isMenu &&
+            {/*{isMenu &&
             <Sidebar device={`mobile`}/>
-            }
+            }*/}
         </>
     )
 }

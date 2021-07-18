@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import "assets/tailwind-output.css";
 import {useDispatch} from "react-redux";
 
+import {isMobile} from 'react-device-detect';
 import authRoutes from "routes/authRoutes";
 import appRoutes from "routes/appRoutes";
 import {Loading, Sidebar} from "components";
@@ -51,7 +52,9 @@ function App() {
     return (
         <div className={`App max-w-screen-lg overflow-hidden flex mx-auto`}>
             <Router>
+                {!isMobile &&
                 <Sidebar/>
+                }
                 <main className="w-screen py-3 px-4">
                     <React.Suspense fallback={<Loading/>}>
                         <Switch>

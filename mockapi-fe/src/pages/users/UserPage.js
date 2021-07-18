@@ -1,4 +1,4 @@
-import {Button, Form, Input, Space, Checkbox, Image} from 'antd';
+import {Button, Form, Input, Space, Checkbox, Image, PageHeader} from 'antd';
 import React, {useEffect} from 'react';
 import {MediaModal} from "components";
 import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
@@ -6,8 +6,9 @@ import {commonsSelector, setCommonMerge} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {editUser, queryMe, usersSelector} from "slices/users";
 import {authLogout, authsSelector} from "slices/auths";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import AppHelmet from "shared/AppHelmet";
+import Avatar from "react-avatar";
 
 const UserPage = () => {
     const {qMe} = useSelector(usersSelector)
@@ -176,7 +177,7 @@ const UserPage = () => {
         );
     }
 
-    const RenderHeader = () => {
+    /*const RenderHeader = () => {
         return (
             <Space size="middle">
                 <h1 className="text-xl capitalize font-light">Hello <span
@@ -187,12 +188,26 @@ const UserPage = () => {
                     type="dashed" danger size="small">Logout</Button>
             </Space>
         )
-    }
+    }*/
 
     return (
         <>
             <AppHelmet title={`${qMe?.data?.name} setting`}/>
-            {RenderHeader()}
+            {/*{RenderHeader()}*/}
+            <PageHeader
+                className="px-0 py-0"
+                onBack={() => history.goBack()}
+                title={<>
+                    <span className="text-gray-400 mr-2">Hi</span>
+                    {qMe?.data?.name}!
+                </>}
+                extra={[
+                    <Button
+                        onClick={() => dispatch(authLogout())}
+                        loading={loAuth.isLoading}
+                        className="mt-1" type="dashed" danger size="small">Logout</Button>
+                ]}
+            />
             {RenderForm()}
         </>
     )

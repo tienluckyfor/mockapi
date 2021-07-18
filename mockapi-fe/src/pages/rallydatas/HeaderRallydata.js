@@ -1,8 +1,8 @@
 import {Breadcrumb, Button, Select, Space} from 'antd';
-import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined} from '@ant-design/icons';
+import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined, MenuOutlined} from '@ant-design/icons';
 import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {useHistory,} from "react-router-dom";
+import {Link, useHistory,} from "react-router-dom";
 import InfoDatasetModal from "pages/datasets/InfoDatasetModal";
 import EditDatasetForm from "pages/datasets/EditDatasetForm";
 import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} from "slices/rallydatas";
@@ -80,17 +80,26 @@ const HeaderRallydata = () => {
         }
 
         return (
-            <Breadcrumb>
-                <Breadcrumb.Item>
-                    R<span className="lg:inline hidden">allydata</span>
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                    {datasetSelect()}
-                </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                    {resourceSelect()}
-                </Breadcrumb.Item>
-            </Breadcrumb>
+            <section className="flex items-center justify-between">
+                <Breadcrumb>
+                    <Breadcrumb.Item>
+                        R<span className="lg:inline hidden">allydata</span>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        {datasetSelect()}
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        {resourceSelect()}
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+                <Link to={`/SidebarPage`}>
+                    <Button
+                        type="dashed"
+                        icon={<MenuOutlined/>}
+                        size="small"
+                    />
+                </Link>
+            </section>
         )
     }
 
@@ -127,6 +136,7 @@ const HeaderRallydata = () => {
                         loading={info.cIsLoading}
                     />
                 </Space>
+
                 <InfoDatasetModal/>
             </section>
 

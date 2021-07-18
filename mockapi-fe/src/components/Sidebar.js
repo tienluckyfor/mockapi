@@ -1,14 +1,16 @@
-import {Menu, Badge, Avatar as AntAvatar, Tooltip, Space} from 'antd';
+import {Menu, Badge, Avatar as AntAvatar, PageHeader, Space, Divider} from 'antd';
 import {CrownOutlined, ShareAltOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
-import {Link, useLocation} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useEffect} from "react"
 import {usersSelector} from "slices/users";
 import Avatar from "react-avatar";
 import {getURLParams} from "services";
+import {isMobile} from 'react-device-detect';
+import AppHelmet from "../shared/AppHelmet";
 
-const Sidebar = ({device = `desktop`}) => {
+const Sidebar = () => {
     const {qMe} = useSelector(usersSelector)
     const [menuSelected, setMenuSelected] = useState()
     const location = useLocation()
@@ -19,10 +21,11 @@ const Sidebar = ({device = `desktop`}) => {
     }
 
     const url = getURLParams()
+    const history = useHistory();
 
     useEffect(() => {
         let menuSelected = window.location.href.replace(/^.+?\/(\w+)$/gim, '$1')
-        if(url.dataset_id_RD){
+        if (url.dataset_id_RD) {
             menuSelected = url.dataset_id_RD
         }
         setMenuSelected(menuSelected)
@@ -35,9 +38,10 @@ const Sidebar = ({device = `desktop`}) => {
                 value={menuSelected}
                 mode="vertical"
                 theme="light"
+                className={isMobile ? `border-none` : ``}
             >
-                {device === 'desktop' &&
-                <>
+                {/*{device === 'desktop' &&*/}
+                {/*<>
                     <Menu.Item key="desktop-logo ">
                         <div className="flex items-center justify-between">
                             <h1>
@@ -55,8 +59,8 @@ const Sidebar = ({device = `desktop`}) => {
                         </div>
                     </Menu.Item>
                     <Menu.Divider/>
-                </>
-                }
+                </>*/}
+                {/*}*/}
                 {Object.entries(menu).map(([key, item], i) =>
                     <Menu.Item key={key}>
                         <Link to={`/${key}`} className={`capitalize`}>
@@ -75,10 +79,10 @@ const Sidebar = ({device = `desktop`}) => {
                                 to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
                                 <Space>
                                     {isOwner &&
-                                    <CrownOutlined />
+                                    <CrownOutlined/>
                                     }
                                     {!isOwner &&
-                                    <ShareAltOutlined />
+                                    <ShareAltOutlined/>
                                     }
                                     <span>{dataset.name}</span>
                                 </Space>
@@ -104,19 +108,37 @@ const Sidebar = ({device = `desktop`}) => {
 
     return (
         <aside>
-            {device === 'desktop' &&
-            <section className={`hidden lg:block relative`} style={{width: 256}}>
+            {!isMobile &&
+            <section className="relative" style={{width: 256}}>
                 <div className="fixed top-0" style={{width: 256}}>
                     <div className="w-px bg-gray-200 absolute top-0 h-screen right-0"></div>
                     {mainMenu()}
                 </div>
             </section>
             }
-            {device === 'mobile' &&
-            <section className={`lg:hidden relative shadow-xl rounded overflow-hidden border mt-3`}>
-                <div className="w-px bg-white absolute top-0 h-screen right-0"></div>
-                {mainMenu()}
-            </section>
+            {isMobile &&
+            <>
+                <AppHelmet title="Menu"/>
+                <div className="-mx-4">
+                    <PageHeader
+                        className="px-3 py-0"
+                        onBack={() => history.goBack()}
+                        title="Menu"
+                        extra={[
+                            <Link to={`/UserPage`} className="flex items-center">
+                                <Avatar
+                                    className="rounded-full"
+                                    size="30"
+                                    name={qMe?.data?.name}
+                                    src={qMe?.data?.medium?.thumb_image}
+                                />
+                            </Link>
+                        ]}
+                    />
+                    <Divider className="my-3"/>
+                    {mainMenu()}
+                </div>
+            </>
             }
         </aside>
     );
