@@ -375,3 +375,13 @@ npx tailwindcss-cli@latest build -i ./src/assets/tailwind-custom.css -o ./src/as
 .ant-image-preview-img-wrapper::before{
     height: auto;
 }
+
+/* ql */
+.ql-editor {
+    overflow-y: scroll;
+    resize: vertical;
+}
+
+.App .ql-editor {
+    min-height: 18em;
+}

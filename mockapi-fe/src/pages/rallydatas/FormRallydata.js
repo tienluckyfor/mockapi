@@ -6,6 +6,7 @@ import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
+import {JsonEditor} from 'jsoneditor-react';
 
 import ReactQuill from "react-quill";
 import Quill from "quill";
@@ -42,14 +43,14 @@ const FormRallydata = ({fields, form, childResources}) => {
         ],
     }
 
-    const [longText, setLongText] = useState({})
+    const [dEditor, setDEditor] = useState({})
     useEffect(() => {
         let values = form.getFieldsValue()
-        Object.entries(longText).map(([key, item], i) => {
+        Object.entries(dEditor).map(([key, item], i) => {
             values.data[key] = item
         })
         form.setFieldsValue(values)
-    }, [longText])
+    }, [dEditor])
 
     return (
         <>
@@ -62,28 +63,29 @@ const FormRallydata = ({fields, form, childResources}) => {
                         switch (iType) {
                             case `Object`:
                             case `Array`:
-                                return (<Form.Item
-                                    name={name}
-                                    label={<span className="capitalize">{name}</span>}
-                                >
-                                    <Input.TextArea rows={6}/>
-                                </Form.Item>)
+                                return (<div className="mb-6">
+                                    <p className="capitalize mb-2">{name}</p>
+                                    <JsonEditor
+                                        value={dEditor[name] ?? (iType === 'Array' ? [] : {})}
+                                        mode="code"
+                                        onChange={(value) => setDEditor({...dEditor, [name]: value})}
+                                        allowedModes={['tree', 'form', 'code']}
+                                    />
+                                    <Form.Item hidden={true} name={name}/>
+                                </div>)
                                 break;
                             case `LongText`:
-                                return (
-                                    <>
-                                        <p className="capitalize mb-2">{name}</p>
-                                        <ReactQuill
-                                            className="pb-10 mb-6"
-                                            style={{height: "400px",}}
-                                            modules={modules}
-                                            onChange={(value, delta, source, editor) => {
-                                                setLongText({...longText, [name]: editor.getHTML()})
-                                            }}
-                                        />
-                                        <Form.Item hidden={true} name={name}/>
-                                    </>
-                                )
+                                return (<div className="mb-6">
+                                    <p className="capitalize mb-2">{name}</p>
+                                    <ReactQuill
+                                        bounds={'.App'}
+                                        modules={modules}
+                                        onChange={(value, delta, source, editor) => {
+                                            setDEditor({...dEditor, [name]: editor.getHTML()})
+                                        }}
+                                    />
+                                    <Form.Item hidden={true} name={name}/>
+                                </div>)
                                 break;
                             case `Media`:
                                 return (<Form.Item

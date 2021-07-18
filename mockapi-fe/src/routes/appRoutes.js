@@ -5,6 +5,7 @@ const DatasetListPage = React.lazy(() => import('pages/datasets/DatasetListPage'
 const RallydataPage = React.lazy(() => import('pages/rallydatas/RallydataPage'))
 const UserPage = React.lazy(() => import('pages/users/UserPage'))
 const DebounceSelectTest = React.lazy(() => import('pages/DebounceSelectTest'))
+const JsonEditor = React.lazy(() => import('pages/JsonEditor'))
 
 export default [
     { path: '/RallydataPage', component: RallydataPage },
@@ -13,4 +14,5 @@ export default [
     { path: '/ApiListPage', component: ApiListPage },
     { path: '/UserPage', component: UserPage },
     { path: '/DebounceSelectTest', component: DebounceSelectTest },
+    { path: '/JsonEditor', component: JsonEditor },
 ]
