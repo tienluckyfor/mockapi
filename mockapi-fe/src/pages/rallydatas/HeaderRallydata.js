@@ -79,33 +79,48 @@ const HeaderRallydata = () => {
             </Select>)
         }
 
+        if (isMobile) {
+            return (
+                <section className="flex items-center justify-between">
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            R
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            {datasetSelect()}
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            {resourceSelect()}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                    <Link to={`/SidebarPage`}>
+                        <Button
+                            type="dashed"
+                            icon={<MenuOutlined/>}
+                            size="small"
+                        />
+                    </Link>
+                </section>
+            )
+        }
         return (
-            <section className="flex items-center justify-between">
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        R<span className="lg:inline hidden">allydata</span>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        {datasetSelect()}
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        {resourceSelect()}
-                    </Breadcrumb.Item>
-                </Breadcrumb>
-                <Link to={`/SidebarPage`}>
-                    <Button
-                        type="dashed"
-                        icon={<MenuOutlined/>}
-                        size="small"
-                    />
-                </Link>
-            </section>
+            <Breadcrumb>
+                <Breadcrumb.Item>
+                    Rallydata
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>
+                    {datasetSelect()}
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>
+                    {resourceSelect()}
+                </Breadcrumb.Item>
+            </Breadcrumb>
         )
     }
 
     return (
         <>
-            <section className="lg:flex block items-center justify-between space-y-3">
+            <section className=" lg:flex block items-center justify-between lg:space-y-0 space-y-3">
                 {renderBreadcrumb()}
                 <Space>
                     <Button

@@ -5,3 +5,4 @@ export {Header} from "./Header"
 export {Progress} from "./Progress";
 export {MediaModal} from "./Media/MediaModal";
 export {Share} from "./Share";
+export {ControlledJsonEditor} from "./ControlledJsonEditor";

@@ -13,13 +13,14 @@ import Quill from "quill";
 import ResizeModule from "@ssumo/quill-resize-module";
 import QuillImageDropAndPaste from "quill-image-drop-and-paste";
 import "react-quill/dist/quill.snow.css";
+import {ControlledJsonEditor} from "../../components";
 
 Quill.register("modules/resize", ResizeModule);
 Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
 
-const FormRallydata = ({fields, form, childResources}) => {
+const FormRallydata = ({fields, form, childResources, dataEditor = {}}) => {
     const dispatch = useDispatch()
-    const {cbRallydata, fieldsRallydata} = useSelector(rallydatasSelector)
+    const {cbRallydata, fieldsRallydata, eRallydata, deRallydata, } = useSelector(rallydatasSelector)
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
@@ -43,7 +44,12 @@ const FormRallydata = ({fields, form, childResources}) => {
         ],
     }
 
-    const [dEditor, setDEditor] = useState({})
+    const [dEditor, setDEditor] = useState(dataEditor)
+    useEffect(() => {
+        if (JSON.stringify(dataEditor) === JSON.stringify(dEditor)) return;
+        setDEditor(dataEditor)
+    }, [dataEditor])
+
     useEffect(() => {
         let values = form.getFieldsValue()
         Object.entries(dEditor).map(([key, item], i) => {
@@ -65,10 +71,10 @@ const FormRallydata = ({fields, form, childResources}) => {
                             case `Array`:
                                 return (<div className="mb-6">
                                     <p className="capitalize mb-2">{name}</p>
-                                    <JsonEditor
-                                        value={dEditor[name] ?? (iType === 'Array' ? [] : {})}
-                                        mode="code"
+                                    <ControlledJsonEditor
+                                        value={dEditor[name] ?? {}}
                                         onChange={(value) => setDEditor({...dEditor, [name]: value})}
+                                        mode="code"
                                         allowedModes={['tree', 'form', 'code']}
                                     />
                                     <Form.Item hidden={true} name={name}/>
@@ -78,6 +84,7 @@ const FormRallydata = ({fields, form, childResources}) => {
                                 return (<div className="mb-6">
                                     <p className="capitalize mb-2">{name}</p>
                                     <ReactQuill
+                                        value={dEditor[name] ?? ``}
                                         bounds={'.App'}
                                         modules={modules}
                                         onChange={(value, delta, source, editor) => {

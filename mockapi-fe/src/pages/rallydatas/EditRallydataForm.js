@@ -1,14 +1,14 @@
-import {Form, Button, Space, Select, Modal,} from 'antd';
+import {Form, Modal,} from 'antd';
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {rallydatasSelector, setRallydataMerge, createRallydata} from "slices/rallydatas";
+import {rallydatasSelector, setRallydataMerge, } from "slices/rallydatas";
 import {MediaModal} from "components";
 import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
 import {getItype, getRallyData} from "./configRallydata";
 import moment from "moment"
 import "moment-timezone";
-import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
+import {mediaSelector, setMediaMerge} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 
 const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
@@ -17,7 +17,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
     const dispatch = useDispatch()
     const {eRallydata, dataset_id_RD, resource_id_RD, mRallydataData, deRallydata} = useSelector(rallydatasSelector)
     const [form] = Form.useForm()
-    const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
+    const {mlMedia, } = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
     useEffect(() => {
@@ -90,6 +90,19 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         setChildResources(resources)
     }, [deRallydata])
 
+    const [dataEditor, setDataEditor] = useState({})
+    useEffect(() => {
+        let dataEditor = {};
+        (fields ?? []).filter((field) => {
+            const {name, type, fakerjs} = field
+            const iType = getItype(type, fakerjs)
+            if(['Object', 'Array', 'LongText'].includes(iType)){
+                dataEditor[name] = eRallydata.rallydata[name]
+            }
+        })
+        setDataEditor(dataEditor)
+    }, [eRallydata, deRallydata])
+
     return (
         <Modal
             title={<h2>Edit Rallydata</h2>}
@@ -109,14 +122,9 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             width={750}
             confirmLoading={eRallydata.isLoading}
         >
-            {/*<pre className="text-sm">
-                {JSON.stringify(eRallydata.rallydata, null, '  ')}
-            </pre>*/}
             <Form
                 form={form}
                 layout={`vertical`}
-                // onFinish={(values) => dispatch(createRallydata(values))}
-                // className="border border-indigo-200 p-4 mt-4 rounded-sm"
             >
                 <MediaModal/>
                 <ModalChildRallydata/>
@@ -124,22 +132,8 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
                     fields={fields}
                     form={form}
                     childResources={childResources}
+                    dataEditor={dataEditor}
                 />
-                {/*<div className="flex items-center justify-end mt-3 ">
-                    <Button
-                        onClick={(e) => dispatch(setRallydataMerge(`cRallydata`, {isOpen: false}))}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        className="ml-3"
-                        type="primary"
-                        htmlType="submit"
-                        loading={cRallydata.isLoading}
-                    >
-                        Submit
-                    </Button>
-                </div>*/}
                 <Form.Item hidden={true} name="id"/>
             </Form>
         </Modal>

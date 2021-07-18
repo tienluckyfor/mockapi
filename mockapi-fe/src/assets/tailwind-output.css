@@ -32642,11 +32642,14 @@ video {
 .ql-editor {
   overflow-y: scroll;
   resize: vertical;
-}
-
-.App .ql-editor {
   min-height: 18em;
 }
+
+/*.App .ql-editor {*/
+
+/*    min-height: 18em;*/
+
+/*}*/
 
 @media (min-width: 640px) {
   .sm\:container {

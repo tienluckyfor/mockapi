@@ -380,8 +380,9 @@ npx tailwindcss-cli@latest build -i ./src/assets/tailwind-custom.css -o ./src/as
 .ql-editor {
     overflow-y: scroll;
     resize: vertical;
-}
-
-.App .ql-editor {
     min-height: 18em;
 }
+
+/*.App .ql-editor {*/
+/*    min-height: 18em;*/
+/*}*/
