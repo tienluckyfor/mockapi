@@ -7,7 +7,7 @@ const AuthLayout = ({onBack, title, children, linkButton}) => {
     const cookies = new Cookies()
     const history = useHistory()
     if (cookies.get('mockapi-token')){
-        history.push(`/`)
+        history.push(`/ApiListPage`)
     }
 
     return (
