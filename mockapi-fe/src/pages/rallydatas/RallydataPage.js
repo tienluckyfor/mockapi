@@ -35,15 +35,6 @@ const RallydataPage = () => {
         }
     }, [mlDRRallydata])
 
-    const url = getURLParams()
-    useEffect(() => {
-        if (dataset_id_RD == url.dataset_id_RD) return;
-        dispatch(setRallydata({
-            dataset_id_RD: url.dataset_id_RD,
-            resource_id_RD: url.resource_id_RD,
-        }))
-    }, [url])
-
     const [seoTitle, setSeoTitle] = useState()
     useEffect(() => {
         const datasets = (qMe?.data?.datasets ?? []).filter((item) => item.id == dataset_id_RD)

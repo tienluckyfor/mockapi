@@ -2,13 +2,14 @@ import {Menu, Badge, Avatar as AntAvatar, PageHeader, Space, Divider} from 'antd
 import {CrownOutlined, ShareAltOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
 import {usersSelector} from "slices/users";
 import Avatar from "react-avatar";
 import {getURLParams} from "services";
 import {isMobile} from 'react-device-detect';
 import AppHelmet from "../shared/AppHelmet";
+import {setRallydata} from "../slices/rallydatas";
 
 const Sidebar = () => {
     const {qMe} = useSelector(usersSelector)
@@ -19,6 +20,7 @@ const Sidebar = () => {
         ResourceListPage: "resource",
         DatasetListPage: "dataset",
     }
+    const dispatch = useDispatch()
 
     const url = getURLParams()
     const history = useHistory();
@@ -31,7 +33,7 @@ const Sidebar = () => {
         setMenuSelected(menuSelected)
     }, [location])
 
-    const mainMenu = () => {
+    const RenderMenu = () => {
         return (
             <Menu
                 selectedKeys={[menuSelected]}
@@ -40,27 +42,6 @@ const Sidebar = () => {
                 theme="light"
                 className={isMobile ? `border-none` : ``}
             >
-                {/*{device === 'desktop' &&*/}
-                {/*<>
-                    <Menu.Item key="desktop-logo ">
-                        <div className="flex items-center justify-between">
-                            <h1>
-                                <b>MockAPI</b>
-                                <span className="ml-2 text-gray-400">v1.0</span>
-                            </h1>
-                            <Link to={`/UserPage`} className="flex items-center">
-                                <Avatar
-                                    className="rounded-full"
-                                    size="30"
-                                    name={qMe?.data?.name}
-                                    src={qMe?.data?.medium?.thumb_image}
-                                />
-                            </Link>
-                        </div>
-                    </Menu.Item>
-                    <Menu.Divider/>
-                </>*/}
-                {/*}*/}
                 {Object.entries(menu).map(([key, item], i) =>
                     <Menu.Item key={key}>
                         <Link to={`/${key}`} className={`capitalize`}>
@@ -75,6 +56,12 @@ const Sidebar = () => {
                         const isOwner = qMe?.data?.id == dataset?.user?.id
                         return (<Menu.Item key={dataset.id}>
                             <Link
+                                onClick={()=>{
+                                    dispatch(setRallydata({
+                                        dataset_id_RD: dataset.id,
+                                        resource_id_RD: dataset.resources[0]?.id,
+                                    }))
+                                }}
                                 className="flex items-center space-x-1"
                                 to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
                                 <Space>
@@ -96,9 +83,6 @@ const Sidebar = () => {
                                     )}
                                 </AntAvatar.Group>
                             </Link>
-                            <pre className="text-sm">
-                                {JSON.stringify(dataset, null, '  ')}
-                            </pre>
                         </Menu.Item>)
                     })}
                 </Menu.ItemGroup>
@@ -128,7 +112,7 @@ const Sidebar = () => {
                         ]}
                     />
                     <Divider className="my-1"/>
-                    {mainMenu()}
+                    {RenderMenu()}
                 </div>
             </section>
             }
@@ -152,7 +136,7 @@ const Sidebar = () => {
                         ]}
                     />
                     <Divider className="my-3"/>
-                    {mainMenu()}
+                    {RenderMenu()}
                 </div>
             </>
             }

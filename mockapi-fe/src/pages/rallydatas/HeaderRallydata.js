@@ -2,13 +2,14 @@ import {Breadcrumb, Button, Select, Space} from 'antd';
 import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined, MenuOutlined} from '@ant-design/icons';
 import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {Link, useHistory,} from "react-router-dom";
+import {Link, useHistory, } from "react-router-dom";
 import InfoDatasetModal from "pages/datasets/InfoDatasetModal";
 import EditDatasetForm from "pages/datasets/EditDatasetForm";
 import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} from "slices/rallydatas";
-import {datasetsSelector, setDataset, editDataset, setDatasetMerge, myDatasetList} from "slices/datasets";
+import {datasetsSelector, setDataset, editDataset, setDatasetMerge, } from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {isMobile} from 'react-device-detect';
+import {getURLParams} from "../../services";
 
 const {Option} = Select
 
@@ -36,10 +37,20 @@ const HeaderRallydata = () => {
             dispatch(detailRallydata(dataset_id_RD))
     }, [dataset_id_RD])
 
+
     useEffect(() => {
-        if (dataset_id_RD && resource_id_RD)
-            history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
+        if (!(dataset_id_RD && resource_id_RD)) return;
+        history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
     }, [dataset_id_RD, resource_id_RD])
+
+    const url = getURLParams()
+    useEffect(() => {
+        // if (dataset_id_RD == url.dataset_id_RD) return;
+        dispatch(setRallydata({
+            dataset_id_RD: url.dataset_id_RD,
+            resource_id_RD: url.resource_id_RD,
+        }))
+    }, [])
 
     const renderBreadcrumb = () => {
 
