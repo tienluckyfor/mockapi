@@ -1,6 +1,6 @@
-import {Tooltip, Button, Divider, Popconfirm, Badge, Table, Dropdown, Menu, } from 'antd';
-import {MoreOutlined, } from '@ant-design/icons';
-import {useEffect, } from 'react';
+import {Tooltip, Button, Divider, Popconfirm, Badge, Table, Dropdown, Menu,} from 'antd';
+import {MoreOutlined,} from '@ant-design/icons';
+import {useEffect,} from 'react';
 import moment from "moment"
 import "moment-timezone"
 import {useDispatch, useSelector} from "react-redux"
@@ -14,7 +14,7 @@ import {
     setDatasetMerge,
     setDataset,
 } from "slices/datasets"
-import {commonsSelector, handleMenuClick, handleVisibleChange, } from "slices/commons";
+import {commonsSelector, handleMenuClick, handleVisibleChange,} from "slices/commons";
 import {queryMe} from "slices/users"
 
 import {Header, Loading} from "components"
@@ -115,12 +115,12 @@ const DatasetListPage = () => {
                     if (!rallydatas) return;
                     return (
                         <section className={`text-xs flex flex-col space-y-1`}>
-                            {(rallydatas??[]).map((rally) => {
+                            {(rallydatas ?? []).map((rally) => {
                                 // const resource = mlDataset?.data?.resources[rally?.resource_id]
                                 return (<p className={`flex space-x-1 items-center`}>
-                                        <span className="truncate ">{rally?.resource_name}</span>
-                                        <Badge count={rally?.aggregate} className="site-badge-count-4" size="small"/>
-                                    </p>)
+                                    <span className="truncate ">{rally?.resource_name}</span>
+                                    <Badge count={rally?.aggregate} className="site-badge-count-4" size="small"/>
+                                </p>)
                             })}
                         </section>
                     )

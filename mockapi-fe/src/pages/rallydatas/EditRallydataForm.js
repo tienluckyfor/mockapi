@@ -90,18 +90,18 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         setChildResources(resources)
     }, [deRallydata])
 
-    const [dataEditor, setDataEditor] = useState({})
-    useEffect(() => {
-        let dataEditor = {};
-        (fields ?? []).filter((field) => {
-            const {name, type, fakerjs} = field
-            const iType = getItype(type, fakerjs)
-            if(['Object', 'Array', 'LongText'].includes(iType)){
-                dataEditor[name] = eRallydata.rallydata[name]
-            }
-        })
-        setDataEditor(dataEditor)
-    }, [eRallydata, deRallydata])
+    // const [dataEditor, setDataEditor] = useState({})
+    // useEffect(() => {
+    //     let dataEditor = {};
+    //     (fields ?? []).filter((field) => {
+    //         const {name, type, fakerjs} = field
+    //         const iType = getItype(type, fakerjs)
+    //         if(['Object', 'Array', 'LongText'].includes(iType)){
+    //             dataEditor[name] = eRallydata.rallydata[name]
+    //         }
+    //     })
+    //     setDataEditor(dataEditor)
+    // }, [eRallydata, deRallydata])
 
     return (
         <Modal
@@ -132,7 +132,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
                     fields={fields}
                     form={form}
                     childResources={childResources}
-                    dataEditor={dataEditor}
+                    // dataEditor={dataEditor}
                 />
                 <Form.Item hidden={true} name="id"/>
             </Form>

@@ -110,7 +110,7 @@ export function editDataset(dataset) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     eDataset: {isLoading: false, isOpen: false},
-                    mlDataset: {isRefresh: true},
+                    lDataset: {isRefresh: true},
                     mlDRRallydata: {isRefresh: true}
                 }))
                 dispatch(setRallydataMerge('mlDRRallydata', {isRefresh: true}))
@@ -147,7 +147,7 @@ export function editParentDataset(dataset) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     epDataset: {isLoading: false, isOpen: false},
-                    mlDataset: {isRefresh: true}
+                    lDataset: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -179,7 +179,7 @@ export function deleteDataset(dataset) {
                 const status = res?.data?.delete_dataset
                 dispatch(setMerge({
                     dDataset: {isLoading: false, status,},
-                    mlDataset: {isRefresh: true}
+                    lDataset: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -187,7 +187,6 @@ export function deleteDataset(dataset) {
         }
     }
 }
-
 
 export function myDatasetList() {
     return async (dispatch, getState) => {
@@ -218,7 +217,7 @@ export function listDataset() {
     return async (dispatch, getState) => {
         const {lDataset} = getState().datasets
         if (lDataset.isLoading) return;
-        dispatch(setMerge({mlDataset: {isLoading: true, isRefresh: false}}))
+        dispatch(setData({lDataset: {isLoading: true, isRefresh: false}}))
         const query = gql`
         query($name: String) {
   datasets(name:$name){
@@ -289,7 +288,7 @@ export function duplicateDataset(dataset) {
                 const status = res?.data?.duplicate_dataset
                 dispatch(setMerge({
                     duDataset: {isLoading: false, status,},
-                    mlDataset: {isRefresh: true}
+                    lDataset: {isRefresh: true}
                 }))
             })
         } catch (e) {

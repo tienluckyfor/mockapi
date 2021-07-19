@@ -1,26 +1,26 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
-import React, {useEffect, useState,} from 'react'
+import React, {useEffect, useRef, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
-import {JsonEditor} from 'jsoneditor-react';
 
 import ReactQuill from "react-quill";
 import Quill from "quill";
 import ResizeModule from "@ssumo/quill-resize-module";
 import QuillImageDropAndPaste from "quill-image-drop-and-paste";
 import "react-quill/dist/quill.snow.css";
-import {ControlledJsonEditor} from "../../components";
+import {ControlledJsonEditor} from "components";
+import { JsonEditor } from "jsoneditor-react";
 
 Quill.register("modules/resize", ResizeModule);
 Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
 
-const FormRallydata = ({fields, form, childResources, dataEditor = {}}) => {
+const FormRallydata = ({fields, form, childResources, }) => {
     const dispatch = useDispatch()
-    const {cbRallydata, fieldsRallydata, eRallydata, deRallydata, } = useSelector(rallydatasSelector)
+    const {cbRallydata, eRallydata, fieldsRallydata, } = useSelector(rallydatasSelector)
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
@@ -44,19 +44,33 @@ const FormRallydata = ({fields, form, childResources, dataEditor = {}}) => {
         ],
     }
 
-    const [dEditor, setDEditor] = useState(dataEditor)
-    useEffect(() => {
-        if (JSON.stringify(dataEditor) === JSON.stringify(dEditor)) return;
-        setDEditor(dataEditor)
-    }, [dataEditor])
+    // const [deInit, setDeInit] = useState(dataEditor)
+    // useEffect(() => {
+    //     if (JSON.stringify(dataEditor) === JSON.stringify(deInit)) return;
+    //     setDeInit(dataEditor)
+    // }, [dataEditor])
 
-    useEffect(() => {
-        let values = form.getFieldsValue()
-        Object.entries(dEditor).map(([key, item], i) => {
-            values.data[key] = item
-        })
-        form.setFieldsValue(values)
-    }, [dEditor])
+    // const [dEditor, setDEditor] = useState({})
+    // useEffect(() => {
+    //     let values = form.getFieldsValue()
+    //     Object.entries(dEditor).map(([key, item], i) => {
+    //         values.data[key] = item
+    //     })
+    //     form.setFieldsValue(values)
+    // }, [dEditor])
+
+    // const handleChange = (html) => {
+    // };
+    // const jsonEditorRef = useRef();
+    // useEffect(() => {
+    //     const editor =
+    //         jsonEditorRef &&
+    //         jsonEditorRef.current &&
+    //         jsonEditorRef.current.jsonEditor;
+    //     if (editor && value) {
+    //         editor.update(value);
+    //     }
+    // }, [jsonEditorRef, value]);
 
     return (
         <>
@@ -69,30 +83,56 @@ const FormRallydata = ({fields, form, childResources, dataEditor = {}}) => {
                         switch (iType) {
                             case `Object`:
                             case `Array`:
-                                return (<div className="mb-6">
+                                return (
+                                    <Form.Item
+                                        name={name}
+                                        label={<span className="capitalize">{name}</span>}
+                                        initialValue={{}}
+                                    >
+                                        <ControlledJsonEditor
+                                            value={eRallydata.rallydata[name] ?? {}}
+                                            // value={dataEditor[name] ?? {}}
+                                            // onChange={(value) => {
+                                            //     setDEditor({...dEditor, [name]: value})
+                                            // }}
+                                            mode="code"
+                                            allowedModes={['tree', 'form', 'code']}
+                                        />
+                                        {/*<JsonEditor
+                                            // value={dataEditor[name] ?? {}}
+                                            // onChange={(value) => {
+                                            //     setDEditor({...dEditor, [name]: value})
+                                            // }}
+                                            mode="code"
+                                            allowedModes={['tree', 'form', 'code']}
+                                        />*/}
+                                    </Form.Item>
+                                        /*<div className="mb-6">
                                     <p className="capitalize mb-2">{name}</p>
                                     <ControlledJsonEditor
-                                        value={dEditor[name] ?? {}}
-                                        onChange={(value) => setDEditor({...dEditor, [name]: value})}
+                                        value={dataEditor[name] ?? {}}
+                                        onChange={(value) => {
+                                            setDEditor({...dEditor, [name]: value})
+                                        }}
                                         mode="code"
                                         allowedModes={['tree', 'form', 'code']}
                                     />
                                     <Form.Item hidden={true} name={name}/>
-                                </div>)
+                                </div>*/)
                                 break;
                             case `LongText`:
-                                return (<div className="mb-6">
-                                    <p className="capitalize mb-2">{name}</p>
-                                    <ReactQuill
-                                        value={dEditor[name] ?? ``}
-                                        bounds={'.App'}
-                                        modules={modules}
-                                        onChange={(value, delta, source, editor) => {
-                                            setDEditor({...dEditor, [name]: editor.getHTML()})
-                                        }}
-                                    />
-                                    <Form.Item hidden={true} name={name}/>
-                                </div>)
+                                return (<Form.Item
+                                        name={name}
+                                        label={<span className="capitalize">{name}</span>}
+                                        initialValue=""
+                                    >
+                                        <ReactQuill
+                                            // value={dEditor[name] ?? ``}
+                                            modules={modules}
+                                            onChange={(html) => {
+                                            }}
+                                        />
+                                    </Form.Item>)
                                 break;
                             case `Media`:
                                 return (<Form.Item

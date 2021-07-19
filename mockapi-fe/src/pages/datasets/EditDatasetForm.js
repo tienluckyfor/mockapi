@@ -10,7 +10,7 @@ const EditDatasetForm = ({visible, onCreate, onCancel}) => {
     const [apiId, setApiId] = useState()
 
     useEffect(() => {
-        setApiId(eDataset?.dataset.api_id)
+        setApiId(eDataset?.dataset?.api?.id)
     }, [eDataset])
 
     const [form] = Form.useForm()

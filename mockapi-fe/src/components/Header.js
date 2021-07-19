@@ -8,7 +8,7 @@ import {authsSelector} from "slices/auths"
 import {apisSelector, myApiList, setApiMerge} from "slices/apis"
 import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resources"
 import {Sidebar} from "./index"
-import {datasetsSelector, myDatasetList, setDatasetMerge} from "slices/datasets";
+import {datasetsSelector, listDataset, myDatasetList, setDatasetMerge} from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {Link} from "react-router-dom";
 
@@ -96,7 +96,8 @@ const Header = ({page}) => {
                 break;
             case 'DatasetListPage':
                 dispatch(setDatasetMerge(`lDataset`, {search: {name: value}}))
-                dispatch(myDatasetList())
+                // dispatch(myDatasetList())
+                dispatch(listDataset())
                 break;
         }
     }

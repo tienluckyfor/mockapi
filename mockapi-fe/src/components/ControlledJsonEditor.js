@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { JsonEditor as JsonEditorWrapper } from "jsoneditor-react";
-
 import "jsoneditor/dist/jsoneditor.css";
 
 export const ControlledJsonEditor = ({ value, onChange, ...props }) => {

@@ -95,6 +95,8 @@ export function createRallydata(rallydata) {
 }
 
 export function editRallydata(rallydata) {
+    // console.log('editRallydata rallydata',  rallydata)
+    // return;
     return async (dispatch) => {
         dispatch(setMerge({eRallydata: {isLoading: true}}))
         const mutationAPI = () => {
