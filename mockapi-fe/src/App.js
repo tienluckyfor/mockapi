@@ -14,7 +14,6 @@ import Cookies from "universal-cookie";
 function App() {
     const dispatch = useDispatch()
     const [href, setHref] = useState(window.location.href)
-    const cookies = new Cookies()
 
     useEffect(() => {
         dispatch(queryMe(window.location.href))

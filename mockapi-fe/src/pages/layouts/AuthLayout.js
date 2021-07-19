@@ -1,7 +1,15 @@
-import {Button, Divider, PageHeader} from "antd";
+import {Divider, PageHeader} from "antd";
 import AppHelmet from "shared/AppHelmet";
+import Cookies from "universal-cookie";
+import {useHistory} from "react-router-dom";
 
 const AuthLayout = ({onBack, title, children, linkButton}) => {
+    const cookies = new Cookies()
+    const history = useHistory()
+    if (cookies.get('mockapi-token')){
+        history.push(`/`)
+    }
+
     return (
         <>
             <AppHelmet title={title}/>
