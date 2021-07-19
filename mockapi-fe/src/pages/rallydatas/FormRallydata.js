@@ -1,5 +1,5 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
-import React, {useEffect, useRef, useState,} from 'react'
+import React  from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
@@ -13,7 +13,6 @@ import ResizeModule from "@ssumo/quill-resize-module";
 import QuillImageDropAndPaste from "quill-image-drop-and-paste";
 import "react-quill/dist/quill.snow.css";
 import {ControlledJsonEditor} from "components";
-import { JsonEditor } from "jsoneditor-react";
 
 Quill.register("modules/resize", ResizeModule);
 Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
@@ -44,34 +43,6 @@ const FormRallydata = ({fields, form, childResources, }) => {
         ],
     }
 
-    // const [deInit, setDeInit] = useState(dataEditor)
-    // useEffect(() => {
-    //     if (JSON.stringify(dataEditor) === JSON.stringify(deInit)) return;
-    //     setDeInit(dataEditor)
-    // }, [dataEditor])
-
-    // const [dEditor, setDEditor] = useState({})
-    // useEffect(() => {
-    //     let values = form.getFieldsValue()
-    //     Object.entries(dEditor).map(([key, item], i) => {
-    //         values.data[key] = item
-    //     })
-    //     form.setFieldsValue(values)
-    // }, [dEditor])
-
-    // const handleChange = (html) => {
-    // };
-    // const jsonEditorRef = useRef();
-    // useEffect(() => {
-    //     const editor =
-    //         jsonEditorRef &&
-    //         jsonEditorRef.current &&
-    //         jsonEditorRef.current.jsonEditor;
-    //     if (editor && value) {
-    //         editor.update(value);
-    //     }
-    // }, [jsonEditorRef, value]);
-
     return (
         <>
             <Form.List name="data">
@@ -90,35 +61,12 @@ const FormRallydata = ({fields, form, childResources, }) => {
                                         initialValue={{}}
                                     >
                                         <ControlledJsonEditor
-                                            value={eRallydata.rallydata[name] ?? {}}
-                                            // value={dataEditor[name] ?? {}}
-                                            // onChange={(value) => {
-                                            //     setDEditor({...dEditor, [name]: value})
-                                            // }}
-                                            mode="code"
-                                            allowedModes={['tree', 'form', 'code']}
+                                            value={eRallydata?.rallydata && eRallydata?.rallydata[name]
+                                                ? eRallydata?.rallydata[name] : {}}
+                                            mode="text"
+                                            allowedModes={['text', 'tree', 'form']}
                                         />
-                                        {/*<JsonEditor
-                                            // value={dataEditor[name] ?? {}}
-                                            // onChange={(value) => {
-                                            //     setDEditor({...dEditor, [name]: value})
-                                            // }}
-                                            mode="code"
-                                            allowedModes={['tree', 'form', 'code']}
-                                        />*/}
-                                    </Form.Item>
-                                        /*<div className="mb-6">
-                                    <p className="capitalize mb-2">{name}</p>
-                                    <ControlledJsonEditor
-                                        value={dataEditor[name] ?? {}}
-                                        onChange={(value) => {
-                                            setDEditor({...dEditor, [name]: value})
-                                        }}
-                                        mode="code"
-                                        allowedModes={['tree', 'form', 'code']}
-                                    />
-                                    <Form.Item hidden={true} name={name}/>
-                                </div>*/)
+                                    </Form.Item>)
                                 break;
                             case `LongText`:
                                 return (<Form.Item
@@ -127,10 +75,8 @@ const FormRallydata = ({fields, form, childResources, }) => {
                                         initialValue=""
                                     >
                                         <ReactQuill
-                                            // value={dEditor[name] ?? ``}
                                             modules={modules}
-                                            onChange={(html) => {
-                                            }}
+                                            onChange={(html) => {}}
                                         />
                                     </Form.Item>)
                                 break;
