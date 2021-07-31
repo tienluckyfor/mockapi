@@ -43,4 +43,14 @@ class ResourceRepository
             ->where('name', $name)
             ->first();
     }
+
+    public function findByNameDatasetId($name, $datasetId, $select = 'resources.*')
+    {
+        return Resource::selectRaw($select)
+            ->join('apis', 'apis.id', '=', 'resources.api_id')
+            ->join('datasets', 'datasets.api_id', '=', 'apis.id')
+            ->where('datasets.id', $datasetId)
+            ->where('resources.name', $name)
+            ->first();
+    }
 }

@@ -275,49 +275,8 @@ export function myRallydataList() {
                 data: diffObject([resource_id_RD], myRallydataList),
             }
         }))
-        // dispatch(setData({
-        //     mRallydataData: myRallydataList,
-        // }))
     }
 }
-
-/*
-
-export function myRallydataList1(resource_id = null) {
-    return async (dispatch, getState) => {
-        let resourceId = resource_id
-        const {dataset_id_RD, resource_id_RD} = getState().rallydatas
-        if (!resourceId) {
-            resourceId = resource_id_RD
-        }
-        if (!(dataset_id_RD && resourceId)) return;
-        if (resource_id === null) {
-            dispatch(setMerge({mlDRRallydata: {isLoading: true, isRefresh: false}}))
-        }
-        const query = gql`
-        query {
-  my_rallydata_list(dataset_id:"${dataset_id_RD}", resource_id:"${resourceId}")
-}`;
-        const res = await apolloClient.query({
-            query
-        })
-        const myRallydataList = res?.data?.my_rallydata_list?.rallydatas ?? []
-        if (resource_id === null) {
-            dispatch(setMerge({
-                mlDRRallydata: {
-                    isLoading: false,
-                    data: myRallydataList,
-                    isRefresh: false,
-                }
-            }))
-            return;
-        }
-        dispatch(setData({
-            mRallydataData: myRallydataList,
-        }))
-    }
-}
-*/
 
 export function detailRallydata(dataset_id) {
     return async (dispatch, getState) => {

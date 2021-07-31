@@ -72,6 +72,7 @@ class User extends Authenticatable
         $shareDatasetIds = $this->share_datasets->pluck('shareable_id')->toArray();
         $datasets = DataSet::where('user_id', $this->id)
             ->orWhereIn('id', $shareDatasetIds)
+            ->orderBy('updated_at', 'desc')
             ->get();
         return $datasets;
     }

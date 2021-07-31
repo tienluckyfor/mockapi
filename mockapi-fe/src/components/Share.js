@@ -66,9 +66,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                     <Select
                         showSearch
                         filterOption={false}
-                        onSearch={(value) => {
-                            debounceFetch(value)
-                        }}
+                        onSearch={(value) => debounceFetch(value)}
                         notFoundContent={null}
                         placeholder="Share to..."
                         allowClear={true}

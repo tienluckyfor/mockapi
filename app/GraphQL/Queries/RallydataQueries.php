@@ -80,14 +80,17 @@ class RallydataQueries
 //        $dataset = $this->dataset_repository->find($args['dataset_id'], '*');
         $dataset = DataSet::find($args['dataset_id']);
         $resources = $this->resource_repository->getByApiId(@$dataset->api_id,
+//            'id, parents')
             'id, name, fields, parents, resources.name as resource_name')
             ->keyBy('id')
             ->toArray();
 //        $dataset = $this->dataset_repository->postman_mapping($dataset, Arr::first($resources));
 //        dd($resources);
+//        dd($resources);
         foreach ($resources as &$resource) {
             if (!empty($resource['parents'])) {
                 foreach ($resource['parents'] as $parent) {
+                    if(!isset($resources[$parent])) continue;
                     $resources[$parent]['fields'][] = [
                         "name" => $resource['name'],
                         "type" => "Resource",
@@ -95,6 +98,7 @@ class RallydataQueries
                 }
             }
         }
+
         $data = [
             'dataset'   => $dataset,
             'resources' => array_values($resources),

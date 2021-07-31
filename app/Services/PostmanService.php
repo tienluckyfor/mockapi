@@ -272,7 +272,7 @@ class PostmanService
                 ],
                 [
                     "key"     => "restful_token",
-                    "value"   => $this->stringService->JWT_encode(['dataset_id' => $datasetId]),
+                    "value"   => $this->stringService->JWT_encode(['dataset_id' => $datasetId, 'user_id' => $dataset->user_id]),
                     "enabled" => true
                 ],
             ],
