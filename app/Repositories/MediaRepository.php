@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Models\Media;
 use App\Services\MediaService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MediaRepository
 {
@@ -47,35 +48,26 @@ class MediaRepository
             ->get();
     }
 
-    /*public function mappingMedia($media)
+    private function _copyFileBy($item){
+        $randFile = time().'-'.rand();
+        $nItem = $item;
+        $nItem['file_name'] = preg_replace('/^(.*?[\/])([^\/]+)(\.\w+)$/mis', '${1}'.$randFile.'${3}', $item['file_name']);
+        $nItem['file_thumb'] = preg_replace('/^(.*?[\/])([^\/]+)(\.\w+)$/mis', '${1}'.$randFile.'${3}', $item['file_thumb']);
+        copy(Storage::path('public/'.$item['file_name']), Storage::path('public/'.$nItem['file_name']));
+        copy(Storage::path('public/'.$item['file_thumb']), Storage::path('public/'.$nItem['file_thumb']));
+        return $nItem;
+    }
+
+    public function duplicate($datasetId, $media)
     {
-        return $media->map(function ($medium) {
-            $image = asset('storage/' . $medium->file_name);
-            $medium->image = $image;
-            $medium->thumb_image = $this->media_service->get_thumb($image);
-            return $medium;
-        });
-    }*/
-
-//    public function getByDatasetId($datasetId, $select = '*')
-//    {
-//        $media = Media::selectRaw($select)
-//            ->orderBy('id', 'desc');
-//        if ($datasetId) {
-//            $media->where('dataset_id', $datasetId);
-//        }
-////        $media = $this->mappingMedia($media->get());
-//        return $media;
-//    }
-
-//    public function getByUserId($userId, $select = '*')
-//    {
-//        $media = Media::selectRaw($select)
-//            ->orderBy('id', 'desc')
-//            ->where('user_id', $userId)
-//        ->get();
-////        $media = $this->mappingMedia($media->get());
-//        return $media;
-//    }
+        $nMediaIds = [];
+        foreach ($media as $item) {
+            $nItem = self::_copyFileBy($item);
+            $nItem['dataset_id'] = $datasetId;
+            $nMedia = Media::create($nItem);
+            $nMediaIds[$item['id']] = (string) $nMedia->id;
+        }
+        return $nMediaIds;
+    }
 
 }

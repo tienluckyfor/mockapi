@@ -1,7 +1,7 @@
-import {Form, Button, } from 'antd';
+import {Form, Button,} from 'antd';
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {rallydatasSelector, setRallydataMerge, createRallydata} from "slices/rallydatas";
+import {rallydatasSelector, setRallydataMerge, createRallydata, setRallydata} from "slices/rallydatas";
 import {MediaModal} from "components";
 import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
@@ -9,17 +9,23 @@ import {getItype, getRallyData} from "./configRallydata";
 import moment from "moment"
 import "moment-timezone";
 import {mediaSelector, setMediaMerge} from "slices/media";
-import {commonsSelector} from "slices/commons";
+import {commonsSelector, setCommon, } from "slices/commons";
 
 const CreateRallydataForm = ({fields}) => {
-    console.log('CreateRallydataForm', fields)
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
     const dispatch = useDispatch()
     const {cRallydata, dataset_id_RD, resource_id_RD, mRallydataData, deRallydata} = useSelector(rallydatasSelector)
     const [form] = Form.useForm()
-    const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
+    const {mlMedia,} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
+
+    useEffect(() => {
+        if (cRallydata.rallydata) {
+            dispatch(setCommon({checkedList: {}}))
+            dispatch(setRallydata({cbRallydata: {}}))
+        }
+    }, [cRallydata])
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;

@@ -2,7 +2,6 @@ import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient,} from "services";
 import {setDatasetMerge} from "./datasets";
-import {useSelector} from "react-redux";
 import {diffObject} from "services/convert";
 import _slice_common from "./_slice_common";
 
@@ -81,7 +80,7 @@ export function createRallydata(rallydata) {
         try {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
-                    cRallydata: {isLoading: false, isOpen: false},
+                    cRallydata: {isLoading: false, isOpen: false, rallydata},
                     mlDRRallydata: {isRefresh: true}
                 }))
                 dispatch(setDatasetMerge(`mlDataset`, {

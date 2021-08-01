@@ -62,7 +62,10 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         let fieldsValue = form.getFieldsValue()
         for (const key in fmedia) {
             const f = fmedia[key]
-            const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
+            const mediaR = (mlMedia.data ?? []).filter((medium) => {
+                return checkedList[f.name]
+                    && (checkedList[f.name].indexOf(medium.id) !== -1)
+            })
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             fieldsValue.data[f.name] = {
                 type: 'media',
@@ -89,19 +92,6 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
     }, [deRallydata])
-
-    // const [dataEditor, setDataEditor] = useState({})
-    // useEffect(() => {
-    //     let dataEditor = {};
-    //     (fields ?? []).filter((field) => {
-    //         const {name, type, fakerjs} = field
-    //         const iType = getItype(type, fakerjs)
-    //         if(['Object', 'Array', 'LongText'].includes(iType)){
-    //             dataEditor[name] = eRallydata.rallydata[name]
-    //         }
-    //     })
-    //     setDataEditor(dataEditor)
-    // }, [eRallydata, deRallydata])
 
     return (
         <Modal

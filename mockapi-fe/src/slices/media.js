@@ -41,7 +41,6 @@ export function setMedia(state) {
 }
 
 export function setMediaMerge(key, item) {
-    console.log('setMediaMerge', {key, item})
     return async (dispatch) => {
         dispatch(setMerge({...{}, [key]: item}))
     }

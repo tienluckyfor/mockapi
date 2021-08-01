@@ -9,7 +9,7 @@ import {detailRallydata, rallydatasSelector, setRallydata, setRallydataMerge} fr
 import {datasetsSelector, setDataset, editDataset, setDatasetMerge, } from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {isMobile} from 'react-device-detect';
-import {getURLParams} from "../../services";
+import {getURLParams} from "services";
 
 const {Option} = Select
 

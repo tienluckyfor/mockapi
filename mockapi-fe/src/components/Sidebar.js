@@ -8,8 +8,8 @@ import {usersSelector} from "slices/users";
 import Avatar from "react-avatar";
 import {getURLParams} from "services";
 import {isMobile} from 'react-device-detect';
-import AppHelmet from "../shared/AppHelmet";
-import {setRallydata} from "../slices/rallydatas";
+import AppHelmet from "shared/AppHelmet";
+import {setRallydata} from "slices/rallydatas";
 
 const Sidebar = () => {
     const {qMe} = useSelector(usersSelector)
@@ -76,8 +76,8 @@ const Sidebar = () => {
                                 <AntAvatar.Group
                                     size="small" maxCount={2}
                                     maxStyle={{color: '#f56a00', backgroundColor: '#fde3cf'}}>
-                                    {(dataset.shares ?? []).map(({user_invite}) =>
-                                        <AntAvatar src={user_invite?.medium?.thumb_image}>
+                                    {(dataset.shares ?? []).map(({user_invite}, key) =>
+                                        <AntAvatar src={user_invite?.medium?.thumb_image} key={key}>
                                             {user_invite?.medium ? null : user_invite?.name.match(/\b(\w)/g).join('')}
                                         </AntAvatar>
                                     )}

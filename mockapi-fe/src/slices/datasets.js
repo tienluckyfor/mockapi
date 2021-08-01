@@ -280,7 +280,7 @@ export function duplicateDataset(dataset) {
 `;
             return apolloClient.mutate({
                 mutation,
-                variables: dataset
+                variables: {id: dataset.id}
             });
         }
         try {

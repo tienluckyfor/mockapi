@@ -130,18 +130,21 @@ class RallydataRepository
         }
     }
 
+
     public function duplicate($dataset, $datasetNew)
     {
-        $rallies = RallyData::selectRaw('resource_id, data')
+        $rallyData = RallyData::selectRaw('id, user_id, resource_id, data, data_children')
             ->where('dataset_id', $dataset->id)
             ->get()
-            ->map(function ($rally) use ($datasetNew) {
-                $rally->dataset_id = $datasetNew->id;
-                $rally->data = json_encode($rally->data);
-                return $rally;
-            })
             ->toArray();
-        RallyData::insert($rallies);
+        $rallyIds = [];
+        foreach ($rallyData as $item) {
+            $nItem = array_merge($item, ['dataset_id' => $datasetNew->id]);
+            $nItem = array_diff_key($nItem, array_flip(['id']));
+            $nRally = RallyData::create($nItem);
+            $rallyIds[$item['id']] = $nRally['id'];
+        }
+        return $rallyIds;
     }
 
     public function getByDatasetIdResourceId($datasetId, $resourceId, $select = '*')
