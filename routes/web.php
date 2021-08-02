@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +14,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+//    dd($_ENV);
+    foreach ($_ENV as $key => $item) {
+//        dd($key, $item);
+        if (preg_match('#DB.*?HOST#mis', $key)) {
+            $host = $item;
+        }
+        if (preg_match('#DB.*?USERNAME#mis', $key)) {
+            $username = $item;
+        }
+        if (preg_match('#DB.*?PASSWORD#mis', $key)) {
+            $password = $item;
+        }
+        if (preg_match('#DB.*?DATABASE#mis', $key)) {
+            $database = $item;
+        }
+        if(isset($host, $username, $password, $database)){
+            $filePath = Storage::path('public/backup/'.$database . '.sql');
+            $command = sprintf('mysqldump --column-statistics=0 -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $filePath);
+            exec($command);
+            dd($command);
+        }
+//        $username = env('DB_USERNAME');
+//        $password = env('DB_PASSWORD');
+//        $database = env('DB_DATABASE');
+    }
 //    $resource = \App\Models\Resource::find(1);
 //    dd($resource->dataset->toArray());
 //    dd($resource->toArray());
@@ -25,10 +50,10 @@ Route::get('/', function () {
 //    dd($user->toArray());
 //    dd($user->datasets->shares);
 //    dd($user->datasets->toArray());
-    $d = \App\Models\DataSet::find(1);
-    dd($d->resources->toArray());
-    dd($d->shares->toArray());
-    dd($d->toArray());
+//    $d = \App\Models\DataSet::find(1);
+//    dd($d->resources->toArray());
+//    dd($d->shares->toArray());
+//    dd($d->toArray());
     return view('welcome');
 });
 
