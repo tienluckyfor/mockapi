@@ -33,7 +33,7 @@ class ExportService
         // check zip install
         $output=null;
         exec('which zip', $output);
-        if(emtpy($output)){
+        if(empty($output)){
             $command = "apt-get install zip unzip -qy";
             exec($command);
         }
