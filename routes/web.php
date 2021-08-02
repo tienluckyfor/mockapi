@@ -18,34 +18,11 @@ Route::get('/export', function () {
     $export = new ExportService();
     return $export
         ->database()
-        ->files('media')
-        ->download();
+        ->files('media');
+//        ->download();
 });
 
 Route::get('/', function () {
-    $bk = new ExportService();
-    return ($bk->database()->files('media')->download());
-//    dd($_ENV);
-    foreach ($_ENV as $key => $item) {
-        if (preg_match('#DB.*?HOST#mis', $key)) {
-            $host = $item;
-        }
-        if (preg_match('#DB.*?USERNAME#mis', $key)) {
-            $username = $item;
-        }
-        if (preg_match('#DB.*?PASSWORD#mis', $key)) {
-            $password = $item;
-        }
-        if (preg_match('#DB.*?DATABASE#mis', $key)) {
-            $database = $item;
-        }
-        if(isset($host, $username, $password, $database)){
-            $filePath = Storage::path('public/backup/'.$database . '.sql');
-            $command = sprintf('mysqldump -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $filePath);
-            exec($command);
-            unset($host, $username, $password, $database);
-        }
-    }
 //    $resource = \App\Models\Resource::find(1);
 //    dd($resource->dataset->toArray());
 //    dd($resource->toArray());
