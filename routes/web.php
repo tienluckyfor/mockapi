@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ExportService;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,10 +14,19 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+Route::get('/export', function () {
+    $export = new ExportService();
+    return $export
+        ->database()
+        ->files('media')
+        ->download();
+});
+
 Route::get('/', function () {
+    $bk = new ExportService();
+    return ($bk->database()->files('media')->download());
 //    dd($_ENV);
     foreach ($_ENV as $key => $item) {
-//        dd($key, $item);
         if (preg_match('#DB.*?HOST#mis', $key)) {
             $host = $item;
         }
@@ -33,11 +43,8 @@ Route::get('/', function () {
             $filePath = Storage::path('public/backup/'.$database . '.sql');
             $command = sprintf('mysqldump -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $filePath);
             exec($command);
-            dd($command);
+            unset($host, $username, $password, $database);
         }
-//        $username = env('DB_USERNAME');
-//        $password = env('DB_PASSWORD');
-//        $database = env('DB_DATABASE');
     }
 //    $resource = \App\Models\Resource::find(1);
 //    dd($resource->dataset->toArray());
