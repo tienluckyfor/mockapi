@@ -30,6 +30,13 @@ class ExportService
 
     public function zip($dPath = null, $fName = null)
     {
+        // check zip install
+        $output=null;
+        exec('which zip', $output);
+        if(emtpy($output)){
+            $command = "apt-get install zip unzip -qy";
+            exec($command);
+        }
         if (!$dPath) {
             $dPath = $this->get_dir();
         }

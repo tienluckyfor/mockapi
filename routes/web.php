@@ -23,6 +23,11 @@ Route::get('/export', function () {
 });
 
 Route::get('/', function () {
+    $output=null;
+    exec('which zip', $output);
+    dd($output);
+    echo "Returned with status $retval and output:\n";
+    print_r($output);
 //    $resource = \App\Models\Resource::find(1);
 //    dd($resource->dataset->toArray());
 //    dd($resource->toArray());
