@@ -31,7 +31,7 @@ Route::get('/', function () {
         }
         if(isset($host, $username, $password, $database)){
             $filePath = Storage::path('public/backup/'.$database . '.sql');
-            $command = sprintf('mysqldump --column-statistics=0 -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $filePath);
+            $command = sprintf('mysqldump -h %s -u %s -p\'%s\' %s > %s', $host, $username, $password, $database, $filePath);
             exec($command);
             dd($command);
         }
