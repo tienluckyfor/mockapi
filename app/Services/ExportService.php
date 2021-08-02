@@ -35,7 +35,7 @@ class ExportService
         exec('which zip', $output);
         if(empty($output)){
             $command = "apt-get install zip unzip -qy";
-            exec($command);
+            dd($command);
         }
         if (!$dPath) {
             $dPath = $this->get_dir();
