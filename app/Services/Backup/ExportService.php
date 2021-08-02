@@ -3,57 +3,16 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
-class ExportService
+class ExportService extends Backup_Abstract
 {
-    private $date;
-    private $zipFile;
+
     public function __construct()
     {
-        $this->date = date('Y-m-d', time());
-        $this->zipFile = Storage::path('public/exports/' . $this->date . '.zip');
+        $this->rDir = Storage::path('public/exports');
+        parent::__construct();
         $this->add_dir();
-    }
-
-    public function add_dir($dName = '')
-    {
-        $fPath = Storage::path('public/exports/' . $this->date . '/' . $dName);
-        if (is_dir($fPath) || mkdir($fPath)) {
-            return $this;
-        }
-    }
-
-    public function get_dir($dName = '')
-    {
-        return Storage::path('public/exports/' . $this->date . '/' . $dName);
-    }
-
-    public function zip($dPath = null, $fName = null)
-    {
-        // check zip install
-        $output=null;
-        exec('which zip', $output);
-        if(empty($output)){
-            $command = "apt-get install zip unzip -qy";
-            dd($command);
-        }
-        if (!$dPath) {
-            $dPath = $this->get_dir();
-        }
-        if (!$fName) {
-            $fName = $this->zipFile;
-        }
-        $command = sprintf('cd %s; zip -r %s *', $dPath, $fName);
-        exec($command);
-        return $this;
-    }
-
-    public function download()
-    {
-        $this->zip();
-        $command = sprintf('rm -rf %s', $this->get_dir());
-        exec($command);
-        return response()->download($this->zipFile)->deleteFileAfterSend();
     }
 
     public function database()
@@ -92,5 +51,4 @@ class ExportService
         $this->zip($dPath, $fName);
         return $this;
     }
-
 }
