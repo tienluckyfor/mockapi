@@ -18,8 +18,8 @@ Route::get('/export', function () {
     $export = new ExportService();
     return $export
         ->database()
-        ->files('media');
-//        ->download();
+        ->files('media')
+        ->download();
 });
 
 Route::get('/', function () {
