@@ -29,7 +29,7 @@ const BackupPage = () => {
             layout={`vertical`}
             onFinish={(values) => dispatch(BackupTake(values))}
             initialValues={{
-                export_url: 'https://be.mockapi.codeby.com/export',
+                export_url: 'https://be.mockapi.codeby.com/api/backup/export',
             }}
         >
             <Form.Item
