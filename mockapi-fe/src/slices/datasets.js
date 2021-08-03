@@ -7,6 +7,7 @@ import _slice_common from "./_slice_common";
 export const initialState = {
     cDataset: {isOpen: false},
     dDataset: {},
+    fdDataset: {},
     eDataset: {},
     epDataset: {isOpen: false},
     duDataset: {},
@@ -184,6 +185,38 @@ export function deleteDataset(dataset) {
             })
         } catch (e) {
             dispatch(setMerge({dDataset: {isLoading: false, dataset: null}}))
+        }
+    }
+}
+
+export function forceDeleteDataset(dataset) {
+    return async (dispatch) => {
+        dispatch(setData({fdDataset: {isLoading: true, dataset}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($id: ID!){
+  force_delete_dataset(
+    input: {
+      id: $id,
+    }
+  )
+}
+`;
+            return apolloClient.mutate({
+                mutation,
+                variables: dataset
+            });
+        }
+        try {
+            await mutationAPI().then(res => {
+                const status = res?.data?.delete_dataset
+                dispatch(setMerge({
+                    fdDataset: {isLoading: false, status,},
+                    lDataset: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({fdDataset: {isLoading: false, dataset: null}}))
         }
     }
 }

@@ -9,6 +9,7 @@ import {
     datasetsSelector,
     editDataset,
     deleteDataset,
+    forceDeleteDataset,
     duplicateDataset,
     listDataset,
     setDatasetMerge,
@@ -28,7 +29,7 @@ const DatasetListPage = () => {
 
     const dispatch = useDispatch()
     const {visibles,} = useSelector(commonsSelector)
-    const {cDataset, eDataset, lDataset, dDataset, duDataset,} = useSelector(datasetsSelector)
+    const {cDataset, eDataset, lDataset, dDataset, fdDataset, duDataset,} = useSelector(datasetsSelector)
 
     useEffect(() => {
         if (lDataset.isRefresh) {
@@ -82,6 +83,22 @@ const DatasetListPage = () => {
                             danger
                             loading={dDataset?.dataset?.id === dataset.id}
                         >Delete</Button>
+                    </Popconfirm>
+                </Menu.Item>
+                <Menu.Item key={`delete`}>
+                    <Popconfirm
+                        title={<p>Also delete rallydata relative: <br/>{dataset.name}</p>}
+                        onConfirm={(e) => dispatch(forceDeleteDataset(dataset))}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{autoFocus: true}}
+                    >
+                        <Button
+                            size={`small`}
+                            type="link"
+                            danger
+                            loading={fdDataset?.dataset?.id === dataset.id}
+                        >Force Delete</Button>
                     </Popconfirm>
                 </Menu.Item>
             </Menu>

@@ -3,6 +3,7 @@ extend type Mutation {
     create_dataset(input: CreateDataSetInput! @spread): DataSet @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@createDataSet")
     edit_dataset(input: EditDataSetInput! @spread): DataSet @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@editDataSet")
     delete_dataset(input: DeleteDataSetInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@deleteDataSet")
+    force_delete_dataset(input: ForceDeleteDataSetInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@forceDeleteDataSet")
     duplicate_dataset(input: DuplicateDataSetInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\DataSetMutations@duplicateDataSet")
 }
 
@@ -61,6 +62,11 @@ input EditDataSetInput{
 
 input DeleteDataSetInput{
     id: ID! @rules(apply: ["App\\Rules\\OwnerCheckDataSet", "App\\Rules\\DeleteCheckDataset"])
+    ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckDataSet"])
+}
+
+input ForceDeleteDataSetInput{
+    id: ID! @rules(apply: ["App\\Rules\\OwnerCheckDataSet"])
     ids: [ID] @rules(apply: ["App\\Rules\\OwnerCheckDataSet"])
 }
 

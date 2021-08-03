@@ -55,6 +55,13 @@ class DataSetMutations
         return DataSet::whereIn('id', $ids)->delete();
     }
 
+    public function forceDeleteDataSet($_, array $args): bool
+    {
+        $ids = isset($args['ids']) ? $args['ids'] : [$args['id']];
+        RallyData::whereIn('dataset_id', $ids)->delete();
+        return DataSet::whereIn('id', $ids)->delete();
+    }
+
     public function duplicateDataSet($_, array $args): bool
     {
         $dataset = Dataset::where('id', $args['id'])->first();
