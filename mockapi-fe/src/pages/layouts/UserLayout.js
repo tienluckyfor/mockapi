@@ -36,9 +36,11 @@ const UserLayout = ({title, children,}) => {
                 <Menu.Item key="/UserPage">
                     Me
                 </Menu.Item>
+                {qMe?.data?.id == 1 &&
                 <Menu.Item key="/BackupPage">
                     Backup
                 </Menu.Item>
+                }
             </Menu>
             {children}
         </>
