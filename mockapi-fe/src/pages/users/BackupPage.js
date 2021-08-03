@@ -82,6 +82,18 @@ const BackupPage = () => {
                         Databases & Files
                     </Button>
                 </Menu.Item>
+                <Menu.Item key={`delete`}>
+                    <Button
+                        danger
+                        size={`small`}
+                        type="link"
+                        onClick={(e) =>
+                            window.location.assign(`${process.env.REACT_APP_URL}/storage/imports/${datum.name}`)
+                        }
+                    >
+                        Download
+                    </Button>
+                </Menu.Item>
             </Menu>
         )
         const columns = [
