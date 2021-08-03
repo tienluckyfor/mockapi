@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import {apolloClient,} from "services";
 import {setRallydataMerge} from "./rallydatas";
 import _slice_common from "./_slice_common";
+import {setUserMerge} from "./users";
 
 export const initialState = {
     cDataset: {isOpen: false},
@@ -15,6 +16,7 @@ export const initialState = {
     lDataset: {isRefresh: true, search: {name: ``}},
     amounts: {},
     modalDataset: {},
+    countChangeRally: 0,
 };
 
 const datasetsSlice = createSlice({
@@ -88,7 +90,7 @@ export function editDataset(dataset) {
         dispatch(setMerge({eDataset: {isLoading: true, dataset}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($id: ID!, $api_id: ID!, $name: String!, $locale: String!, $amounts: JSON){
+            mutation($id: ID!, $api_id: ID!, $name: String!, $locale: String!, $amounts: JSON, $count_change_rally: Int){
   edit_dataset(
     input: {
       id: $id
@@ -96,6 +98,7 @@ export function editDataset(dataset) {
       name: $name
       locale: $locale
       amounts: $amounts
+      count_change_rally: $count_change_rally
     }
   ) {
     id
@@ -109,14 +112,17 @@ export function editDataset(dataset) {
         }
         try {
             await mutationAPI().then(res => {
+                dispatch(setData({countChangeRally: 0}))
                 dispatch(setMerge({
                     eDataset: {isLoading: false, isOpen: false},
                     lDataset: {isRefresh: true},
-                    mlDRRallydata: {isRefresh: true}
+                    mlDRRallydata: {isRefresh: true},
                 }))
                 dispatch(setRallydataMerge('mlDRRallydata', {isRefresh: true}))
+                dispatch(setUserMerge('qMe', {isRefresh: true}))
             })
         } catch (e) {
+            dispatch(setData({countChangeRally: 0}))
             dispatch(setMerge({eDataset: {isLoading: false}}))
         }
     }

@@ -42,7 +42,7 @@ class DataSetMutations
         $args = array_diff_key($args, array_flip(['directive']));
         $dataset = tap(DataSet::findOrFail($args['id']))
             ->update($args);
-        if (isset($args['amounts'])) {
+        if (isset($args['amounts']) && $args['count_change_rally']>0) {
             $this->rallydata_repository->removeDataByAmounts($dataset, $args['amounts']);
             $this->rallydata_repository->fillDataByAmounts($dataset, $args['amounts']);
         }

@@ -13,7 +13,7 @@ const Amount = ({value}) => (
 
 export const ParentAmountData = ({resource}) => {
     const dispatch = useDispatch()
-    const {cDataset, amounts} = useSelector(datasetsSelector)
+    const {countChangeRally, amounts} = useSelector(datasetsSelector)
     const [offsetX, setOffsetX] = useState(null)
     const [percent, setPercent] = useState(null)
     const MoveButton = useRef(null)
@@ -54,6 +54,7 @@ export const ParentAmountData = ({resource}) => {
                         let amounts1 = JSON.parse(JSON.stringify(amounts))
                         amounts1[resource.id] = percent
                         dispatch(setDataset({amounts: amounts1}))
+                        dispatch(setDataset({countChangeRally: countChangeRally+1}))
                     }}
                     onMouseMove={(e) => setPercent(widthToPercent(e))}
                     onMouseLeave={(e) => setPercent(null)}

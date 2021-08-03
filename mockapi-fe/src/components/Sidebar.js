@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
-import {usersSelector} from "slices/users";
+import {queryMe, usersSelector} from "slices/users";
 import Avatar from "react-avatar";
 import {getURLParams} from "services";
 import {isMobile} from 'react-device-detect';
@@ -21,6 +21,14 @@ const Sidebar = () => {
         DatasetListPage: "dataset",
     }
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(queryMe(window.location.href))
+    }, [])
+    useEffect(() => {
+        if (qMe.isRefresh)
+            dispatch(queryMe(window.location.href))
+    }, [qMe])
 
     const url = getURLParams()
     const history = useHistory();
@@ -56,7 +64,7 @@ const Sidebar = () => {
                         const isOwner = qMe?.data?.id == dataset?.user?.id
                         return (<Menu.Item key={dataset.id}>
                             <Link
-                                onClick={()=>{
+                                onClick={() => {
                                     dispatch(setRallydata({
                                         dataset_id_RD: dataset.id,
                                         resource_id_RD: dataset.resources[0]?.id,

@@ -53,8 +53,8 @@ class MediaRepository
         $nItem = $item;
         $nItem['file_name'] = preg_replace('/^(.*?[\/])([^\/]+)(\.\w+)$/mis', '${1}'.$randFile.'${3}', $item['file_name']);
         $nItem['file_thumb'] = preg_replace('/^(.*?[\/])([^\/]+)(\.\w+)$/mis', '${1}'.$randFile.'${3}', $item['file_thumb']);
-        copy(Storage::path('public/'.$item['file_name']), Storage::path('public/'.$nItem['file_name']));
-        copy(Storage::path('public/'.$item['file_thumb']), Storage::path('public/'.$nItem['file_thumb']));
+        @copy(Storage::path('public/'.$item['file_name']), Storage::path('public/'.$nItem['file_name']));
+        @copy(Storage::path('public/'.$item['file_thumb']), Storage::path('public/'.$nItem['file_thumb']));
         return $nItem;
     }
 

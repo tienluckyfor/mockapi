@@ -2,22 +2,21 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom
 import React, {useEffect, useState} from "react"
 import "antd/dist/antd.css";
 import "assets/tailwind-output.css";
-import {useDispatch} from "react-redux";
+// import {useDispatch} from "react-redux";
 
 import {isMobile} from 'react-device-detect';
 import authRoutes from "routes/authRoutes";
 import appRoutes from "routes/appRoutes";
 import {Loading, Sidebar} from "components";
-import {queryMe} from "slices/users";
-import Cookies from "universal-cookie";
+// import {queryMe} from "slices/users";
 
 function App() {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const [href, setHref] = useState(window.location.href)
 
-    useEffect(() => {
-        dispatch(queryMe(window.location.href))
-    }, [dispatch])
+    // useEffect(() => {
+    //     dispatch(queryMe(window.location.href))
+    // }, [])
 
     // if (!cookies.get('mockapi-token') && !href.match(/Login|Register/gim)) {
     //     return (

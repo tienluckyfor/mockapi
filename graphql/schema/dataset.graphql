@@ -58,6 +58,7 @@ input EditDataSetInput{
     name: String! @rules(apply:["required"])
     locale: String! @rules(apply:["required"])
     amounts: JSON
+    count_change_rally: Int
 }
 
 input DeleteDataSetInput{

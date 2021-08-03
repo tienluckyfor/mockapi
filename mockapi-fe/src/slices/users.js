@@ -50,7 +50,7 @@ const cookies = new Cookies()
 export function queryMe(href = ``) {
     return async (dispatch) => {
         if (href.match(/Login|Register|PasswordPage/gim)) return;
-        dispatch(setMerge({qMe: {isLoading: true}}))
+        dispatch(setMerge({qMe: {isLoading: true, isRefresh: false}}))
         const query = gql`
         query {
   me {
