@@ -25,7 +25,7 @@ const Header = ({page}) => {
         add: true,
         menu: true,
     })
-    const searchRef = useRef(null);
+    const searchRef = useRef(null)
     useEffect(() => {
         const show1 = {}
         for (const i in show) {

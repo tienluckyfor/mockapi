@@ -127,6 +127,7 @@ export function editDataset(dataset) {
         }
     }
 }
+/*
 
 export function editParentDataset(dataset) {
     return async (dispatch) => {
@@ -162,6 +163,7 @@ export function editParentDataset(dataset) {
         }
     }
 }
+*/
 
 export function deleteDataset(dataset) {
     return async (dispatch) => {

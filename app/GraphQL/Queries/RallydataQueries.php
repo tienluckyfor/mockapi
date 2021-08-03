@@ -5,12 +5,11 @@ namespace App\GraphQL\Queries;
 
 use App\Models\DataSet;
 use App\Models\Media;
+use App\Models\RallyData;
 use App\Repositories\DatasetRepository;
 use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
 use App\Repositories\ResourceRepository;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 
 class RallydataQueries
 {
@@ -66,7 +65,7 @@ class RallydataQueries
                         ->map(function ($item1) {
                             return $item1['data'];
                         })
-                    ->values();
+                        ->values();
                 }
             }
             $rallydatas[$args['resource_id']] = $rallydatasCurrent;
@@ -77,20 +76,17 @@ class RallydataQueries
 
     public function detailRallydata($_, array $args)
     {
-//        $dataset = $this->dataset_repository->find($args['dataset_id'], '*');
         $dataset = DataSet::find($args['dataset_id']);
         $resources = $this->resource_repository->getByApiId(@$dataset->api_id,
-//            'id, parents')
             'id, name, fields, parents, resources.name as resource_name')
             ->keyBy('id')
             ->toArray();
-//        $dataset = $this->dataset_repository->postman_mapping($dataset, Arr::first($resources));
-//        dd($resources);
-//        dd($resources);
         foreach ($resources as &$resource) {
             if (!empty($resource['parents'])) {
                 foreach ($resource['parents'] as $parent) {
-                    if(!isset($resources[$parent])) continue;
+                    if (!isset($resources[$parent])) {
+                        continue;
+                    }
                     $resources[$parent]['fields'][] = [
                         "name" => $resource['name'],
                         "type" => "Resource",
@@ -104,5 +100,12 @@ class RallydataQueries
             'resources' => array_values($resources),
         ];
         return $data;
+    }
+
+    public function findRallydata($_, array $args)
+    {
+        return RallyData::where('dataset_id', $args['dataset_id'])
+            ->where('data', 'like', "%{$args['find']}%")
+            ->get();
     }
 }

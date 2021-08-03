@@ -5,8 +5,8 @@ namespace App\GraphQL\Mutations;
 
 
 use App\Models\Rallydata;
-use App\Repositories\RallydataRepository;
 use App\Repositories\MediaRepository;
+use App\Repositories\RallydataRepository;
 use Illuminate\Support\Facades\Auth;
 
 class RallydataMutations
@@ -17,8 +17,7 @@ class RallydataMutations
     public function __construct(
         RallydataRepository $RallydataRepository,
         MediaRepository $MediaRepository
-    )
-    {
+    ) {
         $this->media_repository = $MediaRepository;
         $this->rallydata_repository = $RallydataRepository;
     }
@@ -57,5 +56,20 @@ class RallydataMutations
             return true;
         }
         return false;
+    }
+
+    public function replaceRallydata($_, array $args): bool
+    {
+        RallyData::whereIn('id', $args['ids'])
+            ->where('data', 'like', "%{$args['find']}%")
+            ->get()
+            ->map(function ($rally) use ($args) {
+                $data = json_encode($rally->data);
+                $data = preg_replace("#{$args['find']}#mis", $args['replace'], $data);
+                $data = json_decode($data, true);
+                Rallydata::where('id', $rally->id)
+                    ->update(['data' => $data]);
+            });
+        return true;
     }
 }

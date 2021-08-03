@@ -3,6 +3,7 @@ extend type Mutation {
     edit_rallydata(input: EditRallydataInput! @spread): Rallydata @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@editRallydata")
     delete_rallydata(input: DeleteRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@deleteRallydata")
     duplicate_rallydata(input: DuplicateRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@duplicateRallydata")
+    replace_rallydata(input: ReplaceRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@replaceRallydata")
 }
 
 extend type Query {
@@ -11,6 +12,7 @@ extend type Query {
     rallydata_list(dataset_id: ID!, resource_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@rallydataList")
     my_rallydata_list(dataset_id: ID!, resource_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@myRallydataList")
     detail_rallydata(dataset_id: ID!): DetailRallydata @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@detailRallydata")
+    find_rallydata(dataset_id: ID!, find:String): [Rallydata] @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@findRallydata")
 }
 
 type DetailRallydata{
@@ -25,6 +27,7 @@ type Rallydata{
     statuses: JSON
     fields: JSON
     endpoints: JSON
+    data: JSON
     api: Api!
     user: User!
     created_at: DateTime!
@@ -44,6 +47,12 @@ input EditRallydataInput{
     resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
     data: JSON! @rules(apply:["required"])
     data_children: JSON
+}
+
+input ReplaceRallydataInput{
+    ids: [ID]! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
+    find: String
+    replace: String
 }
 
 input DeleteRallydataInput{

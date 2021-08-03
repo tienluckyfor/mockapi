@@ -23,13 +23,16 @@ import CreateDatasetForm from "./CreateDatasetForm"
 import EditDatasetForm from "./EditDatasetForm"
 import InfoDatasetModal from "./InfoDatasetModal";
 import AppHelmet from "shared/AppHelmet";
+import {rallydatasSelector, setRallydataMerge} from "slices/rallydatas";
+import FindReplaceRallydata from "pages/rallydatas/FindReplaceRallydata";
 
 const DatasetListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
     const dispatch = useDispatch()
     const {visibles,} = useSelector(commonsSelector)
-    const {cDataset, eDataset, lDataset, dDataset, fdDataset, duDataset,} = useSelector(datasetsSelector)
+    const {cDataset, eDataset, lDataset, dDataset, fdDataset, duDataset, } = useSelector(datasetsSelector)
+    const {fRallydata} = useSelector(rallydatasSelector)
 
     useEffect(() => {
         if (lDataset.isRefresh) {
@@ -67,6 +70,15 @@ const DatasetListPage = () => {
                         onClick={(e) => dispatch(setDatasetMerge(`eDataset`, {isOpen: true, dataset}))}
                     >
                         Edit
+                    </Button>
+                </Menu.Item>
+                <Menu.Item>
+                    <Button
+                        size={`small`}
+                        type="link"
+                        onClick={(e) => dispatch(setRallydataMerge(`fRallydata`, {isOpen: true, dataset}))}
+                    >
+                        Find & replace
                     </Button>
                 </Menu.Item>
                 <Menu.Item key={`delete`}>
@@ -195,6 +207,15 @@ const DatasetListPage = () => {
                     onCreate={(values) => dispatch(editDataset(values))}
                     onCancel={() => {
                         dispatch(setDatasetMerge(`eDataset`, {isOpen: false}))
+                    }}
+                />
+                }
+                {fRallydata.isOpen &&
+                <FindReplaceRallydata
+                    visible={true}
+                    onCreate={(values) => dispatch(editDataset(values))}
+                    onCancel={() => {
+                        dispatch(setRallydataMerge(`fRallydata`, {isOpen: false}))
                     }}
                 />
                 }

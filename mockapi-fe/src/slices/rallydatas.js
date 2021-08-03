@@ -20,6 +20,8 @@ export const initialState = {
     mRallydataData: [],
     fieldsRallydata: {},
     cbRallydata: {},
+    fRallydata: {isOpen: false},
+    rRallydata: {},
 };
 
 const rallydatasSlice = createSlice({
@@ -136,41 +138,6 @@ export function editRallydata(rallydata) {
 }
 
 /*
-export function editRallydata(rallydata) {
-    return async (dispatch) => {
-        dispatch(setMerge({eRallydata: {isLoading: true, rallydata}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!, $dataset_id: ID!, $resource_id: ID!, $data: JSON!){
-  edit_rallydata(
-    input: {
-      id: $id
-      dataset_id: $dataset_id
-      resource_id: $resource_id
-      data: $data
-    }
-  ) {
-    id
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: rallydata
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    eRallydata: {isLoading: false, isOpen: false},
-                    mlDRRallydata: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({eRallydata: {isLoading: false}}))
-        }
-    }
-}*/
 
 export function editParentRallydata(rallydata) {
     console.log('editParentRallydata', rallydata)
@@ -207,6 +174,7 @@ export function editParentRallydata(rallydata) {
         }
     }
 }
+*/
 
 export function deleteRallydata(rallydata) {
     return async (dispatch) => {
@@ -363,6 +331,69 @@ export function setFieldsRallydata() {
         for (const key in resources) {
             const r = resources[key]
             dispatch(setMerge({fieldsRallydata: {[r.id]: r?.fields}}))
+        }
+    }
+}
+
+export function findRallydata(dataset_id, find) {
+    return async (dispatch) => {
+        dispatch(setMerge({fRallydata: {isLoading: true, isRefresh: false, find}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            query($dataset_id: ID!, $find: String) {
+  find_rallydata(
+    dataset_id: $dataset_id
+    find: $find
+  ){
+      id
+      data
+  }
+}`;
+            return apolloClient.mutate({
+                mutation,
+                variables: {dataset_id, find}
+            })
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    fRallydata: {isLoading: false, data: res?.data?.find_rallydata},
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({fRallydata: {isLoading: false}}))
+        }
+    }
+}
+
+export function replaceRallydata(ids, find, replace) {
+    return async (dispatch) => {
+        dispatch(setMerge({rRallydata: {isLoading: true, ids, find, replace}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($ids: [ID]!, $find: String, $replace: String){
+  replace_rallydata(
+    input: {
+      ids: $ids,
+      find: $find,
+      replace: $replace
+    }
+  )
+}`;
+            return apolloClient.mutate({
+                mutation,
+                variables: {ids, find, replace}
+            })
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    rRallydata: {isLoading: false, status: res?.data?.replace_rallydata},
+                    fRallydata: {isRefresh: true},
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({rRallydata: {isLoading: false}}))
         }
     }
 }
