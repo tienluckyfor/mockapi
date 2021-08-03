@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Services;
-
+namespace App\Services\Backup;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 
 class ExportService extends Backup_Abstract
 {

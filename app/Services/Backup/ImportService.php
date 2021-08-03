@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Backup;
 
+use App\Services\ArrService;
 use Illuminate\Support\Facades\Storage;
 
 class ImportService extends Backup_Abstract
@@ -12,25 +13,28 @@ class ImportService extends Backup_Abstract
         parent::__construct();
     }
 
-    public function take()
+    public function take($export_url)
     {
         $client = new \GuzzleHttp\Client();
-        $exportUrl = 'https://be.mockapi.codeby.com/export';
-        $client->request('GET', $exportUrl, ['sink' => "{$this->rDir}/{$this->date}.zip"]);
+//        $exportUrl = 'https://be.mockapi.codeby.com/export';
+        $fName = "{$this->rDir}/{$this->date}.zip";
+        $client->request('GET', $export_url, ['sink' => $fName]);
+        return file_exists($fName);
     }
 
     public function list()
     {
         $files = array_diff(scandir($this->rDir), array('.', '..'));
         $data = [];
-        foreach ($files as $fName) {
+        foreach ($files as $key => $fName) {
             $file = $this->rDir . '/' . $fName;
             $fSize = $this->human_filesize(filesize($file));
-            $fDate = date("Y-m-d H:i:s.", filemtime($file));
+            $fDate = date("Y-m-d H:i:s", filemtime($file));
             $datum = [
                 'name' => $fName,
                 'size' => $fSize,
                 'date' => $fDate,
+                'id' => $key,
             ];
             $data[] = $datum;
         }
@@ -46,19 +50,31 @@ class ImportService extends Backup_Abstract
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
     }
 
+    private $fName;
+    private $dProcess;
+
+    public function process($fName)
+    {
+        $this->fName = $this->rDir . '/' . $fName;
+        if (!file_exists($this->fName)) {
+            dd('process: file not exists');
+        }
+        $this->dProcess = $this->rDir . '/processing';
+        $command = sprintf('rm -rf %s', $this->dProcess);
+        exec($command);
+        $this->unzip($this->fName, $this->dProcess);
+        return $this;
+    }
+
     public function database()
     {
-//        $fName = '2021-08-02.zip';
-//        $this->unzip($this->rDir . '/' . $fName, $this->rDir . '/processing');
-//
+        return $this;
     }
 
     public function files($dName)
     {
-        $fName = '2021-08-02.zip';
-        $this->unzip($this->rDir . '/' . $fName, $this->rDir . '/processing');
         $dPath = Storage::path('public/' . $dName);
-        $fName = $this->rDir . '/processing/' . $dName . '.zip';
+        $fName = $this->dProcess . '/' . $dName . '.zip';
         $this->unzip($fName, $dPath);
         return $this;
     }

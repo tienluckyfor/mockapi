@@ -4,6 +4,7 @@ const ResourceListPage = React.lazy(() => import('pages/resources/ResourceListPa
 const DatasetListPage = React.lazy(() => import('pages/datasets/DatasetListPage'))
 const RallydataPage = React.lazy(() => import('pages/rallydatas/RallydataPage'))
 const UserPage = React.lazy(() => import('pages/users/UserPage'))
+const BackupPage = React.lazy(() => import('pages/users/BackupPage'))
 const SidebarPage = React.lazy(() => import('pages/SidebarPage'))
 // const DebounceSelectTest = React.lazy(() => import('pages/DebounceSelectTest'))
 // const {Sidebar} = React.lazy(() => import('components/Sidebar'))
@@ -16,6 +17,7 @@ export default [
     { path: '/ResourceListPage', component: ResourceListPage },
     { path: '/ApiListPage', component: ApiListPage },
     { path: '/UserPage', component: UserPage },
+    { path: '/BackupPage', component: BackupPage },
     // { path: '/DebounceSelectTest', component: DebounceSelectTest },
     // { path: '/JsonEditor', component: JsonEditor },
     { path: '/SidebarPage', component: SidebarPage },

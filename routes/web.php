@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Services\ExportService;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,20 +12,8 @@ use App\Services\ExportService;
 |
 */
 
-Route::get('/export', function () {
-    $export = new ExportService();
-    return $export
-        ->database()
-        ->files('media')
-        ->download();
-});
 
 Route::get('/', function () {
-    $output=null;
-    exec('which zip', $output);
-    dd($output);
-    echo "Returned with status $retval and output:\n";
-    print_r($output);
 //    $resource = \App\Models\Resource::find(1);
 //    dd($resource->dataset->toArray());
 //    dd($resource->toArray());

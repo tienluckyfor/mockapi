@@ -29,3 +29,4 @@ mkdir -m 777 -p storage/app/public/media/images_NOT_SUPPORT;
 mkdir -m 777 -p storage/app/public/media/videos;
 mkdir -m 777 -p storage/app/public/media/thumb-images;
 mkdir -m 777 -p storage/app/public/exports;
+mkdir -m 777 -p storage/app/public/imports;

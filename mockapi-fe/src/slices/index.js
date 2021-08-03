@@ -9,6 +9,7 @@ import commonsReducer from "./commons";
 import mediaReducer from "./media";
 import usersReducer from "./users";
 import sharesReducer from "./shares";
+import backupsReducer from "./backups";
 
 const rootReducer = combineReducers({
     shares: sharesReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     resources: resourcesReducer,
     auths: authsReducer,
     apis: apisReducer,
+    backups: backupsReducer,
 });
 
 export default rootReducer;
