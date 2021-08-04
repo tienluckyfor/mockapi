@@ -247,6 +247,11 @@ class RestfulController extends Controller
             "sortInfo"   => $sorts,
             "searchInfo" => $searchs,
         ];
+        if($request->has('_system')){
+            $res['_system'] = [
+                'management_url' => config('app.frontend_url').'/RallydataPage?dataset_id_RD='.$r['dataset_id'],
+            ];
+        }
         return response()->json($res);
     }
 
