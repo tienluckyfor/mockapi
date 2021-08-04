@@ -30,6 +30,7 @@ type Rallydata{
     data: JSON
     api: Api!
     user: User!
+    resource: Resource!
     created_at: DateTime!
     updated_at: DateTime!
 }

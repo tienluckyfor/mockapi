@@ -1,16 +1,14 @@
 import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
-    rallydatasSelector, setRallydata, myRallydataList,
+    rallydatasSelector, myRallydataList,
     setRallydataMerge, editRallydata, setFieldsRallydata
 } from "slices/rallydatas";
-
 import {Loading} from "components";
 import CreateRallydataForm from "./CreateRallydataForm";
 import EditRallydataForm from "./EditRallydataForm";
 import HeaderRallydata from "./HeaderRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
-import {getURLParams} from "services";
 import {usersSelector} from "slices/users";
 import AppHelmet from "shared/AppHelmet";
 

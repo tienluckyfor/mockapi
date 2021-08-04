@@ -105,6 +105,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
             width: iType === `Boolean` ? 70 : 150,
             dataIndex: field.name,
             render: (text, rallydata, index) => {
+                console.log('rallydata 1', rallydata )
                 const val = rallydata[field.name]
                 if (iType === 'Boolean') {
                     const val1 = val ? 'true' : 'false'

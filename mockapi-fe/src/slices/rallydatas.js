@@ -96,8 +96,6 @@ export function createRallydata(rallydata) {
 }
 
 export function editRallydata(rallydata) {
-    // console.log('editRallydata rallydata',  rallydata)
-    // return;
     return async (dispatch) => {
         dispatch(setMerge({eRallydata: {isLoading: true}}))
         const mutationAPI = () => {
@@ -125,11 +123,9 @@ export function editRallydata(rallydata) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     eRallydata: {isLoading: false, isOpen: false},
-                    mlDRRallydata: {isRefresh: true}
+                    mlDRRallydata: {isRefresh: true},
+                    fRallydata: {isRefresh: true},
                 }))
-                // dispatch(setDatasetMerge(`mlDataset`, {
-                //     isRefresh: true
-                // }))
             })
         } catch (e) {
             dispatch(setMerge({eRallydata: {isLoading: false}}))
@@ -137,44 +133,6 @@ export function editRallydata(rallydata) {
     }
 }
 
-/*
-
-export function editParentRallydata(rallydata) {
-    console.log('editParentRallydata', rallydata)
-    return async (dispatch) => {
-        dispatch(setMerge({epRallydata: {isLoading: true, rallydata}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!, $parents:JSON){
-  edit_parent_rallydata(
-    input: {
-      id: $id,
-      parents: $parents,
-    }
-  ) {
-    id
-    parents
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: rallydata
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    epRallydata: {isLoading: false, isOpen: false},
-                    mlRallydata: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({epRallydata: {isLoading: false}}))
-        }
-    }
-}
-*/
 
 export function deleteRallydata(rallydata) {
     return async (dispatch) => {
@@ -346,6 +304,7 @@ export function findRallydata(dataset_id, find) {
     find: $find
   ){
       id
+      resource{id}
       data
   }
 }`;

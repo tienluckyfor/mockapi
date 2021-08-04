@@ -1,13 +1,33 @@
 import {Button, Form, Input, Modal, Table} from 'antd'
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {findRallydata, rallydatasSelector, setRallydata, replaceRallydata} from "slices/rallydatas";
+import {
+    findRallydata,
+    rallydatasSelector,
+    setRallydata,
+    replaceRallydata,
+    setFieldsRallydata, setRallydataMerge, detailRallydata, editRallydata
+} from "slices/rallydatas";
 import debounce from "lodash/debounce"
+import EditRallydataForm from "./EditRallydataForm";
 
 const FindReplaceRallydata = ({visible, onCreate, onCancel}) => {
     const dispatch = useDispatch()
-    const {fRallydata, rRallydata} = useSelector(rallydatasSelector)
+    const {fRallydata, rRallydata, deRallydata, eRallydata, fieldsRallydata,
+        resource_id_RD} = useSelector(rallydatasSelector)
     const [form] = Form.useForm()
+
+    // edit
+    useEffect(() => {
+        dispatch(setFieldsRallydata())
+    }, [deRallydata])
+    useEffect(() => {
+        dispatch(detailRallydata(fRallydata?.dataset.id))
+        dispatch(setRallydata({
+            dataset_id_RD: fRallydata?.dataset.id,
+        }))
+    }, [])
+    // end-edit
 
     const debounceFetch = debounce(name => {
         dispatch(findRallydata(fRallydata?.dataset.id, name))
@@ -39,6 +59,15 @@ const FindReplaceRallydata = ({visible, onCreate, onCancel}) => {
             {
                 title: 'id',
                 dataIndex: 'id',
+                render: (text, rally, index) => {
+                    return <Button
+                        onClick={(e) =>{
+                            dispatch(setRallydataMerge('eRallydata',
+                                {isOpen: true, rallydata: {...rally.data, originalId:rally.id}}))
+                            dispatch(setRallydata({resource_id_RD: rally?.resource?.id}))
+                        }}
+                        type="dashed" className="bg-transparent">{text}</Button>
+                }
             },
             {
                 title: 'data',
@@ -88,35 +117,47 @@ const FindReplaceRallydata = ({visible, onCreate, onCancel}) => {
     }
 
     return (
-        <Modal
-            visible={visible}
-            title="Find & replace"
-            okText="Save"
-            cancelText="Close"
-            onCancel={onCancel}
-            onOk={() => {
-                form
-                    .validateFields()
-                    .then((values) => {
-                        form.resetFields()
-                        onCreate(values)
-                    })
-                    .catch((info) => {
-                        console.log('Validate Failed:', info);
-                    });
-            }}
-            width={570}
-            confirmLoading={fRallydata.isLoading}
-            okButtonProps={{style: {display: 'none'}}}
-        >
-            <Input.Search
-                placeholder={`Search ${fRallydata?.dataset.name}`}
-                onSearch={(value) => debounceFetch(value)}
-                onChange={(e) => debounceFetch(e.target.value)}
-                enterButton
+        <>
+            {eRallydata.isOpen &&
+            <EditRallydataForm
+                fields={fieldsRallydata[resource_id_RD]}
+                visible={true}
+                onCreate={(values) => dispatch(editRallydata(values))}
+                onCancel={() => {
+                    dispatch(setRallydataMerge(`eRallydata`, {isOpen: false}))
+                }}
             />
-            <RenderTableSelect/>
-        </Modal>
+            }
+            <Modal
+                visible={visible}
+                title="Find & replace"
+                okText="Save"
+                cancelText="Close"
+                onCancel={onCancel}
+                onOk={() => {
+                    form
+                        .validateFields()
+                        .then((values) => {
+                            form.resetFields()
+                            onCreate(values)
+                        })
+                        .catch((info) => {
+                            console.log('Validate Failed:', info);
+                        });
+                }}
+                width={570}
+                confirmLoading={fRallydata.isLoading}
+                okButtonProps={{style: {display: 'none'}}}
+            >
+                <Input.Search
+                    placeholder={`Search ${fRallydata?.dataset.name}`}
+                    onSearch={(value) => debounceFetch(value)}
+                    onChange={(e) => debounceFetch(e.target.value)}
+                    enterButton
+                />
+                <RenderTableSelect/>
+            </Modal>
+        </>
     );
 }
 
