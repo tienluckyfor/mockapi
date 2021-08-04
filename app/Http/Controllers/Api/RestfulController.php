@@ -247,12 +247,22 @@ class RestfulController extends Controller
             "sortInfo"   => $sorts,
             "searchInfo" => $searchs,
         ];
-        if($request->has('_system')){
-            $res['_system'] = [
-                'management_url' => config('app.frontend_url').'/RallydataPage?dataset_id_RD='.$r['dataset_id'],
+        $res = array_merge($res, $this->_getSystem());
+        return response()->json($res);
+    }
+
+    private function _getSystem()
+    {
+        $r = request()->input('_restful');
+        if (request()->has('_system')) {
+            $_system = [
+                'management_url' => config('app.frontend_url') . '/RallydataPage?dataset_id_RD=' . $r['dataset_id'],
             ];
         }
-        return response()->json($res);
+        if (isset($_system)) {
+            return ['_system' => $_system];
+        }
+        return [];
     }
 
     /**
@@ -267,6 +277,7 @@ class RestfulController extends Controller
         $rallydata = $this->_findRallyByDataId($r['dataset_id'], $resourceName, $dataId);
         $rallydata = @$this->_handleParentMedia([$rallydata], $r['dataset_id'], $request)[0];
         $res = ['status' => true, 'data' => $rallydata];
+        $res = array_merge($res, $this->_getSystem());
         return response()->json($res);
     }
 
