@@ -352,6 +352,15 @@ class RallydataRepository
             ->get();
     }
 
+    public function getByMediaFiles($mediaFiles)
+    {
+        $wRaw = "data REGEXP '" . implode('|', $mediaFiles) . "'";
+        return RallyData::select("*")
+            ->where('user_id', Auth::id())
+            ->whereRaw($wRaw)
+            ->get();
+    }
+
     public function updateDataByList($rallies)
     {
         $updateCount = 0;

@@ -9,7 +9,9 @@ use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\ValidationException;
 use Image;
+use Pusher\ApiErrorException;
 
 class MediaController extends Controller
 {
@@ -80,6 +82,11 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $file = $request->file('file');
+        if(!$file){
+            throw ValidationException::withMessages([
+                'file' => ['File is required'],
+            ]);
+        }
         $extension = $file->extension();
 
         if (!$file || !$file->isValid()) {
@@ -94,15 +101,6 @@ class MediaController extends Controller
                 $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
                 $convertStatus = true;
                 break;
-//            case (preg_match('#php#', $file->getMimeType()) ? true : false):
-//                $fileType = 'php';
-//                $extension = 'php1';
-//                $fileName = 'media/phps/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
-//                $filePath = storage_path() . "/app/public";
-//                $file->move($filePath . '/media/phps', $fileName);
-//                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
-//                $convertStatus = true;
-//                break;
             case (preg_match('#image#', $file->getMimeType()) ? true : false):
                 $fileType = 'image';
                 $path = $file->getRealPath();

@@ -56,7 +56,6 @@ const CreateRallydataForm = ({fields}) => {
             const f = fmedia[key]
             const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
-            console.log('mediaR', mediaR)
             fieldsValue.data[f.name] = {
                 type: 'media',
                 media_ids: mediaR.map((medium) => medium.id)
@@ -95,7 +94,7 @@ const CreateRallydataForm = ({fields}) => {
             <ModalChildRallydata/>
             <FormRallydata
                 fields={fields}
-                form={form}
+                from={'create'}
                 childResources={childResources}
             />
             <div className="flex items-center justify-end mt-3 ">

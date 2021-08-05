@@ -5,6 +5,7 @@ namespace App\GraphQL\Mutations;
 
 
 use App\Models\Media;
+use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
 use App\Services\StringService;
 
@@ -12,17 +13,21 @@ class MediaMutations
 {
     private $stringService;
     private $rallydataRepository;
+    private $mediaRepository;
 
     public function __construct(
         StringService $stringService,
-        RallydataRepository $rallydataRepository
+        RallydataRepository $rallydataRepository,
+        MediaRepository $mediaRepository
     ) {
+        $this->mediaRepository = $mediaRepository;
         $this->stringService = $stringService;
         $this->rallydataRepository = $rallydataRepository;
     }
 
     public function askDeleteMedia($_, array $args)
     {
+        // type Media
         $rallies = $this->rallydataRepository
             ->getByMediaIds($args['ids'])
             ->map(function ($item) {
@@ -31,22 +36,36 @@ class MediaMutations
                 }, ARRAY_FILTER_USE_BOTH);
                 return $data;
             });
-        if ($rallies->isEmpty()) {
+
+        // type LongText
+        $mediaFiles = $this->mediaRepository->getByIds($args['ids'])
+            ->map(function ($item) {
+                return preg_replace('/^.+?([^\/]+)\..+?$/mis', '$1', $item->file_name);
+            })->toArray();
+        $rallies1 = $this->rallydataRepository
+            ->getByMediaFiles($mediaFiles)
+            ->map(function ($item) {
+                return $item->data;
+            });
+        $mergedRallies = $rallies->merge($rallies1);
+
+        if ($mergedRallies->isEmpty()) {
             Media::whereIn('id', $args['ids'])
                 ->delete();
             return [
                 'status'  => true,
-                'rallies' => $rallies,
+                'rallies' => $mergedRallies,
             ];
         }
         return [
             'status'  => false,
-            'rallies' => $rallies,
+            'rallies' => $mergedRallies,
         ];
     }
 
     public function deleteMedia($_, array $args): bool
     {
+        // type Media
         $rallies = $this->rallydataRepository
             ->getByMediaIds($args['ids'])
             ->map(function ($item) use ($args) {
@@ -60,13 +79,26 @@ class MediaMutations
                 return $item;
             });
         $updateCount = $this->rallydataRepository->updateDataByList($rallies->toArray());
+
+        // type LongText
+        $mediaFiles = $this->mediaRepository->getByIds($args['ids'])
+            ->map(function ($item) {
+                return preg_replace('/^.+?([^\/]+)\..+?$/mis', '$1', $item->file_name);
+            })->toArray();
+        $rallies = $this->rallydataRepository
+            ->getByMediaFiles($mediaFiles)
+            ->map(function ($item) use ($mediaFiles) {
+                $data = $item->data;
+                foreach ($mediaFiles as $mediaFile) {
+                    $data = preg_replace('#<img[^>]+' . $mediaFile . '[^>]+>|<p><\/p>#mis', '', $data);
+                }
+                $item->data = $data;
+                return $item;
+            });
+        $updateCount = $this->rallydataRepository->updateDataByList($rallies->toArray());
         $isDelete = Media::whereIn('id', $args['ids'])
             ->delete();
         return true;
-//        if ($isDelete) {
-//            return true;
-//        }
-//        return false;
     }
 
 }

@@ -1,5 +1,5 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
-import React  from 'react'
+import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
@@ -7,41 +7,13 @@ import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-import ReactQuill from "react-quill";
-import Quill from "quill";
-import ResizeModule from "@ssumo/quill-resize-module";
-import QuillImageDropAndPaste from "quill-image-drop-and-paste";
-import "react-quill/dist/quill.snow.css";
-import {ControlledJsonEditor} from "components";
+import {ControlledJsonEditor, ReactQuillCustom} from "components";
 
-Quill.register("modules/resize", ResizeModule);
-Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
-
-const FormRallydata = ({fields, form, childResources, }) => {
+const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
-    const {cbRallydata, eRallydata, fieldsRallydata, } = useSelector(rallydatasSelector)
+    const {cbRallydata, eRallydata, fieldsRallydata,} = useSelector(rallydatasSelector)
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
-
-    const modules = {
-        resize: {
-            locale: {
-                altTip: "按住alt键比例缩放",
-                floatLeft: "left",
-                floatRight: "right",
-                center: "center",
-                restore: "res.."
-            }
-        },
-        toolbar: [
-            [{'header': [1, 2, 3, false]}],
-            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-            [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-            ['link', 'image', 'video'],
-            [{'align': []}, {'color': []}, {'background': []}],
-            ['clean']
-        ],
-    }
 
     return (
         <>
@@ -70,15 +42,15 @@ const FormRallydata = ({fields, form, childResources, }) => {
                                 break;
                             case `LongText`:
                                 return (<Form.Item
-                                        name={name}
-                                        label={<span className="capitalize">{name}</span>}
-                                        initialValue=""
-                                    >
-                                        <ReactQuill
-                                            modules={modules}
-                                            onChange={(html) => {}}
-                                        />
-                                    </Form.Item>)
+                                    name={name}
+                                    label={<span className="capitalize">{name}</span>}
+                                    initialValue=""
+                                >
+                                    <ReactQuillCustom
+                                        name={`${from}-${name}`}
+                                        onChange={(html) => {}}
+                                    />
+                                </Form.Item>)
                                 break;
                             case `Media`:
                                 return (<Form.Item

@@ -166,12 +166,11 @@ export function deleteRallydata(rallydata) {
     }
 }
 
-export function myRallydataList() {
+export function myRallydataList(isLoading=true) {
     return async (dispatch, getState) => {
         const {dataset_id_RD, resource_id_RD} = getState().rallydatas
-
         dispatch(setMerge({
-            mlDRRallydata: {isLoading: true, isRefresh: false},
+            mlDRRallydata: {isLoading, isRefresh: false},
             mRallydataData: {isLoading: true,},
         }))
         const query = gql`

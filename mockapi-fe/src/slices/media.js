@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import {apolloClient, } from "services";
 import {setDatasetMerge} from "./datasets";
 import _slice_common from "./_slice_common";
+import {setRallydata, setRallydataMerge} from "./rallydatas";
 
 export const initialState = {
     cMedium: {isOpen: false},
@@ -11,7 +12,7 @@ export const initialState = {
     eMedium: {},
     epMedium: {isOpen: false},
     duMedium: {},
-    mlMedia: {isRefresh: true, search: {name: ``}},
+    mlMedia: {isRefresh: false, search: {name: ``}},
     mMedia: {},
     cbMedia: {},
 };
@@ -69,6 +70,7 @@ export function askDeleteMedia(mediaIds) {
                 const ask_delete_media = res?.data?.ask_delete_media
                 dispatch(setData({adMedium: ask_delete_media}))
                 dispatch(setMerge({mlMedia: {isRefresh: ask_delete_media?.status}}))
+                dispatch(setRallydataMerge('mlDRRallydata', {isRefresh: ask_delete_media?.status}))
             })
         } catch (e) {
             dispatch(setMerge({adMedium: {isLoading: false}}))
@@ -78,7 +80,7 @@ export function askDeleteMedia(mediaIds) {
 
 export function deleteMedia(mediaIds) {
     return async (dispatch) => {
-        dispatch(setData({adMedium: {isLoading: true, }}))
+        dispatch(setData({dMedium: {isLoading: true, }}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($ids: [ID]!) {
@@ -97,11 +99,12 @@ export function deleteMedia(mediaIds) {
         try {
             await mutationAPI().then(res => {
                 const delete_media = res?.data?.delete_media
-                dispatch(setData({dMedium: delete_media}))
-                dispatch(setMerge({mlMedia: {isRefresh: delete_media?.status}}))
+                dispatch(setData({dMedium: delete_media, adMedium: {}}))
+                dispatch(setMerge({mlMedia: {isRefresh: delete_media}}))
+                dispatch(setRallydataMerge('mlDRRallydata', {isRefresh: delete_media}))
             })
         } catch (e) {
-            dispatch(setMerge({adMedium: {isLoading: false}}))
+            dispatch(setMerge({dMedium: {isLoading: false}}))
         }
     }
 }

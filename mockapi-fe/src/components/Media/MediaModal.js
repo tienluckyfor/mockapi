@@ -20,17 +20,17 @@ export const MediaModal = () => {
     const dispatch = useDispatch()
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
-
     const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
-    const {mlMedia, mMedia, adMedium} = useSelector(mediaSelector)
+    const {mlMedia, mMedia, adMedium, dMedium} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState()
     const [viewMode, setViewMode] = useState('grid')
     const [plainOptions, setPlainOptions] = useState([])
 
     useEffect(() => {
-        dispatch(myMediaList(dataset_id ?? dataset_id_RD))
+        if (dataset_id ?? dataset_id_RD)
+            dispatch(myMediaList(dataset_id ?? dataset_id_RD))
     }, [dataset_id, mMedia])
 
     useEffect(() => {
@@ -149,7 +149,7 @@ export const MediaModal = () => {
                 </Checkbox>
                 {checkedList[mMedia.name] && checkedList[mMedia.name]?.length !== 0 &&
                 <Button type="dashed" danger icon={<DeleteOutlined/>}
-                        loading={adMedium.isLoading}
+                        loading={adMedium.isLoading || dMedium.isLoading}
                         onClick={() => dispatch(askDeleteMedia(checkedList[mMedia.name]))}
                 />
                 }

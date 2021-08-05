@@ -28,8 +28,9 @@ const RallydataPage = () => {
     }, [dataset_id_RD, resource_id_RD])
 
     useEffect(() => {
+        console.log('debug', {dataset_id_RD , resource_id_RD , mlDRRallydata})
         if (dataset_id_RD && resource_id_RD && mlDRRallydata.isRefresh) {
-            dispatch(myRallydataList())
+            dispatch(myRallydataList(false))
         }
     }, [mlDRRallydata])
 

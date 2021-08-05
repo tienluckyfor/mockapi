@@ -120,7 +120,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
                 <ModalChildRallydata/>
                 <FormRallydata
                     fields={fields}
-                    form={form}
+                    from={'edit'}
                     childResources={childResources}
                     // dataEditor={dataEditor}
                 />
