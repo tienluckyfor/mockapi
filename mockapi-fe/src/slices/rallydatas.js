@@ -6,7 +6,7 @@ import {diffObject} from "services/convert";
 import _slice_common from "./_slice_common";
 
 export const initialState = {
-    cRallydata: {isOpen: false},
+    cRallydata: {isOpen: true},
     dRallydata: {},
     eRallydata: {},
     epRallydata: {isOpen: false},

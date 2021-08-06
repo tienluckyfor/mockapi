@@ -7,7 +7,7 @@ import {mediaSelector, setMediaMerge,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-import {ControlledJsonEditor, ReactQuillCustom} from "components";
+import {ControlledAceEditor, ControlledJsonEditor, ReactQuillCustom} from "components";
 
 const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
@@ -30,14 +30,13 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     <Form.Item
                                         name={name}
                                         label={<span className="capitalize">{name}</span>}
-                                        initialValue={{}}
+                                        initialValue={"{\n\t\n}"}
                                     >
-                                        <ControlledJsonEditor
+                                        {/*<ControlledJsonEditor
                                             value={eRallydata?.rallydata && eRallydata?.rallydata[name]
                                                 ? eRallydata?.rallydata[name] : {}}
-                                            mode="text"
-                                            allowedModes={['text', 'tree', 'form']}
-                                        />
+                                        />*/}
+                                        <ControlledAceEditor/>
                                     </Form.Item>)
                                 break;
                             case `LongText`:

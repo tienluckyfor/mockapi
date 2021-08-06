@@ -18,3 +18,24 @@ export const getItype = (type, fakerjs = ``) => {
 export const getRallyData = (mRallydataData, resource_id) => {
     return mRallydataData?.data ? mRallydataData?.data[resource_id] ?? [] : []
 }
+
+export const handleValues = (fields, values) => {
+    let data = {}
+    let errCount = 0
+    Object.entries(values.data).map(([key, item], i) => {
+        let field = fields.filter((item1) => item1.name == key)
+        field = field[0] ? field[0] : {}
+        const iType = getItype(field.type)
+        let datum = item
+        if (iType == 'Object' || iType == 'Array') {
+            try{
+                datum = JSON.parse(datum)
+            }catch (e) {
+                errCount++;
+            }
+        }
+        data[key] = datum
+    })
+    if(errCount) return null;
+    return {...values, data}
+}

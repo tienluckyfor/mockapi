@@ -2,7 +2,7 @@ import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
     rallydatasSelector, myRallydataList,
-    setRallydataMerge, editRallydata, setFieldsRallydata
+    setRallydataMerge, editRallydata, setFieldsRallydata, createRallydata
 } from "slices/rallydatas";
 import {Loading} from "components";
 import CreateRallydataForm from "./CreateRallydataForm";
@@ -11,6 +11,9 @@ import HeaderRallydata from "./HeaderRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {usersSelector} from "slices/users";
 import AppHelmet from "shared/AppHelmet";
+import {handleValues} from "./configRallydata";
+import {fields} from "../resources/configResource";
+import {error} from "services";
 
 const RallydataPage = () => {
     const dispatch = useDispatch()
@@ -58,10 +61,17 @@ const RallydataPage = () => {
                 <EditRallydataForm
                     fields={fieldsRallydata[resource_id_RD]}
                     visible={true}
-                    onCreate={(values) => dispatch(editRallydata(values))}
-                    onCancel={() => {
+                    /*onCreate={(values) => {
+                        const vals = handleValues(fieldsRallydata[resource_id_RD], values)
+                        if (vals === null) {
+                            error('The JSON field is not a valid format!')
+                            return
+                        }
+                        dispatch(editRallydata(vals))
+                    }}*/
+                    /*onCancel={() => {
                         dispatch(setRallydataMerge(`eRallydata`, {isOpen: false}))
-                    }}
+                    }}*/
                 />
                 }
                 <RenderTableRallydata

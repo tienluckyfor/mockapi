@@ -5,11 +5,12 @@ import {rallydatasSelector, setRallydataMerge, createRallydata, setRallydata} fr
 import {MediaModal} from "components";
 import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
-import {getItype, getRallyData} from "./configRallydata";
+import {getItype, getRallyData, handleValues} from "./configRallydata";
 import moment from "moment"
 import "moment-timezone";
 import {mediaSelector, setMediaMerge} from "slices/media";
-import {commonsSelector, setCommon, } from "slices/commons";
+import {commonsSelector, setCommon,} from "slices/commons";
+import {error} from "services";
 
 const CreateRallydataForm = ({fields}) => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -87,9 +88,19 @@ const CreateRallydataForm = ({fields}) => {
         <Form
             form={form}
             layout={`vertical`}
-            onFinish={(values) => dispatch(createRallydata(values))}
+            onFinish={(values) => {
+                const vals = handleValues(fields, values)
+                if (vals === null) {
+                    error('The JSON field is not a valid format!')
+                    return
+                }
+                dispatch(createRallydata(vals))
+            }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"
         >
+            {/*<pre className="text-sm">
+                {JSON.stringify(fields, null, '  ')}
+            </pre>*/}
             <MediaModal/>
             <ModalChildRallydata/>
             <FormRallydata

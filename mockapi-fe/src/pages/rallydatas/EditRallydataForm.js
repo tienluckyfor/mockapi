@@ -1,15 +1,16 @@
 import {Form, Modal,} from 'antd';
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {rallydatasSelector, setRallydataMerge, } from "slices/rallydatas";
+import {editRallydata, rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {MediaModal} from "components";
 import ModalChildRallydata from "./ModalChildRallydata";
 import FormRallydata from "./FormRallydata";
-import {getItype, getRallyData} from "./configRallydata";
+import {getItype, getRallyData, handleValues} from "./configRallydata";
 import moment from "moment"
 import "moment-timezone";
 import {mediaSelector, setMediaMerge} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
+import {error} from "services";
 
 const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -17,7 +18,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
     const dispatch = useDispatch()
     const {eRallydata, dataset_id_RD, resource_id_RD, mRallydataData, deRallydata} = useSelector(rallydatasSelector)
     const [form] = Form.useForm()
-    const {mlMedia, } = useSelector(mediaSelector)
+    const {mlMedia,} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
 
     useEffect(() => {
@@ -27,6 +28,9 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             fieldsValue.data[name] = rally[name]
+            if (iType === `Object` || iType === 'Array') {
+                fieldsValue.data[name] = JSON.stringify(rally[name], null, '  ')
+            }
             if (iType === `Date`) {
                 fieldsValue.data[name] = moment(rally[name])
             }
@@ -49,7 +53,6 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             "data": {}
         };
         form.setFieldsValue(fieldsValue)
-
     }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
@@ -97,13 +100,20 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         <Modal
             title={<h2>Edit Rallydata</h2>}
             visible={visible}
-            onCancel={onCancel}
+            onCancel={()=>{
+                dispatch(setRallydataMerge(`eRallydata`, {isOpen: false}))
+            }}
             onOk={() => {
                 form
                     .validateFields()
                     .then((values) => {
+                        const vals = handleValues(fields, values)
+                        if (vals === null) {
+                            error('The JSON field is not a valid format!')
+                            return
+                        }
+                        dispatch(editRallydata(vals))
                         form.resetFields()
-                        onCreate(values)
                     })
                     .catch((info) => {
                         console.log('Validate Failed:', info);
