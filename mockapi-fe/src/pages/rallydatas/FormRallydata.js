@@ -16,13 +16,9 @@ const FormRallydata = ({fields, from, childResources,}) => {
     const {cbRallydata, fieldsRallydata, mRallydataData, resource_id_RD} = useSelector(rallydatasSelector)
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
-// console.log('mRallydataData?.data', mRallydataData?.data)
     const rallies = mRallydataData?.data && mRallydataData?.data[resource_id_RD]
     return (
         <>
-          {/*  <pre className="text-sm">
-                {JSON.stringify(rallies, null, '  ')}
-            </pre>*/}
             <Form.List name="data">
                 {(afields, {add, remove}) => (
                     (fields ?? []).map((field) => {
@@ -143,10 +139,9 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                 </Form.Item>)
                                 break;
                             case `Select`:
-                                const selectKeys = rallies
+                                const selectKeys = (rallies ?? [])
                                     .map((rally) => rally?.data && rally?.data[name] ? rally?.data[name] : false)
                                     .filter(item => item)
-                                console.log('selectKeys', selectKeys)
                                 return (<Form.Item
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
