@@ -91,6 +91,13 @@ class PostmanService
                                     "path" => [
                                         $resource['name'],
                                         1
+                                    ],
+                                    "query" => [
+                                        [
+                                            "key"      => "_system",
+                                            "value"    => "",
+                                            "disabled" => true
+                                        ],
                                     ]
                                 ]
                             ],
@@ -129,14 +136,19 @@ class PostmanService
                                             "value" => "id,desc"
                                         ],
                                         [
-                                            "key"   => "search",
-                                            "value" => "name,",
+                                            "key"      => "search",
+                                            "value"    => "name,",
                                             "disabled" => true
                                         ],
                                         [
                                             "key"   => "fields",
                                             "value" => $fields
-                                        ]
+                                        ],
+                                        [
+                                            "key"      => "_system",
+                                            "value"    => "",
+                                            "disabled" => true
+                                        ],
                                     ]
                                 ]
                             ],
@@ -272,7 +284,10 @@ class PostmanService
                 ],
                 [
                     "key"     => "restful_token",
-                    "value"   => $this->stringService->JWT_encode(['dataset_id' => $datasetId, 'user_id' => $dataset->user_id]),
+                    "value"   => $this->stringService->JWT_encode([
+                        'dataset_id' => $datasetId,
+                        'user_id'    => $dataset->user_id
+                    ]),
                     "enabled" => true
                 ],
             ],
