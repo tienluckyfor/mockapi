@@ -21,6 +21,7 @@ const fieldTypes = [
     `Array`,
     `Date`,
     `Media`,
+    `Select`,
 ]
 const fakerList = [
     {

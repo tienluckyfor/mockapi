@@ -1,4 +1,4 @@
-import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space} from 'antd';
+import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space, Select} from 'antd';
 import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
@@ -9,20 +9,27 @@ import RenderTableRallydata from "./RenderTableRallydata";
 
 import {ControlledAceEditor, ControlledJsonEditor, ReactQuillCustom} from "components";
 
+const {Option} = Select;
+
 const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
-    const {cbRallydata, eRallydata, fieldsRallydata,} = useSelector(rallydatasSelector)
+    const {cbRallydata, fieldsRallydata, mRallydataData, resource_id_RD} = useSelector(rallydatasSelector)
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
-
+// console.log('mRallydataData?.data', mRallydataData?.data)
+    const rallies = mRallydataData?.data && mRallydataData?.data[resource_id_RD]
     return (
         <>
+          {/*  <pre className="text-sm">
+                {JSON.stringify(rallies, null, '  ')}
+            </pre>*/}
             <Form.List name="data">
                 {(afields, {add, remove}) => (
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
                         if (type === 'Resource') return;
                         const iType = getItype(type, fakerjs)
+                        // console.log('name', name)
                         switch (iType) {
                             case `Object`:
                             case `Array`:
@@ -47,7 +54,8 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                 >
                                     <ReactQuillCustom
                                         name={`${from}-${name}`}
-                                        onChange={(html) => {}}
+                                        onChange={(html) => {
+                                        }}
                                     />
                                 </Form.Item>)
                                 break;
@@ -132,6 +140,22 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Switch/>
+                                </Form.Item>)
+                                break;
+                            case `Select`:
+                                const selectKeys = rallies
+                                    .map((rally) => rally?.data && rally?.data[name] ? rally?.data[name] : false)
+                                    .filter(item => item)
+                                console.log('selectKeys', selectKeys)
+                                return (<Form.Item
+                                    name={name}
+                                    label={<span className="capitalize">{name}</span>}
+                                >
+                                    <Select mode="tags" style={{width: '300px'}}>
+                                        {selectKeys.map((item) =>
+                                            <Option key={item}>{item}</Option>
+                                        )}
+                                    </Select>
                                 </Form.Item>)
                                 break;
                         }

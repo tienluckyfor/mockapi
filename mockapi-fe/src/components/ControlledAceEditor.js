@@ -13,7 +13,7 @@ export const ControlledAceEditor = (props) => {
             onChange={props.onChange}
             name="UNIQUE_ID_OF_DIV"
             editorProps={{ $blockScrolling: true }}
-            style={{border:'solid 1px #ccc', width:'100%', resize:'vertical',overflow: 'hidden', height:'300px'}}
+            style={{border:'solid 1px #ccc', width:'100%', resize:'vertical',overflow: 'hidden', height:'1300px'}}
             /*setOptions={{
                 enableBasicAutocompletion: false,
                 enableLiveAutocompletion: false,

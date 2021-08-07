@@ -196,7 +196,7 @@ export function myRallydataList(isLoading=true) {
             },
             mRallydataData: {
                 isLoading: false,
-                data: diffObject([resource_id_RD], myRallydataList),
+                data: myRallydataList,//diffObject([resource_id_RD], myRallydataList),
             }
         }))
     }

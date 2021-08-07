@@ -90,6 +90,7 @@ const FormResource = ({formValue, resourceName}) => {
                                             <Select
                                                 style={{width: 150}}
                                                 disabled={field?.name === `id`}
+                                                showSearch
                                             >
                                                 {fieldTypes.map((type, k) =>
                                                     <Option value={type}>{type}</Option>
