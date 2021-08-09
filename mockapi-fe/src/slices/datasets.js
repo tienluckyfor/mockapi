@@ -127,43 +127,6 @@ export function editDataset(dataset) {
         }
     }
 }
-/*
-
-export function editParentDataset(dataset) {
-    return async (dispatch) => {
-        dispatch(setMerge({epDataset: {isLoading: true, dataset}}))
-        const mutationAPI = () => {
-            const mutation = gql`
-            mutation($id: ID!, $parents:JSON){
-  edit_parent_dataset(
-    input: {
-      id: $id,
-      parents: $parents,
-    }
-  ) {
-    id
-    parents
-  }
-}
-`;
-            return apolloClient.mutate({
-                mutation,
-                variables: dataset
-            });
-        }
-        try {
-            await mutationAPI().then(res => {
-                dispatch(setMerge({
-                    epDataset: {isLoading: false, isOpen: false},
-                    lDataset: {isRefresh: true}
-                }))
-            })
-        } catch (e) {
-            dispatch(setMerge({epDataset: {isLoading: false}}))
-        }
-    }
-}
-*/
 
 export function deleteDataset(dataset) {
     return async (dispatch) => {

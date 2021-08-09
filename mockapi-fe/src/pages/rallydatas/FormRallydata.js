@@ -1,22 +1,40 @@
 import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space, Select} from 'antd';
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
-import {mediaSelector, setMediaMerge,} from "slices/media";
+import {mediaSelector, setMediaMerge, setMedia, uploadMediaPaste} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
 
-import {ControlledAceEditor, ControlledJsonEditor, ReactQuillCustom} from "components";
+import {ControlledAceEditor, ReactQuillCustom} from "components";
 
 const {Option} = Select;
 
 const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
     const {cbRallydata, fieldsRallydata, mRallydataData, resource_id_RD} = useSelector(rallydatasSelector)
-    const {mMedia, cbMedia} = useSelector(mediaSelector)
+    const {mMedia, cbMedia, pMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
     const rallies = mRallydataData?.data && mRallydataData?.data[resource_id_RD]
+
+    useEffect(() => {
+        window.addEventListener('paste', (e) => {
+            let items = e.clipboardData.items
+            for (let item of items) {
+                if (item.kind === 'file') {
+                    const pasteFile = item.getAsFile()
+                    dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
+                }
+            }
+        })
+    }, [])
+
+    useEffect(() => {
+        if(!mMedia.visible)
+            dispatch(setMedia({pMedia: []}))
+    }, [mMedia])
+
     return (
         <>
             <Form.List name="data">
@@ -61,13 +79,22 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <section className="flex flex-col space-y-3">
-                                        <Button
-                                            className="w-36"
-                                            onClick={() => dispatch(setMediaMerge('mMedia', {
-                                                visible: !mMedia?.visible,
-                                                name
-                                            }))}
-                                        >Choose media</Button>
+                                        <Space>
+                                            <Button
+                                                className="w-36"
+                                                onClick={() => dispatch(setMediaMerge('mMedia', {
+                                                    visible: !mMedia?.visible,
+                                                    name
+                                                }))}
+                                            >Choose media</Button>
+                                            {pMedia.length !== 0 &&
+                                            <Button
+                                                type="dashed"
+                                                onClick={(e) => dispatch(uploadMediaPaste(name))}
+                                            >Paste</Button>
+                                            }
+                                        </Space>
+
                                         {cbMedia[name]?.length !== 0 &&
                                         <div>
                                             <Space size={[10, 10]} wrap>

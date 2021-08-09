@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PostmanController;
+use App\Http\Controllers\Api\RallyBackupController;
 use App\Http\Controllers\Api\RestfulController;
 use App\Http\Middleware\RestfulTokenIsValid;
 use Illuminate\Http\Request;
@@ -37,8 +38,13 @@ Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulToke
     });
 
 
-Route::group(['prefix' => 'postman'], function () {
+Route::group(['prefix' => 'rally_backup'], function () {
     Route::get('{dataset_id}-c/{file_name}', [PostmanController::class, 'collection']);
+    Route::get('{dataset_id}-e/{file_name}', [PostmanController::class, 'environment']);
+});
+
+Route::group(['prefix' => 'rally_backup'], function () {
+    Route::get('export', [RallyBackupController::class, 'export']);
     Route::get('{dataset_id}-e/{file_name}', [PostmanController::class, 'environment']);
 });
 

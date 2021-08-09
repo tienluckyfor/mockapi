@@ -2,7 +2,6 @@ import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient,} from "services";
 import {setDatasetMerge} from "./datasets";
-import {diffObject} from "services/convert";
 import _slice_common from "./_slice_common";
 
 export const initialState = {

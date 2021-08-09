@@ -1,5 +1,4 @@
 import {Upload as UploadAnt} from 'antd';
-import {PlusOutlined} from '@ant-design/icons';
 import {useState, useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";

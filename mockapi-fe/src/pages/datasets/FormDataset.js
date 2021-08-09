@@ -61,6 +61,7 @@ const FormDataset = ({apiId, setApiId, amounts}) => {
         return (
             <>
                 <Table
+                    scroll={{ x: true }}
                     loading={lDataset.isLoading}
                     columns={columns}
                     dataSource={cDataset?.resources}

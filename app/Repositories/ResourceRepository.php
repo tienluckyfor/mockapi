@@ -6,6 +6,12 @@ use App\Models\Resource;
 
 class ResourceRepository
 {
+    public function findByid($resourceId, $select = '*')
+    {
+        return Resource::selectRaw($select)
+            ->where('id', $resourceId)
+            ->first();
+    }
     public function getByIds($resourceIds, $select = '*')
     {
         return Resource::selectRaw($select)

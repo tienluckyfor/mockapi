@@ -1,9 +1,9 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, } from "@reduxjs/toolkit";
 import gql from "graphql-tag";
-import {apolloClient, } from "services";
-import {setDatasetMerge} from "./datasets";
+import {apolloClient, resfulClient,} from "services";
 import _slice_common from "./_slice_common";
-import {setRallydata, setRallydataMerge} from "./rallydatas";
+import {setRallydataMerge} from "./rallydatas";
+import {setCommonMerge} from "./commons";
 
 export const initialState = {
     cMedium: {isOpen: false},
@@ -15,6 +15,7 @@ export const initialState = {
     mlMedia: {isRefresh: false, search: {name: ``}},
     mMedia: {},
     cbMedia: {},
+    pMedia: [],
 };
 
 const mediaSlice = createSlice({
@@ -49,7 +50,7 @@ export function setMediaMerge(key, item) {
 
 export function askDeleteMedia(mediaIds) {
     return async (dispatch) => {
-        dispatch(setData({adMedium: {isLoading: true, }}))
+        dispatch(setData({adMedium: {isLoading: true,}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($ids: [ID]!) {
@@ -80,7 +81,7 @@ export function askDeleteMedia(mediaIds) {
 
 export function deleteMedia(mediaIds) {
     return async (dispatch) => {
-        dispatch(setData({dMedium: {isLoading: true, }}))
+        dispatch(setData({dMedium: {isLoading: true,}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($ids: [ID]!) {
@@ -144,6 +145,25 @@ export function myMediaList(dataset_id) {
                     search: {...mlMedia.search, total: myMediaList.length},
                 }
         }))
+    }
+}
+
+export function uploadMediaPaste(name) {
+    return async (dispatch, getState) => {
+        const {pMedia,} = getState().media
+        const {dataset_id_RD,} = getState().rallydatas
+        const {checkedList} = getState().commons
+        await pMedia.map(async (options) => {
+            const formData = new FormData()
+            formData.append('file', options)
+            formData.append('dataset_id', dataset_id_RD)
+            formData.append('source', 'ant-upload')
+            const res = await resfulClient.post('/api/media', formData)
+            const cl = [...(checkedList[name] ?? []), res?.data?.id.toString()]
+            dispatch(setCommonMerge('checkedList', {[name]: cl}))
+        })
+        dispatch(setData({pMedia: []}))
+        dispatch(setMerge({mlMedia: {isRefresh: true}}))
     }
 }
 

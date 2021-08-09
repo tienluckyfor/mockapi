@@ -3,7 +3,15 @@ import {BorderInnerOutlined, UnorderedListOutlined, DeleteOutlined, EyeOutlined,
     from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
-import {askDeleteMedia, deleteMedia, mediaSelector, myMediaList, setMediaMerge} from "slices/media";
+import {
+    askDeleteMedia,
+    deleteMedia,
+    mediaSelector,
+    myMediaList,
+    setMedia,
+    setMediaMerge,
+    uploadMediaPaste
+} from "slices/media";
 import {commonsSelector, commonOnCheck, commonOnCheckAll, setCommonMerge} from "slices/commons";
 import {useEffect, useState} from "react"
 import moment from "moment"
@@ -22,7 +30,7 @@ export const MediaModal = () => {
 
     const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
-    const {mlMedia, mMedia, adMedium, dMedium} = useSelector(mediaSelector)
+    const {mlMedia, mMedia, adMedium, dMedium, pMedia} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState()
     const [viewMode, setViewMode] = useState('grid')
@@ -44,8 +52,21 @@ export const MediaModal = () => {
         }
         const plainOptions = (mlMedia.data ?? []).map((medium) => medium.id)
         setPlainOptions(plainOptions)
-        // dispatch(setCommon({plainOptions}))
     }, [mlMedia])
+
+    useEffect(() => {
+        window.addEventListener('paste', (e) => {
+            let items = e.clipboardData.items
+            for (let item of items) {
+                if (item.kind === 'file') {
+                    const pasteFile = item.getAsFile()
+                    dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
+                }
+            }
+            console.log('mMedia', mMedia)
+            dispatch(uploadMediaPaste(mMedia.name))
+        })
+    }, [])
 
     const gridView = () => {
         return (

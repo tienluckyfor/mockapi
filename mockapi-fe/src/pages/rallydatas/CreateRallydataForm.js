@@ -46,6 +46,7 @@ const CreateRallydataForm = ({fields}) => {
     }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
+        // console.log({checkedList, mlMedia})
         // media
         const fmedia = (fields ?? []).filter((field) => {
             const {name, type, fakerjs} = field
@@ -55,7 +56,10 @@ const CreateRallydataForm = ({fields}) => {
         let fieldsValue = form.getFieldsValue()
         for (const key in fmedia) {
             const f = fmedia[key]
-            const mediaR = (mlMedia.data ?? []).filter((medium) => checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1)
+            const mediaR = (mlMedia.data ?? []).filter((medium) => {
+                return checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1
+            })
+            console.log('mediaR', mediaR)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             fieldsValue.data[f.name] = {
                 type: 'media',

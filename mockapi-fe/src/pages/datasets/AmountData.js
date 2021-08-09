@@ -1,8 +1,9 @@
-import {Progress, Tooltip, Form, Button, Popover, Input} from "antd";
+import {Progress, Tooltip, Popover, Button, Space} from "antd";
+import {DownloadOutlined, UploadOutlined} from '@ant-design/icons';
 import {useState, useRef, useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
-import {datasetsSelector, setDatasetMerge, setDataset} from "slices/datasets";
-import {myApiList, setApiMerge} from "slices/apis";
+import {datasetsSelector, setDataset} from "slices/datasets";
+import {objToUrlParams} from "services";
 
 const Amount = ({value}) => (
     <span
@@ -13,7 +14,7 @@ const Amount = ({value}) => (
 
 export const ParentAmountData = ({resource}) => {
     const dispatch = useDispatch()
-    const {countChangeRally, amounts} = useSelector(datasetsSelector)
+    const {countChangeRally, amounts, eDataset} = useSelector(datasetsSelector)
     const [offsetX, setOffsetX] = useState(null)
     const [percent, setPercent] = useState(null)
     const MoveButton = useRef(null)
@@ -36,16 +37,19 @@ export const ParentAmountData = ({resource}) => {
     )
 
     const [amount, setAmount] = useState()
-    useEffect(()=>{
+    useEffect(() => {
         const amount = amounts && amounts[resource.id] ? amounts[resource.id] : 0;
         setAmount(amount)
         // const amount = cDataset?.amounts && cDataset?.amounts[resource.id] ? cDataset?.amounts[resource.id] : 0;
     }, [amounts])
 
     return (
-        <section className={`flex items-center space-x-3`}>
+        <section className={`flex items-center space-x-3 `}>
             <Popover content={content} title={`Fields (${resource.fields.length})`}>
-                <p className={`w-48 truncate`}>{resource.name}</p>
+                <div>
+                    <p className={`w-36 truncate`}>{resource.name}</p>
+
+                </div>
             </Popover>
             <Tooltip title={percent}>
                 <div
@@ -54,7 +58,7 @@ export const ParentAmountData = ({resource}) => {
                         let amounts1 = JSON.parse(JSON.stringify(amounts))
                         amounts1[resource.id] = percent
                         dispatch(setDataset({amounts: amounts1}))
-                        dispatch(setDataset({countChangeRally: countChangeRally+1}))
+                        dispatch(setDataset({countChangeRally: countChangeRally + 1}))
                     }}
                     onMouseMove={(e) => setPercent(widthToPercent(e))}
                     onMouseLeave={(e) => setPercent(null)}
@@ -70,6 +74,17 @@ export const ParentAmountData = ({resource}) => {
                     <Amount value={amount}/>
                 </div>
             </Tooltip>
+            <Space>
+                <Button icon={<DownloadOutlined/>} type="dashed"
+                        onClick={() => {
+                            let url = `${process.env.REACT_APP_URL}/api/rally_backup/export?`
+                            url = url + objToUrlParams({resource_id: resource.id, dataset_id: eDataset?.dataset?.id})//
+                            // console.log('url', url)
+                            // window.open(url, '_blank')
+                            window.location.assign(url)
+                        }}/>
+                <Button icon={<UploadOutlined/>} type="dashed"/>
+            </Space>
         </section>
     )
 }
