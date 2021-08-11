@@ -47,8 +47,9 @@ class MediaMutations
             ->map(function ($item) {
                 return $item->data;
             });
-        $mergedRallies = $rallies->merge($rallies1);
-
+//        \Illuminate\Support\Facades\Log::channel('single')->info('$rallies1', [$rallies1]);
+//        dd($rallies, $rallies1);
+        $mergedRallies = $rallies->toBase()->merge($rallies1->toBase());
         if ($mergedRallies->isEmpty()) {
             Media::whereIn('id', $args['ids'])
                 ->delete();
@@ -90,7 +91,10 @@ class MediaMutations
             ->map(function ($item) use ($mediaFiles) {
                 $data = $item->data;
                 foreach ($mediaFiles as $mediaFile) {
-                    $data = preg_replace('#<img[^>]+' . $mediaFile . '[^>]+>|<p><\/p>#mis', '', $data);
+                    foreach ($data as &$datum) {
+                        if(is_string($datum))
+                            $datum = preg_replace('#<img[^>]+' . $mediaFile . '[^>]+>|<p><\/p>#mis', '', $datum);
+                    }
                 }
                 $item->data = $data;
                 return $item;

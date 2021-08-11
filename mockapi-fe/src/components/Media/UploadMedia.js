@@ -6,7 +6,7 @@ import {resfulClient} from "services"
 import {myMediaList, mediaSelector,} from "slices/media";
 import {commonOnCheck, commonsSelector} from "slices/commons";
 
-const Upload = ({listType, children, plainOptions}) => {
+const UploadMedia = ({listType, children, plainOptions}) => {
     const dispatch = useDispatch()
     const [fileObj, setFileObj] = useState({})
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
@@ -85,4 +85,4 @@ const Upload = ({listType, children, plainOptions}) => {
     )
 }
 
-export default Upload
+export default UploadMedia

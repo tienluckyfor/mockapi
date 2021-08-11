@@ -1,9 +1,11 @@
-import {Progress, Tooltip, Popover, Button, Space} from "antd";
+import {Progress, Tooltip, Popover, Button, Space, Upload} from "antd";
 import {DownloadOutlined, UploadOutlined} from '@ant-design/icons';
 import {useState, useRef, useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
-import {datasetsSelector, setDataset} from "slices/datasets";
-import {objToUrlParams} from "services";
+import {datasetsSelector, myDatasetList, setDataset} from "slices/datasets";
+import {objToUrlParams, resfulClient} from "services";
+import {myRallydataList, rallydatasSelector} from "slices/rallydatas";
+import {mediaSelector, uploadFile} from "../../slices/media";
 
 const Amount = ({value}) => (
     <span
@@ -15,6 +17,8 @@ const Amount = ({value}) => (
 export const ParentAmountData = ({resource}) => {
     const dispatch = useDispatch()
     const {countChangeRally, amounts, eDataset} = useSelector(datasetsSelector)
+    const {resource_id_RD} = useSelector(rallydatasSelector)
+    const {uMedia} = useSelector(mediaSelector)
     const [offsetX, setOffsetX] = useState(null)
     const [percent, setPercent] = useState(null)
     const MoveButton = useRef(null)
@@ -32,7 +36,7 @@ export const ParentAmountData = ({resource}) => {
 
     const content = (
         <div>
-            {resource.fields.map((field) => <p>{field.name}</p>)}
+            {resource.fields.map((field, key) => <p key={key}>{field.name}</p>)}
         </div>
     )
 
@@ -42,6 +46,43 @@ export const ParentAmountData = ({resource}) => {
         setAmount(amount)
         // const amount = cDataset?.amounts && cDataset?.amounts[resource.id] ? cDataset?.amounts[resource.id] : 0;
     }, [amounts])
+
+    useEffect(() => {
+        if(uMedia.data){
+            dispatch(myDatasetList())
+            dispatch(myRallydataList(false))
+        }
+    }, [uMedia])
+
+
+    const UploadFile = ({children, ...props}) => {
+        const customRequest = async (options) => {
+            const formData = new FormData()
+            formData.append('file', options.file)
+            formData.append('dataset_id', eDataset?.dataset?.id)
+            formData.append('resource_id', resource_id_RD)
+            formData.append('source', 'ant-upload')
+            formData.append('uid', options.file.uid)
+            dispatch(uploadFile(formData));
+            // const res = await resfulClient.post('/api/rally_backup/import', formData)
+            // console.log('res', res)
+            // if (res?.data?.id) {
+            //     // const list = checkedList[mMedia?.name] ?? []
+            //     // checkedList1 = [...list, ...checkedList1, (res?.data?.id??0).toString()]
+            //     // checkedList1 = checkedList1.filter((v, i, a) => a.indexOf(v) === i);
+            //     // dispatch(commonOnCheck(mMedia.name, plainOptions, checkedList1))
+            // }
+            // options.onSuccess()
+        }
+        const uploadProps = {
+            // listType,
+            name: 'file',
+            // onChange: onChange,
+            customRequest,
+            showUploadList: {showPreviewIcon: false, showRemoveIcon: false},
+        }
+        return <Upload {...uploadProps} {...props}>{children}</Upload>
+    }
 
     return (
         <section className={`flex items-center space-x-3 `}>
@@ -83,10 +124,14 @@ export const ParentAmountData = ({resource}) => {
                             // window.open(url, '_blank')
                             window.location.assign(url)
                         }}/>
-                <Button icon={<UploadOutlined/>} type="dashed"/>
+                <UploadFile accept=".csv">
+                    <Button type="dashed" danger icon={<UploadOutlined/>}
+                            loading={uMedia.isLoading}/>
+                </UploadFile>
             </Space>
         </section>
     )
+
 }
 
 export const ChildAmountData = ({resource}) => (
@@ -94,11 +139,5 @@ export const ChildAmountData = ({resource}) => (
         <Tooltip title={resource.name}>
             <p className="truncate text-gray-400 w-40 mr-2">{resource.name}</p>
         </Tooltip>
-        {/*<Tooltip title={`50`}>
-            <div className="relative">
-                <Progress percent={20} className={`w-48`} showInfo={false} trailColor={`#ddd`}/>
-                <Amount value={50}/>
-            </div>
-        </Tooltip>*/}
     </section>
 )

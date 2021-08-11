@@ -17,7 +17,7 @@ import {useEffect, useState} from "react"
 import moment from "moment"
 import "moment-timezone"
 
-import Upload from "./Upload";
+import UploadMedia from "./UploadMedia";
 import {usersSelector} from "slices/users";
 
 const {Search} = Input;
@@ -72,11 +72,11 @@ export const MediaModal = () => {
         return (
             <Image.PreviewGroup>
                 <Space size={[10, 10]} wrap>
-                    <Upload listType="picture-card" plainOptions={plainOptions}>
+                    <UploadMedia listType="picture-card" plainOptions={plainOptions}>
                         <div style={{marginTop: 8}}>Upload</div>
-                    </Upload>
+                    </UploadMedia>
                     {(mlMedia.data ?? []).map((medium, key) =>
-                        <div className={`relative border border-gray-300 p-1`} style={{width: 104, height: 104}}>
+                        <div key={key} className={`relative border border-gray-300 p-1`} style={{width: 104, height: 104}}>
                             <Checkbox
                                 value={medium.id}
                                 className={`absolute z-10 left-0 top-0 ml-2 mt-2 px-1 bg-white rounded`}/>
@@ -110,9 +110,9 @@ export const MediaModal = () => {
     const listView = () => {
         return (
             <Image.PreviewGroup>
-                <Upload plainOptions={plainOptions}>
+                <UploadMedia plainOptions={plainOptions}>
                     <Button icon={<UploadOutlined/>}>Upload Media</Button>
-                </Upload>
+                </UploadMedia>
                 <List
                     dataSource={(mlMedia.data ?? [])}
                     renderItem={medium => (

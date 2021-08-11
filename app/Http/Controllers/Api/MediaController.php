@@ -8,10 +8,8 @@ use App\Repositories\MediaRepository;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 use Image;
-use Pusher\ApiErrorException;
 
 class MediaController extends Controller
 {
@@ -87,54 +85,12 @@ class MediaController extends Controller
                 'file' => ['File is required'],
             ]);
         }
-        $extension = $file->extension();
-
         if (!$file || !$file->isValid()) {
             return response()->json(['status' => false]);
         }
-        switch ($file->getMimeType()) {
-            case (preg_match('#video#', $file->getMimeType()) ? true : false):
-                $fileType = 'video';
-                $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
-                $filePath = storage_path() . "/app/public";
-                $file->move($filePath . '/media/videos', $fileName);
-                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
-                $convertStatus = true;
-                break;
-            case (preg_match('#image#', $file->getMimeType()) ? true : false):
-                $fileType = 'image';
-                $path = $file->getRealPath();
-                $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
-                $filePath = storage_path() . "/app/public/$fileName";
-                $convertStatus = $this->media_service->jcphp01_generate_webp_image($path, $filePath);
-                $this->media_service->thumb_image($path, $filePath);
-                $fileThumb = $this->media_service->get_thumb($fileName);
-                if ($convertStatus == 'NOT_SUPPORT') {
-                    $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
-                    $filePath = storage_path() . "/app/public";
-                    $file->move($filePath . '/media/images_NOT_SUPPORT', $fileName);
-                }
-                break;
-            default:
-                $fileType = preg_replace('#\/.*?$#mis', '', $file->getMimeType());
-                $extension = !empty($extension) ? $extension : $fileType;
-                $extension = in_array($extension, ['text']) ? 'txt' : $extension.'1';
-                $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
-                $filePath = storage_path() . "/app/public";
-                $file->move($filePath . '/media/files', $fileName);
-                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
-                $convertStatus = true;
-                break;
-        }
-        if (@$convertStatus) {
-            $media = array_merge($request->all(), [
-                'name_upload' => $file->getClientOriginalName(),
-                'file_type'   => @$fileType,
-                'file_name'   => @$fileName,
-                'file_thumb' => @$fileThumb,
-                'user_id' => Auth::id(),
-                'stage'   => 'first upload',
-            ]);
+        [$convertStatus, $result] = $this->media_service->classify($file);
+        if ($convertStatus) {
+            $media = array_merge($request->all(), $result);
             $create = Media::create($media);
         }
         return response()->json(@$create);

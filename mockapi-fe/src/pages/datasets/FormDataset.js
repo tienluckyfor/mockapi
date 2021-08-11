@@ -9,7 +9,7 @@ import {ChildAmountData, ParentAmountData} from "./AmountData"
 import {locales} from "./configDataset"
 
 const {Option} = Select;
-const FormDataset = ({apiId, setApiId, amounts}) => {
+const FormDataset = ({apiId, setApiId, }) => {
     const dispatch = useDispatch()
     const {cDataset, lDataset, } = useSelector(datasetsSelector)
     const {mlApi} = useSelector(apisSelector)

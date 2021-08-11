@@ -16,6 +16,7 @@ export const initialState = {
     mMedia: {},
     cbMedia: {},
     pMedia: [],
+    uMedia: [],
 };
 
 const mediaSlice = createSlice({
@@ -164,6 +165,14 @@ export function uploadMediaPaste(name) {
         })
         dispatch(setData({pMedia: []}))
         dispatch(setMerge({mlMedia: {isRefresh: true}}))
+    }
+}
+
+export function uploadFile(formData) {
+    return async (dispatch, getState) => {
+        dispatch(setData({uMedia: {isLoading: true, }}))
+        const res = await resfulClient.post('/api/rally_backup/import', formData)
+        dispatch(setMerge({uMedia: {isLoading: false, data: res.data}}))
     }
 }
 

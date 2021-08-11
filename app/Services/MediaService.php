@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use finfo;
+use Illuminate\Support\Facades\Auth;
 use Image;
 use Imagick;
 use Intervention\Image\Exception\NotReadableException;
@@ -18,14 +20,14 @@ class MediaService
 
     public function thumb_image($path, $imagePath)
     {
-        try{
+        try {
             $imagePath = self::get_thumb($imagePath);
             Image::make($path)
                 ->fit(90, 90)
                 ->save($imagePath, 100);
             return $imagePath;
+        } catch (NotReadableException $e) {
         }
-        catch (NotReadableException $e) {}
     }
 
     public function jcphp01_generate_webp_image($file, $outputFile, $compression_quality = 80)
@@ -77,5 +79,110 @@ class MediaService
         return false;
     }
 
+    public function classify($file)
+    {
+        $convertStatus = true;
+        $extension = $file->extension();
+        switch ($file->getMimeType()) {
+            case (preg_match('#video#', $file->getMimeType()) ? true : false):
+                $fileType = 'video';
+                $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+                $file->move($filePath . '/media/videos', $fileName);
+                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                break;
+            case (preg_match('#image#', $file->getMimeType()) ? true : false):
+                $fileType = 'image';
+                $path = $file->getRealPath();
+                $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
+                $filePath = storage_path() . "/app/public/$fileName";
+                $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
+                $this->thumb_image($path, $filePath);
+                $fileThumb = $this->get_thumb($fileName);
+                if ($convertStatus == 'NOT_SUPPORT') {
+                    $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                    $filePath = storage_path() . "/app/public";
+                    $file->move($filePath . '/media/images_NOT_SUPPORT', $fileName);
+                }
+                break;
+            default:
+                $fileType = preg_replace('#\/.*?$#mis', '', $file->getMimeType());
+                $extension = !empty($extension) ? $extension : $fileType;
+                $extension = in_array($extension, ['text']) ? 'txt' : $extension . '1';
+                $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+                $file->move($filePath . '/media/files', $fileName);
+                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                break;
+        }
+        $result = [
+            'name_upload' => $file->getClientOriginalName(),
+            'file_type'   => @$fileType,
+            'file_name'   => @$fileName,
+            'file_thumb'  => @$fileThumb,
+            'user_id'     => Auth::id(),
+            'stage'       => 'first upload',
+        ];
+        return [$convertStatus, $result];
+    }
+
+    public function getViaUrl($fileUrl)
+    {
+        $convertStatus = true;
+        $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+        try {
+            $contents = file_get_contents($fileUrl);
+        } catch (\ErrorException $e) {
+            return [false, false];
+        }
+        $file_info = new finfo(FILEINFO_MIME_TYPE);
+        $mime_type = $file_info->buffer($contents);
+        $originalName = substr($fileUrl, strrpos($fileUrl, '/') + 1);
+
+        switch ($mime_type) {
+            case (preg_match('#video#', $mime_type) ? true : false):
+                $fileType = 'video';
+                $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+//                $file->move($filePath . '/media/videos', $fileName);
+                file_put_contents($filePath . '/media/videos/' . $fileName, $contents);
+                $fileThumb = 'api/media?text=' . urlencode($originalName);
+                break;
+            case (preg_match('#image#', $mime_type) ? true : false):
+                $fileType = 'image';
+                $path = storage_path() . "/app/public/media/tmp/" . rand() . ".$extension";
+                $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
+                $filePath = storage_path() . "/app/public/$fileName";
+                file_put_contents($path, $contents);
+                $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
+                $this->thumb_image($path, $filePath);
+                $fileThumb = $this->get_thumb($fileName);
+                if ($convertStatus == 'NOT_SUPPORT') {
+                    $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                    $filePath = storage_path() . "/app/public";
+                    file_put_contents($filePath . '/media/images_NOT_SUPPORT/' . $fileName, $contents);
+                }
+                break;
+            default:
+                $fileType = preg_replace('#\/.*?$#mis', '', $mime_type);
+                $extension = !empty($extension) ? $extension : $fileType;
+                $extension = in_array($extension, ['text']) ? 'txt' : $extension . '1';
+                $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
+                $filePath = storage_path() . "/app/public";
+//                $file->move($filePath . '/media/files', $fileName);
+                file_put_contents($filePath . '/media/files/' . $fileName, $contents);
+                $fileThumb = 'api/media?text=' . urlencode($originalName);
+                break;
+        }
+        $result = [
+            'name_upload' => $originalName,
+            'file_type'   => @$fileType,
+            'file_name'   => @$fileName,
+            'file_thumb'  => @$fileThumb,
+            'user_id'     => Auth::id(),
+            'stage'       => 'first upload',
+        ];
+        return [$convertStatus, $result];
+    }
 }
 

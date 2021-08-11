@@ -293,8 +293,11 @@ class RallydataRepository
         $file = asset("storage/filldata-media/{$mediaId}.jpg");
         $thumbImage = $this->media_service->get_thumb($file);
         $fileType = 'image';
-        if ($mediaId > 0) {
-            $medium = $media->where('id', $mediaId)->first();
+        $medium = $media->where('id', $mediaId)->first();
+//        if ($mediaId > 0 && !$medium) {
+//            return;
+//        }
+        if ($mediaId > 0 && $medium) {
             $file = $medium->file;
             $thumbImage = $medium->thumb_image;
             $fileType = $medium->file_type;

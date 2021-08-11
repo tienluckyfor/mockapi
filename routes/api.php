@@ -45,7 +45,8 @@ Route::group(['prefix' => 'rally_backup'], function () {
 
 Route::group(['prefix' => 'rally_backup'], function () {
     Route::get('export', [RallyBackupController::class, 'export']);
-    Route::get('{dataset_id}-e/{file_name}', [PostmanController::class, 'environment']);
+    Route::post('import', [RallyBackupController::class, 'import'])
+        ->middleware('auth:api');
 });
 
 

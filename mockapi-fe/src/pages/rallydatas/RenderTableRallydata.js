@@ -137,13 +137,14 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                             {(val.media ?? []).map((medium, key) => {
                                 if (medium.file_type === 'image')
                                     return <Image
+                                        key={key}
                                         preview={{src: medium.file, mask: <EyeOutlined/>}}
                                         height={30}
                                         width={30}
                                         style={{objectFit: "cover"}}
                                         src={medium.thumb_image}
                                     />
-                                return <a target="_blank" href={medium.file}>
+                                return <a key={key} target="_blank" href={medium.file}>
                                     <Image
                                         preview={false}
                                         height={30}
@@ -157,7 +158,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         </Space>
                     </Image.PreviewGroup>
                 }
-                if (iType === 'Object') {
+                if (iType === 'Object' || iType === 'Array') {
                     return <Tooltip title={JSON.stringify(val)}>
                         <p className="text-sm truncate-2y">
                             {JSON.stringify(val, null, '  ')}

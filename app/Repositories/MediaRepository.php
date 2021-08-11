@@ -48,6 +48,22 @@ class MediaRepository
             ->get();
     }
 
+//    public function getByFiles($mediaFiles, $select = '*')
+//    {
+//        return Media::selectRaw($select)
+//            ->where('file_name', 'like',
+//            ->get();
+//    }
+
+    public function getByFiles($mediaFiles)
+    {
+        $wRaw = "file_name LIKE \"%" . implode('" OR file_name LIKE "%', $mediaFiles) . "%\"";
+        return Media::select("*")
+//            ->where('user_id', Auth::id())
+            ->whereRaw($wRaw)
+            ->get();
+    }
+
     private function _copyFileBy($item){
         $randFile = time().'-'.rand();
         $nItem = $item;
