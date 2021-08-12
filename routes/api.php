@@ -38,7 +38,7 @@ Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulToke
     });
 
 
-Route::group(['prefix' => 'rally_backup'], function () {
+Route::group(['prefix' => 'postman'], function () {
     Route::get('{dataset_id}-c/{file_name}', [PostmanController::class, 'collection']);
     Route::get('{dataset_id}-e/{file_name}', [PostmanController::class, 'environment']);
 });
