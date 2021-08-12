@@ -166,9 +166,11 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                 </Form.Item>)
                                 break;
                             case `Select`:
-                                const selectKeys = (rallies ?? [])
+                                let selectKeys = (rallies ?? [])
                                     .map((rally) => rally?.data && rally?.data[name] ? rally?.data[name] : false)
                                     .filter(item => item)
+                                    .flat()
+                                selectKeys = [...new Set(selectKeys)];
                                 return (<Form.Item
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
