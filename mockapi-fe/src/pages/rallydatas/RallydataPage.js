@@ -1,8 +1,7 @@
 import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
-    rallydatasSelector, myRallydataList,
-    setRallydataMerge, editRallydata, setFieldsRallydata, createRallydata
+    rallydatasSelector, myRallydataList, setFieldsRallydata,
 } from "slices/rallydatas";
 import {Loading} from "components";
 import CreateRallydataForm from "./CreateRallydataForm";
@@ -10,10 +9,7 @@ import EditRallydataForm from "./EditRallydataForm";
 import HeaderRallydata from "./HeaderRallydata";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {usersSelector} from "slices/users";
-import AppHelmet from "shared/AppHelmet";
-import {handleValues} from "./configRallydata";
-import {fields} from "../resources/configResource";
-import {error} from "services";
+import AppHelmet from "shared/AppHelmet";;
 
 const RallydataPage = () => {
     const dispatch = useDispatch()

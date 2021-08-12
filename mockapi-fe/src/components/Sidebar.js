@@ -11,7 +11,7 @@ import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
     const {qMe} = useSelector(usersSelector)
     const [menuSelected, setMenuSelected] = useState()
     const location = useLocation()
@@ -99,7 +99,7 @@ const Sidebar = () => {
     }
 
     return (
-        <aside>
+        <aside {...props}>
             {!isMobile &&
             <section className="relative" style={{width: 256}}>
                 <div className="fixed top-0" style={{width: 256}}>

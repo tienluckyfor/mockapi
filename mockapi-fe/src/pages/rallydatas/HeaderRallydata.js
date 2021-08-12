@@ -45,7 +45,6 @@ const HeaderRallydata = () => {
 
     const url = getURLParams()
     useEffect(() => {
-        // if (dataset_id_RD == url.dataset_id_RD) return;
         dispatch(setRallydata({
             dataset_id_RD: url.dataset_id_RD,
             resource_id_RD: url.resource_id_RD,
@@ -73,7 +72,9 @@ const HeaderRallydata = () => {
 
         const resourceSelect = () => {
             const resources = deRallydata?.data?.resources ?? []
-            if (resources[0] && !resource_id_RD) dispatch(setRallydata({resource_id_RD: resources[0]?.id}))
+            if (resources[0] && !resource_id_RD) {
+                dispatch(setRallydata({resource_id_RD: resources[0]?.id.toString()}))
+            }
             return (<Select
                 // showSearch
                 size={`small`}
