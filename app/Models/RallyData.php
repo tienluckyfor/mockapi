@@ -26,6 +26,11 @@ class RallyData extends Model
         'data_children' => 'array',
     ];
 
+    protected function asJson($value)
+    {
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
+    }
+
     public function resource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
