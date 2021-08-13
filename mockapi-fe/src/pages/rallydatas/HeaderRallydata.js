@@ -51,11 +51,11 @@ const HeaderRallydata = () => {
         }))
     }, [])
 
-    const renderBreadcrumb = () => {
+    const RenderBreadcrumb = () => {
 
-        const datasetSelect = () => {
+        const DatasetSelect = () => {
             return (<Select
-                // showSearch
+                showSearch
                 size={`small`}
                 style={{width: isMobile ? 100 : 150}}
                 placeholder="Select a dataset"
@@ -70,13 +70,13 @@ const HeaderRallydata = () => {
             </Select>)
         }
 
-        const resourceSelect = () => {
+        const ResourceSelect = () => {
             const resources = deRallydata?.data?.resources ?? []
             if (resources[0] && !resource_id_RD) {
                 dispatch(setRallydata({resource_id_RD: resources[0]?.id.toString()}))
             }
             return (<Select
-                // showSearch
+                showSearch
                 size={`small`}
                 style={{width: isMobile ? 100 : 150}}
                 placeholder="Select a resource"
@@ -99,10 +99,10 @@ const HeaderRallydata = () => {
                             R
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            {datasetSelect()}
+                            <DatasetSelect/>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            {resourceSelect()}
+                            <ResourceSelect/>
                         </Breadcrumb.Item>
                     </Breadcrumb>
                     <Link to={`/SidebarPage`}>
@@ -121,10 +121,10 @@ const HeaderRallydata = () => {
                     Rallydata
                 </Breadcrumb.Item>
                 <Breadcrumb.Item>
-                    {datasetSelect()}
+                    <DatasetSelect/>
                 </Breadcrumb.Item>
                 <Breadcrumb.Item>
-                    {resourceSelect()}
+                    <ResourceSelect/>
                 </Breadcrumb.Item>
             </Breadcrumb>
         )
@@ -133,7 +133,7 @@ const HeaderRallydata = () => {
     return (
         <>
             <section className=" lg:flex block items-center justify-between lg:space-y-0 space-y-3">
-                {renderBreadcrumb()}
+                <RenderBreadcrumb/>
                 <Space>
                     <Button
                         onClick={(e) => {
