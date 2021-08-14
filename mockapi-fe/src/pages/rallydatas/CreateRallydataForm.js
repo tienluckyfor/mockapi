@@ -59,7 +59,7 @@ const CreateRallydataForm = ({fields}) => {
             const mediaR = (mlMedia.data ?? []).filter((medium) => {
                 return checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1
             })
-            console.log('mediaR', mediaR)
+            // console.log('mediaR', mediaR)
             dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
             fieldsValue.data[f.name] = {
                 type: 'media',

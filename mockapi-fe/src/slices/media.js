@@ -1,4 +1,4 @@
-import {createSlice, } from "@reduxjs/toolkit";
+import {createSlice,} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
 import {apolloClient, resfulClient,} from "services";
 import _slice_common from "./_slice_common";
@@ -131,7 +131,7 @@ export function myMediaList(dataset_id) {
     updated_at
   }
 }`;
-        console.log('myMediaList dataset_id', dataset_id)
+        // console.log('myMediaList dataset_id', dataset_id)
         const res = await apolloClient.query({
             query,
             variables: {dataset_id}
@@ -154,23 +154,31 @@ export function uploadMediaPaste(name) {
         const {pMedia,} = getState().media
         const {dataset_id_RD,} = getState().rallydatas
         const {checkedList} = getState().commons
-        await pMedia.map(async (options) => {
+
+        let promises = []
+        await pMedia.map((file) => {
             const formData = new FormData()
-            formData.append('file', options)
+            formData.append('file', file)
             formData.append('dataset_id', dataset_id_RD)
             formData.append('source', 'ant-upload')
-            const res = await resfulClient.post('/api/media', formData)
-            const cl = [...(checkedList[name] ?? []), res?.data?.id.toString()]
-            dispatch(setCommonMerge('checkedList', {[name]: cl}))
+            promises.push(resfulClient.post('/api/media', formData))
         })
-        dispatch(setData({pMedia: []}))
-        dispatch(setMerge({mlMedia: {isRefresh: true}}))
+        Promise.all(promises).then(values => {
+            let cl = checkedList[name] ? JSON.parse(JSON.stringify(checkedList[name])) : []
+            values.map((res) => {
+                cl = [...cl, res?.data?.id.toString()]
+            })
+            console.log('cl', cl)
+            dispatch(setCommonMerge('checkedList', {[name]: cl}))
+            dispatch(setData({pMedia: []}))
+            dispatch(setMerge({mlMedia: {isRefresh: true}}))
+        })
     }
 }
 
 export function uploadFile(formData) {
     return async (dispatch, getState) => {
-        dispatch(setData({uMedia: {isLoading: true, }}))
+        dispatch(setData({uMedia: {isLoading: true,}}))
         const res = await resfulClient.post('/api/rally_backup/import', formData)
         dispatch(setMerge({uMedia: {isLoading: false, data: res.data}}))
     }

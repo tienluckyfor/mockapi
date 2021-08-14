@@ -20,13 +20,13 @@ const FormRallydata = ({fields, from, childResources,}) => {
 
     useEffect(() => {
         window.addEventListener('paste', (e) => {
-            let items = e.clipboardData.items
-            for (let item of items) {
+            let files = [];
+            for (let item of e.clipboardData.items) {
                 if (item.kind === 'file') {
-                    const pasteFile = item.getAsFile()
-                    dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
+                    files.push(item.getAsFile())
                 }
             }
+            dispatch(setMedia({pMedia: files}))
         })
     }, [])
 
@@ -87,7 +87,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                                     name
                                                 }))}
                                             >Choose media</Button>
-                                            {pMedia.length !== 0 &&
+                                            {pMedia.length!=0 &&
                                             <Button
                                                 type="dashed"
                                                 onClick={(e) => dispatch(uploadMediaPaste(name))}

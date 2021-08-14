@@ -6,9 +6,9 @@ import reportWebVitals from './reportWebVitals';
 
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
-import rootReducer from "./slices";
+import store from "./slices";
 
-const store = configureStore({reducer: rootReducer});
+// const store = rootReducer//configureStore({reducer: rootReducer});
 
 ReactDOM.render(
     <Provider store={store}>

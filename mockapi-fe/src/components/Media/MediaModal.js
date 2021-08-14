@@ -30,7 +30,7 @@ export const MediaModal = () => {
 
     const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
-    const {mlMedia, mMedia, adMedium, dMedium, pMedia} = useSelector(mediaSelector)
+    const {mlMedia, mMedia, adMedium, dMedium,pMedia} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState()
     const [viewMode, setViewMode] = useState('grid')
@@ -47,7 +47,7 @@ export const MediaModal = () => {
 
     useEffect(() => {
         if (mlMedia.isRefresh) {
-            dispatch(setCommonMerge('checkedList', {[mMedia?.name]: []}))
+            // dispatch(setCommonMerge('checkedList', {[mMedia?.name]: []}))
             dispatch(myMediaList(dataset_id))
         }
         const plainOptions = (mlMedia.data ?? []).map((medium) => medium.id)
@@ -56,17 +56,27 @@ export const MediaModal = () => {
 
     useEffect(() => {
         window.addEventListener('paste', (e) => {
-            let items = e.clipboardData.items
-            for (let item of items) {
+            if(!mMedia?.visible) return;
+            let files = [];
+            for (let item of e.clipboardData.items) {
                 if (item.kind === 'file') {
-                    const pasteFile = item.getAsFile()
-                    dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
+                    files.push(item.getAsFile())
                 }
             }
-            console.log('mMedia', mMedia)
+            dispatch(setMedia({pMedia: files}))
+            // let items = e.clipboardData.items
+            // console.log('items', items)
+            // for (let item of items) {
+            //     if (item.kind === 'file') {
+            //         const pasteFile = item.getAsFile()
+            //         // dispatch(setMedia({pMedia: {pasteFile}}))
+            //         dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
+            //     }
+            // }
+            console.log('mMedia', {pMedia, mMedia})
             dispatch(uploadMediaPaste(mMedia.name))
         })
-    }, [])
+    }, [mMedia])
 
     const gridView = () => {
         return (
@@ -76,7 +86,8 @@ export const MediaModal = () => {
                         <div style={{marginTop: 8}}>Upload</div>
                     </UploadMedia>
                     {(mlMedia.data ?? []).map((medium, key) =>
-                        <div key={key} className={`relative border border-gray-300 p-1`} style={{width: 104, height: 104}}>
+                        <div key={key} className={`relative border border-gray-300 p-1`}
+                             style={{width: 104, height: 104}}>
                             <Checkbox
                                 value={medium.id}
                                 className={`absolute z-10 left-0 top-0 ml-2 mt-2 px-1 bg-white rounded`}/>

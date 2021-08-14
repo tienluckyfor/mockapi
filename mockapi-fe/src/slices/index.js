@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { configureStore } from '@reduxjs/toolkit'
 
 import apisReducer from "./apis";
 import authsReducer from "./auths";
@@ -11,7 +12,7 @@ import usersReducer from "./users";
 import sharesReducer from "./shares";
 import backupsReducer from "./backups";
 
-const rootReducer = combineReducers({
+const reducer = combineReducers({
     shares: sharesReducer,
     users: usersReducer,
     media: mediaReducer,
@@ -24,4 +25,12 @@ const rootReducer = combineReducers({
     backups: backupsReducer,
 });
 
-export default rootReducer;
+const store = configureStore({
+    reducer,
+    middleware: getDefaultMiddleware => {
+        return getDefaultMiddleware({ serializableCheck: false })
+    }
+    // devTools: isProduction,
+})
+export default store;
+// export default rootReducer;
