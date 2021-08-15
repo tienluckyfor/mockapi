@@ -24,7 +24,14 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                 <Button
                     size={`small`}
                     type="link"
-                    onClick={(e) => dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata}))}
+                    onClick={(e) => {
+                        // let rallydata1 = rallydata
+                        // Object.entries(childFields).map(([key, item], i) =>{
+                        //     delete rallydata1[key]
+                        // })
+                        // dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata: rallydata1}))
+                        dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata}))
+                    }}
                 >
                     Edit
                 </Button>
@@ -50,6 +57,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
     };
 
     let columns = [];
+    let childFields = {};
     (fieldsRallydata ?? []).map((field) => {
         const iType = getItype(field.type, field.fakerjs)
         if (iType === 'Object ID') {
@@ -166,6 +174,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                     </Tooltip>
                 }
                 if (iType === 'Resource') {
+                    childFields[field.name] = field.name;
                     return <Tooltip title={JSON.stringify(val)}>
                         <p className="text-sm truncate-2y">
                             <b className="mr-1 text-red-500">{(val ?? []).length}</b>

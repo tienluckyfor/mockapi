@@ -74,6 +74,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                 </Form.Item>)
                                 break;
                             case `Media`:
+                                const fName = `${from}-${name}`
                                 return (<Form.Item
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
@@ -84,7 +85,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                                 className="w-36"
                                                 onClick={() => dispatch(setMediaMerge('mMedia', {
                                                     visible: !mMedia?.visible,
-                                                    name
+                                                    name: fName
                                                 }))}
                                             >Choose media</Button>
                                             {pMedia.length!=0 &&
@@ -95,16 +96,16 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                             }
                                         </Space>
 
-                                        {cbMedia[name]?.length !== 0 &&
+                                        {cbMedia[fName]?.length !== 0 &&
                                         <div>
                                             <Space size={[10, 10]} wrap>
-                                                {(cbMedia[name] ?? []).map((medium, key) => (
+                                                {(cbMedia[fName] ?? []).map((medium, key) => (
                                                     <div className={`relative border border-gray-300 p-1`}
                                                          style={{width: 104, height: 104}}>
                                                         <Checkbox
                                                             onChange={() => {
-                                                                const checkedList1 = checkedList[name].filter((item) => item != medium.id)
-                                                                dispatch(setCommonMerge('checkedList', {[name]: checkedList1}))
+                                                                const checkedList1 = checkedList[fName].filter((item) => item != medium.id)
+                                                                dispatch(setCommonMerge('checkedList', {[fName]: checkedList1}))
                                                             }}
                                                             value={medium.id}
                                                             checked
@@ -191,6 +192,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                 {(afields, {add, remove}) => (
                     childResources.map((resource) => {
                         const {name, id,} = resource
+                        const fName = `${from}-${name}`
                         return (<Form.Item
                             name={name}
                             label={<span className="capitalize">{name}</span>}
@@ -200,17 +202,17 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     className="w-36"
                                     onClick={() => dispatch(setRallydataMerge('mRallydata', {
                                         visible: !mMedia?.visible,
-                                        resource,
+                                        resource: {...resource, fName},
                                     }))}
                                 >
                                     <p className="truncate">Choose {name}</p>
                                 </Button>
-                                {cbRallydata[name] && cbRallydata[name]?.length !== 0 &&
+                                {cbRallydata[fName] && cbRallydata[fName]?.length !== 0 &&
                                 <RenderTableRallydata
                                     typeShow="checked"
-                                    mlDRRallydata={{data: cbRallydata[name]}}
+                                    mlDRRallydata={{data: cbRallydata[fName]}}
                                     fieldsRallydata={fieldsRallydata[id]}
-                                    resourceName={name}
+                                    resourceName={fName}
                                 />
                                 }
                             </section>

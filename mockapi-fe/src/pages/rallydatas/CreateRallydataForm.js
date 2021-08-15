@@ -56,11 +56,12 @@ const CreateRallydataForm = ({fields}) => {
         let fieldsValue = form.getFieldsValue()
         for (const key in fmedia) {
             const f = fmedia[key]
+            const fName = `create-${f.name}`
             const mediaR = (mlMedia.data ?? []).filter((medium) => {
-                return checkedList[f.name] && checkedList[f.name].indexOf(medium.id) !== -1
+                return checkedList[fName] && checkedList[fName].indexOf(medium.id) !== -1
             })
             // console.log('mediaR', mediaR)
-            dispatch(setMediaMerge('cbMedia', {[f.name]: mediaR}))
+            dispatch(setMediaMerge('cbMedia', {[fName]: mediaR}))
             fieldsValue.data[f.name] = {
                 type: 'media',
                 media_ids: mediaR.map((medium) => medium.id)
@@ -71,8 +72,9 @@ const CreateRallydataForm = ({fields}) => {
         fieldsValue.data_children = []
         for (const key in childResources) {
             const r = childResources[key]
-            const childrenR = getRallyData(mRallydataData, r.id).filter((rally) => checkedList[r.name] && checkedList[r.name].indexOf(rally.data.id) !== -1)
-            dispatch(setRallydataMerge('cbRallydata', {[r.name]: childrenR}))
+            const fName = `create-${r.name}`
+            const childrenR = getRallyData(mRallydataData, r.id).filter((rally) => checkedList[fName] && checkedList[fName].indexOf(rally.data.id) !== -1)
+            dispatch(setRallydataMerge('cbRallydata', {[fName]: childrenR}))
             fieldsValue.data_children.push({
                 type: 'rallydata',
                 resource_id: r.id,

@@ -150,7 +150,7 @@ class RestfulController extends Controller
      * @param $request
      * @return mixed
      */
-    protected function _handleParentMedia($rallydatasCurrent, $datasetId, $request)
+    protected function _handleParentMedia($rallydatasCurrent, $datasetId, $request, $resources)
     {
         $rallydataIds = [];
         foreach ($rallydatasCurrent as $rallydata) {
@@ -165,10 +165,6 @@ class RestfulController extends Controller
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
         $media = Media::whereIn('id', $mediaIds)->get();
         $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
-        $resources = $this->resource_repository
-            ->getByDatasetId($datasetId)
-            ->keyBy('id')
-            ->toArray();
         $fields = $request->fields ? explode(',', $request->fields) : false;
         foreach ($rallydatasCurrent as &$item) {
             $data_children = @$item['data_children'] ?? [];
@@ -220,13 +216,18 @@ class RestfulController extends Controller
         [$rallydatas, $total, $isPrev, $isNext] = $this->rallydata_repository
             ->getByDatasetIdResourceName($r['dataset_id'], $resourceName,
                 [$perPage, $currentPage, $sorts, $searchs]);
+        dd($rallydatas);
         $rallydatas = array_map(function ($rally) {
             $data = json_decode($rally['data'], true);
             $data_children = json_decode($rally['data_children'], true);
             return ['data' => $data, 'data_children' => $data_children];
         }, $rallydatas);
-
-        $rallydatas = $this->_handleParentMedia($rallydatas, $r['dataset_id'], $request);
+dd($rallydatas);
+        $resources = $this->resource_repository
+            ->getByDatasetId($r['dataset_id'])
+            ->keyBy('id')
+            ->toArray();
+        $rallydatas = $this->_handleParentMedia($rallydatas, $r['dataset_id'], $request, $resources);
 
         $totalPage = ceil($total / $perPage);
         if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
@@ -274,11 +275,51 @@ class RestfulController extends Controller
     public function detail($resourceName, $dataId, Request $request)
     {
         $r = $request->input('_restful');
-        $rallydata = $this->_findRallyByDataId($r['dataset_id'], $resourceName, $dataId);
-        $rallydata = @$this->_handleParentMedia([$rallydata], $r['dataset_id'], $request)[0];
+        $rally = $this->_findRallyByDataId($r['dataset_id'], $resourceName, $dataId);
+        $resources = $this->resource_repository
+            ->getByDatasetId($r['dataset_id'])
+            ->keyBy('id')
+            ->toArray();
+        if ($request->has('_parent')) {
+//            $parents = $this->_getParents($r['dataset_id'], [$rally['id']], $resources, [$rally]);
+//            $rally['data']['_parent'] = @$parents[$rally['id']];
+            $rally = @$this->_getParents($r['dataset_id'], [$rally['id']], $resources, [$rally])[0];
+        }
+        $rallydata = @$this->_handleParentMedia([$rally], $r['dataset_id'], $request, $resources);
+        $rallydata = @$rallydata[0];
         $res = ['status' => true, 'data' => $rallydata];
         $res = array_merge($res, $this->_getSystem());
         return response()->json($res);
+    }
+
+    protected function _getParents($datasetId, $rallyIds, $resources, $rallies)
+    {
+        $query = "
+SELECT rallydatas.*
+FROM rallydatas
+WHERE rallydatas.dataset_id=$datasetId
+AND rallydatas.data_children REGEXP 'rallydata_ids.+?(" . implode('|', $rallyIds) . ")'
+AND rallydatas.deleted_at IS NULL";
+        $results = DB::select(DB::raw($query));
+        $parents = json_decode(json_encode($results), true);
+        $parentData = [];
+        foreach ($parents as $parent) {
+            $children = json_decode($parent['data_children'], true);
+            $data = json_decode($parent['data'], true);
+            foreach ($rallyIds as $rallyId) {
+                foreach ($children as $child) {
+                    if(in_array($rallyId, $child['rallydata_ids'])){
+                        $parentData[$rallyId] = $parentData[$rallyId] ?? [];
+                        $r = $resources[$parent['resource_id']];
+                        $parentData[$rallyId][$r['name']] = $data;
+                    }
+                }
+            }
+        }
+        foreach ($rallies as &$rally) {
+            $rally['data']['_parent'] = @$parentData[$rally['id']];
+        }
+        return $rallies;
     }
 
     /**

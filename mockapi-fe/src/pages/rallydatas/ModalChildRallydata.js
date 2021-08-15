@@ -35,15 +35,16 @@ const ModalChildRallydata = () => {
         <div className="h-96 overflow-y-auto ">
             <div className="">
                 <CheckboxGroup
-                    value={checkedList[mRallydata?.resource?.name]}
+                    value={checkedList[mRallydata?.resource?.fName]}
                     onChange={(list) => {
-                        dispatch(commonOnCheck(mRallydata?.resource?.name, plainOptions, list))
+                        dispatch(commonOnCheck(mRallydata?.resource?.fName, plainOptions, list))
                     }}
                 >
                     <RenderTableRallydata
                         typeShow="checkbox"
                         mlDRRallydata={{data: rallies}}
                         fieldsRallydata={fieldsRallydata[mRallydata?.resource?.id]}
+                        // resourceName={mRallydata?.resource?.fName}
                     />
                 </CheckboxGroup>
             </div>

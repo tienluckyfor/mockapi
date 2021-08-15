@@ -38,6 +38,7 @@ export function setCommon(state) {
 }
 
 export function setCommonMerge(key, item) {
+    console.log('setCommonMerge', {key, item})
     return async (dispatch) => {
         dispatch(setMerge({...{}, [key]: item}))
     }
