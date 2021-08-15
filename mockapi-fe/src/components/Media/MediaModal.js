@@ -228,15 +228,17 @@ export const MediaModal = () => {
             type="error"
             action={
                 <Space direction="vertical">
-                    <Button size="small" type="primary" onClick={() => dispatch(deleteMedia(checkedList[mMedia.name]))}>
+                    <Button size="small" type="primary"
+                            onClick={() => dispatch(deleteMedia(checkedList[mMedia.name]))}>
                         Accept
                     </Button>
-                    <Button size="small" danger type="ghost">
+                    <Button size="small" danger type="ghost"
+                        onClick={()=>dispatch(setMediaMerge('adMedium', {rallies: []}))}
+                    >
                         Decline
                     </Button>
                 </Space>
             }
-            // closable
         />)
     }
     return (<Modal
