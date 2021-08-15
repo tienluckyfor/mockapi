@@ -181,6 +181,7 @@ class RestfulController extends Controller
             $item = $item['data'];
             if ($fields) {
                 array_unshift($fields, 'id');
+                array_unshift($fields, '_parent');
                 $item = array_intersect_key($item, array_flip($fields));
             }
         }
@@ -216,19 +217,17 @@ class RestfulController extends Controller
         [$rallydatas, $total, $isPrev, $isNext] = $this->rallydata_repository
             ->getByDatasetIdResourceName($r['dataset_id'], $resourceName,
                 [$perPage, $currentPage, $sorts, $searchs]);
-        dd($rallydatas);
-        $rallydatas = array_map(function ($rally) {
-            $data = json_decode($rally['data'], true);
-            $data_children = json_decode($rally['data_children'], true);
-            return ['data' => $data, 'data_children' => $data_children];
-        }, $rallydatas);
-dd($rallydatas);
+        $rallyIds = collect($rallydatas)->pluck('id')->toArray();
         $resources = $this->resource_repository
             ->getByDatasetId($r['dataset_id'])
             ->keyBy('id')
             ->toArray();
+        if ($request->has('_parent')) {
+            $rallydatas = $this->_getParents($r['dataset_id'], $rallyIds, $resources, $rallydatas);
+        }
+//dd($rallydatas);
         $rallydatas = $this->_handleParentMedia($rallydatas, $r['dataset_id'], $request, $resources);
-
+//dd($rallydatas);
         $totalPage = ceil($total / $perPage);
         if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
             $isPrev = false;
@@ -308,7 +307,7 @@ AND rallydatas.deleted_at IS NULL";
             $data = json_decode($parent['data'], true);
             foreach ($rallyIds as $rallyId) {
                 foreach ($children as $child) {
-                    if(in_array($rallyId, $child['rallydata_ids'])){
+                    if (in_array($rallyId, $child['rallydata_ids'])) {
                         $parentData[$rallyId] = $parentData[$rallyId] ?? [];
                         $r = $resources[$parent['resource_id']];
                         $parentData[$rallyId][$r['name']] = $data;

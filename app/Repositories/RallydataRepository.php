@@ -209,6 +209,11 @@ class RallydataRepository
         } catch (\QueryException $e) {
             throw new QueryException($e->getMessage());
         }
+        $rallyDatas = array_map(function ($rally) {
+            $rally['data'] = json_decode($rally['data'], true);
+            $rally['data_children'] = json_decode($rally['data_children'], true);
+            return $rally;
+        }, $rallyDatas);
         return [$rallyDatas, $total, $isPrev, $isNext];
     }
 
