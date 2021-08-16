@@ -8,6 +8,7 @@ use App\Services\MediaService;
 use Carbon\Carbon;
 use Faker;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -35,6 +36,27 @@ class RallydataRepository
             return $rally->toArray();
         }
         return [];
+    }
+
+    public function findByDataId($datasetId, $resourceId, $dataId)
+    {
+        $query = "
+SELECT rallydatas.*
+FROM rallydatas 
+WHERE rallydatas.dataset_id={$datasetId} 
+AND rallydatas.resource_id={$resourceId}
+AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS NULL";
+        $results = DB::select(DB::raw($query));
+        $rallydata = json_decode(json_encode($results), true);
+        $rallydata = array_map(function ($item) {
+            $item['data'] = json_decode($item['data'], true);
+            $item['data_children'] = json_decode($item['data_children'], true);
+            return $item;
+        }, $rallydata ?? []);
+        $rallydata = Arr::where($rallydata, function ($item, $key) use ($dataId) {
+            return @$item['data']['id'] == $dataId;
+        });
+        return Arr::first($rallydata);
     }
 
     public function fillData($resource, $amounts, $locale)
@@ -147,28 +169,69 @@ class RallydataRepository
         return $rallyIds;
     }
 
-    public function getByDatasetIdResourceId($datasetId, $resourceId, $select = '*')
+    public function getByDatasetIdResourceIdParentSearch($datasetId, $resourceId, $config = [])
     {
-        $rallyDatas = RallyData::selectRaw($select)
-            ->where('dataset_id', $datasetId)
+        [$perPage, $currentPage, $sorts, $searchs, $parent] = $config;
+        $pResource = $this->resource_repository->findByNameDatasetId($parent[0], $datasetId);
+        if (!$pResource) {
+            throw new \ErrorException('Parent resource not found!');
+        }
+        $pRally = $this->findByDataId($datasetId, $pResource->id, $parent[1]);
+        $rallyIds = collect(@$pRally['data_children'])
             ->where('resource_id', $resourceId)
-            ->orderBy('id', 'desc')
-            ->get();
-        return $rallyDatas;
-    }
-
-    public function getByDatasetIdResourceName($datasetId, $resourceName, $config = [])
-    {
-        [$perPage, $currentPage, $sorts, $searchs] = $config;
+            ->first();
+        $rallyIds = @$rallyIds['rallydata_ids'] ?? null;
+        $sqlChild = $rallyIds ? "and `rallydatas`.`id` in (" . implode(', ', $rallyIds) . ")"
+            : "and `rallydatas`.`id`=0";
 
         $offset = $perPage == -1 ? 0 : $perPage * ($currentPage - 1);
         $sql = "select * from (select rallydatas.id, rallydatas.data, rallydatas.data_children";
         $sql .= isset($sorts[0]) ? ", JSON_EXTRACT(data, '$.{$sorts[0]}') AS sortKey" : "";
         $sql .= isset($searchs[0]) ? ", LOWER(CONCAT(JSON_EXTRACT(data, '$.{$searchs[0]}'))) AS searchKey" : "";
         $sql .= " from `rallydatas`
-               inner join `resources` on `resources`.`id` = `rallydatas`.`resource_id`
       where `dataset_id` = {$datasetId}
-        and `resources`.`name` = '{$resourceName}'
+        and `rallydatas`.`resource_id` = '{$resourceId}'
+        and `rallydatas`.`deleted_at` is null
+        {$sqlChild}
+     ) t";
+
+        $searchKey = isset($searchs[1]) ? strtolower($searchs[1]) : "";
+        $sql .= isset($searchs[1]) ? " where `searchKey` like '%{$searchKey}%'" : "";
+        $total = 0;
+        try {
+            $countSql = preg_replace('#^select \*#mis', 'select count(*) as count', $sql);
+            $total = DB::selectOne($countSql);
+            $total = isset($total->count) ? $total->count : 0;
+        } catch (\QueryException $e) {
+            throw new QueryException($e->getMessage());
+        }
+
+        if (isset($sorts[0])) {
+            $sorts[1] = isset($sorts[1]) ? $sorts[1] : 'desc';
+            if ($sorts[0] == 'id') {
+                $sql .= " order by `id` {$sorts[1]}";
+            } else {
+                $sql .= " order by `sortKey` {$sorts[1]}";
+            }
+        }
+        $perPage += 1;
+        if ($currentPage != -1) {
+            $sql .= " limit {$perPage} offset {$offset}";
+        }
+        return $this->_handleData($currentPage, $sql, $perPage, $total);
+
+    }
+
+    public function getByDatasetIdResourceId($datasetId, $resourceId, $config = [])
+    {
+        [$perPage, $currentPage, $sorts, $searchs] = $config;
+        $offset = $perPage == -1 ? 0 : $perPage * ($currentPage - 1);
+        $sql = "select * from (select rallydatas.id, rallydatas.data, rallydatas.data_children";
+        $sql .= isset($sorts[0]) ? ", JSON_EXTRACT(data, '$.{$sorts[0]}') AS sortKey" : "";
+        $sql .= isset($searchs[0]) ? ", LOWER(CONCAT(JSON_EXTRACT(data, '$.{$searchs[0]}'))) AS searchKey" : "";
+        $sql .= " from `rallydatas`
+      where `dataset_id` = {$datasetId}
+        and `rallydatas`.`resource_id` = '{$resourceId}'
         and `rallydatas`.`deleted_at` is null
      ) t";
 
@@ -194,8 +257,31 @@ class RallydataRepository
         $perPage += 1;
         if ($currentPage != -1) {
             $sql .= " limit {$perPage} offset {$offset}";
-
         }
+        return $this->_handleData($currentPage, $sql, $perPage, $total);
+//        $rallyDatas = [];
+//        $isPrev = $currentPage == 1 ? false : true;
+//        $isNext = false;
+//        try {
+//            $rallyDatas = DB::select($sql);
+//            $rallyDatas = json_decode(json_encode($rallyDatas), true);
+//            if (count($rallyDatas) == $perPage) {
+//                $isNext = true;
+//                array_pop($rallyDatas);
+//            }
+//        } catch (\QueryException $e) {
+//            throw new QueryException($e->getMessage());
+//        }
+//        $rallyDatas = array_map(function ($rally) {
+//            $rally['data'] = json_decode($rally['data'], true);
+//            $rally['data_children'] = json_decode($rally['data_children'], true);
+//            return $rally;
+//        }, $rallyDatas);
+//        return [$rallyDatas, $total, $isPrev, $isNext];
+    }
+
+    protected function _handleData($currentPage, $sql, $perPage, $total)
+    {
         $rallyDatas = [];
         $isPrev = $currentPage == 1 ? false : true;
         $isNext = false;

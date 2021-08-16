@@ -98,6 +98,11 @@ class PostmanService
                                             "value"    => "",
                                             "disabled" => true
                                         ],
+                                        [
+                                            "key"      => "_parent",
+                                            "value"    => "",
+                                            "disabled" => true
+                                        ],
                                     ]
                                 ]
                             ],
@@ -141,11 +146,21 @@ class PostmanService
                                             "disabled" => true
                                         ],
                                         [
+                                            "key"      => "parent",
+                                            "value"    => "product_categories,1",
+                                            "disabled" => true
+                                        ],
+                                        [
                                             "key"   => "fields",
                                             "value" => $fields
                                         ],
                                         [
                                             "key"      => "_system",
+                                            "value"    => "",
+                                            "disabled" => true
+                                        ],
+                                        [
+                                            "key"      => "_parent",
                                             "value"    => "",
                                             "disabled" => true
                                         ],
