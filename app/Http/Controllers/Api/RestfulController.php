@@ -153,30 +153,45 @@ class RestfulController extends Controller
     protected function _handleParentMedia($rallydatasCurrent, $datasetId, $request, $resources)
     {
         $rallydataIds = [];
-        foreach ($rallydatasCurrent as $rallydata) {
-            $data_children = @$rallydata['data_children'] ?? [];
-            foreach ($data_children as $data_child) {
-                $rallydataIds = array_merge($rallydataIds, $data_child['rallydata_ids']);
-            }
-        }
-        $rallydatas = $this->rallydata_repository
-            ->getByDatasetId($datasetId, $rallydataIds)
-            ->groupBy('resource_id');
-        $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
-        $media = Media::whereIn('id', $mediaIds)->get();
-        $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
         $fields = $request->fields ? explode(',', $request->fields) : false;
+        $isChildField = true;
+
+        if ($fields) {
+            $isChildField = [];
+            foreach ($fields as $field) {
+                if (array_search($field, array_column($resources, 'name'))) {
+                    $isChildField[] = $field;
+                }
+            }
+            $isChildField = empty($isChildField) ? false : true;
+        }
+        if ($isChildField) {
+            foreach ($rallydatasCurrent as $rallydata) {
+                $data_children = @$rallydata['data_children'] ?? [];
+                foreach ($data_children as $data_child) {
+                    $rallydataIds = array_merge($rallydataIds, $data_child['rallydata_ids']);
+                }
+            }
+            $rallydatas = $this->rallydata_repository
+                ->getByDatasetId($datasetId, $rallydataIds)
+                ->groupBy('resource_id');
+            $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
+            $media = Media::whereIn('id', $mediaIds)->get();
+            $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
+        }
         foreach ($rallydatasCurrent as &$item) {
-            $data_children = @$item['data_children'] ?? [];
-            foreach ($data_children as $data_child) {
-                $r = $resources[$data_child['resource_id']];
-                $rd = collect($rallydatas[$r['id']]);
-                $item['data'][$r['name']] = $rd
-                    ->whereIn('id', $data_child['rallydata_ids'])
-                    ->map(function ($item1) {
-                        return $item1['data'];
-                    })
-                    ->values();
+            if ($isChildField) {
+                $data_children = @$item['data_children'] ?? [];
+                foreach ($data_children as $data_child) {
+                    $r = $resources[$data_child['resource_id']];
+                    $rd = collect($rallydatas[$r['id']]);
+                    $item['data'][$r['name']] = $rd
+                        ->whereIn('id', $data_child['rallydata_ids'])
+                        ->map(function ($item1) {
+                            return $item1['data'];
+                        })
+                        ->values();
+                }
             }
             $item = $item['data'];
             if ($fields) {
