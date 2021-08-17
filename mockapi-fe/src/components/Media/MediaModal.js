@@ -19,6 +19,7 @@ import "moment-timezone"
 
 import UploadMedia from "./UploadMedia";
 import {usersSelector} from "slices/users";
+import {objToString} from "../../services";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -56,7 +57,6 @@ export const MediaModal = () => {
 
     useEffect((e) => {
         function onMediaUpload(e) {
-            console.log('onMediaUpload mMedia', mMedia)
             if (!mMedia?.visible) {
                 return;
             }
@@ -69,11 +69,9 @@ export const MediaModal = () => {
             dispatch(uploadMediaPaste(mMedia.name))
         }
         window.addEventListener('paste', onMediaUpload)
-        // if (!mMedia?.visible) {
         return () => {
             window.removeEventListener('paste', onMediaUpload)
         }
-        // }
     }, [mMedia])
 
     const gridView = () => {
@@ -81,7 +79,8 @@ export const MediaModal = () => {
             <Image.PreviewGroup>
                 <Space size={[10, 10]} wrap>
                     <UploadMedia listType="picture-card" plainOptions={plainOptions}>
-                        <div style={{marginTop: 8}}>Upload</div>
+                        <Button type="link" loading={pMedia.isLoading} icon={<UploadOutlined style={{fontSize:`1.5em`}}/>} />
+                        {/*<div style={{marginTop: 8}}>Upload</div>*/}
                     </UploadMedia>
                     {(mlMedia.data ?? []).map((medium, key) =>
                         <div key={key} className={`relative border border-gray-300 p-1`}
@@ -120,7 +119,7 @@ export const MediaModal = () => {
         return (
             <Image.PreviewGroup>
                 <UploadMedia plainOptions={plainOptions}>
-                    <Button icon={<UploadOutlined/>}>Upload Media</Button>
+                    <Button icon={<UploadOutlined/>} loading={pMedia.isLoading}>Upload Media</Button>
                 </UploadMedia>
                 <List
                     dataSource={(mlMedia.data ?? [])}
@@ -213,9 +212,9 @@ export const MediaModal = () => {
                         dataSource={adMedium.rallies}
                         renderItem={item => (
                             <List.Item>
-                                <Tooltip title={JSON.stringify(item)}>
+                                <Tooltip title={objToString(item)}>
                                     <p className="truncate w-72">
-                                        {JSON.stringify(item)}
+                                        {objToString(item)}
                                     </p>
                                 </Tooltip>
                             </List.Item>

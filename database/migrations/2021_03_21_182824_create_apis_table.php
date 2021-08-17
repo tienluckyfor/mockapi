@@ -17,6 +17,7 @@ class CreateApisTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->json('collaborators')->nullable();
+            $table->json('thumb_sizes')->nullable();
 
             $table->unsignedBigInteger('user_id')->nullable();
 //            $table->foreign('user_id')->references('id')->on('users');

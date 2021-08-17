@@ -16,6 +16,11 @@ class Api extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'thumb_sizes',
+    ];
+
+    protected $casts = [
+        'thumb_sizes' => 'array',
     ];
 
     public function scopeEnabledApis($query) {

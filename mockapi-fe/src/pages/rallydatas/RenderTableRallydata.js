@@ -4,6 +4,7 @@ import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} f
 import {deleteRallydata, duplicateRallydata, setRallydataMerge} from "slices/rallydatas";
 import {getItype} from "./configRallydata";
 import {useDispatch, useSelector} from "react-redux";
+import {objToString} from "../../services";
 
 const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, resourceName}) => {
     const dispatch = useDispatch()
@@ -143,42 +144,42 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                     return <Image.PreviewGroup>
                         <Space size={[4, 4]} align="start" wrap>
                             {(val.media ?? []).map((medium, key) => {
-                                if (medium.file_type === 'image')
-                                    return <Image
-                                        key={key}
-                                        preview={{src: medium.file, mask: <EyeOutlined/>}}
-                                        height={30}
-                                        width={30}
-                                        style={{objectFit: "cover"}}
-                                        src={medium.thumb_image}
-                                    />
-                                return <a key={key} target="_blank" href={medium.file}>
-                                    <Image
-                                        preview={false}
-                                        height={30}
-                                        width={30}
-                                        style={{objectFit: "cover"}}
-                                        src={medium.thumb_image}
-                                    />
-                                </a>
+                                    if (medium.file_type === 'image')
+                                        return <Image
+                                            key={key}
+                                            preview={{src: medium.file, mask: <EyeOutlined/>}}
+                                            height={30}
+                                            width={30}
+                                            style={{objectFit: "cover"}}
+                                            src={medium.thumb_image}
+                                        />
+                                    return <a key={key} target="_blank" href={medium.file}>
+                                        <Image
+                                            preview={false}
+                                            height={30}
+                                            width={30}
+                                            style={{objectFit: "cover"}}
+                                            src={medium.thumb_image}
+                                        />
+                                    </a>
                                 }
                             )}
                         </Space>
                     </Image.PreviewGroup>
                 }
                 if (iType === 'Object' || iType === 'Array') {
-                    return <Tooltip title={JSON.stringify(val)}>
+                    return <Tooltip title={objToString(val)}>
                         <p className="text-sm truncate-2y">
-                            {JSON.stringify(val, null, '  ')}
+                            {objToString(val, true)}
                         </p>
                     </Tooltip>
                 }
                 if (iType === 'Resource') {
                     childFields[field.name] = field.name;
-                    return <Tooltip title={JSON.stringify(val)}>
+                    return <Tooltip title={objToString(val)}>
                         <p className="text-sm truncate-2y">
                             <b className="mr-1 text-red-500">{(val ?? []).length}</b>
-                            {JSON.stringify(val, null, '  ')}
+                            {objToString(val, true)}
                         </p>
                     </Tooltip>
                 }

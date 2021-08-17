@@ -66,8 +66,8 @@ const FormResource = ({formValue, resourceName}) => {
                                 }
                                 return (
                                     <Space
-                                        className={`h-10`}
                                         key={key}
+                                        className={`h-10`}
                                         style={{display: 'flex', marginBottom: 8}}
                                         align="baseline"
                                     >

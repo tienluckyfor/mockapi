@@ -5,7 +5,7 @@ import moment from "moment"
 import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
 
-import {apisSelector, editApi, deleteApi, duplicateApi, myApiList, setApiMerge} from "slices/apis";
+import {apisSelector, deleteApi, duplicateApi, myApiList, setApiMerge} from "slices/apis";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
 import {queryMe} from "slices/users";
 
@@ -13,6 +13,7 @@ import {Header, Loading} from "components";
 import CreateApiForm from "./CreateApiForm";
 import EditApiForm from "./EditApiForm";
 import AppHelmet from "shared/AppHelmet";
+import {objToString} from "services";
 
 const ApiListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -72,13 +73,26 @@ const ApiListPage = () => {
                 title: 'Name',
                 dataIndex: 'name',
                 ellipsis: true,
-                render: (text, api, index) => <Tooltip title={api.name}>{api.name}</Tooltip>,
+                render: (text, api, index) => {
+                    console.log('1')
+                    return <Tooltip title={text}>{text}</Tooltip>
+                },
+            },
+            {
+                title: 'Thumb sizes',
+                dataIndex: 'thumb_sizes',
+                ellipsis: true,
+                render: (text, api, index) => {
+                    console.log('2')
+                    return <Tooltip title={objToString(text)}>{objToString(text)}</Tooltip>
+                },
             },
             {
                 title: 'Last updated',
                 ellipsis: true,
                 render: (text, api, index) => {
-                    return <Tooltip title={api.updated_at}>{moment(api.updated_at).fromNow()}</Tooltip>
+                    console.log('3')
+                    return <Tooltip title={api?.updated_at}>{moment(text).fromNow()}</Tooltip>
                 }
             },
             {
@@ -86,6 +100,7 @@ const ApiListPage = () => {
                 ellipsis: true,
                 width: '10%',
                 render: (text, api, index) => {
+                    console.log('4')
                     return <Dropdown
                         overlay={menu(api)}
                         arrow
@@ -119,10 +134,6 @@ const ApiListPage = () => {
                 {eApi.isOpen &&
                 <EditApiForm
                     visible={true}
-                    onCreate={(values) => dispatch(editApi(values))}
-                    onCancel={() => {
-                        dispatch(setApiMerge(`eApi`, {isOpen: false}))
-                    }}
                 />
                 }
                 {mlApi?.search?.name &&

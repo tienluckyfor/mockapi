@@ -78,9 +78,6 @@ const UploadMedia = ({listType, children, plainOptions}) => {
             <UploadAnt {...uploadProps} fileList={fileList1}>
                 {children}
             </UploadAnt>
-            {/*<pre className="text-sm">
-                {JSON.stringify(fileList, null, '  ')}
-            </pre>*/}
         </>
     )
 }

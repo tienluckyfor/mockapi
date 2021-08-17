@@ -1,7 +1,8 @@
-import {Form, Input, InputNumber, Button} from 'antd';
+import {Form, Input, Button} from 'antd';
 
 import {useDispatch, useSelector} from "react-redux";
 import {apisSelector, setApiMerge, createApi} from "slices/apis";
+import FormApi from "./FormApi";
 
 const CreateApiForm = () => {
     const dispatch = useDispatch()
@@ -13,13 +14,7 @@ const CreateApiForm = () => {
             className="border border-indigo-200 p-4 mt-4 rounded-sm"
             layout={`vertical`}
         >
-            <Form.Item
-                name="name"
-                label="Name"
-                rules={[{ required: true}]}
-            >
-                <Input/>
-            </Form.Item>
+            <FormApi/>
 
             <div className="flex items-center justify-end mt-3 ">
                 <Button
