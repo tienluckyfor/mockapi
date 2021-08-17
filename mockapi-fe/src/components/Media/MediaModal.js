@@ -30,7 +30,7 @@ export const MediaModal = () => {
 
     const {qMe} = useSelector(usersSelector)
     const {dataset_id_RD,} = useSelector(rallydatasSelector)
-    const {mlMedia, mMedia, adMedium, dMedium,pMedia} = useSelector(mediaSelector)
+    const {mlMedia, mMedia, adMedium, dMedium, pMedia} = useSelector(mediaSelector)
     const {checkedList, indeterminate, checkAll,} = useSelector(commonsSelector)
     const [dataset_id, setDataset_id] = useState()
     const [viewMode, setViewMode] = useState('grid')
@@ -54,28 +54,26 @@ export const MediaModal = () => {
         setPlainOptions(plainOptions)
     }, [mlMedia])
 
-    useEffect(() => {
-        window.addEventListener('paste', (e) => {
-            if(!mMedia?.visible) return;
+    useEffect((e) => {
+        function onMediaUpload(e) {
+            console.log('onMediaUpload mMedia', mMedia)
+            if (!mMedia?.visible) {
+                return;
+            }
             let files = [];
             for (let item of e.clipboardData.items) {
-                if (item.kind === 'file') {
+                if (item.kind === 'file')
                     files.push(item.getAsFile())
-                }
             }
-            dispatch(setMedia({pMedia: files}))
-            // let items = e.clipboardData.items
-            // console.log('items', items)
-            // for (let item of items) {
-            //     if (item.kind === 'file') {
-            //         const pasteFile = item.getAsFile()
-            //         // dispatch(setMedia({pMedia: {pasteFile}}))
-            //         dispatch(setMedia({pMedia: [...pMedia, pasteFile]}))
-            //     }
-            // }
-            console.log('mMedia', {pMedia, mMedia})
+            dispatch(setMediaMerge('pMedia', {files}))
             dispatch(uploadMediaPaste(mMedia.name))
-        })
+        }
+        window.addEventListener('paste', onMediaUpload)
+        // if (!mMedia?.visible) {
+        return () => {
+            window.removeEventListener('paste', onMediaUpload)
+        }
+        // }
     }, [mMedia])
 
     const gridView = () => {
@@ -233,7 +231,7 @@ export const MediaModal = () => {
                         Accept
                     </Button>
                     <Button size="small" danger type="ghost"
-                        onClick={()=>dispatch(setMediaMerge('adMedium', {rallies: []}))}
+                            onClick={() => dispatch(setMediaMerge('adMedium', {rallies: []}))}
                     >
                         Decline
                     </Button>

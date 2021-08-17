@@ -15,7 +15,7 @@ export const initialState = {
     mlMedia: {isRefresh: false, search: {name: ``}},
     mMedia: {},
     cbMedia: {},
-    pMedia: [],
+    pMedia: {files: []},
     uMedia: [],
 };
 
@@ -151,12 +151,13 @@ export function myMediaList(dataset_id) {
 
 export function uploadMediaPaste(name) {
     return async (dispatch, getState) => {
+        dispatch(setMerge({pMedia:{isLoading: true}}))
         const {pMedia,} = getState().media
         const {dataset_id_RD,} = getState().rallydatas
         const {checkedList} = getState().commons
 
         let promises = []
-        await pMedia.map((file) => {
+        pMedia.files.map((file) => {
             const formData = new FormData()
             formData.append('file', file)
             formData.append('dataset_id', dataset_id_RD)
@@ -168,10 +169,11 @@ export function uploadMediaPaste(name) {
             values.map((res) => {
                 cl = [...cl, res?.data?.id.toString()]
             })
-            console.log('cl', cl)
             dispatch(setCommonMerge('checkedList', {[name]: cl}))
-            dispatch(setData({pMedia: []}))
-            dispatch(setMerge({mlMedia: {isRefresh: true}}))
+            dispatch(setMerge({
+                pMedia: {files: [], isLoading: false},
+                mlMedia: {isRefresh: true}
+            }))
         })
     }
 }

@@ -26,13 +26,13 @@ const FormRallydata = ({fields, from, childResources,}) => {
                     files.push(item.getAsFile())
                 }
             }
-            dispatch(setMedia({pMedia: files}))
+            dispatch(setMediaMerge('pMedia', {files}))
         })
     }, [])
 
     useEffect(() => {
         if(!mMedia.visible)
-            dispatch(setMedia({pMedia: []}))
+            dispatch(setMediaMerge('pMedia', {files: []}))
     }, [mMedia])
 
     return (
@@ -88,10 +88,11 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                                     name: fName
                                                 }))}
                                             >Choose media</Button>
-                                            {pMedia.length!=0 &&
+                                            {pMedia.files.length!=0 &&
                                             <Button
                                                 type="dashed"
-                                                onClick={(e) => dispatch(uploadMediaPaste(name))}
+                                                onClick={(e) => dispatch(uploadMediaPaste(`${from}-${name}`))}
+                                                loading={pMedia.isLoading}
                                             >Paste</Button>
                                             }
                                         </Space>
