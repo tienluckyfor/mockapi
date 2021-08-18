@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, myDatasetList, setDataset} from "slices/datasets";
 import {objToUrlParams, resfulClient} from "services";
 import {myRallydataList, rallydatasSelector} from "slices/rallydatas";
-import {mediaSelector, uploadFile} from "../../slices/media";
+import {mediaSelector, uploadFile} from "slices/media";
 
 const Amount = ({value}) => (
     <span

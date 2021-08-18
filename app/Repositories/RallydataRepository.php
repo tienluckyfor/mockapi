@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\DataSet;
 use App\Models\Media;
 use App\Models\RallyData;
 use App\Services\MediaService;
@@ -379,41 +380,75 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
      * @param Media $media
      * @return mixed
      */
-    protected function _handleMediumItem($mediaId, $media)
+    protected function _handleMediumItem($mediaId, $media, $thumbSizes)
     {
+        $file = asset("storage/filldata-media/{$mediaId}.jpg");
+        $fileType = 'image';
+        $thumbs = [];
+        foreach ($thumbSizes as $size) {
+            $thumbs[$size['width']] = $this->media_service->get_thumb($file, $size);
+        }
+        $medium = $media->where('id', $mediaId)->first();
+        if ($mediaId > 0 && $medium) {
+            $file = $medium->file;
+            $fileType = $medium->file_type;
+            $thumbs = $medium->thumb_files;
+        }
+        /*
         $file = asset("storage/filldata-media/{$mediaId}.jpg");
         $thumbImage = $this->media_service->get_thumb($file);
         $fileType = 'image';
         $medium = $media->where('id', $mediaId)->first();
-//        if ($mediaId > 0 && !$medium) {
-//            return;
-//        }
         if ($mediaId > 0 && $medium) {
             $file = $medium->file;
             $thumbImage = $medium->thumb_image;
             $fileType = $medium->file_type;
-        }
+        }*/
+
         $item = [
             'id'          => $mediaId,
-            'file'        => $file,
-            'thumb_image' => $thumbImage,
+//            'thumb_image' => $thumbImage,
             'file_type'   => $fileType,
+            'file'        => $file,
+            'thumb_files' => $thumbs,
         ];
         return $item;
     }
 
     public function mappingMedia($rallydatas, $media)
     {
+//        dd($rallydatas, $media);
+        $thumbSizes = null;
+        $datasetId = null;
+
         foreach ($rallydatas as &$rallydata) {
             foreach ($rallydata as &$rallydatum) {
                 if (!is_array($rallydatum)) {
                     continue;
                 }
+                // thumbSizes
+                if (!($thumbSizes && $datasetId)) {
+                    if (isset($rallydatum['media_ids'])) {
+                        $datasetId = $rallydata['dataset_id'];
+                    }
+                    foreach ($rallydatum as &$item0) {
+                        if (!is_array($item0)) {
+                            continue;
+                        }
+                        foreach ($item0 as &$item) {
+                            if (isset($item['media_ids'])) {
+                                $datasetId = $rallydatum['dataset_id'];
+                            }
+                        }
+                    }
+                    $thumbSizes = DataSet::find($datasetId)->api->thumb_sizes;
+                }
+
                 // restful
                 if (isset($rallydatum['media_ids'])) {
                     $rallydatum = array_merge($rallydatum, ['media' => []]);
                     foreach ($rallydatum['media_ids'] as $mediaId) {
-                        $rallydatum['media'][] = $this->_handleMediumItem($mediaId, $media);
+                        $rallydatum['media'][] = $this->_handleMediumItem($mediaId, $media, $thumbSizes);
                     }
                     continue;
                 }
@@ -427,7 +462,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                         if (isset($item['media_ids'])) {
                             $item = array_merge($item, ['media' => []]);
                             foreach ($item['media_ids'] as $mediaId) {
-                                $item['media'][] = $this->_handleMediumItem($mediaId, $media);
+                                $item['media'][] = $this->_handleMediumItem($mediaId, $media, $thumbSizes);
                             }
                         }
                     }

@@ -8,18 +8,17 @@ import {
     deleteMedia,
     mediaSelector,
     myMediaList,
-    setMedia,
     setMediaMerge,
     uploadMediaPaste
 } from "slices/media";
-import {commonsSelector, commonOnCheck, commonOnCheckAll, setCommonMerge} from "slices/commons";
+import {commonsSelector, commonOnCheck, commonOnCheckAll, } from "slices/commons";
 import {useEffect, useState} from "react"
 import moment from "moment"
 import "moment-timezone"
 
 import UploadMedia from "./UploadMedia";
 import {usersSelector} from "slices/users";
-import {getFirstThumb, objToString} from "../../services";
+import {getFirstThumb, objToString} from "services";
 
 const {Search} = Input;
 const {Option} = Select;

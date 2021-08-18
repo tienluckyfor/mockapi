@@ -8,3 +8,4 @@ export {Share} from "./Share";
 export {ControlledJsonEditor} from "./ControlledJsonEditor";
 export {ControlledAceEditor} from "./ControlledAceEditor";
 export {ReactQuillCustom} from "./ReactQuillCustom";
+export {ThumbChecked} from "./Media/ThumbChecked";

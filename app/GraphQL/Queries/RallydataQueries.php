@@ -44,10 +44,9 @@ class RallydataQueries
             ->groupBy('resource_id');
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
         $media = Media::whereIn('id', $mediaIds)->get();
-//        $media = $this->media_repository
-//            ->getByIds($mediaIds, 'id, file_name');
-////            ->keyBy('id')
-////            ->toArray();
+
+       \Illuminate\Support\Facades\Log::channel('single')->info('1', []);
+       
         $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
 // handle parent
         $resources = $this->resource_repository

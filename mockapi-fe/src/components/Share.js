@@ -10,6 +10,7 @@ import moment from "moment"
 import "moment-timezone";
 import {datasetsSelector} from "slices/datasets";
 import {isMobile} from 'react-device-detect';
+import {getFirstThumb} from "../services";
 
 export const Share = ({shareable_type, shareable_id}) => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -78,7 +79,8 @@ export const Share = ({shareable_type, shareable_id}) => {
                                         className="rounded-full"
                                         size="20"
                                         name={user.name}
-                                        src={user?.medium?.thumb_image}
+                                        // src={user?.medium?.thumb_image}
+                                        src={getFirstThumb(user?.medium)}
                                     />
                                     {user.name}
                                 </Space>
@@ -113,7 +115,8 @@ export const Share = ({shareable_type, shareable_id}) => {
                                     className="rounded-full"
                                     size="20"
                                     name={user_invite.name}
-                                    src={user_invite?.medium?.thumb_image}
+                                    // src={user_invite?.medium?.thumb_image}
+                                    src={getFirstThumb(user_invite?.medium)}
                                 />
 
                                 {is_owner &&

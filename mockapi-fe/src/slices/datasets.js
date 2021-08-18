@@ -235,7 +235,7 @@ export function listDataset() {
         medium{
             id
             file
-            thumb_image
+            thumb_files
         }
     }
     postman{

@@ -222,7 +222,7 @@ export function detailRallydata(dataset_id) {
             medium{
                 id
                 file
-                thumb_image
+                thumb_files
             }
         }
         postman{

@@ -3,11 +3,10 @@ import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
-import {mediaSelector, setMediaMerge, setMedia, uploadMediaPaste} from "slices/media";
-import {commonsSelector, setCommonMerge} from "slices/commons";
+import {mediaSelector, setMediaMerge, } from "slices/media";
+import {commonsSelector, } from "slices/commons";
 import RenderTableRallydata from "./RenderTableRallydata";
-
-import {ControlledAceEditor, ReactQuillCustom} from "components";
+import {ControlledAceEditor, ReactQuillCustom, ThumbChecked} from "components";
 
 const {Option} = Select;
 
@@ -79,7 +78,8 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
-                                    <section className="flex flex-col space-y-3">
+                                    <ThumbChecked name={fName}/>
+                                    {/*<section className="flex flex-col space-y-3">
                                         <Space>
                                             <Button
                                                 className="w-36"
@@ -123,7 +123,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                             </Space>
                                         </div>
                                         }
-                                    </section>
+                                    </section>*/}
                                 </Form.Item>)
                                 break;
                             case `Date`:

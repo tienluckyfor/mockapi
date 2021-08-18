@@ -4,7 +4,7 @@ import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} f
 import {deleteRallydata, duplicateRallydata, setRallydataMerge} from "slices/rallydatas";
 import {getItype} from "./configRallydata";
 import {useDispatch, useSelector} from "react-redux";
-import {objToString} from "../../services";
+import {getFirstThumb, objToString} from "services";
 
 const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, resourceName}) => {
     const dispatch = useDispatch()
@@ -151,7 +151,8 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                                             height={30}
                                             width={30}
                                             style={{objectFit: "cover"}}
-                                            src={medium.thumb_image}
+                                            // src={medium.thumb_image}
+                                            src={getFirstThumb(medium)}
                                         />
                                     return <a key={key} target="_blank" href={medium.file}>
                                         <Image
@@ -159,7 +160,8 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                                             height={30}
                                             width={30}
                                             style={{objectFit: "cover"}}
-                                            src={medium.thumb_image}
+                                            // src={medium.thumb_image}
+                                            src={getFirstThumb(medium)}
                                         />
                                     </a>
                                 }

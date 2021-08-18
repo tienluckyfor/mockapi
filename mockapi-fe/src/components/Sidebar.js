@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
 import {queryMe, usersSelector} from "slices/users";
 import Avatar from "react-avatar";
-import {getURLParams} from "services";
+import {getFirstThumb, getURLParams} from "services";
 import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
@@ -85,7 +85,10 @@ const Sidebar = (props) => {
                                     size="small" maxCount={2}
                                     maxStyle={{color: '#f56a00', backgroundColor: '#fde3cf'}}>
                                     {(dataset.shares ?? []).map(({user_invite}, key) =>
-                                        <AntAvatar src={user_invite?.medium?.thumb_image} key={key}>
+                                        <AntAvatar
+                                            // src={user_invite?.medium?.thumb_image}
+                                            src={getFirstThumb(user_invite?.medium)}
+                                            key={key}>
                                             {user_invite?.medium ? null : user_invite?.name.match(/\b(\w)/g).join('')}
                                         </AntAvatar>
                                     )}
@@ -114,7 +117,8 @@ const Sidebar = (props) => {
                                     className="rounded-full"
                                     size="30"
                                     name={qMe?.data?.name}
-                                    src={qMe?.data?.medium?.thumb_image}
+                                    // src={qMe?.data?.medium?.thumb_image}
+                                    src={getFirstThumb(qMe?.data?.medium)}
                                 />
                             </Link>
                         ]}
@@ -138,7 +142,8 @@ const Sidebar = (props) => {
                                     className="rounded-full"
                                     size="30"
                                     name={qMe?.data?.name}
-                                    src={qMe?.data?.medium?.thumb_image}
+                                    // src={qMe?.data?.medium?.thumb_image}
+                                    src={getFirstThumb(qMe?.data?.medium)}
                                 />
                             </Link>
                         ]}
