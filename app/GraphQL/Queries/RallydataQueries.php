@@ -45,8 +45,6 @@ class RallydataQueries
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
         $media = Media::whereIn('id', $mediaIds)->get();
 
-       \Illuminate\Support\Facades\Log::channel('single')->info('1', []);
-       
         $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
 // handle parent
         $resources = $this->resource_repository
