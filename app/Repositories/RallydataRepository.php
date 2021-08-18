@@ -441,7 +441,11 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                             }
                         }
                     }
+                    
                     $thumbSizes = DataSet::find($datasetId)->api->thumb_sizes;
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$datasetId', [$datasetId]);
+                    \Illuminate\Support\Facades\Log::channel('single')->info('$thumbSizes', [$thumbSizes]);
+                    
                 }
 
                 // restful
