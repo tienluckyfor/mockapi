@@ -14,7 +14,6 @@ export const diffObject = (keys, obj) => {
 }
 
 export const objToString = (obj, isBeauty = false) => {
-    console.log('objToString obj', obj)
     if (!obj) return '-'
     try {
         if (isBeauty)
