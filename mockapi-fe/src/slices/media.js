@@ -126,12 +126,11 @@ export function myMediaList(dataset_id) {
     id
     file_type
     file
-    thumb_image
+    thumb_files
     name_upload
     updated_at
   }
 }`;
-        // console.log('myMediaList dataset_id', dataset_id)
         const res = await apolloClient.query({
             query,
             variables: {dataset_id}

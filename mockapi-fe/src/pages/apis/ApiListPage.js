@@ -74,7 +74,6 @@ const ApiListPage = () => {
                 dataIndex: 'name',
                 ellipsis: true,
                 render: (text, api, index) => {
-                    console.log('1')
                     return <Tooltip title={text}>{text}</Tooltip>
                 },
             },
@@ -83,7 +82,6 @@ const ApiListPage = () => {
                 dataIndex: 'thumb_sizes',
                 ellipsis: true,
                 render: (text, api, index) => {
-                    console.log('2')
                     return <Tooltip title={objToString(text)}>{objToString(text)}</Tooltip>
                 },
             },
@@ -91,7 +89,6 @@ const ApiListPage = () => {
                 title: 'Last updated',
                 ellipsis: true,
                 render: (text, api, index) => {
-                    console.log('3')
                     return <Tooltip title={api?.updated_at}>{moment(text).fromNow()}</Tooltip>
                 }
             },
@@ -100,7 +97,6 @@ const ApiListPage = () => {
                 ellipsis: true,
                 width: '10%',
                 render: (text, api, index) => {
-                    console.log('4')
                     return <Dropdown
                         overlay={menu(api)}
                         arrow

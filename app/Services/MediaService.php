@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\DataSet;
 use finfo;
 use Illuminate\Support\Facades\Auth;
 use Image;
@@ -11,23 +12,36 @@ use Intervention\Image\Exception\NotReadableException;
 class MediaService
 {
 
-    public function get_thumb($imagePath)
+    public function get_thumb($imagePath, $size)
     {
         $imagePath = str_replace('/images/', '/thumb-images/', $imagePath);
-        $imagePath = str_replace('.wepb', '.jpg', $imagePath);
+        $imagePath = str_replace('.wepb', "-{$size['width']}.jpg", $imagePath);
         return $imagePath;
     }
 
-    public function thumb_image($path, $imagePath)
+    public function convertThumbs($path, $filePath, $fileName, $sizes)
     {
-        try {
-            $imagePath = self::get_thumb($imagePath);
-            Image::make($path)
-                ->fit(90, 90)
-                ->save($imagePath, 100);
-            return $imagePath;
-        } catch (NotReadableException $e) {
+        $thumbs = [];
+        foreach ($sizes as $size) {
+            try {
+                $thumbPath = self::get_thumb($filePath, $size);
+                $thumbName = self::get_thumb($fileName, $size);
+                $thumbs[$size['width']] = $thumbName;
+                if (isset($size['height'])) {
+                    Image::make($path)
+                        ->fit($size['width'], $size['height'])
+                        ->save($thumbPath, 100);
+                } else {
+                    Image::make($path)
+                        ->resize($size['width'], null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })
+                        ->save($thumbPath, 100);
+                }
+            } catch (NotReadableException $e) {
+            }
         }
+        return $thumbs;
     }
 
     public function jcphp01_generate_webp_image($file, $outputFile, $compression_quality = 80)
@@ -79,8 +93,12 @@ class MediaService
         return false;
     }
 
-    public function classify($file)
+    public function classify($file, $datasetId)
     {
+        if ($datasetId) {
+            $thumbSizes = DataSet::find($datasetId)->api->thumb_sizes;
+        }
+        $thumbSizes = $thumbSizes ?? [['width' => 90, 'height' => 90]];
         $convertStatus = true;
         $extension = $file->extension();
         switch ($file->getMimeType()) {
@@ -89,7 +107,10 @@ class MediaService
                 $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                 $filePath = storage_path() . "/app/public";
                 $file->move($filePath . '/media/videos', $fileName);
-                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                $thumbs = [];
+                foreach ($thumbSizes as $size) {
+                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                }
                 break;
             case (preg_match('#image#', $file->getMimeType()) ? true : false):
                 $fileType = 'image';
@@ -97,8 +118,7 @@ class MediaService
                 $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
                 $filePath = storage_path() . "/app/public/$fileName";
                 $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
-                $this->thumb_image($path, $filePath);
-                $fileThumb = $this->get_thumb($fileName);
+                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
                 if ($convertStatus == 'NOT_SUPPORT') {
                     $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                     $filePath = storage_path() . "/app/public";
@@ -112,14 +132,20 @@ class MediaService
                 $fileName = 'media/files/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                 $filePath = storage_path() . "/app/public";
                 $file->move($filePath . '/media/files', $fileName);
-                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+//                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
+//                $thumbs = handleThumbs($thumbSizes, $fileThumb, $fileType);
+                $thumbs = [];
+                foreach ($thumbSizes as $size) {
+                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
+                }
                 break;
         }
         $result = [
+            'dataset_id'  => $datasetId,
             'name_upload' => $file->getClientOriginalName(),
             'file_type'   => @$fileType,
             'file_name'   => @$fileName,
-            'file_thumb'  => @$fileThumb,
+            'thumbs'      => @$thumbs,
             'user_id'     => Auth::id(),
             'stage'       => 'first upload',
         ];

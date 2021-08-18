@@ -65,7 +65,7 @@ export function queryMe(href = ``) {
       medium{
           id
           file
-          thumb_image
+          thumb_files
       }
       datasets{
           id 
@@ -84,7 +84,7 @@ export function queryMe(href = ``) {
                   medium{
                       id
                       file
-                      thumb_image
+                      thumb_files
                   }
               }
           }
@@ -156,7 +156,7 @@ export function userList(variables) {
     medium{
         id
         image
-        thumb_image
+        thumb_files
     }
   }
 }`;
@@ -181,7 +181,7 @@ export function shareSearchUsers(shareable_type, shareable_id, name) {
     medium{
         id
         file
-        thumb_image
+        thumb_files
     }
   }
 }`;

@@ -7,8 +7,22 @@ export const getURLParams = () => {
     return obj;
 }
 
-export const getThumbImage = (thumb_image) => {
-    if (thumb_image)
-        return thumb_image
-    return '/assets/images/default.jpeg'
+// export const getThumbImage = (thumb_image) => {
+//     if (thumb_image)
+//         return thumb_image
+//     return '/assets/images/default.jpeg'
+// };
+
+export const getFirstThumb = (medium) => {
+    try {
+        const {file, thumb_files} = medium;
+        if (Object.keys(thumb_files).length)
+            return thumb_files[Object.keys(thumb_files)[0]];
+        return file;
+    } catch (e) {
+        return '/assets/images/default.jpeg'
+    }
+    // if (medium)
+    //     return thumb_image
+    // return '/assets/images/default.jpeg'
 };

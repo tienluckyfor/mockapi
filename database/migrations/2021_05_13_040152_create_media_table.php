@@ -22,7 +22,7 @@ class CreateMediaTable extends Migration
             $table->string('name_upload')->nullable();
             $table->string('file_type')->nullable();
             $table->string('file_name')->nullable();
-            $table->string('file_thumb')->nullable();
+            $table->json('thumbs')->nullable();
             $table->integer('view')->nullable();
             $table->string('stage')->nullable();
             $table->timestamps();

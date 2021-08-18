@@ -88,10 +88,14 @@ class MediaController extends Controller
         if (!$file || !$file->isValid()) {
             return response()->json(['status' => false]);
         }
-        [$convertStatus, $result] = $this->media_service->classify($file);
+//        dd($request->toArray());
+        [$convertStatus, $result] = $this->media_service->classify($file, (int) $request->dataset_id);
         if ($convertStatus) {
             $media = array_merge($request->all(), $result);
+            \Illuminate\Support\Facades\Log::channel('single')->info('$media', [$media]);
+            
             $create = Media::create($media);
+//            dd($create->toArray());
         }
         return response()->json(@$create);
     }

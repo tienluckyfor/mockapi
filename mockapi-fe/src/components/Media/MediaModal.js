@@ -19,7 +19,7 @@ import "moment-timezone"
 
 import UploadMedia from "./UploadMedia";
 import {usersSelector} from "slices/users";
-import {objToString} from "../../services";
+import {getFirstThumb, objToString} from "../../services";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -94,7 +94,7 @@ export const MediaModal = () => {
                                 height={90}
                                 width={90}
                                 style={{objectFit: "cover"}}
-                                src={medium.thumb_image}
+                                src={getFirstThumb(medium)}
                             />
                             }
                             {medium.file_type !== `image` &&
@@ -104,7 +104,7 @@ export const MediaModal = () => {
                                     height={90}
                                     width={90}
                                     style={{objectFit: "cover"}}
-                                    src={medium.thumb_image}
+                                    src={getFirstThumb(medium)}
                                 />
                             </a>
                             }
@@ -132,11 +132,11 @@ export const MediaModal = () => {
                                         className={`absolute z-10 left-0 top-0 ml-1 mt-1 m-0 px-1 bg-white rounded`}/>
                                     {medium.file_type === `image` &&
                                     <Image
-                                        preview={{src: medium.image, mask: <EyeOutlined/>}}
+                                        preview={{src: medium.file, mask: <EyeOutlined/>}}
                                         height={60}
                                         width={60}
                                         style={{objectFit: "cover"}}
-                                        src={medium.thumb_image}
+                                        src={getFirstThumb(medium)}
                                     />
                                     }
                                     {medium.file_type !== `image` &&
@@ -146,7 +146,7 @@ export const MediaModal = () => {
                                             height={60}
                                             width={60}
                                             style={{objectFit: "cover"}}
-                                            src={medium.thumb_image}
+                                            src={getFirstThumb(medium)}
                                         />
                                     </a>
                                     }
