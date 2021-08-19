@@ -1,10 +1,9 @@
-import {Form, Input, Button, DatePicker, InputNumber, Switch, Checkbox, Image, Space, Select} from 'antd';
+import {Form, Input, Button, DatePicker, InputNumber, Switch, Select} from 'antd';
 import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
-import {mediaSelector, setMediaMerge, } from "slices/media";
-import {commonsSelector, } from "slices/commons";
+import {mediaSelector, setMediaMerge, uploadMediaPaste,} from "slices/media";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {ControlledAceEditor, ReactQuillCustom, ThumbChecked} from "components";
 
@@ -13,26 +12,40 @@ const {Option} = Select;
 const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
     const {cbRallydata, fieldsRallydata, mRallydataData, resource_id_RD} = useSelector(rallydatasSelector)
-    const {mMedia, cbMedia, pMedia} = useSelector(mediaSelector)
-    const {checkedList,} = useSelector(commonsSelector)
+    const {mMedia, } = useSelector(mediaSelector)
     const rallies = mRallydataData?.data && mRallydataData?.data[resource_id_RD]
 
-    useEffect(() => {
-        window.addEventListener('paste', (e) => {
+    /*useEffect(() => {
+        function onMediaUpload(e) {
+            console.log('FormRallydata onMediaUpload')
             let files = [];
             for (let item of e.clipboardData.items) {
-                if (item.kind === 'file') {
+                if (item.kind === 'file')
                     files.push(item.getAsFile())
-                }
             }
             dispatch(setMediaMerge('pMedia', {files}))
-        })
-    }, [])
+            // dispatch(uploadMediaPaste(mMedia.name))
+        }
+        // window.addEventListener('paste', (e) => {
+        //     let files = [];
+        //     for (let item of e.clipboardData.items) {
+        //         if (item.kind === 'file') {
+        //             files.push(item.getAsFile())
+        //         }
+        //     }
+        //     dispatch(setMediaMerge('pMedia', {files}))
+        // })
 
+        window.addEventListener('paste', onMediaUpload)
+        return () => {
+            window.removeEventListener('paste', onMediaUpload)
+        }
+    }, [])*/
+/*
     useEffect(() => {
         if(!mMedia.visible)
             dispatch(setMediaMerge('pMedia', {files: []}))
-    }, [mMedia])
+    }, [mMedia])*/
 
     return (
         <>

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Checkbox, Image, Space} from "antd";
-import {mediaSelector, setMediaMerge} from "slices/media";
+import {mediaSelector, setMediaMerge, uploadMediaPaste,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {getFirstThumb} from "services";
@@ -9,15 +9,59 @@ export const ThumbChecked = ({name}) => {
     const dispatch = useDispatch()
     const {mMedia, cbMedia} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
+    const {pMedia,} = useSelector(mediaSelector)
+
+    useEffect(() => {
+        function onMediaUpload(e) {
+            console.log('FormRallydata onMediaUpload')
+            let files = [];
+            for (let item of e.clipboardData.items) {
+                if (item.kind === 'file')
+                    files.push(item.getAsFile())
+            }
+            dispatch(setMediaMerge('pMedia', {files}))
+            // dispatch(uploadMediaPaste(mMedia.name))
+        }
+
+        // window.addEventListener('paste', (e) => {
+        //     let files = [];
+        //     for (let item of e.clipboardData.items) {
+        //         if (item.kind === 'file') {
+        //             files.push(item.getAsFile())
+        //         }
+        //     }
+        //     dispatch(setMediaMerge('pMedia', {files}))
+        // })
+
+        window.addEventListener('paste', onMediaUpload)
+        return () => {
+            window.removeEventListener('paste', onMediaUpload)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!mMedia.visible)
+            dispatch(setMediaMerge('pMedia', {files: []}))
+    }, [mMedia])
 
     return <section className="flex flex-col space-y-3">
-        <Button
-            className="w-36"
-            onClick={() => dispatch(setMediaMerge('mMedia', {
-                visible: !mMedia?.visible,
-                name
-            }))}
-        >Choose media</Button>
+        <Space>
+            <Button
+                className="w-36"
+                onClick={() => dispatch(setMediaMerge('mMedia', {
+                    visible: !mMedia?.visible,
+                    name
+                }))}
+            >Choose media</Button>
+            {pMedia.files.length != 0 &&
+            <Button
+                type="dashed"
+                onClick={(e) => dispatch(uploadMediaPaste(name))}
+                loading={pMedia.isLoading}
+            >Paste</Button>
+            }
+        </Space>
+
         {cbMedia[name]?.length !== 0 &&
         <div>
             <Space size={[10, 10]} wrap>
