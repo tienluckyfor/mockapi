@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataSet;
 use App\Models\Media;
 use App\Models\RallyData;
 use App\Repositories\DatasetRepository;
@@ -139,7 +140,6 @@ class RestfulController extends Controller
             $media = Media::whereIn('id', $mediaIds)->get();
             $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
         }
-
         foreach ($rallydatasCurrent as &$item) {
             if ($isChildField) {
                 $data_children = @$item['data_children'] ?? [];
@@ -164,7 +164,8 @@ class RestfulController extends Controller
 
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatasCurrent);
         $media = Media::whereIn('id', $mediaIds)->get();
-        $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media);
+        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+        $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media, $thumbSizes);
         return $rallydatasCurrent;
     }
 

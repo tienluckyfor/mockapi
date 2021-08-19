@@ -156,8 +156,6 @@ class MediaService
     {
         $convertStatus = true;
         $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
-        \Illuminate\Support\Facades\Log::channel('single')->info('$fileUrl', [$fileUrl]);
-        
         try {
             $contents = file_get_contents($fileUrl);
         } catch (\ErrorException $e) {
@@ -217,7 +215,6 @@ class MediaService
             'file_name'   => @$fileName,
 //            'file_thumb'  => @$fileThumb,
             'thumbs'      => @$thumbs,
-
             'user_id'     => Auth::id(),
             'stage'       => 'first upload',
         ];
