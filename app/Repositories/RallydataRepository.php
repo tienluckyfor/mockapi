@@ -223,7 +223,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
 
     }
 
-    public function getByDatasetIdResourceId($datasetId, $resourceId, $config = [])
+    public function getByDatasetIdResourceId($datasetId, $resourceId, $config = [1, -1, ['id', 'asc'], []])
     {
         [$perPage, $currentPage, $sorts, $searchs] = $config;
         $offset = $perPage == -1 ? 0 : $perPage * ($currentPage - 1);
@@ -415,10 +415,10 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         return $item;
     }
 
-    public function mappingMedia($rallydatas, $media)
+    public function mappingMedia($rallydatas, $media, $thumbSizes=null)
     {
 //        dd($rallydatas, $media);
-        $thumbSizes = null;
+//        $thumbSizes = null;
         $datasetId = null;
 
         foreach ($rallydatas as &$rallydata) {
@@ -427,7 +427,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                     continue;
                 }
                 // thumbSizes
-                if (!($thumbSizes && $datasetId)) {
+                if (!$thumbSizes && !$datasetId) {
                     if (isset($rallydatum['media_ids'])) {
                         $datasetId = $rallydata['dataset_id'];
                     }

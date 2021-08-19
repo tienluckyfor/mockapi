@@ -152,10 +152,12 @@ class MediaService
         return [$convertStatus, $result];
     }
 
-    public function getViaUrl($fileUrl)
+    public function getViaUrl($fileUrl, $thumbSizes)
     {
         $convertStatus = true;
         $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$fileUrl', [$fileUrl]);
+        
         try {
             $contents = file_get_contents($fileUrl);
         } catch (\ErrorException $e) {
@@ -172,7 +174,11 @@ class MediaService
                 $filePath = storage_path() . "/app/public";
 //                $file->move($filePath . '/media/videos', $fileName);
                 file_put_contents($filePath . '/media/videos/' . $fileName, $contents);
-                $fileThumb = 'api/media?text=' . urlencode($originalName);
+//                $fileThumb = 'api/media?text=' . urlencode($originalName);
+                $thumbs = [];
+                foreach ($thumbSizes as $size) {
+                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
+                }
                 break;
             case (preg_match('#image#', $mime_type) ? true : false):
                 $fileType = 'image';
@@ -181,12 +187,13 @@ class MediaService
                 $filePath = storage_path() . "/app/public/$fileName";
                 file_put_contents($path, $contents);
                 $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
-                $this->thumb_image($path, $filePath);
-                $fileThumb = $this->get_thumb($fileName);
+//                $this->thumb_image($path, $filePath);
+//                $fileThumb = $this->get_thumb($fileName);
+                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
                 if ($convertStatus == 'NOT_SUPPORT') {
                     $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                     $filePath = storage_path() . "/app/public";
-                    file_put_contents($filePath . '/media/images_NOT_SUPPORT/' . $fileName, $contents);
+                    file_put_contents($filePath .'/'. $fileName, $contents);
                 }
                 break;
             default:
@@ -197,14 +204,20 @@ class MediaService
                 $filePath = storage_path() . "/app/public";
 //                $file->move($filePath . '/media/files', $fileName);
                 file_put_contents($filePath . '/media/files/' . $fileName, $contents);
-                $fileThumb = 'api/media?text=' . urlencode($originalName);
+//                $fileThumb = 'api/media?text=' . urlencode($originalName);
+                $thumbs = [];
+                foreach ($thumbSizes as $size) {
+                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
+                }
                 break;
         }
         $result = [
             'name_upload' => $originalName,
             'file_type'   => @$fileType,
             'file_name'   => @$fileName,
-            'file_thumb'  => @$fileThumb,
+//            'file_thumb'  => @$fileThumb,
+            'thumbs'      => @$thumbs,
+
             'user_id'     => Auth::id(),
             'stage'       => 'first upload',
         ];

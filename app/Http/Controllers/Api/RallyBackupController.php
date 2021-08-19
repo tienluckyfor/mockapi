@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataSet;
 use App\Models\Media;
 use App\Models\RallyData;
 use App\Repositories\MediaRepository;
@@ -44,19 +45,27 @@ class RallyBackupController extends Controller
         }
         $resourceId = $request->resource_id;
         $datasetId = $request->dataset_id;
-        $ralliesD = $this->rallydata_repository
-            ->getByDatasetIdResourceId($datasetId, $resourceId)
+        [$ralliesD] = $this->rallydata_repository
+            ->getByDatasetIdResourceId($datasetId, $resourceId);
+        $ralliesD = collect($ralliesD)
             ->map(function ($item) {
-                return $item->data;
-            });
+                foreach ($item['data'] as &$datum) {
+                    if (isset($datum['media_ids']) && empty($datum['media_ids'])) {
+                        $datum = [];
+                    }
+                }
+                return $item['data'];
+            })
+            ->toArray();
+
         $mediaIds = $this->rallydata_repository->getMediaIds($ralliesD);
         $media = $this->media_repository->getByIds($mediaIds);
-        $ralliesM = $this->rallydata_repository->mappingMedia($ralliesD->toArray(), $media);
+        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+        $ralliesM = $this->rallydata_repository->mappingMedia($ralliesD, $media, $thumbSizes);
         $resource = $this->resource_repository
             ->findByid($resourceId);
         [$cols] = $this->_getColsFields($resource);
         $arr = $this->_encodeData($ralliesM, $cols);
-
         header("Content-Type: text/csv");
         header("Content-Disposition: attachment; filename={$resource->name}.csv");
         function outputCSV($data)
@@ -89,11 +98,14 @@ class RallyBackupController extends Controller
             foreach ($cols as $col) {
                 $val = isset($item[$col]) ? $item[$col] : null;
                 if (isset($val['media'][0]['file'])) {
-                    $files = collect($val['media'])->pluck('file');
-                    $val = $files;
+                    $files = collect($val['media'])->pluck('file')->toArray();
+                    $val = implode(',', $files);
+                    $row[] = $val;
+                    continue;
                 }
                 if (is_array($val)) {
                     $val = json_encode($val);
+//                    $val = str_replace("\/", '/', $val);
                 }
                 $row[] = $val;
             }
@@ -122,7 +134,7 @@ class RallyBackupController extends Controller
         // check
         $resourceId = $request->resource_id;
         $datasetId = $request->dataset_id;
-        $rallies = $this->rallydata_repository
+        [$rallies] = $this->rallydata_repository
             ->getByDatasetIdResourceId($datasetId, $resourceId);
         $resource = $this->resource_repository
             ->findByid($resourceId);
@@ -132,46 +144,63 @@ class RallyBackupController extends Controller
                 'file' => ['Fields does\'nt match'],
             ]);
         }
+        $count = [
+            'inside_media'    => 0,
+            'outside_media'   => 0,
+            'outside_s_media' => 0,
+            'update_data'     => 0,
+            'create_data'     => 0
+        ];
+
         // inside media
         [$data, $mediaFiles] = $this->_decodeDataMedia($data, $cols, $fields);
-        $media = $this->media_repository->getByFiles($mediaFiles);
-        $oMedia = [];
+        $media = $this->media_repository->getByFiles($mediaFiles, $datasetId);
+        $count['inside_media'] = $media->count();
+        $aMedia = [];
         foreach ($data as &$datum) {
             foreach ($datum as &$item) {
-                if (isset($item['media'][0]['file'])) {
-                    foreach ($item['media'] as $key => $medium) {
-                        $fMedia = preg_replace('/^.+?([0-9\-]+)\.\w+$/mis', '$1', $medium['file']);
-                        $rMedia = $media->filter(function ($item1) use ($fMedia) {
-                            if (empty($fMedia)) {
-                                return false;
-                            }
-                            return false !== stristr($item1->file_name, $fMedia);
-                        })->first();
-                        if ($rMedia) {
-                            $item['media_ids'][] = $rMedia->id;
-                            unset($item['media'][$key]);
-                        }
-                    }
-                    $oMedia[] = $item['media'];
+                if (!(isset($item['media'][0]['file']) && preg_match('#^http#mis', $item['media'][0]['file']))) {
+                    continue;
                 }
+                $aMedia[] = $item['media'];
+                foreach ($item['media'] as $key => $medium) {
+//                    $fMedia = preg_replace('/^.+?([0-9\-]+)\.\w+$/mis', '$1', $medium['file']);
+//                    $rMedia = $media->filter(function ($item1) use ($fMedia) {
+//                        if (empty($fMedia)) {
+//                            return false;
+//                        }
+//                        return false !== stristr($item1->file_name, $fMedia);
+//                    })->first();
+                    $rMedia = $this->_findMediaByUrl($medium['file'], $media);
+                    if ($rMedia) {
+                        $item['media_ids'][] = $rMedia->id;
+//                        unset($item['media'][$key]);
+                    }
+                }
+//                $oMedia[] = $item['media'];
             }
         }
 
         // outside media
-        $oMedia = collect($oMedia)
+        $aMedia = collect($aMedia)
             ->flatten()
             ->unique()
             ->filter()
             ->toArray();
         $iMedia = [];
-        foreach ($oMedia as $url) {
-            [$convertStatus, $result] = $this->media_service->getViaUrl($url);
+        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+        foreach ($aMedia as $url) {
+            $rMedia = $this->_findMediaByUrl($url, $media);
+            if($rMedia) continue;
+            $count['outside_media']++;
+            [$convertStatus, $result] = $this->media_service->getViaUrl($url, $thumbSizes);
             if ($convertStatus) {
                 $media = array_merge($request->all(), $result);
                 $create = Media::create($media);
                 $iMedia[$url] = $create->id;
             }
         }
+        $count['outside_s_media'] = count($iMedia);
         foreach ($data as &$datum) {
             foreach ($datum as &$item) {
                 if (isset($item['media'])) {
@@ -186,20 +215,21 @@ class RallyBackupController extends Controller
             }
         }
         $nData = collect($data);
-        $rallies = $rallies
+        $rallies = collect($rallies)
             ->map(function ($rally) use ($data, &$nData) {
                 $datum = collect($data)
-                    ->where('id', $rally->data['id'])
+                    ->where('id', $rally['data']['id'])
                     ->first();
                 if ($datum) {
                     $nData = $nData
-                        ->where('id', '!=', $rally->data['id']);
-                    $rally->data = $datum;
+                        ->where('id', '!=', $rally['data']['id']);
+                    $rally['data'] = $datum;
                     return $rally;
                 }
             })
             ->filter();
-        $updateCount = $this->rallydata_repository->updateDataByList($rallies->toArray());
+
+        $count['update_data'] = $this->rallydata_repository->updateDataByList($rallies->toArray());
         foreach ($nData as $nDatum) {
             $rally = [
                 'user_id'     => Auth::id(),
@@ -213,12 +243,24 @@ class RallyBackupController extends Controller
                 $id = isset($maxRally['data']['id']) ? $maxRally['data']['id'] : 0;
                 $rally['data']['id'] = $id + 1;
             }
-            $updateCount += (bool)RallyData::create($rally);
+            $count['create_data'] += (bool)RallyData::create($rally);
         }
         return response()->json([
             'status' => true,
-            'data'   => ['updateCount' => $updateCount]
+            'data'   => $count
         ]);
+    }
+
+    private function _findMediaByUrl($url, $media)
+    {
+        $fMedia = preg_replace('/^.+?([0-9\-]+)\.\w+$/mis', '$1', $url);
+        $rMedia = $media->filter(function ($item1) use ($fMedia) {
+            if (empty($fMedia)) {
+                return false;
+            }
+            return false !== stristr($item1->file_name, $fMedia);
+        })->first();
+        return $rMedia;
     }
 
     private function _decodeDataMedia($data, $cols, $fields)
@@ -237,11 +279,10 @@ class RallyBackupController extends Controller
                 $dataType = collect($fields)->where('name', $key1)->first();
                 $dataType = $dataType['type'];
                 if ($dataType == 'Media') {
-                    if (!($files = json_decode($item1, true))) {
-                        $files = [$item1];
-                    }
                     $media = ['type' => 'media', 'media_ids' => [], 'media' => []];
+                    $files = explode(',', $item1);
                     foreach ($files as $file) {
+                        $file = trim($file);
                         $fMedia = preg_replace('/^.+?([0-9\-]+)\.\w+$/mis', '$1', $file);
                         if (substr_count($fMedia, '-') >= 5) {
                             $mediaFiles[] = $fMedia;

@@ -55,11 +55,12 @@ class MediaRepository
 //            ->get();
 //    }
 
-    public function getByFiles($mediaFiles)
+    public function getByFiles($mediaFiles, $datasetId)
     {
-        $wRaw = "file_name LIKE \"%" . implode('" OR file_name LIKE "%', $mediaFiles) . "%\"";
+        $wRaw = "(file_name LIKE \"%" . implode('%" OR file_name LIKE "%', $mediaFiles) . "%\")";
         return Media::select("*")
 //            ->where('user_id', Auth::id())
+            ->where('dataset_id', $datasetId)
             ->whereRaw($wRaw)
             ->get();
     }
