@@ -47,7 +47,7 @@ const InfoDatasetModal = () => {
     const ReactJs = () => {
         return <ul className="space-y-4">
             <li className="space-y-2">
-                <p className="text-gray-600">Install package</p>
+                <a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM package</a>
                 <CopyBlock
                     text={`npm i react-api-codeby`}
                     theme={dracula}
