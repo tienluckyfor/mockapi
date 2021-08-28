@@ -321,10 +321,14 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
     {
         $select = "$select, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
                 CASE
-                WHEN (is_show = true AND is_pin = true) THEN 999999
-                WHEN (is_show = true AND is_pin != true) THEN null
-                WHEN (pin_index = -1 AND is_show=false) THEN null
+                WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
+                WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
                 ELSE pin_index END AS pin_index";
+        $select1 = "json_extract(data, '$.id') as dataId, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
+                CASE
+                WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
+                WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
+                ELSE pin_index END AS pin_index, is_show";
         $rallyDatas = RallyData::selectRaw($select)
             ->where('dataset_id', $datasetId);
         if (!empty($rallyIds)) {

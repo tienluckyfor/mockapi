@@ -1,31 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Divider, List, Modal,} from "antd";
-import {CopyOutlined, CheckOutlined,} from '@ant-design/icons';
-import {CopyToClipboard} from "react-copy-to-clipboard";
+import React from 'react';
+import {Button, Divider, List, Modal, Space, Tabs} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
-import {commonsSelector, setCommonMerge} from "slices/commons";
 import {Share} from "components";
+import {CodeBlock, CopyBlock, dracula} from "react-code-blocks";
+import {apiCodeby} from "./apiCodeby";
 
 const InfoDatasetModal = () => {
     const dispatch = useDispatch()
     const {modalDataset,} = useSelector(datasetsSelector)
-    const {copied} = useSelector(commonsSelector)
-
-    // const [listData, setListData] = useState([])
-    // useEffect(() => {
-    //     const listData = [
-    //         {
-    //             title: `Postman Collection`,
-    //             url: modalDataset?.dataset?.postman?.collection ?? ``,
-    //         },
-    //         {
-    //             title: `Postman Environment`,
-    //             url: modalDataset?.dataset?.postman?.environment ?? ``,
-    //         },
-    //     ]
-    //     setListData(listData)
-    // }, [modalDataset])
 
     const listData = [
         {
@@ -42,32 +25,48 @@ const InfoDatasetModal = () => {
         },
     ]
 
-    const renderList = () => {
+    const PostmanList = () => {
         return <List
             dataSource={listData}
-            renderItem={(item, i) => (
-                <List.Item>
-                    <List.Item.Meta
-                        title={<a href={item.url} target={`_blank`}>{item.title}</a>}
-                        description={<div className="flex items-center justify-between">
-                            <a href={item.url} target={`_blank`} className="block w-64 truncate">
-                                {item.url.replace(/^.+?(\/api.+?)$/, '...$1')}
-                            </a>
-                            <CopyToClipboard
-                                text={item.url}
-                                onCopy={() => dispatch(setCommonMerge(`copied`, {[i]: true}))}
-                            >
-                                <Button
-                                    size={`small`}
-                                    type={copied[i] ? `primary` : `dashed`}
-                                    icon={copied[i] ? <CheckOutlined/> : <CopyOutlined/>}
-                                />
-                            </CopyToClipboard>
-                        </div>}
+            renderItem={(item, i) => <List.Item>
+                <div className="space-y-2 w-full">
+                    <a href={item.url} target={`_blank`} className="block">
+                        {item.title}
+                    </a>
+                    <CopyBlock
+                        text={item.url}
+                        theme={dracula}
+                        showLineNumbers={false}
                     />
-                </List.Item>
-            )}
+                </div>
+            </List.Item>
+            }
         />
+    }
+
+    const ReactJs = () => {
+        return <ul className="space-y-4">
+            <li className="space-y-2">
+                <p className="text-gray-600">Install package</p>
+                <CopyBlock
+                    text={`npm i react-api-codeby`}
+                    theme={dracula}
+                    showLineNumbers={false}
+                    language="javascript"
+                />
+            </li>
+            <li className="space-y-2">
+                <p className="text-gray-600">apiCodeby.js</p>
+                <CopyBlock
+                    text={apiCodeby()}
+                    theme={dracula}
+                    showLineNumbers={false}
+                    language="javascript"
+                    codeBlock
+                />
+            </li>
+
+        </ul>
     }
 
     return (<Modal
@@ -83,7 +82,14 @@ const InfoDatasetModal = () => {
             shareable_type="App\Models\DataSet"
             shareable_id={modalDataset?.dataset?.id}/>
         <Divider/>
-        {renderList()}
+        <Tabs defaultActiveKey="ReactJs">
+            <Tabs.TabPane tab="Postman" key="Postman">
+                <PostmanList/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="ReactJs" key="ReactJs">
+                <ReactJs/>
+            </Tabs.TabPane>
+        </Tabs>
     </Modal>)
 }
 
