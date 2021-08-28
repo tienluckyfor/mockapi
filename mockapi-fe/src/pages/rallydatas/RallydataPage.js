@@ -1,15 +1,16 @@
 import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {
-    rallydatasSelector, myRallydataList, setFieldsRallydata,
+    rallydatasSelector, myRallydataList, setFieldsRallydata, myRallydataListSort,
 } from "slices/rallydatas";
 import {Loading} from "components";
 import CreateRallydataForm from "./CreateRallydataForm";
 import EditRallydataForm from "./EditRallydataForm";
 import HeaderRallydata from "./HeaderRallydata";
-import RenderTableRallydata from "./RenderTableRallydata";
+// import RenderTableRallydata from "./RenderTableRallydata";
 import {usersSelector} from "slices/users";
-import AppHelmet from "shared/AppHelmet";;
+import AppHelmet from "shared/AppHelmet";
+import RenderTableRallydataSort from "./RenderTableRallydataSort";
 
 const RallydataPage = () => {
     const dispatch = useDispatch()
@@ -22,13 +23,13 @@ const RallydataPage = () => {
 
     useEffect(() => {
         if (dataset_id_RD && resource_id_RD) {
-            dispatch(myRallydataList())
+            dispatch(myRallydataListSort())
         }
     }, [dataset_id_RD, resource_id_RD])
 
     useEffect(() => {
         if (dataset_id_RD && resource_id_RD && mlDRRallydata.isRefresh) {
-            dispatch(myRallydataList(false))
+            dispatch(myRallydataListSort(false))
         }
     }, [mlDRRallydata])
 
@@ -56,20 +57,9 @@ const RallydataPage = () => {
                 <EditRallydataForm
                     fields={fieldsRallydata[resource_id_RD]}
                     visible={true}
-                    /*onCreate={(values) => {
-                        const vals = handleValues(fieldsRallydata[resource_id_RD], values)
-                        if (vals === null) {
-                            error('The JSON field is not a valid format!')
-                            return
-                        }
-                        dispatch(editRallydata(vals))
-                    }}*/
-                    /*onCancel={() => {
-                        dispatch(setRallydataMerge(`eRallydata`, {isOpen: false}))
-                    }}*/
                 />
                 }
-                <RenderTableRallydata
+                <RenderTableRallydataSort
                     mlDRRallydata={mlDRRallydata}
                     fieldsRallydata={fieldsRallydata[resource_id_RD]}
                 />

@@ -71,6 +71,40 @@ class RallydataQueries
         return $data;
     }
 
+    public function myRallydataListSort($_, array $args)
+    {
+        $rallydatas = $this->rallydata_repository
+            ->getByDatasetIdSort($args['dataset_id'])
+            ->groupBy('resource_id');
+        $mediaIds = $this->rallydata_repository->getMediaIds($rallydatas->toArray());
+        $media = Media::whereIn('id', $mediaIds)->get();
+
+        $rallydatas = $this->rallydata_repository->mappingMedia($rallydatas->toArray(), $media);
+// handle parent
+        $resources = $this->resource_repository
+            ->getByDatasetId($args['dataset_id'])
+            ->keyBy('id')
+            ->toArray();
+        if (isset($args['resource_id'], $rallydatas[$args['resource_id']])) {
+            $rallydatasCurrent = @$rallydatas[$args['resource_id']] ?? [];
+            foreach ($rallydatasCurrent as &$item) {
+                $data_children = @$item['data_children'] ?? [];
+                foreach ($data_children as $data_child) {
+                    $r = $resources[$data_child['resource_id']];
+                    $rd = collect(@$rallydatas[$r['id']] ?? []);
+                    $item['data'][$r['name']] = $rd->whereIn('id', $data_child['rallydata_ids'])
+                        ->map(function ($item1) {
+                            return $item1['data'];
+                        })
+                        ->values();
+                }
+            }
+            $rallydatas[$args['resource_id']] = $rallydatasCurrent;
+        }
+        $data = ['rallydatas' => $rallydatas];
+        return $data;
+    }
+
     public function detailRallydata($_, array $args)
     {
         $dataset = DataSet::find($args['dataset_id']);

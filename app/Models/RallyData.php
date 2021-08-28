@@ -19,11 +19,16 @@ class RallyData extends Model
         'resource_id',
         'data',
         'data_children',
+        'is_pin',
+        'is_show',
+        'pin_index',
     ];
 
     protected $casts = [
         'data' => 'array',
         'data_children' => 'array',
+        'is_pin' => 'boolean',
+        'is_show' => 'boolean',
     ];
 
     protected function asJson($value)

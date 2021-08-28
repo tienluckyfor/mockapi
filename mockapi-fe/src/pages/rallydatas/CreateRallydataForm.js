@@ -31,6 +31,7 @@ const CreateRallydataForm = ({fields}) => {
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
         let fieldsValue = {
+            "is_show": true,
             "dataset_id": dataset_id_RD,
             "resource_id": resource_id_RD,
             "data": {}
@@ -46,7 +47,6 @@ const CreateRallydataForm = ({fields}) => {
     }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
-        // console.log({checkedList, mlMedia})
         // media
         const fmedia = (fields ?? []).filter((field) => {
             const {name, type, fakerjs} = field
@@ -104,9 +104,6 @@ const CreateRallydataForm = ({fields}) => {
             }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"
         >
-            {/*<pre className="text-sm">
-                {JSON.stringify(fields, null, '  ')}
-            </pre>*/}
             <MediaModal/>
             <ModalChildRallydata/>
             <FormRallydata

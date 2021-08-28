@@ -19,6 +19,7 @@
         "laravel/sanctum": "^2.9",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "mavinoo/laravel-batch": "^2.2",
         "mll-lab/laravel-graphql-playground": "^2.5",
         "nuwave/lighthouse": "^5.3",
         "pusher/pusher-php-server": "^6.1",

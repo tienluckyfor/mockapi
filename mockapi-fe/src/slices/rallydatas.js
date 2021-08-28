@@ -21,6 +21,7 @@ export const initialState = {
     cbRallydata: {},
     fRallydata: {isOpen: false},
     rRallydata: {},
+    sRallydata: {},
 };
 
 const rallydatasSlice = createSlice({
@@ -54,15 +55,15 @@ export function setRallydataMerge(key, item) {
 }
 
 export function createRallydata(rallydata) {
-    // console.log('createRallydata rallydata',  rallydata);
-    // return ;
     return async (dispatch) => {
         dispatch(setMerge({cRallydata: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
+            mutation($is_pin: Boolean, $is_show: Boolean, $dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
   create_rallydata(
     input: {
+      is_pin: $is_pin
+      is_show: $is_show
       dataset_id: $dataset_id
       resource_id: $resource_id
       data: $data
@@ -99,9 +100,11 @@ export function editRallydata(rallydata) {
         dispatch(setMerge({eRallydata: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($id: ID!, $dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
+            mutation($is_pin: Boolean, $is_show: Boolean, $id: ID!, $dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
   edit_rallydata(
     input: {
+      is_pin: $is_pin
+      is_show: $is_show
       id: $id
       dataset_id: $dataset_id
       resource_id: $resource_id
@@ -196,6 +199,46 @@ export function myRallydataList(isLoading=true) {
             mRallydataData: {
                 isLoading: false,
                 data: myRallydataList,//diffObject([resource_id_RD], myRallydataList),
+            }
+        }))
+    }
+}
+
+export function myRallydataListSort(isLoading=true) {
+    return async (dispatch, getState) => {
+        const {dataset_id_RD, resource_id_RD} = getState().rallydatas
+        dispatch(setMerge({
+            mlDRRallydata: {isLoading, isRefresh: false},
+            mRallydataData: {isLoading: true,},
+            sRallydata: {isLoading: true,},
+        }))
+        const query = gql`
+        query($dataset_id: ID!, $resource_id: ID) {
+  my_rallydata_list_sort(
+    dataset_id: $dataset_id
+    resource_id: $resource_id
+  ) 
+}`;
+        const res = await apolloClient.query({
+            query,
+            variables: {
+                dataset_id: dataset_id_RD,
+                resource_id: resource_id_RD,
+            }
+        })
+        const myRallydataList = res?.data?.my_rallydata_list_sort?.rallydatas ?? {};
+        dispatch(setMerge({
+            mlDRRallydata: {
+                isLoading: false,
+                data: myRallydataList[resource_id_RD] ?? [],
+                isRefresh: false,
+            },
+            mRallydataData: {
+                isLoading: false,
+                data: myRallydataList,//diffObject([resource_id_RD], myRallydataList),
+            },
+            sRallydata: {
+                isLoading: false
             }
         }))
     }
@@ -351,6 +394,36 @@ export function replaceRallydata(ids, find, replace) {
             })
         } catch (e) {
             dispatch(setMerge({rRallydata: {isLoading: false}}))
+        }
+    }
+}
+
+export function sortRallydata(ids) {
+    return async (dispatch) => {
+        dispatch(setMerge({sRallydata: {isLoading: true, ids}}))
+        const mutationAPI = () => {
+            const mutation = gql`
+            mutation($ids: [ID]!){
+  sort_rallydata(
+    input: {
+      ids: $ids
+    }
+  )
+}`;
+            return apolloClient.mutate({
+                mutation,
+                variables: {ids}
+            })
+        }
+        try {
+            await mutationAPI().then(res => {
+                dispatch(setMerge({
+                    sRallydata: {isLoading: false, status: res?.data?.sort_rallydata},
+                    mlDRRallydata: {isRefresh: true}
+                }))
+            })
+        } catch (e) {
+            dispatch(setMerge({sRallydata: {isLoading: false}}))
         }
     }
 }

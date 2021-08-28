@@ -1,19 +1,29 @@
 import {Button, Checkbox, Dropdown, Image, Menu, Popconfirm, Space, Table, Tooltip} from "antd";
-import {EyeOutlined,} from '@ant-design/icons';
+import {EyeOutlined, PushpinOutlined, EyeInvisibleOutlined} from '@ant-design/icons';
 import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} from "slices/commons";
-import {deleteRallydata, duplicateRallydata, setRallydataMerge} from "slices/rallydatas";
+import {
+    deleteRallydata,
+    duplicateRallydata,
+    rallydatasSelector,
+    setRallydataMerge,
+    sortRallydata
+} from "slices/rallydatas";
 import {getItype} from "./configRallydata";
 import {useDispatch, useSelector} from "react-redux";
 import {getFirstThumb, objToString} from "services";
+import DragSortingTable from "components/DragSortingTable";
 
-const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, resourceName}) => {
+const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = null, resourceName}) => {
     const dispatch = useDispatch()
     const {visibles, checkedList} = useSelector(commonsSelector)
+    const {sRallydata} = useSelector(rallydatasSelector)
 
     const menu = (rallydata) => {
         return (<Menu onClick={(e) => dispatch(handleMenuClick(e, rallydata))}>
             <Menu.Item>
                 <Button
+                    block
+                    className="text-left"
                     size={`small`}
                     type="link"
                     onClick={(e) => dispatch(duplicateRallydata({id: rallydata.originalId}))}
@@ -23,6 +33,8 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
             </Menu.Item>
             <Menu.Item>
                 <Button
+                    block
+                    className="text-left"
                     size={`small`}
                     type="link"
                     onClick={(e) => {
@@ -41,6 +53,8 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                     okButtonProps={{autoFocus: true}}
                 >
                     <Button
+                        block
+                        className="text-left"
                         size={`small`}
                         type={`link`}
                         danger
@@ -85,19 +99,32 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                             </Checkbox>
                         </Tooltip>
                     }
-                    return <Dropdown
-                        overlay={menu(rallydata)}
-                        arrow
-                        visible={visibles[rallydata.originalId]}
-                        onVisibleChange={(flag) => dispatch(handleVisibleChange(flag, rallydata))}
-                    >
-                        <Button
-                            type={`dashed`}
-                            size={`small`}
-                            danger
-                            className={`px-1`}
-                        >{val}</Button>
-                    </Dropdown>
+                    return <>
+                        <div className="relative">
+                            <Space size="3" direction="vertical" className="absolute z-10 -mt-3 -ml-4 ">
+                                {rallydata._is_pin &&
+                                <PushpinOutlined rotate={-90} className="text-indigo-500 text-xs"/>
+                                }
+                                {!rallydata._is_show &&
+                                <EyeInvisibleOutlined className="text-gray-300 text-xs"/>
+                                }
+                            </Space>
+                        </div>
+                        <Dropdown
+                            overlay={menu(rallydata)}
+                            arrow
+                            visible={visibles[rallydata.originalId]}
+                            onVisibleChange={(flag) => dispatch(handleVisibleChange(flag, rallydata))}
+                        >
+
+                            <Button
+                                type={`dashed`}
+                                size={`small`}
+                                danger
+                                className={`px-1`}
+                            >{val}</Button>
+                        </Dropdown>
+                    </>
                 }
             })
             return;
@@ -187,19 +214,24 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
         })
     })
     const data = (mlDRRallydata?.data ?? []).map((rallydata) => {
-        return {...rallydata.data, originalId: rallydata.id}
+        return {
+            ...rallydata.data,
+            originalId: rallydata.id,
+            _is_show: rallydata.is_show,
+            _is_pin: rallydata.is_pin
+        }
     })
 
     return (
         <div style={{width: (typeShow === 'checked' ? 700 : 738)}} className={`mt-4`}>
-            <Table
+            <DragSortingTable
                 columns={columns}
                 dataSource={data}
-                scroll={{x: 1}}
-                pagination={{pageSize: 20, hideOnSinglePage: true}}
+                onChange={(ids) => dispatch(sortRallydata(ids))}
+                isLoading={sRallydata.isLoading}
             />
         </div>
     )
 }
 
-export default RenderTableRallydata
+export default RenderTableRallydataSort

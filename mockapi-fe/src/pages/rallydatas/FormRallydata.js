@@ -1,9 +1,9 @@
-import {Form, Input, Button, DatePicker, InputNumber, Switch, Select} from 'antd';
-import React, {useEffect} from 'react'
+import {Form, Input, Button, DatePicker, InputNumber, Switch, Select, Space, Checkbox} from 'antd';
+import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {getItype,} from "./configRallydata";
 import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
-import {mediaSelector, setMediaMerge, uploadMediaPaste,} from "slices/media";
+import {mediaSelector, } from "slices/media";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {ControlledAceEditor, ReactQuillCustom, ThumbChecked} from "components";
 
@@ -12,50 +12,25 @@ const {Option} = Select;
 const FormRallydata = ({fields, from, childResources,}) => {
     const dispatch = useDispatch()
     const {cbRallydata, fieldsRallydata, mRallydataData, resource_id_RD} = useSelector(rallydatasSelector)
-    const {mMedia, } = useSelector(mediaSelector)
+    const {mMedia,} = useSelector(mediaSelector)
     const rallies = mRallydataData?.data && mRallydataData?.data[resource_id_RD]
-
-    /*useEffect(() => {
-        function onMediaUpload(e) {
-            console.log('FormRallydata onMediaUpload')
-            let files = [];
-            for (let item of e.clipboardData.items) {
-                if (item.kind === 'file')
-                    files.push(item.getAsFile())
-            }
-            dispatch(setMediaMerge('pMedia', {files}))
-            // dispatch(uploadMediaPaste(mMedia.name))
-        }
-        // window.addEventListener('paste', (e) => {
-        //     let files = [];
-        //     for (let item of e.clipboardData.items) {
-        //         if (item.kind === 'file') {
-        //             files.push(item.getAsFile())
-        //         }
-        //     }
-        //     dispatch(setMediaMerge('pMedia', {files}))
-        // })
-
-        window.addEventListener('paste', onMediaUpload)
-        return () => {
-            window.removeEventListener('paste', onMediaUpload)
-        }
-    }, [])*/
-/*
-    useEffect(() => {
-        if(!mMedia.visible)
-            dispatch(setMediaMerge('pMedia', {files: []}))
-    }, [mMedia])*/
 
     return (
         <>
+            <Space size="large">
+                <Form.Item name="is_show" valuePropName="checked">
+                    <Checkbox>Is show</Checkbox>
+                </Form.Item>
+                <Form.Item name="is_pin" valuePropName="checked">
+                    <Checkbox>Is pined</Checkbox>
+                </Form.Item>
+            </Space>
             <Form.List name="data">
                 {(afields, {add, remove}) => (
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
                         if (type === 'Resource') return;
                         const iType = getItype(type, fakerjs)
-                        // console.log('name', name)
                         switch (iType) {
                             case `Object`:
                             case `Array`:
@@ -65,10 +40,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                         label={<span className="capitalize">{name}</span>}
                                         initialValue={"{\n\t\n}"}
                                     >
-                                        {/*<ControlledJsonEditor
-                                            value={eRallydata?.rallydata && eRallydata?.rallydata[name]
-                                                ? eRallydata?.rallydata[name] : {}}
-                                        />*/}
                                         <ControlledAceEditor/>
                                     </Form.Item>)
                                 break;
@@ -92,51 +63,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <ThumbChecked name={fName}/>
-                                    {/*<section className="flex flex-col space-y-3">
-                                        <Space>
-                                            <Button
-                                                className="w-36"
-                                                onClick={() => dispatch(setMediaMerge('mMedia', {
-                                                    visible: !mMedia?.visible,
-                                                    name: fName
-                                                }))}
-                                            >Choose media</Button>
-                                            {pMedia.files.length!=0 &&
-                                            <Button
-                                                type="dashed"
-                                                onClick={(e) => dispatch(uploadMediaPaste(`${from}-${name}`))}
-                                                loading={pMedia.isLoading}
-                                            >Paste</Button>
-                                            }
-                                        </Space>
-
-                                        {cbMedia[fName]?.length !== 0 &&
-                                        <div>
-                                            <Space size={[10, 10]} wrap>
-                                                {(cbMedia[fName] ?? []).map((medium, key) => (
-                                                    <div className={`relative border border-gray-300 p-1`}
-                                                         style={{width: 104, height: 104}}>
-                                                        <Checkbox
-                                                            onChange={() => {
-                                                                const checkedList1 = checkedList[fName].filter((item) => item != medium.id)
-                                                                dispatch(setCommonMerge('checkedList', {[fName]: checkedList1}))
-                                                            }}
-                                                            value={medium.id}
-                                                            checked
-                                                            className={`absolute z-10 left-0 top-0 ml-1 mt-1 m-0 px-1 bg-white rounded`}/>
-                                                        <Image
-                                                            preview={false}
-                                                            height={90}
-                                                            width={90}
-                                                            style={{objectFit: "cover"}}
-                                                            src={medium.thumb_image}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </Space>
-                                        </div>
-                                        }
-                                    </section>*/}
                                 </Form.Item>)
                                 break;
                             case `Date`:
@@ -201,7 +127,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
                     })
                 )}
             </Form.List>
-
             <Form.List name="data_children">
                 {(afields, {add, remove}) => (
                     childResources.map((resource) => {

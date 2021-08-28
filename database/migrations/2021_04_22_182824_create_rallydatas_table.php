@@ -20,6 +20,9 @@ class CreateRallyDatasTable extends Migration
             $table->unsignedBigInteger('dataset_id')->nullable();
             $table->json('data')->nullable();
             $table->json('data_children')->nullable();
+            $table->boolean('is_show')->nullable();
+            $table->boolean('is_pin')->nullable();
+            $table->integer('pin_index')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -4,6 +4,7 @@ extend type Mutation {
     delete_rallydata(input: DeleteRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@deleteRallydata")
     duplicate_rallydata(input: DuplicateRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@duplicateRallydata")
     replace_rallydata(input: ReplaceRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@replaceRallydata")
+    sort_rallydata(input: SortRallydataInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\RallydataMutations@sortRallydata")
 }
 
 extend type Query {
@@ -11,6 +12,7 @@ extend type Query {
     #    rallydata(id: ID @eq): Rallydata @find
     rallydata_list(dataset_id: ID!, resource_id: ID!): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@rallydataList")
     my_rallydata_list(dataset_id: ID!, resource_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@myRallydataList")
+    my_rallydata_list_sort(dataset_id: ID!, resource_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@myRallydataListSort")
     detail_rallydata(dataset_id: ID!): DetailRallydata @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@detailRallydata")
     find_rallydata(dataset_id: ID!, find:String): [Rallydata] @guard @field(resolver: "App\\GraphQL\\Queries\\RallydataQueries@findRallydata")
 }
@@ -36,6 +38,8 @@ type Rallydata{
 }
 
 input CreateRallydataInput{
+    is_pin: Boolean
+    is_show: Boolean
     dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
     resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
     data: JSON! @rules(apply:["required"])
@@ -43,6 +47,8 @@ input CreateRallydataInput{
 }
 
 input EditRallydataInput{
+    is_pin: Boolean
+    is_show: Boolean
     id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
     dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
     resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
@@ -62,4 +68,8 @@ input DeleteRallydataInput{
 
 input DuplicateRallydataInput{
     id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
+}
+
+input SortRallydataInput{
+    ids: [ID]! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
 }

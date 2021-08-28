@@ -26,6 +26,8 @@ class RallydataMutations
     {
         $args['user_id'] = Auth::id();
 //        $args = $this->media_repository->handle_media($args);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$args', [$args]);
+        
         return $this->rallydata_repository->createManual($args);
     }
 
@@ -71,5 +73,31 @@ class RallydataMutations
                     ->update(['data' => $data]);
             });
         return true;
+    }
+
+    public function sortRallydata($_, array $args): bool
+    {
+        $instance = new Rallydata;
+        $value = [];
+        foreach ($args['ids'] as $key => $id) {
+            $value[] = ['id' => $id, 'pin_index' => $key];
+        }
+        $index = 'id';
+        $result = batch()->update($instance, $value, $index);
+        return (bool) $result;
+//        dd($result);
+//        $result = Batch::update($instance, $values, $batchSize);
+//        RallyData::whereIn('id', $args['ids'])
+//            ->where('data', 'like', "%{$args['find']}%")
+//            ->get()
+//            ->map(function ($rally) use ($args) {
+//                $data = json_encode($rally->data);
+//                $data = preg_replace("#{$args['find']}#mis", $args['replace'], $data);
+//                $data = json_decode($data, true);
+//                Rallydata::where('id', $rally->id)
+//                    ->update(['data' => $data]);
+//            });
+//        return true;
+
     }
 }

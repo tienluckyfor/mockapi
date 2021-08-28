@@ -317,6 +317,28 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         return $rallyDatas;
     }
 
+    public function getByDatasetIdSort($datasetId, $rallyIds = [], $select = '*')
+    {
+        $select = "$select, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
+                CASE
+                WHEN (is_show = true AND is_pin = true) THEN 999999
+                WHEN (is_show = true AND is_pin != true) THEN null
+                WHEN (pin_index = -1 AND is_show=false) THEN null
+                ELSE pin_index END AS pin_index";
+        $rallyDatas = RallyData::selectRaw($select)
+            ->where('dataset_id', $datasetId);
+        if (!empty($rallyIds)) {
+            $rallyDatas = $rallyDatas->whereIn('id', $rallyIds);
+        }
+        $rallyDatas = $rallyDatas
+            ->orderBy('is_pin', 'desc')
+            ->orderBy('pin_index', 'asc')
+            ->orderBy('id', 'desc')
+            ->get()
+        ;
+        return $rallyDatas;
+    }
+
     public function getMyDatasetIdResourceId($userId, $datasetId, $resourceId, $select = '*')
     {
         $rallyDatas = RallyData::selectRaw($select)

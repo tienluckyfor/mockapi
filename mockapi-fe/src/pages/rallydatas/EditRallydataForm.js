@@ -23,7 +23,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
 
     useEffect(() => {
         const rally = eRallydata.rallydata
-        let fieldsValue = {id: rally.originalId, data: {}};
+        let fieldsValue = {id: rally.originalId, data: {}, is_show:rally._is_show, is_pin:rally._is_pin, };
         (fields ?? []).map((field) => {
             const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
@@ -116,6 +116,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
                             return
                         }
                         // console.log('vals', vals)
+                        // return;
                         dispatch(editRallydata(vals))
                         form.resetFields()
                     })

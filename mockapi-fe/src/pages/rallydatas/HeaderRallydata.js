@@ -84,6 +84,10 @@ const HeaderRallydata = () => {
                 onChange={(id) => {
                     dispatch(setRallydata({resource_id_RD: id}))
                 }}
+                filterOption={(input, option) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    || option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
             >
                 {resources.map((resource) => (
                     <Option key={resource.id} value={(resource?.id ?? 0).toString()}>{resource.name}</Option>
