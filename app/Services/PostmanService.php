@@ -138,7 +138,8 @@ class PostmanService
                                         ],
                                         [
                                             "key"   => "sort",
-                                            "value" => "id,desc"
+                                            "value" => "id,desc",
+                                            "disabled" => true
                                         ],
                                         [
                                             "key"      => "search",

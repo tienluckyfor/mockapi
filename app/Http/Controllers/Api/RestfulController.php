@@ -12,7 +12,6 @@ use App\Repositories\RallydataRepository;
 use App\Repositories\ResourceRepository;
 use App\Services\ArrService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class RestfulController extends Controller
@@ -98,7 +97,7 @@ class RestfulController extends Controller
         ]);
     }
 
-   function destroy($resourceName, $dataId, Request $request)
+    function destroy($resourceName, $dataId, Request $request)
     {
         $r = $request->input('_restful');
         $resource = $this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
@@ -178,11 +177,11 @@ class RestfulController extends Controller
         $currentPage = $request->current_page && is_numeric($request->current_page) && $request->current_page >= -1
             ? (int)$request->current_page : 1;
 
-        $sorts = ['id', 'desc'];
+        $sorts = ['pin_index'];
         if ($request->sort) {
             $sorts = explode(',', $request->sort);
         }
-
+//dd($sorts);
         $searchs = [];
         if ($request->search) {
             $searchs = explode(',', $request->search);
@@ -194,7 +193,7 @@ class RestfulController extends Controller
         }
         $resource = $this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
 
-        if(!empty($parent)){
+        if (!empty($parent)) {
             [$rallydatas, $total, $isPrev, $isNext] = $this->rallydata_repository
                 ->getByDatasetIdResourceIdParentSearch($r['dataset_id'], $resource->id,
                     [$perPage, $currentPage, $sorts, $searchs, $parent]);
@@ -218,7 +217,9 @@ class RestfulController extends Controller
             $isPrev = false;
             $isNext = false;
         }
-        $rallydatas = $this->arrService->sort($rallydatas, $sorts[0], $sorts[1]);
+        if (isset($sorts[1])) {
+            $rallydatas = $this->arrService->sort($rallydatas, $sorts[0], $sorts[1]);
+        }
         $res = [
             "data"       => $rallydatas,
             "pageInfo"   => [

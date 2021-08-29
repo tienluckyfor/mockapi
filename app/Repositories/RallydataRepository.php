@@ -230,12 +230,17 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         $sql = "select * from (select rallydatas.id, rallydatas.data, rallydatas.data_children";
         $sql .= isset($sorts[0]) ? ", JSON_EXTRACT(data, '$.{$sorts[0]}') AS sortKey" : "";
         $sql .= isset($searchs[0]) ? ", LOWER(CONCAT(JSON_EXTRACT(data, '$.{$searchs[0]}'))) AS searchKey" : "";
+        $sql .= ", CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
+                CASE
+                WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
+                WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
+                ELSE pin_index END AS pin_index";
         $sql .= " from `rallydatas`
       where `dataset_id` = {$datasetId}
         and `rallydatas`.`resource_id` = '{$resourceId}'
         and `rallydatas`.`deleted_at` is null
+        and `rallydatas`.`is_show` = true
      ) t";
-
         $searchKey = isset($searchs[1]) ? strtolower($searchs[1]) : "";
         $sql .= isset($searchs[1]) ? " where `searchKey` like '%{$searchKey}%'" : "";
         $total = 0;
@@ -247,7 +252,9 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
             throw new QueryException($e->getMessage());
         }
 
-        if (isset($sorts[0])) {
+        if ($sorts[0] == 'pin_index') {
+            $sql .= " ORDER BY is_pin DESC, pin_index ASC, id DESC";
+        } else {
             $sorts[1] = isset($sorts[1]) ? $sorts[1] : 'desc';
             if ($sorts[0] == 'id') {
                 $sql .= " order by `id` {$sorts[1]}";
@@ -324,11 +331,11 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                 WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
                 WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
                 ELSE pin_index END AS pin_index";
-        $select1 = "json_extract(data, '$.id') as dataId, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
+        /*$select1 = "json_extract(data, '$.id') as dataId, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
                 CASE
                 WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
                 WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
-                ELSE pin_index END AS pin_index, is_show";
+                ELSE pin_index END AS pin_index, is_show";*/
         $rallyDatas = RallyData::selectRaw($select)
             ->where('dataset_id', $datasetId);
         if (!empty($rallyIds)) {
@@ -338,8 +345,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
             ->orderBy('is_pin', 'desc')
             ->orderBy('pin_index', 'asc')
             ->orderBy('id', 'desc')
-            ->get()
-        ;
+            ->get();
         return $rallyDatas;
     }
 
@@ -441,7 +447,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         return $item;
     }
 
-    public function mappingMedia($rallydatas, $media, $thumbSizes=null)
+    public function mappingMedia($rallydatas, $media, $thumbSizes = null)
     {
 //        dd($rallydatas, $media);
 //        $thumbSizes = null;
@@ -467,7 +473,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                             }
                         }
                     }
-                    
+
                     $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
                 }
 
