@@ -4,7 +4,6 @@ import {useEffect} from 'react';
 import moment from "moment"
 import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
-
 import {
     resourcesSelector,
     editResource,
@@ -16,7 +15,6 @@ import {
 } from "slices/resources";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
 import {queryMe} from "slices/users";
-
 import {Header, Loading} from "components";
 import EditParentResourceForm from "./EditParentResourceForm";
 import CreateResourceForm from "./CreateResourceForm";
@@ -201,13 +199,7 @@ const ResourceListPage = () => {
                 <CreateResourceForm/>
                 }
                 {eResource.isOpen &&
-                <EditResourceForm
-                    visible={true}
-                    onCreate={(values) => dispatch(editResource(values))}
-                    onCancel={() => {
-                        dispatch(setResourceMerge(`eResource`, {isOpen: false}))
-                    }}
-                />
+                <EditResourceForm />
                 }
                 {epResource.isOpen &&
                 <EditParentResourceForm

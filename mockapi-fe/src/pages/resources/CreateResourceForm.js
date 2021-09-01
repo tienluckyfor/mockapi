@@ -6,7 +6,6 @@ import {resourcesSelector, setResourceMerge, createResource} from "slices/resour
 import {fields, endpoints, } from "./configResource"
 import FormResource from "./FormResource";
 
-
 const CreateResourceForm = () => {
     const dispatch = useDispatch()
     const {cResource} = useSelector(resourcesSelector)
@@ -19,10 +18,15 @@ const CreateResourceForm = () => {
 
     return (
         <Form
-            onFinish={(values) => dispatch(createResource(values))}
+            onFinish={(values) => {
+                console.log('values', values)
+                return;
+                dispatch(createResource(values))
+            }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"
             layout={`vertical`}
             onFieldsChange={(_, allFields) => {
+                console.log('allFields', allFields)
                 const formValue = {}
                 allFields.map((item) => {
                     formValue[item.name] = item.value

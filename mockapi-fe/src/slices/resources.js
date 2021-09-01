@@ -5,7 +5,7 @@ import {setDatasetMerge} from "./datasets";
 import _slice_common from "./_slice_common";
 
 export const initialState = {
-    cResource: {isOpen: false},
+    cResource: {isOpen: true},
     dResource: {},
     eResource: {},
     epResource: {isOpen: false},

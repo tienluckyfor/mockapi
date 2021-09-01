@@ -7,7 +7,6 @@ import {apisSelector} from "slices/apis";
 import {useEffect, useState} from "react";
 
 const {Option, OptGroup} = Select;
-const {TextArea} = Input;
 
 const FormResource = ({formValue, resourceName}) => {
     const {mlApi} = useSelector(apisSelector)
@@ -19,6 +18,9 @@ const FormResource = ({formValue, resourceName}) => {
 
     return (
         <>
+            {/*<pre className="text-sm">
+                {JSON.stringify(formValue, null, '  ')}
+            </pre>*/}
             <Form.Item
                 name="api_id"
                 label="Api"
@@ -42,16 +44,24 @@ const FormResource = ({formValue, resourceName}) => {
                     onChange={(e) => setRName(e.target.value)}
                 />
             </Form.Item>
-            <Form.Item
-                name="field_template"
-                label="Field Template"
-            >
-                <TextArea/>
-            </Form.Item>
             <section className="">
-                <p className="mb-2">
+                <p className="mb-1">
                     <span className="text-red-500 mr-2 text-sm">*</span>
                     Fields</p>
+                <Form.Item
+                    className={`mb-0`}
+                    valuePropName="checked"
+                    name={`is_authentication`}
+                >
+                    <label className="flex items-center space-x-2 mb-2 cursor-pointer">
+                        <Switch
+                            checkedChildren={<CheckOutlined/>}
+                            unCheckedChildren={<CloseOutlined/>}
+                            size="small"
+                        />
+                        <span className="text-gray-500">Is authentication</span>
+                    </label>
+                </Form.Item>
                 <Form.List
                     name="fields"
                     initialValue={fields}
@@ -62,8 +72,7 @@ const FormResource = ({formValue, resourceName}) => {
                                 let field = {}
                                 try {
                                     field = formValue?.fields[name]
-                                } catch (e) {
-                                }
+                                } catch (e) {}
                                 return (
                                     <Space
                                         key={key}
@@ -114,12 +123,12 @@ const FormResource = ({formValue, resourceName}) => {
                                                         )}
                                                     </OptGroup>
                                                 )}
-
                                             </Select>
                                         </Form.Item>
                                         }
                                         {field?.name !== `id` &&
-                                        <MinusCircleOutlined onClick={() => remove(name)}/>
+                                        <Button danger type="link" onClick={() => remove(name)}
+                                                icon={<MinusCircleOutlined/>}/>
                                         }
                                     </Space>
                                 )
@@ -168,13 +177,6 @@ const FormResource = ({formValue, resourceName}) => {
                                         </>
                                         }
                                     </div>
-                                    <Form.Item
-                                        name={[name, `json`]}
-                                        fieldKey={[fieldKey, 'json']}
-                                        className={`mb-4`}
-                                    >
-                                        <TextArea placeholder="$mockdata or JSON"/>
-                                    </Form.Item>
                                     <Form.Item
                                         name={[name, `type`]}
                                         fieldKey={[fieldKey, 'type']}

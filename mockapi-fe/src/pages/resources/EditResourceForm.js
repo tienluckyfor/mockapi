@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react'
 import {Modal, Form,} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
-import {resourcesSelector,} from "slices/resources";
+import {editResource, resourcesSelector, setResourceMerge,} from "slices/resources";
 import {apisSelector, myApiList} from "slices/apis";
 import FormResource from "./FormResource";
 
-const EditResourceForm = ({visible, onCreate, onCancel}) => {
+const EditResourceForm = () => {
     const dispatch = useDispatch()
     const {eResource} = useSelector(resourcesSelector)
     const {mlApi} = useSelector(apisSelector)
@@ -38,17 +38,20 @@ const EditResourceForm = ({visible, onCreate, onCancel}) => {
 
     return (
         <Modal
-            visible={visible}
+            visible={true}
             title="Edit Resource"
             okText="Save"
             cancelText="Cancel"
-            onCancel={onCancel}
+            onCancel={() =>
+                dispatch(setResourceMerge(`eResource`, {isOpen: false}))
+            }
             onOk={() => {
                 form
                     .validateFields()
                     .then((values) => {
                         form.resetFields()
-                        onCreate(values)
+                        // onCreate(values)
+                        dispatch(editResource(values))
                     })
                     .catch((info) => {
                         console.log('Validate Failed:', info);

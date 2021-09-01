@@ -49,9 +49,9 @@ input CreateRallydataInput{
 input EditRallydataInput{
     is_pin: Boolean
     is_show: Boolean
-    id: ID! @rules(apply: ["required", "App\\Rules\\OwnerCheckRallyData"])
-    dataset_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckDataSet"])
-    resource_id: ID! @rules(apply:["required", "App\\Rules\\OwnerCheckResource"])
+    id: ID! @rules(apply: ["required", ])#"App\\Rules\\OwnerCheckRallyData"])
+    dataset_id: ID! @rules(apply:["required", ])#"App\\Rules\\OwnerCheckDataSet"])
+    resource_id: ID! @rules(apply:["required", ])#"App\\Rules\\OwnerCheckResource"])
     data: JSON! @rules(apply:["required"])
     data_children: JSON
 }
