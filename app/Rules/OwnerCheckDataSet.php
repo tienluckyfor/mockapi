@@ -2,34 +2,31 @@
 
 namespace App\Rules;
 
-use App\Models\DataSet;
+use App\Repositories\ShareRepository;
 use Illuminate\Contracts\Validation\Rule;
 
 class OwnerCheckDataSet implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    protected $share_repository;
+
+    public function __construct(
+        ShareRepository $shareRepository
+    ) {
+        $this->share_repository = $shareRepository;
     }
 
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
     {
         //
-        return DataSet::where('user_id', \auth()->id())
-            ->where('id', $value)
-            ->exists();
+        $OwnerIds = $this->share_repository->getOwnerIdsByDatasetId($value);
+        return in_array(\auth()->id(), $OwnerIds);
     }
 
     /**

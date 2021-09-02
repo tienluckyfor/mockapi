@@ -4,18 +4,18 @@ namespace App\Rules;
 
 use App\Models\DataSet;
 use App\Models\RallyData;
+use App\Repositories\ShareRepository;
 use Illuminate\Contracts\Validation\Rule;
 
 class OwnerCheckRallyData implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+
+    protected $share_repository;
+
+    public function __construct(
+        ShareRepository $shareRepository
+    ) {
+        $this->share_repository = $shareRepository;
     }
 
     /**
@@ -28,9 +28,12 @@ class OwnerCheckRallyData implements Rule
     public function passes($attribute, $value)
     {
         //
-        return RallyData::where('user_id', \auth()->id())
-            ->where('id', $value)
-            ->exists();
+        $OwnerIds = $this->share_repository->getOwnerIdsByRallyId($value);
+        return in_array(\auth()->id(), $OwnerIds);
+
+//        return RallyData::where('user_id', \auth()->id())
+//            ->where('id', $value)
+//            ->exists();
     }
 
     /**
