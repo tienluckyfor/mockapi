@@ -4,7 +4,7 @@
 namespace App\GraphQL\Mutations;
 
 
-use App\Models\Rallydata;
+use App\Models\RallyData;
 use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +22,7 @@ class RallydataMutations
         $this->rallydata_repository = $RallydataRepository;
     }
 
-    public function createRallydata($_, array $args): Rallydata
+    public function createRallydata($_, array $args): RallyData
     {
         $args['user_id'] = Auth::id();
 //        $args = $this->media_repository->handle_media($args);
@@ -31,31 +31,31 @@ class RallydataMutations
         return $this->rallydata_repository->createManual($args);
     }
 
-    public function editRallydata($_, array $args): Rallydata
+    public function editRallydata($_, array $args): RallyData
     {
-        dd(Rallydata::find(50));
+        dd(RallyData::find(50)->toArray());
         dd($args);
         $args = array_diff_key($args, array_flip(['directive']));
-        return tap(Rallydata::findOrFail($args['id']))
+        return tap(RallyData::findOrFail($args['id']))
             ->update($args);
     }
 
-    public function editParentRallydata($_, array $args): Rallydata
+    public function editParentRallydata($_, array $args): RallyData
     {
         $args = array_diff_key($args, array_flip(['directive']));
-        return tap(Rallydata::findOrFail($args['id']))
+        return tap(RallyData::findOrFail($args['id']))
             ->update($args);
     }
 
     public function deleteRallydata($_, array $args): bool
     {
         $ids = isset($args['ids']) ? $args['ids'] : [$args['id']];
-        return Rallydata::whereIn('id', $ids)->delete();
+        return RallyData::whereIn('id', $ids)->delete();
     }
 
     public function duplicateRallydata($_, array $args): bool
     {
-        $rallydata = Rallydata::where('id', $args['id'])->first()->toArray();
+        $rallydata = RallyData::where('id', $args['id'])->first()->toArray();
         if ($this->rallydata_repository->createManual($rallydata)) {
             return true;
         }
@@ -71,7 +71,7 @@ class RallydataMutations
                 $data = json_encode($rally->data);
                 $data = preg_replace("#{$args['find']}#mis", $args['replace'], $data);
                 $data = json_decode($data, true);
-                Rallydata::where('id', $rally->id)
+                RallyData::where('id', $rally->id)
                     ->update(['data' => $data]);
             });
         return true;
@@ -79,7 +79,7 @@ class RallydataMutations
 
     public function sortRallydata($_, array $args): bool
     {
-        $instance = new Rallydata;
+        $instance = new RallyData;
         $value = [];
         foreach ($args['ids'] as $key => $id) {
             $value[] = ['id' => $id, 'pin_index' => $key];
@@ -96,7 +96,7 @@ class RallydataMutations
 //                $data = json_encode($rally->data);
 //                $data = preg_replace("#{$args['find']}#mis", $args['replace'], $data);
 //                $data = json_decode($data, true);
-//                Rallydata::where('id', $rally->id)
+//                RallyData::where('id', $rally->id)
 //                    ->update(['data' => $data]);
 //            });
 //        return true;
