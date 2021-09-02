@@ -33,7 +33,7 @@ class RallydataMutations
 
     public function editRallydata($_, array $args): Rallydata
     {
-        dd(Rallydata::findOrFail(50));
+        dd(Rallydata::find(50));
         dd($args);
         $args = array_diff_key($args, array_flip(['directive']));
         return tap(Rallydata::findOrFail($args['id']))
