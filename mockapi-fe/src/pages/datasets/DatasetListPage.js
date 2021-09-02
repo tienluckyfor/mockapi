@@ -25,6 +25,7 @@ import InfoDatasetModal from "./InfoDatasetModal";
 import AppHelmet from "shared/AppHelmet";
 import {rallydatasSelector, setRallydataMerge} from "slices/rallydatas";
 import FindReplaceRallydata from "pages/rallydatas/FindReplaceRallydata";
+import {ShareAvatars} from "../../components/AntdComponent";
 
 const DatasetListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -123,6 +124,10 @@ const DatasetListPage = () => {
                 width: '30%',
                 render: (text, dataset, index) => <Tooltip title={dataset.name}>
                     <p className="truncate w-48">{dataset.name}</p>
+                    <ShareAvatars user={dataset?.user} shares={dataset?.shares}/>
+                    {/*<pre className="text-sm">
+                        {JSON.stringify(dataset, null, '  ')}
+                    </pre>*/}
                 </Tooltip>
             },
             {

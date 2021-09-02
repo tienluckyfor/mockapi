@@ -80,7 +80,9 @@ class User extends Authenticatable
     public function share_datasets(): HasMany
     {
         return $this->hasMany(Share::class, 'user_invite_id', 'id')
-            ->where('shareable_type', '=', 'App\Models\DataSet');
+            ->join('datasets', 'datasets.id', '=', 'shares.shareable_id')
+            ->where('shareable_type', '=', 'App\Models\DataSet')
+            ->whereNull('datasets.deleted_at');
     }
 
     public function media()

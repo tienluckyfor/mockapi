@@ -1,4 +1,4 @@
-import {Menu, Badge, Avatar as AntAvatar, PageHeader, Space, Divider} from 'antd';
+import {Menu, Badge, PageHeader, Space, Divider, Tooltip} from 'antd';
 import {CrownOutlined, ShareAltOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
@@ -6,10 +6,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
 import {queryMe, usersSelector} from "slices/users";
 import Avatar from "react-avatar";
-import {getFirstThumb, getURLParams} from "services";
+import {getFirstThumb, getURLParams, } from "services";
 import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
+import {ShareAvatars} from "./AntdComponent";
 
 const Sidebar = (props) => {
     const {qMe} = useSelector(usersSelector)
@@ -63,37 +64,30 @@ const Sidebar = (props) => {
                         // if (key >= 5) return;
                         const isOwner = qMe?.data?.id == dataset?.user?.id
                         return (<Menu.Item key={dataset.id}>
-                            <Link
-                                onClick={() => {
-                                    dispatch(setRallydata({
-                                        dataset_id_RD: dataset.id,
-                                        resource_id_RD: dataset.resources[0]?.id,
-                                    }))
-                                }}
-                                className="flex items-center space-x-1"
-                                to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
-                                <Space>
-                                    {isOwner &&
-                                    <CrownOutlined/>
-                                    }
-                                    {!isOwner &&
-                                    <ShareAltOutlined/>
-                                    }
-                                    <span>{dataset.name}</span>
-                                </Space>
-                                <AntAvatar.Group
-                                    size="small" maxCount={2}
-                                    maxStyle={{color: '#f56a00', backgroundColor: '#fde3cf'}}>
-                                    {(dataset.shares ?? []).map(({user_invite}, key) =>
-                                        <AntAvatar
-                                            // src={user_invite?.medium?.thumb_image}
-                                            src={getFirstThumb(user_invite?.medium)}
-                                            key={key}>
-                                            {user_invite?.medium ? null : user_invite?.name.match(/\b(\w)/g).join('')}
-                                        </AntAvatar>
-                                    )}
-                                </AntAvatar.Group>
-                            </Link>
+                            <Tooltip title={dataset.name}>
+                                <Link
+                                    onClick={() => {
+                                        dispatch(setRallydata({
+                                            dataset_id_RD: dataset.id,
+                                            resource_id_RD: dataset.resources[0]?.id,
+                                        }))
+                                    }}
+                                    className="flex items-center space-x-1"
+                                    to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
+                                    <Space>
+                                        {isOwner &&
+                                        <CrownOutlined/>
+                                        }
+                                        {!isOwner &&
+                                        <ShareAltOutlined/>
+                                        }
+                                        <p className="w-32 truncate">{dataset.name}</p>
+                                    </Space>
+                                    <ShareAvatars shares={dataset?.shares} user={qMe?.data}/>
+                                </Link>
+                            </Tooltip>
+
+
                         </Menu.Item>)
                     })}
                 </Menu.ItemGroup>

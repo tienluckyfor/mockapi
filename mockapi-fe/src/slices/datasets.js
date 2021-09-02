@@ -229,6 +229,17 @@ export function listDataset() {
     name
     locale
     updated_at
+    shares{
+        user_invite{
+            id
+            name
+            medium {
+                id
+                file
+                thumb_files
+            }
+        }
+    }
     user{
         id
         name
