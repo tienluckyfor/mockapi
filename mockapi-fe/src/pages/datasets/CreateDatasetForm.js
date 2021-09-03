@@ -1,7 +1,7 @@
 import {Form, Button, } from 'antd'
 import {useDispatch, useSelector} from "react-redux"
 import {useEffect, useState} from 'react'
-import {myApiList} from "slices/apis"
+import {listApi} from "slices/apis"
 import {myResourceList} from "slices/resources"
 import {datasetsSelector, setDatasetMerge, createDataset, setDataset} from "slices/datasets"
 import FormDataset from "./FormDataset";
@@ -12,7 +12,7 @@ const CreateDatasetForm = () => {
     const [apiId, setApiId] = useState()
 
     useEffect(() => {
-        dispatch(myApiList())
+        dispatch(listApi())
     }, [])
 
     useEffect(() => {

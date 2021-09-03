@@ -8,7 +8,10 @@ export const initialState = {
     dApi: {},
     eApi: {},
     duApi: {},
+    modalApi: {},
     mlApi: {isRefresh: true, search: {name: ``}},
+    lApi: {isRefresh: true, search: {name: ``}},
+
 };
 
 const apisSlice = createSlice({
@@ -70,7 +73,7 @@ export function createApi(variables) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     cApi: {isLoading: false, isOpen: false},
-                    mlApi: {isRefresh: true}
+                    lApi: {isRefresh: true},
                 }))
             })
         } catch (e) {
@@ -109,7 +112,7 @@ export function editApi(api) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     eApi: {isLoading: false, isOpen: false},
-                    mlApi: {isRefresh: true}
+                    lApi: {isRefresh: true},
                 }))
             })
         } catch (e) {
@@ -141,13 +144,13 @@ export function deleteApi(api) {
                 const status = res?.data?.delete_api
                 dispatch(setMerge({
                     dApi: {isLoading: false, status,},
-                    mlApi: {isRefresh: true}
+                    lApi: {isRefresh: true},
                 }))
             })
         } catch (e) {
             dispatch(setMerge({
                 dApi: {isLoading: false, api:null},
-                mlApi: {isRefresh: true}
+                lApi: {isRefresh: true},
             }))
         }
     }
@@ -165,6 +168,26 @@ export function myApiList() {
             name
             thumb_sizes
             updated_at
+    shares{
+        user_invite{
+            id
+            name
+            medium {
+                id
+                file
+                thumb_files
+            }
+        }
+    }
+    user{
+        id
+        name
+        medium{
+            id
+            file
+            thumb_files
+        }
+    }
   }
 }`;
         const res = await apolloClient.query({
@@ -178,6 +201,57 @@ export function myApiList() {
                     data: myApiList,
                     isRefresh: false,
                     search: {...mlApi.search, total: myApiList.length},
+                }
+        }))
+    }
+}
+
+
+export function listApi() {
+    return async (dispatch, getState) => {
+        const {lApi} = getState().apis
+        if (lApi.isLoading) return;
+        dispatch(setMerge({lApi: {isLoading: true, isRefresh: false}}))
+        const query = gql`
+        query {
+  apis(name:"${lApi.search.name}") {
+            id
+            name
+            thumb_sizes
+            updated_at
+    shares{
+        user_invite{
+            id
+            name
+            medium {
+                id
+                file
+                thumb_files
+            }
+        }
+    }
+    user{
+        id
+        name
+        medium{
+            id
+            file
+            thumb_files
+        }
+    }
+  }
+}`;
+        const res = await apolloClient.query({
+            query
+        })
+        const apiList = res?.data?.apis ?? []
+        dispatch(setMerge({
+            lApi:
+                {
+                    isLoading: false,
+                    data: apiList,
+                    isRefresh: false,
+                    search: {...lApi.search, total: apiList.length},
                 }
         }))
     }
@@ -206,7 +280,7 @@ export function duplicateApi(api) {
                 const status = res?.data?.duplicate_api
                 dispatch(setMerge({
                     duApi: {isLoading: false, status,},
-                    mlApi: {isRefresh: true}
+                    lApi: {isRefresh: true}
                 }))
             })
         } catch (e) {

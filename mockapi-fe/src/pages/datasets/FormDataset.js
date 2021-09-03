@@ -2,7 +2,7 @@ import {Form, Input, Select, Tree, Table,} from 'antd'
 import {DownOutlined} from '@ant-design/icons'
 import {useDispatch, useSelector} from "react-redux"
 import {useEffect, } from 'react'
-import {apisSelector, myApiList} from "slices/apis"
+import {apisSelector, listApi} from "slices/apis"
 import {myResourceList} from "slices/resources"
 import {datasetsSelector, } from "slices/datasets"
 import {ChildAmountData, ParentAmountData} from "./AmountData"
@@ -12,10 +12,10 @@ const {Option} = Select;
 const FormDataset = ({apiId, setApiId, }) => {
     const dispatch = useDispatch()
     const {cDataset, lDataset, } = useSelector(datasetsSelector)
-    const {mlApi} = useSelector(apisSelector)
+    const {lApi} = useSelector(apisSelector)
 
     useEffect(() => {
-        dispatch(myApiList())
+        dispatch(listApi())
     }, [])
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const FormDataset = ({apiId, setApiId, }) => {
                     autoFocus
                     onChange={(value) => setApiId(value)}
                 >
-                    {(mlApi.data ?? []).map((api, key) =>
+                    {(lApi.data ?? []).map((api, key) =>
                         <Option value={api.id}>{api.name}</Option>
                     )}
                 </Select>

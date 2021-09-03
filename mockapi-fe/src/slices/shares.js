@@ -6,7 +6,6 @@ import _slice_common from "./_slice_common";
 export const initialState = {
     cShare: {},
     dShare: {},
-    eShare: {},
     lShare: {isRefresh: true},
 };
 

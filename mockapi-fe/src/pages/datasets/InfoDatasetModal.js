@@ -1,9 +1,9 @@
 import React from 'react';
-import {Button, Divider, List, Modal, Space, Tabs} from "antd";
+import {Divider, List, Modal, Tabs} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
 import {Share} from "components";
-import {CodeBlock, CopyBlock, dracula} from "react-code-blocks";
+import {CopyBlock, dracula} from "react-code-blocks";
 import {apiCodeby} from "./apiCodeby";
 
 const InfoDatasetModal = () => {
@@ -47,7 +47,8 @@ const InfoDatasetModal = () => {
     const ReactJs = () => {
         return <ul className="space-y-4">
             <li className="space-y-2">
-                <a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM package</a>
+                <a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM
+                    package</a>
                 <CopyBlock
                     text={`npm i react-api-codeby`}
                     theme={dracula}
@@ -79,6 +80,7 @@ const InfoDatasetModal = () => {
         cancelText="Close"
     >
         <Share
+            data={modalDataset?.dataset}
             shareable_type="App\Models\DataSet"
             shareable_id={modalDataset?.dataset?.id}/>
         <Divider/>

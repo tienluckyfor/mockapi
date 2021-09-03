@@ -4,17 +4,15 @@ import {PlusOutlined, CloseOutlined, SearchOutlined, MenuOutlined, LoadingOutlin
 import {useState, useEffect, useRef} from 'react'
 
 import {useDispatch, useSelector} from "react-redux"
-import {authsSelector} from "slices/auths"
-import {apisSelector, myApiList, setApiMerge} from "slices/apis"
+import {apisSelector, listApi, setApiMerge} from "slices/apis"
 import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resources"
-import {Sidebar} from "./index"
-import {datasetsSelector, listDataset, myDatasetList, setDatasetMerge} from "slices/datasets";
+import {datasetsSelector, listDataset,  setDatasetMerge} from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {Link} from "react-router-dom";
 
 const Header = ({page}) => {
     const dispatch = useDispatch()
-    const {mlApi, cApi} = useSelector(apisSelector)
+    const {lApi, cApi} = useSelector(apisSelector)
     const {mlResource, cResource} = useSelector(resourcesSelector)
     const {lDataset, cDataset} = useSelector(datasetsSelector)
     const {qMe} = useSelector(usersSelector)
@@ -87,8 +85,8 @@ const Header = ({page}) => {
         setSearch(value)
         switch (page) {
             case 'ApiListPage':
-                dispatch(setApiMerge(`mlApi`, {search: {name: value}}))
-                dispatch(myApiList())
+                dispatch(setApiMerge(`lApi`, {search: {name: value}}))
+                dispatch(listApi())
                 break;
             case 'ResourceListPage':
                 dispatch(setResourceMerge(`mlResource`, {search: {name: value}}))
@@ -108,9 +106,9 @@ const Header = ({page}) => {
             case 'ApiListPage':
                 setInfo({
                     name: `Api`,
-                    isLoading: mlApi?.isLoading,
+                    isLoading: lApi?.isLoading,
                     total: qMe?.data?.apis_count,
-                    search: mlApi?.search,
+                    search: lApi?.search,
                     cIsOpen: cApi?.isOpen,
                     cIsLoading: cApi?.isLoading,
                 })
@@ -136,7 +134,7 @@ const Header = ({page}) => {
                 })
                 break;
         }
-    }, [mlApi, cApi, mlResource, cResource, lDataset, cDataset, qMe])
+    }, [lApi, cApi, mlResource, cResource, lDataset, cDataset, qMe])
 
     const onAdd = () => {
         switch (page) {

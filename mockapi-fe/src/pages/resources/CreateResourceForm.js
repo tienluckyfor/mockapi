@@ -1,7 +1,7 @@
 import {Form, Button, } from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from 'react'
-import {myApiList} from "slices/apis"
+import {listApi} from "slices/apis"
 import {resourcesSelector, setResourceMerge, createResource} from "slices/resources"
 import {fields, endpoints, } from "./configResource"
 import FormResource from "./FormResource";
@@ -12,7 +12,7 @@ const CreateResourceForm = () => {
     const [formValue, setFormValue] = useState({})
 
     useEffect(() => {
-        dispatch(myApiList())
+        dispatch(listApi())
         setFormValue({fields, endpoints})
     }, [])
 

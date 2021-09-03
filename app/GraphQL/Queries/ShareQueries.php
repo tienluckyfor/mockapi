@@ -3,6 +3,7 @@
 
 namespace App\GraphQL\Queries;
 
+use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Share;
 
@@ -17,6 +18,16 @@ class ShareQueries
         switch ($args['shareable_type']) {
             case 'App\Models\DataSet':
                 $owner = DataSet::find($args['shareable_id'])
+                    ->user;
+                $share = collect([
+                    'is_owner'    => true,
+                    'user_invite' => $owner,
+                    'updated_at'  => null,
+                ]);
+                $shares->prepend($share);
+                break;
+            case 'App\Models\Api':
+                $owner = Api::find($args['shareable_id'])
                     ->user;
                 $share = collect([
                     'is_owner'    => true,

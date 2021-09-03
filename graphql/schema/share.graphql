@@ -35,7 +35,7 @@ input CreateShareInput{
 }
 
 input EditShareInput{
-    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckShare"])
+#    id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckShare"])
     name: String! @rules(apply:["required"])
 }
 

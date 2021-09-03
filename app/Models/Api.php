@@ -46,4 +46,10 @@ class Api extends Model
     {
         return $this->hasMany(DataSet::class);
     }
+
+    public function shares()
+    {
+        return $this->morphMany(Share::class, 'shareable')
+            ->orderBy('id', 'desc');
+    }
 }

@@ -7,10 +7,11 @@ extend type Mutation {
 }
 
 extend type Query {
-    apis(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Api!]! @paginate(type: "paginator" model: "App\\Models\\Api")
+#    apis(name: String @where(operator: "like") orderBy: [OrderByClause!] @orderBy): [Api!]! @paginate(type: "paginator" model: "App\\Models\\Api")
 #    apis(name: String @eq orderBy: [OrderByClause!] @orderBy): [Api!]! @paginate(type: "paginator" model: "App\\Models\\Api")
     api(id: ID @eq): Api @find
-    my_api_list(name: String): [Api!]! @guard @field(resolver: "App\\GraphQL\\Queries\\ApiQueries@my_api_list")
+    my_api_list(name: String): [Api] @guard @field(resolver: "App\\GraphQL\\Queries\\ApiQueries@myApiList")
+    apis(name: String): [Api] @guard @field(resolver: "App\\GraphQL\\Queries\\ApiQueries@getApis")
 }
 
 type Api{
@@ -20,6 +21,7 @@ type Api{
     user: User!
     created_at: DateTime!
     updated_at: DateTime!
+    shares: [Share]
 }
 
 input CreateApiInput{

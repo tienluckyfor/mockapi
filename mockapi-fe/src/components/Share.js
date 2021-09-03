@@ -8,24 +8,23 @@ import {useDispatch, useSelector} from "react-redux";
 import debounce from "lodash/debounce"
 import moment from "moment"
 import "moment-timezone";
-import {datasetsSelector} from "slices/datasets";
 import {isMobile} from 'react-device-detect';
-import {getFirstThumb} from "../services";
+import {getFirstThumb} from "services";
+import {listApi} from "../slices/apis";
+import {myDatasetList} from "../slices/datasets";
 
-export const Share = ({shareable_type, shareable_id}) => {
+export const Share = ({shareable_type, shareable_id, data}) => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
-
     const dispatch = useDispatch()
     const {lsUser} = useSelector(usersSelector)
     const {cShare, lShare, dShare} = useSelector(sharesSelector)
-    const {modalDataset,} = useSelector(datasetsSelector)
     const {qMe,} = useSelector(usersSelector)
 
     const [isOwner, setIsOwner] = useState()
     React.useEffect(() => {
-        const isOwner = qMe?.data?.id == modalDataset?.dataset?.user?.id
+        const isOwner = qMe?.data?.id == data?.user?.id
         setIsOwner(isOwner)
-    }, [qMe, modalDataset])
+    }, [qMe, data])
 
     const RenderForm = () => {
         const debounceFetch = debounce(name => {
@@ -37,6 +36,16 @@ export const Share = ({shareable_type, shareable_id}) => {
                 form.setFieldsValue({user_invite_id: null});
             }
         }, [cShare])
+
+        React.useEffect(() => {
+            if (cShare?.data || dShare?.status) {
+                if (shareable_type.match(/Api/gi))
+                    dispatch(listApi())
+                if (shareable_type.match(/Dataset/gi))
+                    dispatch(myDatasetList())
+            }
+
+        }, [cShare, dShare])
 
         React.useEffect(() => {
             if (lShare.isRefresh && shareable_id) {
@@ -63,7 +72,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                 layout="inline"
                 className={isOwner ? '' : 'hidden'}
             >
-                <Form.Item name="user_invite_id" style={{width: isMobile ? '80%': '89.5%'}}>
+                <Form.Item name="user_invite_id" style={{width: isMobile ? '80%' : '89.5%'}}>
                     <Select
                         showSearch
                         filterOption={false}
@@ -79,7 +88,6 @@ export const Share = ({shareable_type, shareable_id}) => {
                                         className="rounded-full"
                                         size="20"
                                         name={user.name}
-                                        // src={user?.medium?.thumb_image}
                                         src={getFirstThumb(user?.medium)}
                                     />
                                     {user.name}
@@ -103,10 +111,11 @@ export const Share = ({shareable_type, shareable_id}) => {
     }
 
     const RenderList = () => {
+        console.log('lShare?.data?.shares', lShare?.data?.shares)
         return (
             <List
                 loading={lShare.isLoading}
-                dataSource={(lShare?.data?.shares ?? [])}
+                dataSource={lShare?.data?.shares ?? []}
                 renderItem={({id, is_owner, user_invite, updated_at}) => (
                     <List.Item>
                         <section className="flex justify-between w-full">
@@ -131,7 +140,7 @@ export const Share = ({shareable_type, shareable_id}) => {
                                 {!is_owner &&
                                 <span className="text-gray-400">{moment(updated_at).fromNow()}</span>
                                 }
-                                { isOwner && !is_owner &&
+                                {isOwner && !is_owner &&
                                 <Popconfirm
                                     title="Are you sure to delete?"
                                     onConfirm={() => dispatch(deleteShare(id))}

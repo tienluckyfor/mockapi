@@ -9,7 +9,7 @@ import {useEffect, useState} from "react";
 const {Option, OptGroup} = Select;
 
 const FormResource = ({formValue, resourceName}) => {
-    const {mlApi} = useSelector(apisSelector)
+    const {lApi} = useSelector(apisSelector)
     const [rName, setRName] = useState()
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const FormResource = ({formValue, resourceName}) => {
                     optionFilterProp="children"
                     autoFocus
                 >
-                    {(mlApi.data ?? []).map((api, key) =>
+                    {(lApi.data ?? []).map((api, key) =>
                         <Option value={api.id}>{api.name}</Option>
                     )}
                 </Select>

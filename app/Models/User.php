@@ -43,7 +43,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'media_ids' => 'array',
+        'media_ids'         => 'array',
     ];
 
     public function sendPasswordResetNotification($token)
@@ -67,6 +67,26 @@ class User extends Authenticatable
         return $this->hasMany(DataSet::class);
     }
 
+// Apis
+    public function getApisAttribute()
+    {
+        $shareApiIds = $this->share_apis->pluck('shareable_id')->toArray();
+        $apis = Api::where('user_id', $this->id)
+            ->orWhereIn('id', $shareApiIds)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        return $apis;
+    }
+
+    public function share_apis(): HasMany
+    {
+        return $this->hasMany(Share::class, 'user_invite_id', 'id')
+            ->join('apis', 'apis.id', '=', 'shares.shareable_id')
+            ->where('shareable_type', '=', 'App\Models\Api')
+            ->whereNull('apis.deleted_at');
+    }
+
+// Datasets
     public function getDatasetsAttribute()
     {
         $shareDatasetIds = $this->share_datasets->pluck('shareable_id')->toArray();

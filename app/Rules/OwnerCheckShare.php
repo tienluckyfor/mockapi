@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\Api;
 use App\Models\DataSet;
 use App\Models\Share;
 use Illuminate\Contracts\Validation\Rule;
@@ -36,6 +37,11 @@ class OwnerCheckShare implements Rule
             switch ($this->shareableType) {
                 case 'App\Models\DataSet':
                     return DataSet::where('user_id', \auth()->id())
+                        ->where('id', $this->shareableId)
+                        ->exists();
+                    break;
+                case 'App\Models\Api':
+                    return Api::where('user_id', \auth()->id())
                         ->where('id', $this->shareableId)
                         ->exists();
                     break;

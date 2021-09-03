@@ -2,13 +2,13 @@ import {useEffect, useState} from 'react'
 import {Modal, Form,} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {editResource, resourcesSelector, setResourceMerge,} from "slices/resources";
-import {apisSelector, myApiList} from "slices/apis";
+import {apisSelector, listApi} from "slices/apis";
 import FormResource from "./FormResource";
 
 const EditResourceForm = () => {
     const dispatch = useDispatch()
     const {eResource} = useSelector(resourcesSelector)
-    const {mlApi} = useSelector(apisSelector)
+    const {lApi} = useSelector(apisSelector)
     const [rName, setRName] = useState()
     const [formValue, setFormValue] = useState({})
     const [form] = Form.useForm()
@@ -16,14 +16,14 @@ const EditResourceForm = () => {
     const [fields, setFields] = useState([])
 
     useEffect(() => {
-        dispatch(myApiList())
+        dispatch(listApi())
     }, [])
 
     useEffect(() => {
         setEndpoints(eResource?.resource?.endpoints)
         setFields(eResource?.resource?.fields)
         setFormValue({fields, endpoints})
-        let api = (mlApi.data ?? []).filter((api) => api?.id == eResource?.resource?.api_id)
+        let api = (lApi.data ?? []).filter((api) => api?.id == eResource?.resource?.api_id)
         api = api[0] ?? {}
         form.setFieldsValue({
             id: eResource?.resource?.id,
@@ -34,7 +34,7 @@ const EditResourceForm = () => {
             endpoints: eResource?.resource?.endpoints,
         });
         setRName(eResource?.resource?.name)
-    }, [eResource, mlApi])
+    }, [eResource, lApi])
 
     return (
         <Modal

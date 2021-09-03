@@ -1,4 +1,4 @@
-import {Breadcrumb, Button, Select, Space} from 'antd';
+import {Breadcrumb, Button, Menu, Select, Space} from 'antd';
 import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined, MenuOutlined} from '@ant-design/icons';
 import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
@@ -139,17 +139,18 @@ const HeaderRallydata = () => {
             <section className=" lg:flex block items-center justify-between lg:space-y-0 space-y-3">
                 <RenderBreadcrumb/>
                 <Space>
+                    {qMe?.data?.id == deRallydata?.data?.dataset?.user?.id &&
                     <Button
                         onClick={(e) => {
                             dispatch(setDatasetMerge(`eDataset`, {
                                 isOpen: true,
                                 dataset: deRallydata?.data?.dataset
                             }))
-                            // dispatch(myDatasetList())
                         }}
                         type="dashed"
                         icon={<FormOutlined/>}
                     />
+                    }
                     <Button
                         onClick={(e) => dispatch(setDataset({
                             modalDataset: {

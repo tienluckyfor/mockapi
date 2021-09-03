@@ -32,6 +32,8 @@ class UserQueries
             ->loadCount(['apis', 'resources', 'datasets']);
         $shareDatasetIds = $user->share_datasets->pluck('shareable_id')->toArray();
         $user->datasets_count += count($shareDatasetIds);
+        $shareApiIds = $user->share_apis->pluck('shareable_id')->toArray();
+        $user->apis_count += count($shareApiIds);
         return $user;
     }
 

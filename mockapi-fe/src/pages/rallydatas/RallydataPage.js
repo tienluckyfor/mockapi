@@ -1,13 +1,10 @@
 import {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {
-    rallydatasSelector, myRallydataList, setFieldsRallydata, myRallydataListSort,
-} from "slices/rallydatas";
+import {rallydatasSelector, setFieldsRallydata, myRallydataListSort,} from "slices/rallydatas";
 import {Loading} from "components";
 import CreateRallydataForm from "./CreateRallydataForm";
 import EditRallydataForm from "./EditRallydataForm";
 import HeaderRallydata from "./HeaderRallydata";
-// import RenderTableRallydata from "./RenderTableRallydata";
 import {usersSelector} from "slices/users";
 import AppHelmet from "shared/AppHelmet";
 import RenderTableRallydataSort from "./RenderTableRallydataSort";

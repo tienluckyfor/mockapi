@@ -16,7 +16,7 @@ import {
     setDataset,
 } from "slices/datasets"
 import {commonsSelector, handleMenuClick, handleVisibleChange,} from "slices/commons";
-import {queryMe} from "slices/users"
+import {queryMe, usersSelector} from "slices/users"
 
 import {Header, Loading} from "components"
 import CreateDatasetForm from "./CreateDatasetForm"
@@ -25,14 +25,15 @@ import InfoDatasetModal from "./InfoDatasetModal";
 import AppHelmet from "shared/AppHelmet";
 import {rallydatasSelector, setRallydataMerge} from "slices/rallydatas";
 import FindReplaceRallydata from "pages/rallydatas/FindReplaceRallydata";
-import {ShareAvatars} from "../../components/AntdComponent";
+import {ShareAvatars} from "components/AntdComponent";
 
 const DatasetListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
     const dispatch = useDispatch()
     const {visibles,} = useSelector(commonsSelector)
-    const {cDataset, eDataset, lDataset, dDataset, fdDataset, duDataset, } = useSelector(datasetsSelector)
+    const {cDataset, eDataset, lDataset, dDataset, fdDataset, duDataset,} = useSelector(datasetsSelector)
+    const {qMe,} = useSelector(usersSelector)
     const {fRallydata} = useSelector(rallydatasSelector)
 
     useEffect(() => {
@@ -44,6 +45,7 @@ const DatasetListPage = () => {
 
     const renderTable = () => {
         const menu = (dataset) => (
+
             <Menu onClick={(e) => dispatch(handleMenuClick(e, dataset))}>
                 <Menu.Item>
                     <Button
@@ -54,66 +56,71 @@ const DatasetListPage = () => {
                         Info
                     </Button>
                 </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        size={`small`}
-                        type="link"
-                        onClick={(e) => dispatch(duplicateDataset(dataset))}
-                        loading={duDataset.isLoading && duDataset?.dataset?.id === dataset.id}
-                    >
-                        Duplicate
-                    </Button>
-                </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        size={`small`}
-                        type="link"
-                        onClick={(e) => dispatch(setDatasetMerge(`eDataset`, {isOpen: true, dataset}))}
-                    >
-                        Edit
-                    </Button>
-                </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        size={`small`}
-                        type="link"
-                        onClick={(e) => dispatch(setRallydataMerge(`fRallydata`, {isOpen: true, dataset}))}
-                    >
-                        Find & replace
-                    </Button>
-                </Menu.Item>
-                <Menu.Item key={`delete`}>
-                    <Popconfirm
-                        title={`Delete dataset: ${dataset.name}`}
-                        onConfirm={(e) => dispatch(deleteDataset(dataset))}
-                        okText="Yes"
-                        cancelText="No"
-                        okButtonProps={{autoFocus: true}}
-                    >
+                {qMe?.data?.id == dataset?.user?.id &&
+                <>
+                    <Menu.Item>
                         <Button
                             size={`small`}
                             type="link"
-                            danger
-                            loading={dDataset?.dataset?.id === dataset.id}
-                        >Delete</Button>
-                    </Popconfirm>
-                </Menu.Item>
-                <Menu.Item key={`delete`}>
-                    <Popconfirm
-                        title={<p>Also delete rallydata relative: <br/>{dataset.name}</p>}
-                        onConfirm={(e) => dispatch(forceDeleteDataset(dataset))}
-                        okText="Yes"
-                        cancelText="No"
-                        okButtonProps={{autoFocus: true}}
-                    >
+                            onClick={(e) => dispatch(duplicateDataset(dataset))}
+                            loading={duDataset.isLoading && duDataset?.dataset?.id === dataset.id}
+                        >
+                            Duplicate
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item>
                         <Button
                             size={`small`}
                             type="link"
-                            danger
-                            loading={fdDataset?.dataset?.id === dataset.id}
-                        >Force Delete</Button>
-                    </Popconfirm>
-                </Menu.Item>
+                            onClick={(e) => dispatch(setDatasetMerge(`eDataset`, {isOpen: true, dataset}))}
+                        >
+                            Edit
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button
+                            size={`small`}
+                            type="link"
+                            onClick={(e) => dispatch(setRallydataMerge(`fRallydata`, {isOpen: true, dataset}))}
+                        >
+                            Find & replace
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item key={`delete`}>
+                        <Popconfirm
+                            title={`Delete dataset: ${dataset.name}`}
+                            onConfirm={(e) => dispatch(deleteDataset(dataset))}
+                            okText="Yes"
+                            cancelText="No"
+                            okButtonProps={{autoFocus: true}}
+                        >
+                            <Button
+                                size={`small`}
+                                type="link"
+                                danger
+                                loading={dDataset?.dataset?.id === dataset.id}
+                            >Delete</Button>
+                        </Popconfirm>
+                    </Menu.Item>
+                    <Menu.Item key={`delete`}>
+                        <Popconfirm
+                            title={<p>Also delete rallydata relative: <br/>{dataset.name}</p>}
+                            onConfirm={(e) => dispatch(forceDeleteDataset(dataset))}
+                            okText="Yes"
+                            cancelText="No"
+                            okButtonProps={{autoFocus: true}}
+                        >
+                            <Button
+                                size={`small`}
+                                type="link"
+                                danger
+                                loading={fdDataset?.dataset?.id === dataset.id}
+                            >Force Delete</Button>
+                        </Popconfirm>
+                    </Menu.Item>
+                </>
+                }
+
             </Menu>
         )
 
@@ -125,9 +132,6 @@ const DatasetListPage = () => {
                 render: (text, dataset, index) => <Tooltip title={dataset.name}>
                     <p className="truncate w-48">{dataset.name}</p>
                     <ShareAvatars user={dataset?.user} shares={dataset?.shares}/>
-                    {/*<pre className="text-sm">
-                        {JSON.stringify(dataset, null, '  ')}
-                    </pre>*/}
                 </Tooltip>
             },
             {
@@ -150,7 +154,6 @@ const DatasetListPage = () => {
                     return (
                         <section className={`text-xs flex flex-col space-y-1`}>
                             {(rallydatas ?? []).map((rally) => {
-                                // const resource = mlDataset?.data?.resources[rally?.resource_id]
                                 return (<p className={`flex space-x-1 items-center`}>
                                     <span className="truncate ">{rally?.resource_name}</span>
                                     <Badge count={rally?.aggregate} className="site-badge-count-4" size="small"/>
@@ -158,9 +161,6 @@ const DatasetListPage = () => {
                             })}
                         </section>
                     )
-                    // return (<Tooltip title={dataset?.api?.name}>
-                    //     <p className="text-gray-400">{dataset?.api?.name}</p>
-                    // </Tooltip>)
                 },
             },
             {

@@ -4,34 +4,43 @@ import {useEffect} from 'react';
 import moment from "moment"
 import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
-
-import {apisSelector, deleteApi, duplicateApi, myApiList, setApiMerge} from "slices/apis";
+import {apisSelector, deleteApi, duplicateApi, listApi, setApiMerge, setApi} from "slices/apis";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
 import {queryMe} from "slices/users";
-
 import {Header, Loading} from "components";
 import CreateApiForm from "./CreateApiForm";
 import EditApiForm from "./EditApiForm";
 import AppHelmet from "shared/AppHelmet";
 import {objToString} from "services";
+import InfoApiModal from "./InfoApiModal";
+import {ShareAvatars} from "components/AntdComponent";
 
 const ApiListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
 
     const dispatch = useDispatch()
     const {visibles} = useSelector(commonsSelector)
-    const {cApi, eApi, mlApi, dApi, duApi} = useSelector(apisSelector)
+    const {cApi, eApi, lApi, dApi, duApi} = useSelector(apisSelector)
 
     useEffect(() => {
-        if (mlApi.isRefresh) {
-            dispatch(myApiList())
+        if (lApi.isRefresh) {
+            dispatch(listApi())
             dispatch(queryMe(window.location.href))
         }
-    }, [dispatch, mlApi])
+    }, [dispatch, lApi])
 
     const renderTable = () => {
         const menu = (api) => (
             <Menu onClick={(e) => dispatch(handleMenuClick(e, api))}>
+                <Menu.Item>
+                    <Button
+                        size={`small`}
+                        type="link"
+                        onClick={(e) => dispatch(setApi({modalApi: {visible: true, api}}))}
+                    >
+                        Info
+                    </Button>
+                </Menu.Item>
                 <Menu.Item>
                     <Button
                         size={`small`}
@@ -74,7 +83,10 @@ const ApiListPage = () => {
                 dataIndex: 'name',
                 ellipsis: true,
                 render: (text, api, index) => {
-                    return <Tooltip title={text}>{text}</Tooltip>
+                    return <Tooltip title={text}>
+                        <p className="truncate w-48">{text}</p>
+                        <ShareAvatars user={api?.user} shares={api?.shares}/>
+                    </Tooltip>
                 },
             },
             {
@@ -113,7 +125,7 @@ const ApiListPage = () => {
             <>
                 <Table
                     columns={columns}
-                    dataSource={mlApi?.data}
+                    dataSource={lApi?.data}
                     pagination={{pageSize: 20, hideOnSinglePage: true}}
                 />
             </>
@@ -132,10 +144,10 @@ const ApiListPage = () => {
                     visible={true}
                 />
                 }
-                {mlApi?.search?.name &&
+                {lApi?.search?.name &&
                 <h3 className="text-xl mt-3 text-gray-400">
-                    {mlApi?.search?.total} results of search <span
-                    className="bg-yellow-400 text-black px-1">{mlApi?.search?.name}</span>
+                    {lApi?.search?.total} results of search <span
+                    className="bg-yellow-400 text-black px-1">{lApi?.search?.name}</span>
                 </h3>
                 }
                 <Divider className="mt-4 mb-0"/>
@@ -147,12 +159,13 @@ const ApiListPage = () => {
     return (
         <>
             <AppHelmet title="API's list"/>
-            {mlApi.isLoading && !mlApi.data &&
+            {lApi.isLoading && !lApi.data &&
             <Loading/>
             }
-            {!(mlApi.isLoading && !mlApi.data) &&
+            {!(lApi.isLoading && !lApi.data) &&
             renderMain()
             }
+            <InfoApiModal/>
         </>
     );
 }
