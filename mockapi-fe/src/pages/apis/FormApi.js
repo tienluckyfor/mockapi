@@ -21,7 +21,7 @@ const FormApi = () => {
                 >
                     {(fields, {add, remove}) => (
                         <>
-                            {(fields??[]).map(({key, name, fieldKey, ...restField}) => (
+                            {(fields ?? []).map(({key, name, fieldKey, ...restField}) => (
                                 <Space
                                     key={key}
                                     className={`h-10`}
@@ -47,8 +47,9 @@ const FormApi = () => {
                                             placeholder="Height"
                                         />
                                     </Form.Item>
-                                    <MinusCircleOutlined onClick={() => remove(name)}/>
-
+                                    <Button type="link" danger onClick={() => remove(name)}
+                                            icon={<MinusCircleOutlined/>}/>
+                                    {/*<MinusCircleOutlined onClick={() => remove(name)}/>*/}
                                 </Space>
                             ))}
 

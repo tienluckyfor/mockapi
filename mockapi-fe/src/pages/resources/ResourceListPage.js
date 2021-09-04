@@ -30,7 +30,6 @@ const ResourceListPage = () => {
 
     useEffect(() => {
         if (lResource.isRefresh) {
-            // dispatch(myResourceList())
             dispatch(listResource())
             dispatch(queryMe(window.location.href))
         }
@@ -103,7 +102,6 @@ const ResourceListPage = () => {
                             rowSpan
                         },
                     }
-                    console.log('obj', {api, rowSpan})
                     return obj
                 },
             },

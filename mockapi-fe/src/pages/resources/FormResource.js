@@ -1,4 +1,4 @@
-import {Button, Form, Input, Select, Space, Switch} from "antd";
+import {Button, Form, Input, Select, Space, Switch, Checkbox} from "antd";
 import {PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined}
     from '@ant-design/icons'
 import {endpoints, fakerList, fields, fieldTypes} from "./configResource";
@@ -50,22 +50,24 @@ const FormResource = ({formValue, resourceName}) => {
                     <span className="text-red-500 mr-2 text-sm">*</span>
                     Fields</p>
                 <Form.Item
-                    className={`mb-0`}
+                    className={`mb-2`}
                     valuePropName="checked"
                     name={`is_authentication`}
                 >
-                    <label className="flex items-center space-x-2 mb-2 cursor-pointer">
-                        <Switch
+                    <Checkbox>Is authentication</Checkbox>
+                    {/*<label className="flex items-center space-x-2 mb-2 cursor-pointer">*/}
+                        {/*<Switch
                             checkedChildren={<CheckOutlined/>}
                             unCheckedChildren={<CloseOutlined/>}
                             size="small"
+                            // onChange={()=>console.log('a')}
                         />
-                        <span className="text-gray-500">Is authentication</span>
-                    </label>
+                        <span className="text-gray-500">Is authentication</span>*/}
+                    {/*</label>*/}
                 </Form.Item>
                 <Form.List
                     name="fields"
-                    initialValue={fields}
+                    // initialValue={fields}
                 >
                     {(afields, {add, remove}) => (
                         <>
@@ -75,6 +77,7 @@ const FormResource = ({formValue, resourceName}) => {
                                     field = formValue?.fields[name]
                                 } catch (e) {
                                 }
+                                const isDisabled = field?.name == 'id' || field?.type=='Authentication'
                                 return (
                                     <Space
                                         key={key}
@@ -88,7 +91,7 @@ const FormResource = ({formValue, resourceName}) => {
                                             fieldKey={[fieldKey, 'name']}
                                         >
                                             <Input
-                                                disabled={field?.name === `id`}
+                                                disabled={isDisabled}
                                                 placeholder="Name"
                                                 autoFocus
                                             />
@@ -100,7 +103,7 @@ const FormResource = ({formValue, resourceName}) => {
                                         >
                                             <Select
                                                 style={{width: 150}}
-                                                disabled={field?.name === `id`}
+                                                disabled={isDisabled}
                                                 showSearch
                                             >
                                                 {fieldTypes.map((type, k) =>
@@ -128,7 +131,7 @@ const FormResource = ({formValue, resourceName}) => {
                                             </Select>
                                         </Form.Item>
                                         }
-                                        {field?.name !== `id` &&
+                                        {!isDisabled &&
                                         <Button danger type="link" onClick={() => remove(name)}
                                                 icon={<MinusCircleOutlined/>}/>
                                         }

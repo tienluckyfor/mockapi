@@ -1,17 +1,22 @@
-const fields = [
+export const fields = [
     {name: `id`, type: `Object ID`},
     {name: `createdAt`, type: `Faker.js`, fakerjs: `datetime.dateTime`},
     {name: `name`, type: `Faker.js`, fakerjs: `person.name`},
     {name: `avatar`, type: `Faker.js`, fakerjs: `image.imageUrl(avatar)`},
 ]
-const endpoints = [
+export const authFields = [
+    {name: `_username`, type: `Authentication`},
+    {name: `_password`, type: `Authentication`},
+    {name: `_token`, type: `Authentication`},
+]
+export const endpoints = [
     {name: `get`, type: `get`, json: `$mockData`, status: true,},
     {name: `get`, type: `get_id`, json: `$mockData`, status: true,},
     {name: `post`, type: `post`, json: `$mockData`, status: true,},
     {name: `put`, type: `put`, json: `$mockData`, status: true,},
     {name: `delete`, type: `delete_id`, json: `$mockData`, status: true,},
 ]
-const fieldTypes = [
+export const fieldTypes = [
     `Faker.js`,
     `Text`,
     `LongText`,
@@ -23,7 +28,7 @@ const fieldTypes = [
     `Media`,
     `Select`,
 ]
-const fakerList = [
+export const fakerList = [
     {
         "name": "address",
         "list": {
@@ -68,22 +73,22 @@ const fakerList = [
             "datetime.month": "Month",
         }
     },
-   /* {
-        "name": "finance",
-        "list": {
-            "finance.account": "Account",
-            "finance.accountName": "Account name",
-            "finance.mask": "Mask",
-            "finance.amount": "Amount",
-            "finance.transactionType": "Transaction type",
-            "finance.currencyCode": "Currency code",
-            "finance.currencyName": "Currency name",
-            "finance.currencySymbol": "Currency symbol",
-            "finance.bitcoinAddress": "Bitcoin address",
-            "finance.iban": "Iban",
-            "finance.bic": "Bic",
-        }
-    },*/
+    /* {
+         "name": "finance",
+         "list": {
+             "finance.account": "Account",
+             "finance.accountName": "Account name",
+             "finance.mask": "Mask",
+             "finance.amount": "Amount",
+             "finance.transactionType": "Transaction type",
+             "finance.currencyCode": "Currency code",
+             "finance.currencyName": "Currency name",
+             "finance.currencySymbol": "Currency symbol",
+             "finance.bitcoinAddress": "Bitcoin address",
+             "finance.iban": "Iban",
+             "finance.bic": "Bic",
+         }
+     },*/
     /*{
         "name": "hacker",
         "list": {
@@ -164,4 +169,3 @@ const fakerList = [
     },*/
 ]
 
-export {fields, endpoints, fieldTypes, fakerList}
