@@ -41,7 +41,7 @@ const CreateResourceForm = () => {
                         formValue.fields = [...authFields, ...formValue.fields]
                     }
                     if (item.name.indexOf('is_authentication') != -1 && !item.value) {
-                        formValue.fields = (formValue.fields ?? []).filter((item) => item.type != 'authentication')
+                        formValue.fields = (formValue.fields ?? []).filter((item) => item.type != 'Authentication')
                     }
                 })
                 setFormValue(formValue)
