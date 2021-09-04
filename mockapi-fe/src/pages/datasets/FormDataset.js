@@ -3,7 +3,7 @@ import {DownOutlined} from '@ant-design/icons'
 import {useDispatch, useSelector} from "react-redux"
 import {useEffect, } from 'react'
 import {apisSelector, listApi} from "slices/apis"
-import {myResourceList} from "slices/resources"
+import {listResource} from "slices/resources"
 import {datasetsSelector, } from "slices/datasets"
 import {ChildAmountData, ParentAmountData} from "./AmountData"
 import {locales} from "./configDataset"
@@ -20,7 +20,7 @@ const FormDataset = ({apiId, setApiId, }) => {
 
     useEffect(() => {
         if (!apiId) return;
-        dispatch(myResourceList(apiId))
+        dispatch(listResource(apiId))
     }, [apiId])
 
     const renderTable = () => {

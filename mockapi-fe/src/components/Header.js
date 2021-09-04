@@ -4,7 +4,7 @@ import {PlusOutlined, CloseOutlined, SearchOutlined, MenuOutlined, LoadingOutlin
 import {useState, useEffect, useRef} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import {apisSelector, listApi, setApiMerge} from "slices/apis"
-import {resourcesSelector, myResourceList, setResourceMerge} from "slices/resources"
+import {resourcesSelector, listResource, setResourceMerge} from "slices/resources"
 import {datasetsSelector, listDataset,  setDatasetMerge} from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {Link} from "react-router-dom";
@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 const Header = ({page}) => {
     const dispatch = useDispatch()
     const {lApi, cApi} = useSelector(apisSelector)
-    const {mlResource, cResource} = useSelector(resourcesSelector)
+    const {lResource, cResource} = useSelector(resourcesSelector)
     const {lDataset, cDataset} = useSelector(datasetsSelector)
     const {qMe} = useSelector(usersSelector)
     const [isMenu, setIsMenu] = useState(false)
@@ -88,8 +88,8 @@ const Header = ({page}) => {
                 dispatch(listApi())
                 break;
             case 'ResourceListPage':
-                dispatch(setResourceMerge(`mlResource`, {search: {name: value}}))
-                dispatch(myResourceList())
+                dispatch(setResourceMerge(`lResource`, {search: {name: value}}))
+                dispatch(listResource())
                 break;
             case 'DatasetListPage':
                 dispatch(setDatasetMerge(`lDataset`, {search: {name: value}}))
@@ -115,9 +115,9 @@ const Header = ({page}) => {
             case 'ResourceListPage':
                 setInfo({
                     name: `Resource`,
-                    isLoading: mlResource?.isLoading,
+                    isLoading: lResource?.isLoading,
                     total: qMe?.data?.resources_count,
-                    search: mlResource?.search,
+                    search: lResource?.search,
                     cIsOpen: cResource?.isOpen,
                     cIsLoading: cResource?.isLoading,
                 })
@@ -133,7 +133,7 @@ const Header = ({page}) => {
                 })
                 break;
         }
-    }, [lApi, cApi, mlResource, cResource, lDataset, cDataset, qMe])
+    }, [lApi, cApi, lResource, cResource, lDataset, cDataset, qMe])
 
     const onAdd = () => {
         switch (page) {

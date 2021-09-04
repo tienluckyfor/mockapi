@@ -6,7 +6,7 @@ import {resourcesSelector,} from "slices/resources";
 const CheckboxGroup = Checkbox.Group;
 
 const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
-    const {epResource, mlResource} = useSelector(resourcesSelector)
+    const {epResource, lResource} = useSelector(resourcesSelector)
     const [plainOptions, setPlainOptions] = useState([]);
 
     const [form] = Form.useForm()
@@ -16,7 +16,7 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
     });
 
     useEffect(() => {
-        const resources = (mlResource?.data?.resources ?? [])
+        const resources = (lResource?.data?.resources ?? [])
             .filter((resource) => resource?.id !== epResource?.resource?.id && resource?.api_id === epResource?.resource?.api_id)
         setPlainOptions(resources.map((item) => {
             return {

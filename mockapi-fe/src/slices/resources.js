@@ -10,7 +10,6 @@ export const initialState = {
     eResource: {},
     epResource: {isOpen: false},
     duResource: {},
-    mlResource: {isRefresh: true, search: {name: ``}},
     lResource: {isRefresh: true, search: {name: ``}},
 };
 
@@ -88,7 +87,7 @@ export function createResource(resource) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     cResource: {isLoading: false, isOpen: false},
-                    mlResource: {isRefresh: true}
+                    lResource: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -142,7 +141,7 @@ export function editResource(resource) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     eResource: {isLoading: false, isOpen: false},
-                    mlResource: {isRefresh: true}
+                    lResource: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -178,7 +177,7 @@ export function editParentResource(resource) {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
                     epResource: {isLoading: false, isOpen: false},
-                    mlResource: {isRefresh: true}
+                    lResource: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -210,7 +209,7 @@ export function deleteResource(resource) {
                 const status = res?.data?.delete_resource
                 dispatch(setMerge({
                     dResource: {isLoading: false, status, resource: null},
-                    mlResource: {isRefresh: true}
+                    lResource: {isRefresh: true}
                 }))
             })
         } catch (e) {
@@ -221,27 +220,27 @@ export function deleteResource(resource) {
 
 export function myResourceList(api_id = ``) {
     return async (dispatch, getState) => {
-        const {mlResource} = getState().resources
-        if (mlResource.isLoading) return;
-        dispatch(setMerge({mlResource: {isLoading: true, isRefresh: false}}))
+        const {lResource} = getState().resources
+        if (lResource.isLoading) return;
+        dispatch(setMerge({lResource: {isLoading: true, isRefresh: false}}))
         const query = gql`
         query {
-  my_resource_list(name:"${mlResource.search.name}", api_id:"${api_id}")
+  my_resource_list(name:"${lResource.search.name}", api_id:"${api_id}")
 }`;
         const res = await apolloClient.query({
             query
         })
         dispatch(setMerge({
-            mlResource: {isLoading: false},
+            lResource: {isLoading: false},
         }))
         const myResourceList = res?.data?.my_resource_list ?? []
 
         if (api_id === ``) {
             dispatch(setMerge({
-                mlResource:
+                lResource:
                     {
                         data: myResourceList,
-                        search: {...mlResource.search, total: myResourceList?.resources.length},
+                        search: {...lResource.search, total: myResourceList?.resources.length},
                     }
             }))
             return;
@@ -337,7 +336,7 @@ export function duplicateResource(resource) {
                 const status = res?.data?.duplicate_resource
                 dispatch(setMerge({
                     duResource: {isLoading: false, status,},
-                    mlResource: {isRefresh: true}
+                    lResource: {isRefresh: true}
                 }))
             })
         } catch (e) {
