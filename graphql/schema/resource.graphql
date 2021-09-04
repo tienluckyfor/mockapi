@@ -4,13 +4,18 @@ extend type Mutation {
     edit_parent_resource(input: EditParentResourceInput! @spread): Resource @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@editParentResource")
     delete_resource(input: DeleteResourceInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@deleteResource")
     duplicate_resource(input: DuplicateResourceInput! @spread): Boolean! @guard @field(resolver: "App\\GraphQL\\Mutations\\ResourceMutations@duplicateResource")
-
 }
 
 extend type Query {
-    resources(name: String @eq orderBy: [OrderByClause!] @orderBy): [Resource!]! @paginate(type: "paginator" model: "App\\Models\\Resource")
+#    resources(name: String @eq orderBy: [OrderByClause!] @orderBy): [Resource!]! @paginate(type: "paginator" model: "App\\Models\\Resource")
     resource(id: ID @eq): Resource @find
     my_resource_list(name: String, api_id: ID): JSON! @guard @field(resolver: "App\\GraphQL\\Queries\\ResourceQueries@my_resource_list")
+    resources(name: String, api_id: ID): ResourceApi @guard @field(resolver: "App\\GraphQL\\Queries\\ResourceQueries@getResources")
+}
+
+type ResourceApi{
+    resources: [Resource]
+    apis: [Api]
 }
 
 type Resource{

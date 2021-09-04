@@ -1,10 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 import gql from "graphql-tag";
-import {apolloClient, } from "services";
+import {apolloClient,} from "services";
 import _slice_common from "./_slice_common";
 
 export const initialState = {
-    cApi: {isOpen:true},
+    cApi: {isOpen: false},
     dApi: {},
     eApi: {},
     duApi: {},
@@ -149,7 +149,7 @@ export function deleteApi(api) {
             })
         } catch (e) {
             dispatch(setMerge({
-                dApi: {isLoading: false, api:null},
+                dApi: {isLoading: false, api: null},
                 lApi: {isRefresh: true},
             }))
         }
@@ -162,8 +162,8 @@ export function myApiList() {
         if (mlApi.isLoading) return;
         dispatch(setMerge({mlApi: {isLoading: true, isRefresh: false}}))
         const query = gql`
-        query {
-  my_api_list(name:"${mlApi.search.name}") {
+        query ($name: String) {
+  my_api_list(name:$name) {
             id
             name
             thumb_sizes
@@ -191,7 +191,8 @@ export function myApiList() {
   }
 }`;
         const res = await apolloClient.query({
-            query
+            query,
+            variables: {name: mlApi.search.name}
         })
         const myApiList = res?.data?.my_api_list ?? []
         dispatch(setMerge({
@@ -213,8 +214,8 @@ export function listApi() {
         if (lApi.isLoading) return;
         dispatch(setMerge({lApi: {isLoading: true, isRefresh: false}}))
         const query = gql`
-        query {
-  apis(name:"${lApi.search.name}") {
+        query ($name: String) {
+  apis(name:$name) {
             id
             name
             thumb_sizes
@@ -242,7 +243,8 @@ export function listApi() {
   }
 }`;
         const res = await apolloClient.query({
-            query
+            query,
+            variables: {name: lApi.search.name}
         })
         const apiList = res?.data?.apis ?? []
         dispatch(setMerge({

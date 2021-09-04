@@ -19,7 +19,6 @@ class ApiQueries
     public function getApis($_, array $args)
     {
         $user = Auth::user();
-//        dd($user->apis->toArray());
         $apis = $user->apis;
         if (!empty($args['name'])) {
             $apis = $apis->where('name', 'like', "%{$args['name']}%");

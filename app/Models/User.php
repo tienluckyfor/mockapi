@@ -86,6 +86,26 @@ class User extends Authenticatable
             ->whereNull('apis.deleted_at');
     }
 
+// Resources
+    public function getResourcesAttribute()
+    {
+        $shareResourceIds = $this->share_apis->pluck('shareable_id')->toArray();
+        $resources = Resource::where('user_id', $this->id)
+            ->orWhereIn('api_id', $shareResourceIds)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        return $resources;
+    }
+
+    public function share_resources(): HasMany
+    {
+        return $this->hasMany(Share::class, 'user_invite_id', 'id')
+            ->join('apis', 'apis.id', '=', 'shares.shareable_id')
+            ->join('resources', 'resources.api_id', '=', 'apis.id')
+            ->where('shareable_type', '=', 'App\Models\Api')
+            ->whereNull('apis.deleted_at');
+    }
+
 // Datasets
     public function getDatasetsAttribute()
     {

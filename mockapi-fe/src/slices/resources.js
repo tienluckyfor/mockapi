@@ -5,12 +5,13 @@ import {setDatasetMerge} from "./datasets";
 import _slice_common from "./_slice_common";
 
 export const initialState = {
-    cResource: {isOpen: true},
+    cResource: {isOpen: false},
     dResource: {},
     eResource: {},
     epResource: {isOpen: false},
     duResource: {},
     mlResource: {isRefresh: true, search: {name: ``}},
+    lResource: {isRefresh: true, search: {name: ``}},
 };
 
 const resourcesSlice = createSlice({
@@ -245,14 +246,80 @@ export function myResourceList(api_id = ``) {
             }))
             return;
         }
-        // create dataset
-        // let amounts = {};
-        // (myResourceList?.resources ?? []).forEach(resource => {
-        //     amounts[resource.id] = 0
-        // })
-        // dispatch(setDataset({amounts}))
         dispatch(setDatasetMerge(`cDataset`, {
             resources: myResourceList?.resources,
+        }))
+    }
+}
+
+export function listResource(api_id = null) {
+    return async (dispatch, getState) => {
+        const {lResource} = getState().resources
+        if (lResource.isLoading) return;
+        dispatch(setMerge({lResource: {isLoading: true, isRefresh: false}}))
+        const query = gql`
+        query ($name: String, $api_id: ID) {
+  resources(name:$name, api_id: $api_id) {
+      resources{
+          id
+          name
+          api{id}
+          field_template
+          parents
+          statuses
+          fields
+          endpoints
+          updated_at
+      }
+      apis{
+          id
+          name
+          updated_at
+          thumb_sizes
+    shares{
+        user_invite{
+            id
+            name
+            medium {
+                id
+                file
+                thumb_files
+            }
+        }
+    }
+    user{
+        id
+        name
+        medium{
+            id
+            file
+            thumb_files
+        }
+    }
+      }
+  }
+}`;
+        const res = await apolloClient.query({
+            query,
+            variables:{name: lResource.search.name, api_id}
+        })
+        dispatch(setMerge({
+            lResource: {isLoading: false},
+        }))
+        const resourceList = res?.data?.resources ?? []
+
+        if (api_id === ``) {
+            dispatch(setMerge({
+                lResource:
+                    {
+                        data: resourceList,
+                        search: {...lResource.search, total: resourceList?.resources.length},
+                    }
+            }))
+            return;
+        }
+        dispatch(setDatasetMerge(`cDataset`, {
+            resources: resourceList?.resources,
         }))
     }
 }

@@ -8,6 +8,7 @@ import {
     resourcesSelector,
     deleteResource,
     duplicateResource,
+    // myResourceList,
     listResource,
     setResourceMerge,
     editParentResource,
@@ -25,15 +26,15 @@ const ResourceListPage = () => {
 
     const dispatch = useDispatch()
     const {visibles} = useSelector(commonsSelector)
-    const {cResource, eResource, lResource, dResource, duResource, epResource} = useSelector(resourcesSelector)
+    const {cResource, eResource, mlResource, dResource, duResource, epResource} = useSelector(resourcesSelector)
 
     useEffect(() => {
-        if (lResource.isRefresh) {
+        if (mlResource.isRefresh) {
             // dispatch(myResourceList())
             dispatch(listResource())
             dispatch(queryMe(window.location.href))
         }
-    }, [dispatch, lResource])
+    }, [dispatch, mlResource])
 
     const renderTable = () => {
         const menu = (resource) => (
@@ -83,16 +84,14 @@ const ResourceListPage = () => {
                 </Menu.Item>
             </Menu>
         )
-
         const columns = [
             {
                 title: 'Api',
                 dataIndex: 'api',
                 ellipsis: true,
                 render: (text, resource, index) => {
-                    const api = (lResource?.data?.apis ?? []).filter(item => item.id == resource.api_id)[0]
-                    console.log('api', api)
-                    const resources = lResource?.data?.resources.filter((resource) => resource.api_id === api.id)
+                    const api = mlResource?.data?.apis[resource.api_id]
+                    const resources = mlResource?.data?.resources.filter((resource) => resource.api_id === api.id)
                     const obj = {
                         children: <Tooltip title={api.name}>
                             <p className={`text-gray-400`}>{api.name}</p>
@@ -111,7 +110,7 @@ const ResourceListPage = () => {
                 width: '30%',
                 sorter: (a, b) => a.name.localeCompare(b.name),
                 render: (text, resource, index) => {
-                    const resources = (lResource?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(resource?.id) !== -1)
+                    const resources = (mlResource?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(resource?.id) !== -1)
                     if (resources.length === 0) {
                         return (
                             <Tooltip title={resource.name}>
@@ -184,12 +183,9 @@ const ResourceListPage = () => {
 
         return (
             <>
-                <pre className="text-sm">
-                    {JSON.stringify(lResource?.data, null, '  ')}
-                </pre>
                 <Table
                     columns={columns}
-                    dataSource={lResource?.data?.resources}
+                    dataSource={mlResource?.data?.resources}
                     pagination={{pageSize: 20, hideOnSinglePage: true}}
                 />
             </>
@@ -215,10 +211,10 @@ const ResourceListPage = () => {
                     }}
                 />
                 }
-                {lResource?.search?.name &&
+                {mlResource?.search?.name &&
                 <h3 className="text-xl mt-3 text-gray-400">
-                    {lResource?.search?.total} results of search <span
-                    className="bg-yellow-400 text-black px-1">{lResource?.search?.name}</span>
+                    {mlResource?.search?.total} results of search <span
+                    className="bg-yellow-400 text-black px-1">{mlResource?.search?.name}</span>
                 </h3>
                 }
                 <Divider className="mt-4 mb-0"/>
@@ -230,10 +226,10 @@ const ResourceListPage = () => {
     return (
         <>
             <AppHelmet title="Resource's list"/>
-            {lResource.isLoading && !lResource.data &&
+            {mlResource.isLoading && !mlResource.data &&
             <Loading/>
             }
-            {!(lResource.isLoading && !lResource.data) &&
+            {!(mlResource.isLoading && !mlResource.data) &&
             renderMain()
             }
         </>

@@ -56,4 +56,23 @@ class ResourceQueries
         $data = ['resources' => $resourcesSort, 'apis' => $apis];
         return $data;
     }
+
+    public function getResources($_, array $args)
+    {
+        $user = Auth::user();
+        $resources = $user->resources;
+        $apis = $user->apis;
+        if (!empty($args['name'])) {
+            $resources = $resources->where('name', 'like', "%{$args['name']}%");
+        }
+        if(!empty($args['api_id'])){
+            $resources = $resources->where('api_id', $args['api_id']);
+            $apis = $apis->where('id', $args['api_id']);
+        }
+        return [
+            'resources' => $resources,
+            'apis'      => $apis,
+        ];
+//        return $resources;
+    }
 }

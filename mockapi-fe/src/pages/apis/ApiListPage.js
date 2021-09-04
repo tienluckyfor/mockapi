@@ -6,7 +6,7 @@ import "moment-timezone";
 import {useDispatch, useSelector} from "react-redux";
 import {apisSelector, deleteApi, duplicateApi, listApi, setApiMerge, setApi} from "slices/apis";
 import {commonsSelector, handleMenuClick, handleVisibleChange} from "slices/commons";
-import {queryMe} from "slices/users";
+import {queryMe, usersSelector} from "slices/users";
 import {Header, Loading} from "components";
 import CreateApiForm from "./CreateApiForm";
 import EditApiForm from "./EditApiForm";
@@ -21,6 +21,7 @@ const ApiListPage = () => {
     const dispatch = useDispatch()
     const {visibles} = useSelector(commonsSelector)
     const {cApi, eApi, lApi, dApi, duApi} = useSelector(apisSelector)
+    const {qMe,} = useSelector(usersSelector)
 
     useEffect(() => {
         if (lApi.isRefresh) {
@@ -41,40 +42,44 @@ const ApiListPage = () => {
                         Info
                     </Button>
                 </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        size={`small`}
-                        type="link"
-                        onClick={(e) => dispatch(duplicateApi(api))}
-                        loading={duApi.isLoading && duApi?.api?.id === api.id}
-                    >
-                        Duplicate
-                    </Button>
-                </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        size={`small`}
-                        type="link"
-                        onClick={(e) => dispatch(setApiMerge(`eApi`, {isOpen: true, api}))}
-                    >
-                        Edit
-                    </Button>
-                </Menu.Item>
-                <Menu.Item key={`delete`}>
-                    <Popconfirm
-                        title={`Delete api: ${api.name}`}
-                        onConfirm={(e) => dispatch(deleteApi(api))}
-                        okText="Yes"
-                        cancelText="No"
-                    >
+                {qMe?.data?.id == api?.user?.id &&
+                <>
+                    <Menu.Item>
                         <Button
                             size={`small`}
                             type="link"
-                            danger
-                            loading={dApi?.api?.id === api.id}
-                        >Delete</Button>
-                    </Popconfirm>
-                </Menu.Item>
+                            onClick={(e) => dispatch(duplicateApi(api))}
+                            loading={duApi.isLoading && duApi?.api?.id === api.id}
+                        >
+                            Duplicate
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button
+                            size={`small`}
+                            type="link"
+                            onClick={(e) => dispatch(setApiMerge(`eApi`, {isOpen: true, api}))}
+                        >
+                            Edit
+                        </Button>
+                    </Menu.Item>
+                    <Menu.Item key={`delete`}>
+                        <Popconfirm
+                            title={`Delete api: ${api.name}`}
+                            onConfirm={(e) => dispatch(deleteApi(api))}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button
+                                size={`small`}
+                                type="link"
+                                danger
+                                loading={dApi?.api?.id === api.id}
+                            >Delete</Button>
+                        </Popconfirm>
+                    </Menu.Item>
+                </>
+                }
             </Menu>
         )
         const columns = [
