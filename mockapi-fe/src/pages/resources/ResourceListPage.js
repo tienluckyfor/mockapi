@@ -19,6 +19,7 @@ import EditParentResourceForm from "./EditParentResourceForm";
 import CreateResourceForm from "./CreateResourceForm";
 import EditResourceForm from "./EditResourceForm";
 import AppHelmet from "shared/AppHelmet";
+import {ShareAvatars} from "components/AntdComponent";
 
 const ResourceListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -96,6 +97,7 @@ const ResourceListPage = () => {
                     const obj = {
                         children: <Tooltip title={api.name}>
                             <p className={`text-gray-400`}>{api.name}</p>
+                            <ShareAvatars user={api?.user} shares={api?.shares}/>
                         </Tooltip>,
                         props: {
                             rowSpan
