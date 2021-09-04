@@ -91,16 +91,17 @@ const ResourceListPage = () => {
                 ellipsis: true,
                 render: (text, resource, index) => {
                     const api = (lResource?.data?.apis ?? []).filter(item => item.id == resource.api_id)[0]
-                    console.log('api', api)
-                    const resources = lResource?.data?.resources.filter((resource) => resource.api_id === api.id)
+                    const resources = lResource?.data?.resources.filter((item) => item.api_id == api.id)
+                    const rowSpan = resources[0] && resources[0]?.id === resource.id ? resources.length : 0;
                     const obj = {
                         children: <Tooltip title={api.name}>
                             <p className={`text-gray-400`}>{api.name}</p>
                         </Tooltip>,
                         props: {
-                            rowSpan: resources[0] && resources[0]?.id === resource.id ? api.count : 0,
+                            rowSpan
                         },
                     }
+                    console.log('obj', {api, rowSpan})
                     return obj
                 },
             },
@@ -184,9 +185,7 @@ const ResourceListPage = () => {
 
         return (
             <>
-                <pre className="text-sm">
-                    {JSON.stringify(lResource?.data, null, '  ')}
-                </pre>
+
                 <Table
                     columns={columns}
                     dataSource={lResource?.data?.resources}

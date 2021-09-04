@@ -260,17 +260,7 @@ export function listResource(api_id = null) {
         const query = gql`
         query ($name: String, $api_id: ID) {
   resources(name:$name, api_id: $api_id) {
-      resources{
-          id
-          name
-          api{id}
-          field_template
-          parents
-          statuses
-          fields
-          endpoints
-          updated_at
-      }
+      resources
       apis{
           id
           name
@@ -308,7 +298,7 @@ export function listResource(api_id = null) {
         }))
         const resourceList = res?.data?.resources ?? []
 
-        if (api_id === ``) {
+        if (!api_id) {
             dispatch(setMerge({
                 lResource:
                     {

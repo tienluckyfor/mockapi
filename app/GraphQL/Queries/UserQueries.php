@@ -34,6 +34,7 @@ class UserQueries
         $user->datasets_count += count($shareDatasetIds);
         $shareApiIds = $user->share_apis->pluck('shareable_id')->toArray();
         $user->apis_count += count($shareApiIds);
+        $user->resources_count += Resource::whereIn('api_id', $shareApiIds)->count();
         return $user;
     }
 

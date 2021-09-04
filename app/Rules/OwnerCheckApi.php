@@ -2,19 +2,17 @@
 
 namespace App\Rules;
 
-use App\Models\Api;
 use Illuminate\Contracts\Validation\Rule;
+use App\Repositories\ShareRepository;
 
 class OwnerCheckApi implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    protected $share_repository;
+
+    public function __construct(
+        ShareRepository $shareRepository
+    ) {
+        $this->share_repository = $shareRepository;
     }
 
     /**
@@ -26,10 +24,8 @@ class OwnerCheckApi implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
-        return Api::where('user_id', \auth()->id())
-            ->where('id', $value)
-            ->exists();
+        $OwnerIds = $this->share_repository->getOwnerIdsByApiId($value);
+        return in_array(\auth()->id(), $OwnerIds);
     }
 
     /**

@@ -69,8 +69,27 @@ class ResourceQueries
             $resources = $resources->where('api_id', $args['api_id']);
             $apis = $apis->where('id', $args['api_id']);
         }
+        // sort
+        $resourcesSort = [];
+        $checks = [];
+        foreach ($resources->toArray() as $resource) {
+            if (in_array($resource['api_id'], $checks)) {
+                continue;
+            }
+            $checks[] = $resource['api_id'];
+            $resourcesSort = array_merge($resourcesSort, collect($resources)
+                ->where('api_id', $resource['api_id'])
+                ->sort(function ($a, $b) {
+                    return strtotime($a->updated_at) < strtotime($b->updated_at);
+                })
+                ->values()
+                ->toArray()
+            );
+        }
         return [
-            'resources' => $resources,
+//            'resourcesSort' => $resourcesSort,
+            'resources' => $resourcesSort,
+//            'resources' => $resources,
             'apis'      => $apis,
         ];
 //        return $resources;

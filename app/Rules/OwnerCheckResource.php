@@ -2,20 +2,17 @@
 
 namespace App\Rules;
 
-use App\Models\Resource;
 use Illuminate\Contracts\Validation\Rule;
+use App\Repositories\ShareRepository;
 
 class OwnerCheckResource implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
+    protected $share_repository;
 
-    public function __construct()
-    {
-        //
+    public function __construct(
+        ShareRepository $shareRepository
+    ) {
+        $this->share_repository = $shareRepository;
     }
 
     /**
@@ -28,9 +25,8 @@ class OwnerCheckResource implements Rule
     public function passes($attribute, $value)
     {
         //
-        return Resource::where('user_id', \auth()->id())
-            ->where('id', $value)
-            ->exists();
+        $OwnerIds = $this->share_repository->getOwnerIdsByResourceId($value);
+        return in_array(\auth()->id(), $OwnerIds);
     }
 
     /**

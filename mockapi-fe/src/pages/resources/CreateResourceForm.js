@@ -19,8 +19,8 @@ const CreateResourceForm = () => {
     return (
         <Form
             onFinish={(values) => {
-                console.log('values', values)
-                return;
+                // console.log('values', values)
+                // return;
                 dispatch(createResource(values))
             }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"

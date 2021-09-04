@@ -18,9 +18,6 @@ const FormResource = ({formValue, resourceName}) => {
 
     return (
         <>
-            {/*<pre className="text-sm">
-                {JSON.stringify(formValue, null, '  ')}
-            </pre>*/}
             <Form.Item
                 name="api_id"
                 label="Api"
@@ -38,7 +35,11 @@ const FormResource = ({formValue, resourceName}) => {
             <Form.Item
                 name="name"
                 label="Name"
-                rules={[{required: true}]}
+                rules={[{required: true},
+                    {
+                        pattern: /^[a-zA-Z0-9_\-]+$/,
+                        message: "Must contain only letters, numbers or the underscore!",
+                    },]}
             >
                 <Input
                     onChange={(e) => setRName(e.target.value)}
@@ -72,7 +73,8 @@ const FormResource = ({formValue, resourceName}) => {
                                 let field = {}
                                 try {
                                     field = formValue?.fields[name]
-                                } catch (e) {}
+                                } catch (e) {
+                                }
                                 return (
                                     <Space
                                         key={key}
