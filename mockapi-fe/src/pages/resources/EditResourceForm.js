@@ -25,18 +25,20 @@ const EditResourceForm = () => {
         // setFields(eResource?.resource?.fields)
         let api = (lApi.data ?? []).filter((api) => api?.id == eResource?.resource?.api_id)
         api = api[0] ?? {}
-        form.setFieldsValue({
+        const obj = {
             id: eResource?.resource?.id,
             name: eResource?.resource?.name,
             api_id: (api?.id ?? 0).toString(),
             field_template: eResource?.resource?.field_template,
             fields: eResource?.resource?.fields,
             endpoints: eResource?.resource?.endpoints,
-            is_authentication: (eResource?.resource?.fields ?? []).filter(item => item.type == 'Authentication')
-        });
+            // is_authentication: (eResource?.resource?.fields ?? []).filter(item => item.type == 'Authentication')
+        }
+        obj.is_authentication = (obj.fields ?? []).filter(item => item.type == 'Authentication').length!=0
+        form.setFieldsValue(obj);
         setFormValue({
-            fields: eResource?.resource?.fields,
-            endpoints: eResource?.resource?.endpoints
+            fields: obj.fields,
+            endpoints: obj.endpoints
         })
         setRName(eResource?.resource?.name)
     }, [eResource, lApi])
@@ -44,7 +46,7 @@ const EditResourceForm = () => {
     useEffect(() => {
         form.setFieldsValue(formValue)
     }, [formValue])
-    
+
     return (
         <Modal
             visible={true}
@@ -79,17 +81,12 @@ const EditResourceForm = () => {
                     })
                     changedFields.map((item) => {
                         if (item.name.indexOf('is_authentication') != -1 && item.value) {
-                            // console.log('1')
                             formValue.fields = [...authFields, ...formValue.fields]
                         }
                         if (item.name.indexOf('is_authentication') != -1 && !item.value) {
-                            // console.log('2', formValue.fields )
                             formValue.fields = (formValue.fields ?? []).filter((item) => item.type != 'Authentication')
-                            // console.log('3', formValue.fields )
                         }
                     })
-                    // console.log('formValue', formValue)
-                    console.log('formValue', formValue)
                     setFormValue(formValue)
                 }}
             >

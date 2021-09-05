@@ -123,6 +123,14 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     </Select>
                                 </Form.Item>)
                                 break;
+                            case `Authentication`:
+                                return (<Form.Item
+                                    name={name}
+                                    label={<span className="capitalize">{name}</span>}
+                                >
+                                    <Input/>
+                                </Form.Item>)
+                                break;
                         }
                     })
                 )}

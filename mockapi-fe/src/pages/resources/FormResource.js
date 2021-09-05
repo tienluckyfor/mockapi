@@ -78,8 +78,6 @@ const FormResource = ({formValue, resourceName}) => {
                                     field = formValue?.fields[name]
                                 } catch (e) {
                                 }
-                                if(!field) return <></>
-                                console.log('field', field, formValue?.fields)
                                 const isDisabled = field?.name == 'id' || field?.type=='Authentication'
                                 return (
                                     <Space
