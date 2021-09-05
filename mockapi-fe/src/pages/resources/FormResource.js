@@ -1,7 +1,7 @@
 import {Button, Form, Input, Select, Space, Switch, Checkbox} from "antd";
 import {PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined}
     from '@ant-design/icons'
-import {endpoints, fakerList, fields, fieldTypes} from "./configResource";
+import {endpoints, fakerList, fieldTypes} from "./configResource";
 import {useSelector} from "react-redux";
 import {apisSelector} from "slices/apis";
 import {useEffect, useState} from "react";
@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 const {Option, OptGroup} = Select;
 
 const FormResource = ({formValue, resourceName}) => {
+    // console.log('formValue', formValue)
     const {lApi} = useSelector(apisSelector)
     const [rName, setRName] = useState()
 
@@ -69,14 +70,16 @@ const FormResource = ({formValue, resourceName}) => {
                     name="fields"
                     // initialValue={fields}
                 >
-                    {(afields, {add, remove}) => (
+                    {(fields, {add, remove}) => (
                         <>
-                            {afields.map(({key, name, fieldKey, ...restField}) => {
+                            {fields.map(({key, name, fieldKey, ...restField}) => {
                                 let field = {}
                                 try {
                                     field = formValue?.fields[name]
                                 } catch (e) {
                                 }
+                                if(!field) return <></>
+                                console.log('field', field, formValue?.fields)
                                 const isDisabled = field?.name == 'id' || field?.type=='Authentication'
                                 return (
                                     <Space
@@ -152,9 +155,9 @@ const FormResource = ({formValue, resourceName}) => {
                     <span className="text-red-500 mr-2 text-sm">*</span>
                     Endpoints</p>
                 <Form.List name="endpoints" initialValue={endpoints}>
-                    {(afields, {add, remove}) => (
+                    {(fields, {add, remove}) => (
                         <>
-                            {afields.map(({key, name, fieldKey, ...restField}) => (
+                            {fields.map(({key, name, fieldKey, ...restField}) => (
                                 <>
                                     <div className="flex items-center space-x-2 mb-1">
                                         <Form.Item

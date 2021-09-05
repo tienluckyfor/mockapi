@@ -25,14 +25,14 @@ const CreateResourceForm = () => {
         <Form
             form={form}
             onFinish={(values) => {
-                console.log('values', values)
-                return;
+                // console.log('values', values)
+                // return;
                 dispatch(createResource(values))
             }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"
             layout={`vertical`}
             onFieldsChange={(changedFields, allFields) => {
-                const formValue = {}
+                let formValue = {}
                 allFields.map((item) => {
                     formValue[item.name] = item.value
                 })
