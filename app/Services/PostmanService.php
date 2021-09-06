@@ -55,40 +55,50 @@ class PostmanService
                 }
             }
         }
+
+        $headers = [
+            [
+                "key"   => "Accept",
+                "value" => "application/json",
+                "type"  => "text"
+            ],
+            [
+                "key"   => "Authorization",
+                "value" => "Bearer {{restful_token}}",
+                "type"  => "text"
+            ],
+        ];
+//        foreach ($resources as $resource) {
+//            if ($this->resource_repository->checkAuthByResource($resource)) {
+//                $headers[] = [
+//                    "key"   => "{$resource['name']}_token",
+//                    "value" => "Bearer {{{$resource['name']}_token}}",
+//                    "type"  => "text"
+//                ];
+//            }
+//        }
+
         foreach ($resources as $resource) {
             $items = [];
             $amounts = [];
             $amounts[$resource['id']] = 1;
             $rallydata = Arr::first($this->rallydata_repository->fillData($resource, $amounts, $resource['locale']));
+// Auth
+            if ($this->resource_repository->checkAuthByResource($resource)) {
+                $authHeaders = [
+                    [
+                        "key"   => "{$resource['name']}_token",
+                        "value" => "Bearer {{{$resource['name']}_token}}",
+                        "type"  => "text"
+                    ]
+                ];
+                $authHeaders = array_merge($headers, $authHeaders);
 
-            $headers = [
-                [
-                    "key"   => "Accept",
-                    "value" => "application/json",
-                    "type"  => "text"
-                ],
-                [
-                    "key"   => "Authorization",
-                    "value" => "Bearer {{restful_token}}",
-                    "type"  => "text"
-                ],
-            ];
-
-// nFieldStr & isAuth
-            $isAuth = 0;
-            $nFields = array_map(function ($field) use (&$isAuth) {
-                if ($field['type'] == 'Authentication') {
-                    $isAuth++;
-                }
-                return $field['name'];
-            }, $resource['fields']);
-            $nFieldStr = implode(',', $nFields);
-            if ($isAuth) {
                 $items[] = [
                     "name"     => "{{api_url}}/{$resource['name']}/auth-register",
                     "request"  => [
                         "method" => "POST",
-                        "header" => $headers,
+                        "header" => $authHeaders,
                         "body"   => [
                             "mode"    => "raw",
                             "raw"     => self::_rawHandle([
@@ -114,11 +124,43 @@ class PostmanService
                     ],
                     "response" => []
                 ];
+
                 $items[] = [
                     "name"     => "{{api_url}}/{$resource['name']}/auth-login",
                     "request"  => [
                         "method" => "POST",
-                        "header" => $headers,
+                        "header" => $authHeaders,
+                        "body"   => [
+                            "mode"    => "raw",
+                            "raw"     => self::_rawHandle([
+                                '_username' => 'tien.luckyfor@gmail.com',
+                                '_password' => '12345678',
+                            ]),
+                            "options" => [
+                                "raw" => [
+                                    "language" => "json"
+                                ]
+                            ]
+                        ],
+                        "url"    => [
+                            "raw"  => "{{api_url}}/{$resource['name']}/auth-login",
+                            "host" => [
+                                "{{api_url}}"
+                            ],
+                            "path" => [
+                                $resource['name'],
+                                "auth-login"
+                            ]
+                        ]
+                    ],
+                    "response" => []
+                ];
+
+                $items[] = [
+                    "name"     => "{{api_url}}/{$resource['name']}/auth",
+                    "request"  => [
+                        "method" => "GET",
+                        "header" => $authHeaders,
                         "body"   => [
                             "mode"    => "raw",
                             "raw"     => self::_rawHandle([
@@ -145,11 +187,16 @@ class PostmanService
                     "response" => []
                 ];
             }
+
             $data[] = [
                 "name" => $resource['name'] . '/auth',
                 "item" => $items,
             ];
-
+// nFieldStr
+            $nFields = array_map(function ($field) {
+                return $field['name'];
+            }, $resource['fields']);
+            $nFieldStr = implode(',', $nFields);
             $items = [];
 
             foreach ($resource['endpoints'] as $endpoint) {
@@ -385,6 +432,16 @@ class PostmanService
             "_postman_exported_at"    => Carbon::now(),
             "_postman_exported_using" => "Postman/8.0.10"
         ];
+        $resources = $this->resource_repository->getByDatasetId($datasetId);
+        $resources->map(function ($resource) use (&$data) {
+            if ($this->resource_repository->checkAuthByResource($resource)) {
+                $data['values'][] = [
+                    "key"     => "{$resource['name']}_token",
+                    "value"   => '',
+                    "enabled" => true
+                ];
+            }
+        });
         return $data;
     }
 

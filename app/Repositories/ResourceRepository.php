@@ -62,11 +62,16 @@ class ResourceRepository
             ->first();
     }
 
-    public function isAuthentication($resourceId)
+    public function checkAuthByResource($resource)
     {
-        $resource = $this->findByid($resourceId);
-        return (bool)collect($resource->fields)
+        return (bool)collect($resource['fields'])
             ->where('type', 'Authentication')
             ->first();
+    }
+
+    public function checkAuthById($resourceId)
+    {
+        $resource = $this->findByid($resourceId)->toArray();
+        return $this->checkAuthByResource($resource);
     }
 }

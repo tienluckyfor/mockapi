@@ -20,7 +20,7 @@ class AuthService
 
     public function validation($args)
     {
-        if ($this->resource_repository->isAuthentication($args['resource_id'])) {
+        if ($this->resource_repository->checkAuthById($args['resource_id'])) {
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
                 return '_username/_password are required';
             }
@@ -37,7 +37,7 @@ class AuthService
 
     public function validationLogin($args)
     {
-        if ($this->resource_repository->isAuthentication($args['resource_id'])) {
+        if ($this->resource_repository->checkAuthById($args['resource_id'])) {
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
                 return '_username/_password are required';
             }
@@ -48,7 +48,7 @@ class AuthService
                 ['_username', $args['data']['_username'], @$args['id']])
                 ->where('data._password', $args['data']['_password']);
             if ($rallies->isEmpty()) {
-                return '_username or _password are incorrect';
+                return '_username/_password are incorrect';
             }
             return $rallies;
         }
