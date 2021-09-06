@@ -97,7 +97,7 @@ export function createRallydata(rallydata) {
 
 export function editRallydata(rallydata) {
     return async (dispatch) => {
-        dispatch(setMerge({eRallydata: {isLoading: true}}))
+        dispatch(setMerge({eRallydata: {isLoading: true,}}))
         const mutationAPI = () => {
             const mutation = gql`
             mutation($is_pin: Boolean, $is_show: Boolean, $id: ID!, $dataset_id: ID!, $resource_id: ID!, $data: JSON!, $data_children: JSON){
@@ -124,7 +124,7 @@ export function editRallydata(rallydata) {
         try {
             await mutationAPI().then(res => {
                 dispatch(setMerge({
-                    eRallydata: {isLoading: false, isOpen: false},
+                    eRallydata: {isLoading: false, isOpen: false,},
                     mlDRRallydata: {isRefresh: true},
                     fRallydata: {isRefresh: true},
                 }))

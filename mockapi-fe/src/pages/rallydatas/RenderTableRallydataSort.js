@@ -38,7 +38,7 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
                     size={`small`}
                     type="link"
                     onClick={(e) => {
-                        dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata}))
+                        dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata, firstCount:0}))
                     }}
                 >
                     Edit

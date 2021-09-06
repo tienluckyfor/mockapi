@@ -7,7 +7,7 @@ export const fields = [
 export const authFields = [
     {name: `_username`, type: `Authentication`},
     {name: `_password`, type: `Authentication`},
-    {name: `_token`, type: `Authentication`},
+    // {name: `_token`, type: `Authentication`},
 ]
 export const endpoints = [
     {name: `get`, type: `get`, json: `$mockData`, status: true,},

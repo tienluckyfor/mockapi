@@ -12,6 +12,7 @@ class ResourceRepository
             ->where('id', $resourceId)
             ->first();
     }
+
     public function getByIds($resourceIds, $select = '*')
     {
         return Resource::selectRaw($select)
@@ -44,7 +45,8 @@ class ResourceRepository
             ->get();
     }
 
-    public function findByName($name, $select='*'){
+    public function findByName($name, $select = '*')
+    {
         return Resource::selectRaw($select)
             ->where('name', $name)
             ->first();
@@ -57,6 +59,14 @@ class ResourceRepository
             ->join('datasets', 'datasets.api_id', '=', 'apis.id')
             ->where('datasets.id', $datasetId)
             ->where('resources.name', $name)
+            ->first();
+    }
+
+    public function isAuthentication($resourceId)
+    {
+        $resource = $this->findByid($resourceId);
+        return (bool)collect($resource->fields)
+            ->where('type', 'Authentication')
             ->first();
     }
 }

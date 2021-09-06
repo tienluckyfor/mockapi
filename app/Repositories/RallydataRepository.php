@@ -60,6 +60,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         return Arr::first($rallydata);
     }
 
+
     public function fillData($resource, $amounts, $locale)
     {
         $faker = Faker\Factory::create($locale);
@@ -77,12 +78,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                         $obj[$name] = $i;
                     }
                     if ($type == 'Faker.js' && $fakerjs == 'image.imageUrl(avatar)') {
-//                        $image = asset('storage/filldata-media/' . rand(1, 10) . '.jpg');
-//                        $obj[$name] = [
-//                            'image'       => $image,
-//                            'thumb_image' => $this->media_service->get_thumb($image),
-//                            'id'          => null,
-//                        ];
                         $obj[$name] = [
                             "type"      => "media",
                             "media_ids" => [rand(-10, -1)]
@@ -267,25 +262,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
             $sql .= " limit {$perPage} offset {$offset}";
         }
         return $this->_handleData($currentPage, $sql, $perPage, $total);
-//        $rallyDatas = [];
-//        $isPrev = $currentPage == 1 ? false : true;
-//        $isNext = false;
-//        try {
-//            $rallyDatas = DB::select($sql);
-//            $rallyDatas = json_decode(json_encode($rallyDatas), true);
-//            if (count($rallyDatas) == $perPage) {
-//                $isNext = true;
-//                array_pop($rallyDatas);
-//            }
-//        } catch (\QueryException $e) {
-//            throw new QueryException($e->getMessage());
-//        }
-//        $rallyDatas = array_map(function ($rally) {
-//            $rally['data'] = json_decode($rally['data'], true);
-//            $rally['data_children'] = json_decode($rally['data_children'], true);
-//            return $rally;
-//        }, $rallyDatas);
-//        return [$rallyDatas, $total, $isPrev, $isNext];
     }
 
     protected function _handleData($currentPage, $sql, $perPage, $total)
@@ -331,11 +307,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                 WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
                 WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
                 ELSE pin_index END AS pin_index";
-        /*$select1 = "json_extract(data, '$.id') as dataId, CASE WHEN is_pin = false THEN null ELSE is_pin END AS is_pin,
-                CASE
-                WHEN (is_show = true AND is_pin = true) THEN pin_index-999999
-                WHEN (is_show = true AND (is_pin != true OR is_pin is null)) THEN pin_index-999999
-                ELSE pin_index END AS pin_index, is_show";*/
         $rallyDatas = RallyData::selectRaw($select)
             ->where('dataset_id', $datasetId);
         if (!empty($rallyIds)) {
@@ -372,14 +343,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
     {
         $mediaIds = [];
         foreach ($rallydatas as $rallydata) {
-//            dd($rallydata);
-//            if (isset($rallydata['data'])) {
-//                foreach ($rallydata['data'] as $datum) {
-//                    if (isset($datum['media_ids'])) {
-//                        $mediaIds = array_merge($mediaIds, $datum['media_ids']);
-//                    }
-//                }
-//            }
             foreach ($rallydata as $rallydatum) {
                 if (!is_array($rallydatum)) {
                     continue;
@@ -426,20 +389,9 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
             $fileType = $medium->file_type;
             $thumbs = $medium->thumb_files;
         }
-        /*
-        $file = asset("storage/filldata-media/{$mediaId}.jpg");
-        $thumbImage = $this->media_service->get_thumb($file);
-        $fileType = 'image';
-        $medium = $media->where('id', $mediaId)->first();
-        if ($mediaId > 0 && $medium) {
-            $file = $medium->file;
-            $thumbImage = $medium->thumb_image;
-            $fileType = $medium->file_type;
-        }*/
 
         $item = [
             'id'          => $mediaId,
-//            'thumb_image' => $thumbImage,
             'file_type'   => $fileType,
             'file'        => $file,
             'thumb_files' => $thumbs,
@@ -449,8 +401,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
 
     public function mappingMedia($rallydatas, $media, $thumbSizes = null)
     {
-//        dd($rallydatas, $media);
-//        $thumbSizes = null;
         $datasetId = null;
 
         foreach ($rallydatas as &$rallydata) {
@@ -531,6 +481,25 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
                 ->update(['data' => json_encode($rally['data'])]);
         }
         return $updateCount;
+    }
+
+    public function getByDataField($datasetId, $resourceId, $field)
+    {
+        [$key, $value, $id] = $field;
+        $sql = "select * from (select rallydatas.id, rallydatas.data, LOWER(JSON_UNQUOTE(JSON_EXTRACT(data, '$.{$key}'))) AS searchKey from `rallydatas`
+      where `dataset_id` = $datasetId
+        and `rallydatas`.`resource_id` = $resourceId
+        and `rallydatas`.`deleted_at` is null";
+        if(!empty($id)){
+            $sql .= " and `rallydatas`.`id` != $id";
+        }
+        $sql .= " ) t where searchKey='$value'";
+        $results = DB::select(DB::raw($sql));
+        $rallies = json_decode(json_encode($results), true);
+        return collect($rallies)->map(function ($item){
+            $item['data'] =  json_decode($item['data'], true);
+            return collect($item);
+        });
     }
 
 }

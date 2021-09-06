@@ -7,32 +7,45 @@ namespace App\GraphQL\Mutations;
 use App\Models\RallyData;
 use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
+use App\Repositories\ResourceRepository;
+use App\Services\AuthService;
+use GraphQL\Error\Error;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RallydataMutations
 {
+    private $resource_repository;
     private $rallydata_repository;
     private $media_repository;
+    private $auth_service;
 
     public function __construct(
-        RallydataRepository $RallydataRepository,
-        MediaRepository $MediaRepository
+        AuthService $authService,
+        ResourceRepository $resourceRepository,
+        RallydataRepository $rallydataRepository,
+        MediaRepository $mediaRepository
     ) {
-        $this->media_repository = $MediaRepository;
-        $this->rallydata_repository = $RallydataRepository;
+        $this->auth_service = $authService;
+        $this->resource_repository = $resourceRepository;
+        $this->media_repository = $mediaRepository;
+        $this->rallydata_repository = $rallydataRepository;
     }
 
     public function createRallydata($_, array $args): RallyData
     {
+        if($error = $this->auth_service->validation($args)){
+            throw new Error($error);
+        }
         $args['user_id'] = Auth::id();
-//        $args = $this->media_repository->handle_media($args);
-        \Illuminate\Support\Facades\Log::channel('single')->info('$args', [$args]);
-        
         return $this->rallydata_repository->createManual($args);
     }
 
     public function editRallydata($_, array $args): RallyData
     {
+        if($error = $this->auth_service->validation($args, true)){
+            throw new Error($error);
+        }
         $args = array_diff_key($args, array_flip(['directive']));
         return tap(RallyData::findOrFail($args['id']))
             ->update($args);
@@ -54,6 +67,9 @@ class RallydataMutations
     public function duplicateRallydata($_, array $args): bool
     {
         $rallydata = RallyData::where('id', $args['id'])->first()->toArray();
+        if (isset($rallydata['data']['_username'])) {
+            throw new Error('Can\'t duplicate resource has Authentication type');
+        }
         if ($this->rallydata_repository->createManual($rallydata)) {
             return true;
         }
@@ -84,7 +100,7 @@ class RallydataMutations
         }
         $index = 'id';
         $result = batch()->update($instance, $value, $index);
-        return (bool) $result;
+        return (bool)$result;
 //        dd($result);
 //        $result = Batch::update($instance, $values, $batchSize);
 //        RallyData::whereIn('id', $args['ids'])

@@ -22,28 +22,35 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
     const {checkedList,} = useSelector(commonsSelector)
 
     useEffect(() => {
-        const rally = eRallydata.rallydata
-        let fieldsValue = {id: rally.originalId, data: {}, is_show:rally._is_show, is_pin:rally._is_pin, };
-        (fields ?? []).map((field) => {
-            const {name, type, fakerjs} = field
-            const iType = getItype(type, fakerjs)
-            fieldsValue.data[name] = rally[name]
-            if (iType === `Object` || iType === 'Array') {
-                fieldsValue.data[name] = JSON.stringify(rally[name], null, '  ')
-            }
-            if (iType === `Date`) {
-                fieldsValue.data[name] = moment(rally[name])
-            }
-            if (iType === `Media`) {
-                dispatch(setCommonMerge('checkedList', {[`edit-${name}`]: rally[name]?.media_ids}))
-            }
-            if (iType === `Resource`) {
-                delete fieldsValue.data[name]
-                const rallyIds = (rally[name] ?? []).map((item) => item.id)
-                dispatch(setCommonMerge('checkedList', {[`edit-${name}`]: rallyIds}))
-            }
-        })
-        form.setFieldsValue(fieldsValue)
+        if (eRallydata.firstCount == 0) {
+            const rally = eRallydata.rallydata
+            let fieldsValue = {id: rally.originalId, data: {}, is_show: rally._is_show, is_pin: rally._is_pin,};
+            (fields ?? []).map((field) => {
+                const {name, type, fakerjs} = field
+                const iType = getItype(type, fakerjs)
+                fieldsValue.data[name] = rally[name]
+                if (iType === `Object` || iType === 'Array') {
+                    fieldsValue.data[name] = JSON.stringify(rally[name], null, '  ')
+                }
+                if (iType === `Date`) {
+                    fieldsValue.data[name] = moment(rally[name])
+                }
+                if (iType === `Media`) {
+                    dispatch(setCommonMerge('checkedList', {[`edit-${name}`]: rally[name]?.media_ids}))
+                }
+                if (iType === `Resource`) {
+                    delete fieldsValue.data[name]
+                    const rallyIds = (rally[name] ?? []).map((item) => item.id)
+                    dispatch(setCommonMerge('checkedList', {[`edit-${name}`]: rallyIds}))
+                }
+            })
+            form.setFieldsValue(fieldsValue)
+            dispatch(setRallydataMerge('eRallydata', {firstCount: eRallydata.firstCount + 1}))
+        }
+
+        if (!eRallydata.isOpen) {
+            form.resetFields();
+        }
     }, [eRallydata])
 
     useEffect(() => {
@@ -103,7 +110,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         <Modal
             title={<h2>Edit Rallydata</h2>}
             visible={visible}
-            onCancel={()=>{
+            onCancel={() => {
                 dispatch(setRallydataMerge(`eRallydata`, {isOpen: false}))
             }}
             onOk={() => {
@@ -118,7 +125,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
                         // console.log('vals', vals)
                         // return;
                         dispatch(editRallydata(vals))
-                        form.resetFields()
+                        // form.resetFields()
                     })
                     .catch((info) => {
                         console.log('Validate Failed:', info);

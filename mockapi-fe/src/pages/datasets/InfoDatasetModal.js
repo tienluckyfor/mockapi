@@ -1,10 +1,11 @@
 import React from 'react';
-import {Divider, List, Modal, Tabs} from "antd";
+import {Button, Divider, List, Modal, Tabs} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
 import {Share} from "components";
 import {CopyBlock, dracula} from "react-code-blocks";
 import {apiCodeby} from "./apiCodeby";
+import {LinkOutlined} from '@ant-design/icons';
 
 const InfoDatasetModal = () => {
     const dispatch = useDispatch()
@@ -25,14 +26,21 @@ const InfoDatasetModal = () => {
         },
     ]
 
+    const LinkButton = ({item}) => {
+        return <a href={item.url} target={`_blank`}>
+            <Button className="px-0" type="link" icon={<LinkOutlined/>}>{item.title}</Button>
+        </a>
+    }
+
     const PostmanList = () => {
         return <List
             dataSource={listData}
             renderItem={(item, i) => <List.Item>
                 <div className="space-y-2 w-full">
-                    <a href={item.url} target={`_blank`} className="block">
+                    <LinkButton item={item}/>
+                    {/*<a href={item.url} target={`_blank`} className="block">
                         {item.title}
-                    </a>
+                    </a>*/}
                     <CopyBlock
                         text={item.url}
                         theme={dracula}
@@ -47,8 +55,17 @@ const InfoDatasetModal = () => {
     const ReactJs = () => {
         return <ul className="space-y-4">
             <li className="space-y-2">
-                <a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM
+                <LinkButton item={{
+                    url: "https://www.npmjs.com/package/react-api-codeby",
+                    title: "NPM package"
+                }}/>
+                {/*<a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM
                     package</a>
+
+                <a href={item.url} target={`_blank`}>
+                    <Button className="px-0" type="link" icon={<LinkOutlined/>}>NPM
+                        package</Button>
+                </a>*/}
                 <CopyBlock
                     text={`npm i react-api-codeby`}
                     theme={dracula}
@@ -84,7 +101,7 @@ const InfoDatasetModal = () => {
             shareable_type="App\Models\DataSet"
             shareable_id={modalDataset?.dataset?.id}/>
         <Divider/>
-        <Tabs defaultActiveKey="ReactJs">
+        <Tabs defaultActiveKey="Postman">
             <Tabs.TabPane tab="Postman" key="Postman">
                 <PostmanList/>
             </Tabs.TabPane>
