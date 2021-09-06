@@ -41,6 +41,7 @@ type Rallies{
 }
 
 type Postman{
+    token: String
     collection: String
     environment: String
 }

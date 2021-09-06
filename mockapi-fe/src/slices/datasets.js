@@ -252,6 +252,7 @@ export function listDataset() {
     postman{
         collection
         environment
+        token
     }
     api{
         id

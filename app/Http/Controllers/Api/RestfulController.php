@@ -11,8 +11,11 @@ use App\Repositories\MediaRepository;
 use App\Repositories\RallydataRepository;
 use App\Repositories\ResourceRepository;
 use App\Services\ArrService;
+use App\Services\AuthService;
+use App\Services\StringService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class RestfulController extends Controller
 {
@@ -21,14 +24,20 @@ class RestfulController extends Controller
     private $resource_repository;
     private $rallydata_repository;
     private $media_repository;
+    private $auth_service;
+    private $string_service;
 
     public function __construct(
+        StringService $stringService,
+        AuthService $authService,
         ArrService $arrService,
         MediaRepository $MediaRepository,
         RallydataRepository $RallydataRepository,
         DatasetRepository $DatasetRepository,
         ResourceRepository $ResourceRepository
     ) {
+        $this->string_service = $stringService;
+        $this->auth_service = $authService;
         $this->arrService = $arrService;
         $this->media_repository = $MediaRepository;
         $this->rallydata_repository = $RallydataRepository;
@@ -302,23 +311,50 @@ AND rallydatas.deleted_at IS NULL";
         return $rallies;
     }
 
-    /*protected function _findRallyByDataId($datasetId, $resourceName, $dataId)
+    public function authRegister($resourceName, Request $request)
     {
-        $query = "
-SELECT rallydatas.*
-FROM rallydatas inner join resources r on rallydatas.resource_id = r.id
-WHERE r.name='{$resourceName}' AND rallydatas.dataset_id={$datasetId} 
-AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS NULL";
-        $results = DB::select(DB::raw($query));
-        $rallydata = json_decode(json_encode($results), true);
-        $rallydata = array_map(function ($item) {
-            $item['data'] = json_decode($item['data'], true);
-            $item['data_children'] = json_decode($item['data_children'], true);
-            return $item;
-        }, $rallydata ?? []);
-        $rallydata = Arr::where($rallydata, function ($item, $key) use ($dataId) {
-            return @$item['data']['id'] == $dataId;
-        });
-        return Arr::first($rallydata);
-    }*/
+        $r = $request->input('_restful');
+        $data = $request->except('_restful');
+        $resource = $this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
+        $rallydata = [
+            'user_id'     => $r['user_id'],
+            'dataset_id'  => $r['dataset_id'],
+            'resource_id' => $resource->id,
+            'data'        => $data,
+        ];
+        if ($error = $this->auth_service->validation($rallydata)) {
+            throw ValidationException::withMessages([$error]);
+        }
+        $rally = $this->rallydata_repository->createManual($rallydata);
+        $res = [
+            'status'                => true,
+            'data'                  => $rally->data,
+            "{$resourceName}_token" => $this->string_service->getRallyToken($rallydata),
+        ];
+        return response()->json($res);
+    }
+
+    public function authLogin($resourceName, Request $request)
+    {
+        $r = $request->input('_restful');
+        $data = $request->except('_restful');
+        $resource = $this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
+        $rallydata = [
+            'user_id'     => $r['user_id'],
+            'dataset_id'  => $r['dataset_id'],
+            'resource_id' => $resource->id,
+            'data'        => $data,
+        ];
+        $rallies = $this->auth_service->validationLogin($rallydata);
+        if (is_string($rallies)) {
+            $error = $rallies;
+            throw ValidationException::withMessages([$error]);
+        }
+        $res = [
+            'status'                => true,
+            'data'                  => $rallies->first()['data'],
+            "{$resourceName}_token" => $this->string_service->getRallyToken($rallydata),
+        ];
+        return response()->json($res);
+    }
 }

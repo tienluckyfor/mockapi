@@ -269,6 +269,7 @@ export function detailRallydata(dataset_id) {
             }
         }
         postman{
+            token
             collection
             environment
         }

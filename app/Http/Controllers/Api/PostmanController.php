@@ -24,21 +24,13 @@ class PostmanController extends Controller
 
     public function collection($datasetId)
     {
-//        $dataset = $this->dataset_repository->find($datasetId);
         $data = $this->postman_service->collection($datasetId);
         return response()->json($data);
-//        return response()->streamDownload(function () use ($data) {
-//            echo json_encode($data);
-//        }, "{$dataset['name']}.postman_collection.json");
     }
 
     public function environment($datasetId)
     {
-//        $dataset = $this->dataset_repository->find($datasetId);
         $data = $this->postman_service->environment($datasetId);
         return response()->json($data);
-//        return response()->streamDownload(function () use ($data) {
-//            echo json_encode($data);
-//        }, "{$dataset['name']}.postman_environment.json");
     }
 }

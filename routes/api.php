@@ -35,6 +35,9 @@ Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulToke
         Route::post('/', [RestfulController::class, 'store']);
         Route::put('/{dataId}', [RestfulController::class, 'update']);
         Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
+
+        Route::post('/auth-register', [RestfulController::class, 'authRegister']);
+        Route::post('/auth-login', [RestfulController::class, 'authLogin']);
     });
 
 
@@ -69,7 +72,7 @@ Route::group(['prefix' => 'backup'], function () {
         Route::get('process', function () use ($import) {
             $fName = request()->fName;
             $process = request()->process;
-            switch ($process){
+            switch ($process) {
                 case 'databases':
                     $import->process($fName)->database();
                     break;

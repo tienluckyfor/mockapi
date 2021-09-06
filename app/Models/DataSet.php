@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StringService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +31,9 @@ class DataSet extends Model
 
     public function getPostmanAttribute()
     {
+        $stringService = app(StringService::class);
         return [
+            'token' => $stringService->getToken($this->id, $this->user_id),
             'collection'  => URL::to("/api/postman/{$this->id}-c/postman_collection.json"),
             'environment' => URL::to("/api/postman/{$this->id}-e/postman_environment.json"),
         ];

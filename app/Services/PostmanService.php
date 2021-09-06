@@ -60,22 +60,103 @@ class PostmanService
             $amounts = [];
             $amounts[$resource['id']] = 1;
             $rallydata = Arr::first($this->rallydata_repository->fillData($resource, $amounts, $resource['locale']));
+
+            $headers = [
+                [
+                    "key"   => "Accept",
+                    "value" => "application/json",
+                    "type"  => "text"
+                ],
+                [
+                    "key"   => "Authorization",
+                    "value" => "Bearer {{restful_token}}",
+                    "type"  => "text"
+                ],
+            ];
+
+// nFieldStr & isAuth
+            $isAuth = 0;
+            $nFields = array_map(function ($field) use (&$isAuth) {
+                if ($field['type'] == 'Authentication') {
+                    $isAuth++;
+                }
+                return $field['name'];
+            }, $resource['fields']);
+            $nFieldStr = implode(',', $nFields);
+            if ($isAuth) {
+                $items[] = [
+                    "name"     => "{{api_url}}/{$resource['name']}/auth-register",
+                    "request"  => [
+                        "method" => "POST",
+                        "header" => $headers,
+                        "body"   => [
+                            "mode"    => "raw",
+                            "raw"     => self::_rawHandle([
+                                '_username' => 'tien.luckyfor@gmail.com',
+                                '_password' => '12345678',
+                            ]),
+                            "options" => [
+                                "raw" => [
+                                    "language" => "json"
+                                ]
+                            ]
+                        ],
+                        "url"    => [
+                            "raw"  => "{{api_url}}/{$resource['name']}/auth-register",
+                            "host" => [
+                                "{{api_url}}"
+                            ],
+                            "path" => [
+                                $resource['name'],
+                                "auth-register"
+                            ]
+                        ]
+                    ],
+                    "response" => []
+                ];
+                $items[] = [
+                    "name"     => "{{api_url}}/{$resource['name']}/auth-login",
+                    "request"  => [
+                        "method" => "POST",
+                        "header" => $headers,
+                        "body"   => [
+                            "mode"    => "raw",
+                            "raw"     => self::_rawHandle([
+                                '_username' => 'tien.luckyfor@gmail.com',
+                                '_password' => '12345678',
+                            ]),
+                            "options" => [
+                                "raw" => [
+                                    "language" => "json"
+                                ]
+                            ]
+                        ],
+                        "url"    => [
+                            "raw"  => "{{api_url}}/{$resource['name']}/auth-login",
+                            "host" => [
+                                "{{api_url}}"
+                            ],
+                            "path" => [
+                                $resource['name'],
+                                "auth-login"
+                            ]
+                        ]
+                    ],
+                    "response" => []
+                ];
+            }
+            $data[] = [
+                "name" => $resource['name'] . '/auth',
+                "item" => $items,
+            ];
+
+            $items = [];
+
             foreach ($resource['endpoints'] as $endpoint) {
                 if (!$endpoint['status']) {
                     continue;
                 }
-                $headers = [
-                    [
-                        "key"   => "Accept",
-                        "value" => "application/json",
-                        "type"  => "text"
-                    ],
-                    [
-                        "key"   => "Authorization",
-                        "value" => "Bearer {{restful_token}}",
-                        "type"  => "text"
-                    ],
-                ];
+
                 switch ($endpoint['type']) {
                     case 'get_id':
                         $items[] = [
@@ -84,11 +165,11 @@ class PostmanService
                                 "method" => "GET",
                                 "header" => $headers,
                                 "url"    => [
-                                    "raw"  => "{{api_url}}/{$resource['name']}/1",
-                                    "host" => [
+                                    "raw"   => "{{api_url}}/{$resource['name']}/1",
+                                    "host"  => [
                                         "{{api_url}}"
                                     ],
-                                    "path" => [
+                                    "path"  => [
                                         $resource['name'],
                                         1
                                     ],
@@ -110,17 +191,13 @@ class PostmanService
                         ];
                         break;
                     case 'get':
-                        $fields = array_map(function ($field) {
-                            return $field['name'];
-                        }, $resource['fields']);
-                        $fields = implode(',', $fields);
                         $items[] = [
                             "name"     => "{{api_url}}/{$resource['name']}",
                             "request"  => [
                                 "method" => "GET",
                                 "header" => $headers,
                                 "url"    => [
-                                    "raw"   => "{{api_url}}/{$resource['name']}?per_page=20&current_page=1&sort=id,desc&search=name,&fields={$fields}",
+                                    "raw"   => "{{api_url}}/{$resource['name']}?per_page=20&current_page=1&sort=id,desc&search=name,&fields={$nFieldStr}",
                                     "host"  => [
                                         "{{api_url}}"
                                     ],
@@ -137,8 +214,8 @@ class PostmanService
                                             "value" => "1"
                                         ],
                                         [
-                                            "key"   => "sort",
-                                            "value" => "id,desc",
+                                            "key"      => "sort",
+                                            "value"    => "id,desc",
                                             "disabled" => true
                                         ],
                                         [
@@ -153,7 +230,7 @@ class PostmanService
                                         ],
                                         [
                                             "key"   => "fields",
-                                            "value" => $fields
+                                            "value" => $nFieldStr
                                         ],
                                         [
                                             "key"      => "_system",
@@ -300,10 +377,7 @@ class PostmanService
                 ],
                 [
                     "key"     => "restful_token",
-                    "value"   => $this->stringService->JWT_encode([
-                        'dataset_id' => $datasetId,
-                        'user_id'    => $dataset->user_id
-                    ]),
+                    "value"   => $this->stringService->getToken($dataset->id, $dataset->user_id),
                     "enabled" => true
                 ],
             ],

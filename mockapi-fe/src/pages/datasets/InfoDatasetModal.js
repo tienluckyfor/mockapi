@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Divider, List, Modal, Tabs} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
@@ -10,7 +10,6 @@ import {LinkOutlined} from '@ant-design/icons';
 const InfoDatasetModal = () => {
     const dispatch = useDispatch()
     const {modalDataset,} = useSelector(datasetsSelector)
-
     const listData = [
         {
             title: `Data Management`,
@@ -45,6 +44,7 @@ const InfoDatasetModal = () => {
                         text={item.url}
                         theme={dracula}
                         showLineNumbers={false}
+                        language="javascript"
                     />
                 </div>
             </List.Item>
@@ -59,13 +59,6 @@ const InfoDatasetModal = () => {
                     url: "https://www.npmjs.com/package/react-api-codeby",
                     title: "NPM package"
                 }}/>
-                {/*<a className="block" target="_blank" href="https://www.npmjs.com/package/react-api-codeby">NPM
-                    package</a>
-
-                <a href={item.url} target={`_blank`}>
-                    <Button className="px-0" type="link" icon={<LinkOutlined/>}>NPM
-                        package</Button>
-                </a>*/}
                 <CopyBlock
                     text={`npm i react-api-codeby`}
                     theme={dracula}
@@ -74,9 +67,9 @@ const InfoDatasetModal = () => {
                 />
             </li>
             <li className="space-y-2">
-                <p className="text-gray-600">apiCodeby.js</p>
+                <p className="text-gray-600">src/configs/apiCodeby.js</p>
                 <CopyBlock
-                    text={apiCodeby()}
+                    text={apiCodeby(modalDataset?.dataset?.postman?.token)}
                     theme={dracula}
                     showLineNumbers={false}
                     language="javascript"
