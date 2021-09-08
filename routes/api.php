@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PostmanController;
 use App\Http\Controllers\Api\RallyBackupController;
 use App\Http\Controllers\Api\RestfulController;
+use App\Http\Middleware\RallyTokenIsValid;
 use App\Http\Middleware\RestfulTokenIsValid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,14 +31,17 @@ Route::get('media', [MediaController::class, 'index']);
 
 Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulTokenIsValid::class]],
     function () {
+        Route::get('/auth', [RestfulController::class, 'auth'])
+            ->middleware([RallyTokenIsValid::class]);
+        Route::post('/auth-register', [RestfulController::class, 'authRegister']);
+        Route::post('/auth-login', [RestfulController::class, 'authLogin']);
+
         Route::get('/', [RestfulController::class, 'list']);
         Route::get('/{dataId}', [RestfulController::class, 'detail']);
         Route::post('/', [RestfulController::class, 'store']);
         Route::put('/{dataId}', [RestfulController::class, 'update']);
         Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
 
-        Route::post('/auth-register', [RestfulController::class, 'authRegister']);
-        Route::post('/auth-login', [RestfulController::class, 'authLogin']);
     });
 
 

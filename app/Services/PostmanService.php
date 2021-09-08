@@ -87,7 +87,7 @@ class PostmanService
             if ($this->resource_repository->checkAuthByResource($resource)) {
                 $authHeaders = [
                     [
-                        "key"   => "{$resource['name']}_token",
+                        "key"   => "Rallytoken",
                         "value" => "Bearer {{{$resource['name']}_token}}",
                         "type"  => "text"
                     ]
@@ -98,7 +98,7 @@ class PostmanService
                     "name"     => "{{api_url}}/{$resource['name']}/auth-register",
                     "request"  => [
                         "method" => "POST",
-                        "header" => $authHeaders,
+                        "header" => $headers,
                         "body"   => [
                             "mode"    => "raw",
                             "raw"     => self::_rawHandle([
@@ -129,7 +129,7 @@ class PostmanService
                     "name"     => "{{api_url}}/{$resource['name']}/auth-login",
                     "request"  => [
                         "method" => "POST",
-                        "header" => $authHeaders,
+                        "header" => $headers,
                         "body"   => [
                             "mode"    => "raw",
                             "raw"     => self::_rawHandle([
@@ -174,13 +174,13 @@ class PostmanService
                             ]
                         ],
                         "url"    => [
-                            "raw"  => "{{api_url}}/{$resource['name']}/auth-login",
+                            "raw"  => "{{api_url}}/{$resource['name']}/auth",
                             "host" => [
                                 "{{api_url}}"
                             ],
                             "path" => [
                                 $resource['name'],
-                                "auth-login"
+                                "auth"
                             ]
                         ]
                     ],

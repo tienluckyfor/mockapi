@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\DataSet;
 use App\Models\Media;
 use App\Models\RallyData;
+use App\Services\ArrService;
 use App\Services\MediaService;
 use Carbon\Carbon;
 use Faker;
@@ -17,13 +18,16 @@ class RallydataRepository
 {
     private $resource_repository;
     private $media_service;
+    private $arr_service;
 
     public function __construct(
-        ResourceRepository $ResourceRepository,
-        MediaService $MediaService
+        ArrService $arrService,
+        ResourceRepository $resourceRepository,
+        MediaService $media_service
     ) {
-        $this->resource_repository = $ResourceRepository;
-        $this->media_service = $MediaService;
+        $this->arr_service=$arrService;
+        $this->resource_repository = $resourceRepository;
+        $this->media_service = $media_service;
     }
 
     public function findMaxByDatasetResource($datasetId, $resourceId)
@@ -37,27 +41,6 @@ class RallydataRepository
             return $rally->toArray();
         }
         return [];
-    }
-
-    public function findByDataId($datasetId, $resourceId, $dataId)
-    {
-        $query = "
-SELECT rallydatas.*
-FROM rallydatas 
-WHERE rallydatas.dataset_id={$datasetId} 
-AND rallydatas.resource_id={$resourceId}
-AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS NULL";
-        $results = DB::select(DB::raw($query));
-        $rallydata = json_decode(json_encode($results), true);
-        $rallydata = array_map(function ($item) {
-            $item['data'] = json_decode($item['data'], true);
-            $item['data_children'] = json_decode($item['data_children'], true);
-            return $item;
-        }, $rallydata ?? []);
-        $rallydata = Arr::where($rallydata, function ($item, $key) use ($dataId) {
-            return @$item['data']['id'] == $dataId;
-        });
-        return Arr::first($rallydata);
     }
 
 
@@ -282,6 +265,7 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         $rallyDatas = array_map(function ($rally) {
             $rally['data'] = json_decode($rally['data'], true);
             $rally['data_children'] = json_decode($rally['data_children'], true);
+            $rally['data'] = array_diff_key($rally['data'], array_flip(['_password']));
             return $rally;
         }, $rallyDatas);
         return [$rallyDatas, $total, $isPrev, $isNext];
@@ -315,17 +299,6 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
         $rallyDatas = $rallyDatas
             ->orderBy('is_pin', 'desc')
             ->orderBy('pin_index', 'asc')
-            ->orderBy('id', 'desc')
-            ->get();
-        return $rallyDatas;
-    }
-
-    public function getMyDatasetIdResourceId($userId, $datasetId, $resourceId, $select = '*')
-    {
-        $rallyDatas = RallyData::selectRaw($select)
-            ->where('user_id', $userId)
-            ->where('dataset_id', $datasetId)
-            ->where('resource_id', $resourceId)
             ->orderBy('id', 'desc')
             ->get();
         return $rallyDatas;
@@ -490,16 +463,66 @@ AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS
       where `dataset_id` = $datasetId
         and `rallydatas`.`resource_id` = $resourceId
         and `rallydatas`.`deleted_at` is null";
-        if(!empty($id)){
+        if (!empty($id)) {
             $sql .= " and `rallydatas`.`id` != $id";
         }
         $sql .= " ) t where searchKey='$value'";
         $results = DB::select(DB::raw($sql));
         $rallies = json_decode(json_encode($results), true);
-        return collect($rallies)->map(function ($item){
-            $item['data'] =  json_decode($item['data'], true);
+        return collect($rallies)->map(function ($item) {
+            $item['data'] = json_decode($item['data'], true);
             return collect($item);
         });
+    }
+
+    public function findByDataId($datasetId, $resourceId, $dataId)
+    {
+        $query = "
+SELECT rallydatas.*
+FROM rallydatas 
+WHERE rallydatas.dataset_id={$datasetId} 
+AND rallydatas.resource_id={$resourceId}
+AND rallydatas.data REGEXP '(\"id\"[^,]+{$dataId})' AND rallydatas.deleted_at IS NULL";
+        $results = DB::select(DB::raw($query));
+        $rallydata = json_decode(json_encode($results), true);
+        $rallydata = array_map(function ($item) {
+            $item['data'] = json_decode($item['data'], true);
+            $item['data_children'] = json_decode($item['data_children'], true);
+            return $item;
+        }, $rallydata ?? []);
+        $rallydata = Arr::where($rallydata, function ($item, $key) use ($dataId) {
+            return @$item['data']['id'] == $dataId;
+        });
+        return Arr::first($rallydata);
+    }
+
+    public function findByDataFields($datasetId, $resourceId, $fields)
+    {
+        [$key, $value] = $this->arr_service->firstKeyValue($fields);
+        $sql = "
+SELECT * FROM (SELECT rallydatas.*, LOWER(JSON_UNQUOTE(JSON_EXTRACT(data, '$.{$key}'))) AS searchKey FROM `rallydatas`
+WHERE `dataset_id` = $datasetId
+AND `rallydatas`.`resource_id` = $resourceId
+AND `rallydatas`.`deleted_at` IS NULL";
+        if (!empty($id)) {
+            $sql .= " and `rallydatas`.`id` != $id";
+        }
+        $sql .= " ) t where searchKey='$value'";
+        $results = DB::select(DB::raw($sql));
+        $rallydata = json_decode(json_encode($results), true);
+        $rallydata = array_map(function ($item) {
+            $item['data'] = json_decode($item['data'], true);
+            $item['data_children'] = json_decode($item['data_children'], true);
+            return $item;
+        }, $rallydata ?? []);
+        $rallydata = Arr::where($rallydata, function ($item, $key) use ($fields) {
+            $countMatch = 0;
+            foreach ($fields as $key => $value) {
+                $countMatch += @$item['data'][$key] == $value ? 1 : 0;
+            }
+            return $countMatch == count($fields);
+        });
+        return Arr::first($rallydata);
     }
 
 }

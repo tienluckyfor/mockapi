@@ -156,58 +156,6 @@ export function deleteApi(api) {
     }
 }
 
-export function myApiList() {
-    return async (dispatch, getState) => {
-        const {mlApi} = getState().apis
-        if (mlApi.isLoading) return;
-        dispatch(setMerge({mlApi: {isLoading: true, isRefresh: false}}))
-        const query = gql`
-        query ($name: String) {
-  my_api_list(name:$name) {
-            id
-            name
-            thumb_sizes
-            updated_at
-    shares{
-        user_invite{
-            id
-            name
-            medium {
-                id
-                file
-                thumb_files
-            }
-        }
-    }
-    user{
-        id
-        name
-        medium{
-            id
-            file
-            thumb_files
-        }
-    }
-  }
-}`;
-        const res = await apolloClient.query({
-            query,
-            variables: {name: mlApi.search.name}
-        })
-        const myApiList = res?.data?.my_api_list ?? []
-        dispatch(setMerge({
-            mlApi:
-                {
-                    isLoading: false,
-                    data: myApiList,
-                    isRefresh: false,
-                    search: {...mlApi.search, total: myApiList.length},
-                }
-        }))
-    }
-}
-
-
 export function listApi() {
     return async (dispatch, getState) => {
         const {lApi} = getState().apis

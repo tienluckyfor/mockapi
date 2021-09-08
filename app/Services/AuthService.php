@@ -22,7 +22,7 @@ class AuthService
     {
         if ($this->resource_repository->checkAuthById($args['resource_id'])) {
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
-                return '_username/_password are required';
+                return '_username and _password are required';
             }
             if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
                 return '_username must contain only letters, numbers or the underscore!';
@@ -39,7 +39,7 @@ class AuthService
     {
         if ($this->resource_repository->checkAuthById($args['resource_id'])) {
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
-                return '_username/_password are required';
+                return '_username and _password are required';
             }
             if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
                 return '_username must contain only letters, numbers or the underscore!';
@@ -48,7 +48,7 @@ class AuthService
                 ['_username', $args['data']['_username'], @$args['id']])
                 ->where('data._password', $args['data']['_password']);
             if ($rallies->isEmpty()) {
-                return '_username/_password are incorrect';
+                return '_username or _password incorrect';
             }
             return $rallies;
         }
