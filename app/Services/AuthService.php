@@ -24,9 +24,9 @@ class AuthService
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
                 return '_username and _password are required';
             }
-            if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
-                return '_username must contain only letters, numbers or the underscore!';
-            }
+//            if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
+//                return '_username must contain only letters, numbers or the underscore!';
+//            }
             $rallies = $this->rallydata_repository->getByDataField($args['dataset_id'], $args['resource_id'],
                 ['_username', $args['data']['_username'], @$args['id']]);
             if ($rallies->isNotEmpty()) {
@@ -41,9 +41,9 @@ class AuthService
             if (empty($args['data']['_username']) || empty($args['data']['_password'])) {
                 return '_username and _password are required';
             }
-            if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
-                return '_username must contain only letters, numbers or the underscore!';
-            }
+//            if (!preg_match('#^[a-zA-Z0-9_\-]+$#mis', $args['data']['_username'])) {
+//                return '_username must contain only letters, numbers or the underscore!';
+//            }
             $rallies = $this->rallydata_repository->getByDataField($args['dataset_id'], $args['resource_id'],
                 ['_username', $args['data']['_username'], @$args['id']])
                 ->where('data._password', $args['data']['_password']);

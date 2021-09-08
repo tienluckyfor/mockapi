@@ -36,18 +36,15 @@ class RestfulTokenIsValid
         if (is_numeric(@$decode['dataset_id']) && is_numeric(@$decode['user_id'])) {
             $resourceName = $request->segment(3);
             $resource = $this->resource_repository->findByNameDatasetId($resourceName, $decode['dataset_id']);
-            $request->request->set('_restful', [
-                'dataset_id' => $decode['dataset_id'],
-                'user_id'    => $decode['user_id'],
-                'resource' => @$resource->toArray(),
-            ]);
-//            $request->request->add([
-//                '_restful'=> ([
-//                    'dataset_id'  => $decode['dataset_id'],
-//                    'user_id'  => $decode['user_id'],
-//                ])
-//            ]);
-            return $next($request);
+            if ($resource) {
+                $request->request->set('_restful', [
+                    'dataset_id' => $decode['dataset_id'],
+                    'user_id'    => $decode['user_id'],
+                    'resource'   => $resource->toArray(),
+                ]);
+                return $next($request);
+            }
+            abort(401, 'Resource not found');
         }
         abort(401, 'Unauthorized');
     }

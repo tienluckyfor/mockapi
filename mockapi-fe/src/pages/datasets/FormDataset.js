@@ -79,7 +79,7 @@ const FormDataset = ({apiId, setApiId, }) => {
                 rules={[{required: true}]}
             >
                 <Select
-                    // showSearch
+                    showSearch
                     optionFilterProp="children"
                     autoFocus
                     onChange={(value) => setApiId(value)}

@@ -25,6 +25,7 @@ const FormResource = ({formValue, resourceName}) => {
                 rules={[{required: true}]}
             >
                 <Select
+                    showSearch
                     optionFilterProp="children"
                     autoFocus
                 >
