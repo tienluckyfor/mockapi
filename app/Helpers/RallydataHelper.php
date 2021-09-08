@@ -33,6 +33,8 @@ class RallydataHelper
     {
         $rallydataIds = [];
         $fields = $fieldStr ? explode(',', $fieldStr) : false;
+        \Illuminate\Support\Facades\Log::channel('single')->info('$fields', [$fields]);
+        
         $isChildField = true;
         if ($fields) {
             $isChildField = [];

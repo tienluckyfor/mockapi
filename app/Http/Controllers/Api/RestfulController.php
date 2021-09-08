@@ -161,7 +161,7 @@ class RestfulController extends Controller
         if ($request->has('_parent')) {
             $rallydatas = $this->rallydata_helper->_getParents($r['dataset_id'], $rallyIds, $resources, $rallydatas);
         }
-        $rallydatas = $this->rallydata_helper->_handleParentMedia($rallydatas, $r['dataset_id'], $request, $resources);
+        $rallydatas = $this->rallydata_helper->_handleParentMedia($rallydatas, $r['dataset_id'], $request->fields, $resources);
         $totalPage = ceil($total / $perPage);
         if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
             $isPrev = false;
