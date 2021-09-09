@@ -56,10 +56,10 @@ class RestfulController extends Controller
         //
     }
 
-    public function store($resourceName, Request $request)
+    public function store(Request $request)
     {
         $r = $request->input('_restful');
-        $data = $request->except('_restful');
+        $data = $this->rallydata_helper->_getDataByResourceFields($request->all(), $r['resource']['fields']);
         $resource = $r['resource'];//$this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
         $rallydata = [
             'user_id'     => $r['user_id'],
@@ -89,8 +89,9 @@ class RestfulController extends Controller
     public function update($resourceName, $dataId, Request $request)
     {
         $r = $request->input('_restful');
-        $newData = $request->except(['_restful', 'id']);
+//        $newData = $request->except(['_restful', 'id']);
         $resource = $r['resource'];//$this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
+        $newData = $this->rallydata_helper->_getDataByResourceFields($request->except(['_restful', 'id']), $resource['fields']);
         $rallydata = $this->rallydata_repository->findByDataId($r['dataset_id'], $resource['id'], $dataId);
         if (!$rallydata) {
             return response()->json([
@@ -209,7 +210,8 @@ class RestfulController extends Controller
             'data'        => $data,
         ];
         if ($error = $this->auth_service->validation($rallydata)) {
-            throw ValidationException::withMessages([$error]);
+            abort(401, $error);
+//            throw ValidationException::withMessages([$error]);
         }
         $rally = $this->rallydata_repository->createManual($rallydata);
         $res = [
@@ -234,7 +236,9 @@ class RestfulController extends Controller
             ];
             return response()->json($res);
         }
-        throw ValidationException::withMessages(['_username or _password incorrect']);
+        $error = '_username or _password incorrect';
+        abort(401, $error);
+//        throw ValidationException::withMessages(['_username or _password incorrect']);
     }
 
     public function auth($resourceName, Request $request)

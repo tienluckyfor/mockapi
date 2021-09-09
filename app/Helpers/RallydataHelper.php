@@ -34,7 +34,7 @@ class RallydataHelper
         $rallydataIds = [];
         $fields = $fieldStr ? explode(',', $fieldStr) : false;
         \Illuminate\Support\Facades\Log::channel('single')->info('$fields', [$fields]);
-        
+
         $isChildField = true;
         if ($fields) {
             $isChildField = [];
@@ -131,6 +131,15 @@ AND rallydatas.deleted_at IS NULL";
             $rally['data']['_parent'] = @$parentData[$rally['id']];
         }
         return $rallies;
+    }
+
+    public function _getDataByResourceFields($data, $fields)
+    {
+        $keys = collect($fields)->pluck('name')->toArray();
+        $structData = array_fill_keys($keys, '');
+        $data = array_intersect_key($data, $structData);
+        $finalData = array_merge($structData, $data);
+        return $finalData;
     }
 
     public function findRallyById($r, $dataId, $isParent = false, $fieldStr)

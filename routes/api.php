@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\RallyBackupController;
 use App\Http\Controllers\Api\RestfulController;
 use App\Http\Middleware\RallyTokenIsValid;
 use App\Http\Middleware\RestfulTokenIsValid;
+use App\Http\Middleware\ResourceAuthCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,10 +39,12 @@ Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulToke
 
         Route::get('/', [RestfulController::class, 'list']);
         Route::get('/{dataId}', [RestfulController::class, 'detail']);
-        Route::post('/', [RestfulController::class, 'store']);
-        Route::put('/{dataId}', [RestfulController::class, 'update']);
-        Route::delete('/{dataId}', [RestfulController::class, 'destroy']);
-
+        Route::post('/', [RestfulController::class, 'store'])
+            ->middleware([ResourceAuthCheck::class]);
+        Route::put('/{dataId}', [RestfulController::class, 'update'])
+            ->middleware([ResourceAuthCheck::class]);
+        Route::delete('/{dataId}', [RestfulController::class, 'destroy'])
+            ->middleware([ResourceAuthCheck::class]);
     });
 
 
