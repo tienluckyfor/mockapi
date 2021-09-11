@@ -3,12 +3,13 @@ const axios = require("axios")
 
 class Url {
     static baseUrl(req, prefix = null) {
-        const bUrl = url.format({
-            protocol: req.protocol,
-            host: req.get('host'),
-            // pathname: req.originalUrl
-        });
-        return prefix ? [bUrl, prefix].join('') : bUrl;
+        // const bUrl = url.format({
+        //     protocol: req.protocol,
+        //     host: req.get('host'),
+        //     // pathname: req.originalUrl
+        // });
+
+        return prefix ? [process.env.APP_URL, prefix].join('') : bUrl;
     }
 
     static fullUrl(req) {

@@ -22,9 +22,10 @@ class Devices {
         let obj = {};
         this.list().map((item) => {
             const imageName = `${this.urlToName(url)}-${this.urlToName(item.name)}.png`;
-            const imageUrl = req ? `${Url.baseUrl(req, '/images')}/${imageName}` : ``;
-            const imagePath = `${targetPath}/${imageName}`;
-            obj[item.name] = {imageName, imagePath, imageUrl}
+            const imageUrl = req ? `${Url.baseUrl(req, '/images/screenshots')}/${imageName}` : ``;
+            const imageSharp = req ? `${Url.baseUrl(req, '/imageSharp/screenshots')}/${imageName}` : ``;
+            const imagePath = `${targetPath}/screenshots/${imageName}`;
+            obj[item.name] = {imageName, imagePath, imageUrl, imageSharp}
         })
         return {obj, arr: Object.values(obj)};
     }
@@ -105,7 +106,8 @@ class Screenshot {
                         .map(item => {
                             return {name: item.name, width: item.viewport.width, height: item.viewport.height}
                         })[0],
-                    "imageUrl": item.imageUrl
+                    "imageUrl": item.imageUrl,
+                    "imageSharp": item.imageSharp
                 })
             }
         })

@@ -13,9 +13,9 @@ router.get('/',
     async (req, res, next) => {
         const {url} = req.query;
         const targetPath = path.join(__dirname, `../../public/images`)
-        console.log('targetPath', targetPath, url)
+        // console.log('targetPath', targetPath, url)
         let imageFile = await Screenshot.imageFiles(targetPath, req, url)
-        console.log('imageFile', imageFile)
+        console.log('imageFile 1', imageFile)
         if (imageFile.data) {
             return res.status(imageFile.status).send(imageFile);
         } else {
@@ -28,7 +28,7 @@ router.get('/',
             await Screenshot.takePhoto(url, targetPath);
         }
         imageFile = await Screenshot.imageFiles(targetPath, req, url);
-        console.log('imageFile', imageFile)
+        console.log('imageFile 2', imageFile)
         return res.status(imageFile.status).send(imageFile);
     });
 
