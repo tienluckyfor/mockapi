@@ -85,7 +85,11 @@ class Screenshot {
             );
             await page.emulate(device);
             const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
-            await page.setViewport({width: device.viewport.width, height: bodyHeight});
+            const height = bodyHeight > device.viewport.height ? bodyHeight : device.viewport.height
+            await page.setViewport({
+                width: device.viewport.width,
+                height
+            });
             await sleep(3000);
             await page.screenshot({path: imagePath});
         }
