@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "nodemon-start": "nodemon ./bin/www",
     "local": "cross-env NODE_ENV=local nodemon ./bin/www",
-    "dev": "cross-env NODE_ENV=dev node ./bin/www",
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
     "forever-dev": "forever start -c \"npm run dev\" ./"
   },
   "dependencies": {
