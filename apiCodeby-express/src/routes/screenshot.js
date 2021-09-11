@@ -11,10 +11,11 @@ router.get('/',
     createValidationFor('login'),
     checkValidationResult,
     async (req, res, next) => {
-        const {url} = req.query
-        const targetPath = path.join(__dirname, `../../public/images/${Screenshot.imageName(url)}`)
-        console.log('targetPath', targetPath)
-        let imageFile = await Screenshot.imageFile(targetPath, req, url)
+        const {url} = req.query;
+        const targetPath = path.join(__dirname, `../../public/images`)
+        console.log('targetPath', targetPath, url)
+        let imageFile = await Screenshot.imageFiles(targetPath, req, url)
+        console.log('imageFile', imageFile)
         if (imageFile.data) {
             return res.status(imageFile.status).send(imageFile);
         } else {
@@ -26,7 +27,8 @@ router.get('/',
             }
             await Screenshot.takePhoto(url, targetPath);
         }
-        imageFile = await Screenshot.imageFile(targetPath, req, url);
+        imageFile = await Screenshot.imageFiles(targetPath, req, url);
+        console.log('imageFile', imageFile)
         return res.status(imageFile.status).send(imageFile);
     });
 
