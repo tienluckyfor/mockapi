@@ -7,7 +7,7 @@
     "nodemon-start": "nodemon ./bin/www",
     "local": "cross-env NODE_ENV=local nodemon ./bin/www",
     "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
-    "forever-dev": "forever start -c \"npm run dev\" ./"
+    "fdev": "forever stopall; forever start -c \"npm run dev\" ./"
   },
   "dependencies": {
     "axios": "^0.21.4",
