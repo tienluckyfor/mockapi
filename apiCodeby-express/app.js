@@ -5,14 +5,14 @@ var cookieParser = require('cookie-parser');
 // var logger = require('morgan');
 require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var screenshotRouter = require('./routes/screenshot');
+var indexRouter = require('./src/routes/index');
+var usersRouter = require('./src/routes/users');
+var screenshotRouter = require('./src/routes/screenshot');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './src/views'));
 app.set('view engine', 'ejs');
 
 // app.use(logger('dev'));

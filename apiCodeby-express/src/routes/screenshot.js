@@ -1,6 +1,5 @@
-const Screenshot = require("../utils/Screenshot");
-const File = require("../utils/File");
-const Url = require("../utils/Url");
+const {Screenshot} = require("../utils/Screenshot");
+const {Url} = require("../utils/Url");
 var path = require('path');
 var express = require('express');
 const {check, validationResult} = require('express-validator')
@@ -13,22 +12,22 @@ router.get('/',
     checkValidationResult,
     async (req, res, next) => {
         const {url} = req.query
-        console.log('url', url)
-        const targetPath = path.join(__dirname, `../public/images/${Screenshot.ImageName(url)}`)
-        if(!await File.Exists(targetPath)){
-            await Screenshot.TakePhoto(url, targetPath)
+        const targetPath = path.join(__dirname, `../../public/images/${Screenshot.imageName(url)}`)
+        console.log('targetPath', targetPath)
+        let imageFile = await Screenshot.imageFile(targetPath, req, url)
+        if (imageFile.data) {
+            return res.status(imageFile.status).send(imageFile);
+        } else {
+            const isOnline = await Url.isOnline(url)
+            if (!isOnline) {
+                return res.status(400).send({
+                    message: `URL is not online: ${url}`
+                });
+            }
+            await Screenshot.takePhoto(url, targetPath);
         }
-        if(await File.Exists(targetPath)){
-            res.json({
-                "data": {
-                    "url":url,
-                    "imageUrl":Url.baseUrl(req, '/images/')+Screenshot.ImageName(url)
-                },
-            })
-        }
-        return res.status(400).send({
-            message: `Can not Screenshot URL: ${url}`
-        });
+        imageFile = await Screenshot.imageFile(targetPath, req, url);
+        return res.status(imageFile.status).send(imageFile);
     });
 
 
