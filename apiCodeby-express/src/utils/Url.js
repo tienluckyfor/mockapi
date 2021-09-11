@@ -1,5 +1,6 @@
 var url = require('url');
 const axios = require("axios")
+const config =  require('../../config.js');
 
 class Url {
     static baseUrl(req, prefix = null) {
@@ -9,7 +10,7 @@ class Url {
         //     // pathname: req.originalUrl
         // });
 
-        return prefix ? [process.env.APP_URL, prefix].join('') : bUrl;
+        return prefix ? [config.APP_URL, prefix].join('') : bUrl;
     }
 
     static fullUrl(req) {
