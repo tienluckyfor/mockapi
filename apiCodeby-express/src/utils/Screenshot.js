@@ -20,6 +20,7 @@ class Screenshot {
         // Get scroll width and height of the rendered page and set viewport
         const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
         const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
+        console.log('width', {width: bodyWidth, height: bodyHeight})
         await page.setViewport({width: bodyWidth, height: bodyHeight});
         await sleep(3000);
         await page.screenshot({path});
