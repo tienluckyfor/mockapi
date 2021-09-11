@@ -21,9 +21,7 @@ router.get('/',
         } else {
             const isOnline = await Url.isOnline(url)
             if (!isOnline) {
-                return res.status(400).send({
-                    message: `URL is not online: ${url}`
-                });
+                return res.status(imageFile.status).send(imageFile);
             }
             await Screenshot.takePhoto(url, targetPath);
         }

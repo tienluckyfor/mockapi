@@ -23,8 +23,7 @@ class Url {
 
     static async isOnline(url) {
         try {
-            return true;
-
+            // return true;
             await axios.head(url, {timeout: 1000 * 5});
             return true;
         } catch (error) {
