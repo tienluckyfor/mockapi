@@ -2,8 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
-// require('dotenv').config()
+var cors = require('cors');
 const config =  require('./config.js');
 
 var indexRouter = require('./src/routes/index');
@@ -12,6 +11,7 @@ var screenshotRouter = require('./src/routes/screenshot');
 var imageSharpRouter = require('./src/routes/imageSharp');
 
 var app = express();
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, './src/views'));
