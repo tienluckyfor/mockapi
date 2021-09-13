@@ -2,15 +2,17 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var cors = require('cors');
+// var cors = require('cors');
 const config =  require('./config.js');
 
 var indexRouter = require('./src/routes/index');
 var usersRouter = require('./src/routes/users');
 var screenshotRouter = require('./src/routes/screenshot');
 var imageSharpRouter = require('./src/routes/imageSharp');
+const cors = require('cors');
 
 var app = express();
+app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, './src/views'));
@@ -22,35 +24,11 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(
-    cors({
-        origin: [
-            'http://localhost:8080',
-            'http://localhost:3003',
-            'https://mimosa.offshorly.com',
-            'https://openmimosa.org',
-            'https://mimosa-staging.netlify.app',
-            'https://609a150cbeffec6d6fc2872a--mimosa-app.netlify.app',
-            'http://127.0.0.1:3000'
-        ],
-        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-        allowedHeaders: [
-            'DNT',
-            'X-CustomHeader',
-            'Keep-Alive',
-            'User-Agent',
-            'X-Requested-With',
-            'If-Modified-Since',
-            'Cache-Control',
-            'Content-Type',
-            'Content-Range',
-            'Range',
-            'Authorization'
-        ],
-        credentials: true,
-        optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-    })
-)
+// app.use(
+//     cors({
+//         "origin": "*",
+//     })
+// )
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/screenshot', screenshotRouter);
