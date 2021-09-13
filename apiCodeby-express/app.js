@@ -25,7 +25,7 @@ app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/screenshot', screenshotRouter);
+app.use('/screenshot', screenshotRouter).use(cors());
 app.use('/imageSharp', imageSharpRouter);
 
 // catch 404 and forward to error handler
