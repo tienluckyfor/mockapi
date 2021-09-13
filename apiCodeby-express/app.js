@@ -11,7 +11,9 @@ var screenshotRouter = require('./src/routes/screenshot');
 var imageSharpRouter = require('./src/routes/imageSharp');
 
 var app = express();
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, './src/views'));
