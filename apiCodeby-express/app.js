@@ -21,11 +21,39 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
 
+app.use(
+    cors({
+        origin: [
+            'http://localhost:8080',
+            'http://localhost:3003',
+            'https://mimosa.offshorly.com',
+            'https://openmimosa.org',
+            'https://mimosa-staging.netlify.app',
+            'https://609a150cbeffec6d6fc2872a--mimosa-app.netlify.app',
+            'http://127.0.0.1:3000'
+        ],
+        methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
+        allowedHeaders: [
+            'DNT',
+            'X-CustomHeader',
+            'Keep-Alive',
+            'User-Agent',
+            'X-Requested-With',
+            'If-Modified-Since',
+            'Cache-Control',
+            'Content-Type',
+            'Content-Range',
+            'Range',
+            'Authorization'
+        ],
+        credentials: true,
+        optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    })
+)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/screenshot', screenshotRouter).use(cors());
+app.use('/screenshot', screenshotRouter);
 app.use('/imageSharp', imageSharpRouter);
 
 // catch 404 and forward to error handler
