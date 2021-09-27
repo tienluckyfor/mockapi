@@ -57,19 +57,9 @@ const FormResource = ({formValue, resourceName}) => {
                     name={`is_authentication`}
                 >
                     <Checkbox>Is authentication</Checkbox>
-                    {/*<label className="flex items-center space-x-2 mb-2 cursor-pointer">*/}
-                        {/*<Switch
-                            checkedChildren={<CheckOutlined/>}
-                            unCheckedChildren={<CloseOutlined/>}
-                            size="small"
-                            // onChange={()=>console.log('a')}
-                        />
-                        <span className="text-gray-500">Is authentication</span>*/}
-                    {/*</label>*/}
                 </Form.Item>
                 <Form.List
                     name="fields"
-                    // initialValue={fields}
                 >
                     {(fields, {add, remove}) => (
                         <>
@@ -140,11 +130,14 @@ const FormResource = ({formValue, resourceName}) => {
                                     </Space>
                                 )
                             })}
-                            <Form.Item>
+                            <Space>
                                 <Button type="dashed" onClick={() => add()} icon={<PlusOutlined/>}>
                                     Add field
                                 </Button>
-                            </Form.Item>
+                                {/*<Button type="dashed" onClick={() => add()} icon={<PlusOutlined/>}>
+                                    Add relative
+                                </Button>*/}
+                            </Space>
                         </>
                     )}
                 </Form.List>

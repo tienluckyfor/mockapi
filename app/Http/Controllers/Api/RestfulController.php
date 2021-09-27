@@ -13,7 +13,6 @@ use App\Services\ArrService;
 use App\Services\AuthService;
 use App\Services\StringService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class RestfulController extends Controller
 {
@@ -66,6 +65,7 @@ class RestfulController extends Controller
             'dataset_id'  => $r['dataset_id'],
             'resource_id' => $resource['id'],
             'data'        => $data,
+            'is_show'     => true,
         ];
         $rally = $this->rallydata_repository->createManual($rallydata);
         $res = [
@@ -91,7 +91,8 @@ class RestfulController extends Controller
         $r = $request->input('_restful');
 //        $newData = $request->except(['_restful', 'id']);
         $resource = $r['resource'];//$this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
-        $newData = $this->rallydata_helper->_getDataByResourceFields($request->except(['_restful', 'id']), $resource['fields']);
+        $newData = $this->rallydata_helper->_getDataByResourceFields($request->except(['_restful', 'id']),
+            $resource['fields']);
         $rallydata = $this->rallydata_repository->findByDataId($r['dataset_id'], $resource['id'], $dataId);
         if (!$rallydata) {
             return response()->json([
@@ -162,7 +163,8 @@ class RestfulController extends Controller
         if ($request->has('_parent')) {
             $rallydatas = $this->rallydata_helper->_getParents($r['dataset_id'], $rallyIds, $resources, $rallydatas);
         }
-        $rallydatas = $this->rallydata_helper->_handleParentMedia($rallydatas, $r['dataset_id'], $request->fields, $resources);
+        $rallydatas = $this->rallydata_helper->_handleParentMedia($rallydatas, $r['dataset_id'], $request->fields,
+            $resources);
         $totalPage = ceil($total / $perPage);
         if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
             $isPrev = false;
