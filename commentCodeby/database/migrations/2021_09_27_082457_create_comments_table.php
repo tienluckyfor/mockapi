@@ -17,7 +17,10 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('app_id')->nullable();
             $table->unsignedBigInteger('people_id')->nullable();
-            $table->json('content')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('unique_id')->nullable();
+            $table->string('content')->nullable();
+            $table->json('contents')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

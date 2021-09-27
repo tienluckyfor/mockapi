@@ -16,7 +16,10 @@ class CreatePeopleTable extends Migration
         Schema::create('people', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('app_id')->nullable();
-            $table->json('info')->nullable();
+            $table->string('unique_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('avatar')->nullable();
+            $table->json('more')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
