@@ -5,17 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Comment extends Model
+class SubComment extends Model
 {
-
-    use HasFactory, SoftDeletes;
-
+    use HasFactory;
     protected $fillable = [
-        'app_id',
+        'comment_id',
         'people_id',
-        'unique_id',
         'content',
         'contents',
     ];
@@ -29,8 +25,8 @@ class Comment extends Model
         return $this->belongsTo(People::class);
     }
 
-    public function app(): BelongsTo
+    public function comment(): BelongsTo
     {
-        return $this->belongsTo(App::class);
+        return $this->belongsTo(Comment::class);
     }
 }
