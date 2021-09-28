@@ -1,0 +1,27 @@
+
+extend type Mutation {
+    upsert_app(input: UpsertAppInput! @spread): App @field(resolver: "App\\GraphQL\\Mutations\\AppMutations@upsertApp")
+    delete_app(input: DeleteAppInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\AppMutations@deleteApp")
+    duplicate_app(input: DeleteAppInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\AppMutations@duplicateApp")
+}
+
+extend type Query {
+    list_app(name: String, args:JSON): [App] @field(resolver: "App\\GraphQL\\Queries\\AppQueries@listApp")
+}
+
+type App{
+    id: ID
+    name: String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input UpsertAppInput{
+    id: ID
+    name: String!
+}
+
+input DeleteAppInput{
+    id: ID
+    ids: [ID]
+}
