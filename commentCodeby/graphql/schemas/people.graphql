@@ -1,0 +1,32 @@
+extend type Mutation {
+    upsert_people(input: UpsertPeopleInput! @spread): People @field(resolver: "App\\GraphQL\\Mutations\\PeopleMutations@upsertPeople")
+    delete_people(input: DeletePeopleInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\PeopleMutations@deletePeople")
+    duplicate_people(input: DeletePeopleInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\PeopleMutations@duplicatePeople")
+}
+
+extend type Query {
+    list_people(name: String, args:JSON): ListPeople @field(resolver: "App\\GraphQL\\Queries\\PeopleQueries@listPeople")
+    detail_people(id:ID!): People @field(resolver: "App\\GraphQL\\Queries\\PeopleQueries@detailPeople")
+}
+
+type ListPeople{
+    data: [People],
+    pageInfo: JSON
+}
+type People{
+    id: ID
+    unique_id: ID!
+    name: String
+    avatar: String
+    more: JSON
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+input UpsertPeopleInput{
+    id: ID
+    name: String!
+}
+input DeletePeopleInput{
+    id: ID
+    ids: [ID]
+}

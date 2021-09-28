@@ -29,7 +29,7 @@ class CommentMutations
                 'app_id'    => @$args['app_id'],
                 'unique_id' => @$args['people']['unique_id'],
             ],
-            $args
+            $args['people']
         );
         $args['people_id'] = $people->id;
         $comment = Comment::updateOrCreate(

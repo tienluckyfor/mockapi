@@ -15,7 +15,7 @@ type ListComment{
 }
 type Comment{
     id: ID
-    #    people:
+    people: People
     content:String
     created_at: DateTime!
     updated_at: DateTime!
@@ -23,7 +23,7 @@ type Comment{
 input UpsertCommentInput{
     id: ID
     app_id: ID
-    unique_id: String!
+    unique_id: ID!
     content: String!
     people:JSON
 }

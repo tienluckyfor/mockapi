@@ -177,8 +177,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation($id: ID, $app_id: ID, $unique_id: String!, $content: String!, $people:JSON) {\n  upsert_comment(\n    input: {\n      id: $id,\n      app_id: $app_id,\n      unique_id: $unique_id,\n      content: $content,\n      people: $people\n    }\n  ) {\n    id\n    content\n    created_at\n    updated_at\n  }\n}\n",
-								"variables": "{\n    \"id\": null,\n    \"app_id\": \"1\",\n    \"unique_id\": \"$unique_id\",\n    \"content\": \"$content\",\n    \"people\": {\n        \"unique_id\":\"$unique_id\",\n        \"name\":\"name\",\n        \"avatar\":\"avatar\"\n    }\n}"
+								"query": "mutation($id: ID, $app_id: ID, $unique_id: ID!, $content: String!, $people:JSON) {\n  upsert_comment(\n    input: {\n      id: $id,\n      app_id: $app_id,\n      unique_id: $unique_id,\n      content: $content,\n      people: $people\n    }\n  ) {\n    id\n    content\n    created_at\n    updated_at\n    people{id,name,avatar}\n  }\n}\n",
+								"variables": "{\n    \"id\": null,\n    \"app_id\": \"1\",\n    \"unique_id\": \"$unique_id\",\n    \"content\": \"$content\",\n    \"people\": {\n        \"unique_id\":\"$unique_id12\",\n        \"name\":\"name\",\n        \"avatar\":\"avatar\"\n    }\n}"
 							}
 						},
 						"url": {
