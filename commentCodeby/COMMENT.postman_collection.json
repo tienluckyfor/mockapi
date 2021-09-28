@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "23dd5faf-47b1-4333-bca2-0be63f91fc2c",
+		"name": "COMMENT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "app",
+			"item": [
+				{
+					"name": "mutation create_app",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID, $name: String) {\n  upsert_app(\n    input: {\n      id: $id,\n      name: $name\n    }\n  ) {\n    id\n    name\n    created_at\n    updated_at\n  }\n}\n",
+								"variables": "{\n    \"id\": \"8\",\n    \"name\": \"12345\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mutation delete_app",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID, $ids: [ID]) {\n  delete_app(\n    input: {\n      id: $id,\n      ids: $ids,\n    }\n  )\n}\n",
+								"variables": "{\n    \"id\": \"8\",\n    \"ids\": [1, 2]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "query list_app",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($name: String){\n  list_app(\n      name: $name\n    ) {\n      id\n      name\n  }\n}",
+								"variables": "{\n    \"name\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
