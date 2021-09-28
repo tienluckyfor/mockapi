@@ -19,10 +19,11 @@ type Comment{
     content:String
     created_at: DateTime!
     updated_at: DateTime!
+    subComment: [SubComment]
 }
 input UpsertCommentInput{
     id: ID
-    app_id: ID
+    app_id: ID!
     unique_id: ID!
     content: String!
     people:JSON

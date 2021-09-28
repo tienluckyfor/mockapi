@@ -1,0 +1,35 @@
+extend type Mutation {
+    upsert_subComment(input: UpsertSubCommentInput! @spread): SubComment @field(resolver: "App\\GraphQL\\Mutations\\SubCommentMutations@upsertSubComment")
+    delete_subComment(input: DeleteSubCommentInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\SubCommentMutations@deleteSubComment")
+    duplicate_subComment(input: DeleteSubCommentInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\SubCommentMutations@duplicateSubComment")
+}
+
+extend type Query {
+    list_subComment(name: String, args:JSON): ListSubComment @field(resolver: "App\\GraphQL\\Queries\\SubCommentQueries@listSubComment")
+    detail_subComment(id:ID!): SubComment @field(resolver: "App\\GraphQL\\Queries\\SubCommentQueries@detailSubComment")
+}
+
+type ListSubComment{
+    data: [SubComment],
+    pageInfo: JSON
+}
+type SubComment{
+    id: ID
+    people: People
+    content:String
+    comment:Comment
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+input UpsertSubCommentInput{
+    id: ID
+    app_id: ID!
+    comment_id: ID
+    unique_id: ID
+    content: String!
+    people:JSON
+}
+input DeleteSubCommentInput{
+    id: ID
+    ids: [ID]
+}
