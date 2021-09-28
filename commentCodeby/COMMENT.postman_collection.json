@@ -9,7 +9,7 @@
 			"name": "app",
 			"item": [
 				{
-					"name": "mutation create_app",
+					"name": "mutation upsert_app",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -22,8 +22,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation($id: ID, $name: String) {\n  upsert_app(\n    input: {\n      id: $id,\n      name: $name\n    }\n  ) {\n    id\n    name\n    created_at\n    updated_at\n  }\n}\n",
-								"variables": "{\n    \"id\": \"8\",\n    \"name\": \"12345\"\n}"
+								"query": "mutation($id: ID, $name: String!) {\n  upsert_app(\n    input: {\n      id: $id,\n      name: $name\n    }\n  ) {\n    id\n    name\n    created_at\n    updated_at\n  }\n}\n",
+								"variables": "{\n    \"id\": \"8\",\n    \"name\": \"123451\"\n}"
 							}
 						},
 						"url": {
@@ -69,6 +69,36 @@
 					"response": []
 				},
 				{
+					"name": "mutation duplicate_app",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID) {\n  duplicate_app(\n    input: {\n      id: $id\n    }\n  )\n}\n",
+								"variables": "{\n    \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "query list_app",
 					"request": {
 						"method": "POST",
@@ -82,8 +112,133 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query($name: String){\n  list_app(\n      name: $name\n    ) {\n      id\n      name\n  }\n}",
-								"variables": "{\n    \"name\": \"\"\n}"
+								"query": "query($name: String, $args: JSON){\n    list_app(\n        name: $name\n        args: $args\n    ) {\n        data{\n            id\n        }\n        pageInfo\n    }\n}",
+								"variables": "{\n    \"name\": \"\",\n    \"args\": {\n        \"per_page\":5,\n        \"current_page\":4,\n        \"sort\":[\"id\", \"asc\"]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "query detail_app",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($id: ID!){\n    detail_app(id: $id) {\n        id\n    }\n}",
+								"variables": "{\n    \"id\": \"3\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "mutation register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($name: String!, $email: String!, $password: String!, $password_confirmation: String!) {\n  register(\n    input: {\n      name: $name\n      email: $email\n      password: $password\n      password_confirmation: $password_confirmation\n    }\n  ) {\n    status\n  }\n}",
+								"variables": "{\n    \"name\": \"$name\",\n    \"email\": \"email@gmail.com\",\n    \"password\": \"$password\",\n    \"password_confirmation\": \"$password\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mutation login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($username: String!,$password: String!) {\n  login(\n    input: {\n      username: $username\n      password: $password\n    }\n  ) {\n    access_token\n    refresh_token\n    expires_in\n    token_type\n    user {\n      id\n      email\n      name\n    }\n  }\n}",
+								"variables": "{\n    \"username\": \"email@gmail.com\",\n    \"password\": \"$password\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "query users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  users {\n    data {\n      id\n      name\n      email\n    }\n  }\n}",
+								"variables": "{\n    \"username\": \"email@gmail.com\",\n    \"password\": \"$password\"\n}"
 							}
 						},
 						"url": {

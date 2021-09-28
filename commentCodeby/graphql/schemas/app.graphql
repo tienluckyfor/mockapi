@@ -1,4 +1,3 @@
-
 extend type Mutation {
     upsert_app(input: UpsertAppInput! @spread): App @field(resolver: "App\\GraphQL\\Mutations\\AppMutations@upsertApp")
     delete_app(input: DeleteAppInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\AppMutations@deleteApp")
@@ -6,21 +5,24 @@ extend type Mutation {
 }
 
 extend type Query {
-    list_app(name: String, args:JSON): [App] @field(resolver: "App\\GraphQL\\Queries\\AppQueries@listApp")
+    list_app(name: String, args:JSON): ListApp @field(resolver: "App\\GraphQL\\Queries\\AppQueries@listApp")
+    detail_app(id:ID!): App @field(resolver: "App\\GraphQL\\Queries\\AppQueries@detailApp")
 }
 
+type ListApp{
+    data: [App],
+    pageInfo: JSON
+}
 type App{
     id: ID
     name: String
     created_at: DateTime!
     updated_at: DateTime!
 }
-
 input UpsertAppInput{
     id: ID
     name: String!
 }
-
 input DeleteAppInput{
     id: ID
     ids: [ID]
