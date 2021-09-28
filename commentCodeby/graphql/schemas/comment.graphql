@@ -1,0 +1,33 @@
+extend type Mutation {
+    upsert_comment(input: UpsertCommentInput! @spread): Comment @field(resolver: "App\\GraphQL\\Mutations\\CommentMutations@upsertComment")
+    delete_comment(input: DeleteCommentInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\CommentMutations@deleteComment")
+    duplicate_comment(input: DeleteCommentInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\CommentMutations@duplicateComment")
+}
+
+extend type Query {
+    list_comment(name: String, args:JSON): ListComment @field(resolver: "App\\GraphQL\\Queries\\CommentQueries@listComment")
+    detail_comment(id:ID!): Comment @field(resolver: "App\\GraphQL\\Queries\\CommentQueries@detailComment")
+}
+
+type ListComment{
+    data: [Comment],
+    pageInfo: JSON
+}
+type Comment{
+    id: ID
+    #    people:
+    content:String
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+input UpsertCommentInput{
+    id: ID
+    app_id: ID
+    unique_id: String!
+    content: String!
+    people:JSON
+}
+input DeleteCommentInput{
+    id: ID
+    ids: [ID]
+}

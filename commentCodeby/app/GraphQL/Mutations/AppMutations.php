@@ -19,7 +19,11 @@ class AppMutations
 
     public function upsertApp($_, array $args)
     {
-        return App::create($args);
+        $app = App::updateOrCreate(
+            ['id' => @$args['id']],
+            $args
+        );
+        return $app;
     }
 
     public function deleteApp($_, array $args)

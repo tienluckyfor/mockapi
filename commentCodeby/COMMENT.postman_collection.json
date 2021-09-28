@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "23dd5faf-47b1-4333-bca2-0be63f91fc2c",
+		"_postman_id": "fdb7d58e-80a8-4496-b91f-2cd1f0675b82",
 		"name": "COMMENT",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -143,6 +143,161 @@
 							"mode": "graphql",
 							"graphql": {
 								"query": "query($id: ID!){\n    detail_app(id: $id) {\n        id\n    }\n}",
+								"variables": "{\n    \"id\": \"3\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "mutation upsert_comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID, $app_id: ID, $unique_id: String!, $content: String!, $people:JSON) {\n  upsert_comment(\n    input: {\n      id: $id,\n      app_id: $app_id,\n      unique_id: $unique_id,\n      content: $content,\n      people: $people\n    }\n  ) {\n    id\n    content\n    created_at\n    updated_at\n  }\n}\n",
+								"variables": "{\n    \"id\": null,\n    \"app_id\": \"1\",\n    \"unique_id\": \"$unique_id\",\n    \"content\": \"$content\",\n    \"people\": {\n        \"unique_id\":\"$unique_id\",\n        \"name\":\"name\",\n        \"avatar\":\"avatar\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mutation delete_comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID, $ids: [ID]) {\n  delete_comment(\n    input: {\n      id: $id,\n      ids: $ids,\n    }\n  )\n}\n",
+								"variables": "{\n    \"id\": \"8\",\n    \"ids\": [1, 2]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mutation duplicate_comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($id: ID) {\n  duplicate_comment(\n    input: {\n      id: $id\n    }\n  )\n}\n",
+								"variables": "{\n    \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "query list_comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($name: String, $args: JSON){\n    list_comment(\n        name: $name\n        args: $args\n    ) {\n        data{\n            id\n        }\n        pageInfo\n    }\n}",
+								"variables": "{\n    \"name\": \"\",\n    \"args\": {\n        \"per_page\":5,\n        \"current_page\":4,\n        \"sort\":[\"id\", \"asc\"]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/graphql",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "query detail_comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query($id: ID!){\n    detail_comment(id: $id) {\n        id\n    }\n}",
 								"variables": "{\n    \"id\": \"3\"\n}"
 							}
 						},
