@@ -9,21 +9,26 @@ class SubCommentQueries
     public function listSubComment($_, array $args)
     {
         $subComments = SubComment::select('*');
-        $perPage = $args['args']['per_page'] && is_numeric($args['args']['per_page'])
+        $perPage = isset($args['args']['per_page']) && is_numeric($args['args']['per_page'])
             ? abs((int)$args['args']['per_page']) : 20;
-        $currentPage = $args['args']['current_page'] && is_numeric($args['args']['current_page']) && $args['args']['current_page'] >= -1
+        $currentPage = isset($args['args']['current_page']) && is_numeric($args['args']['current_page']) && $args['args']['current_page'] >= -1
             ? (int)$args['args']['current_page'] : 1;
         $offset = $perPage == -1 ? 0 : $perPage * ($currentPage - 1);
         $perPage += 1;
         if (isset($args['args']['sort'])) {
             $sort = $args['args']['sort'];
             $subComments = $subComments->orderBy($sort[0], $sort[1]);
+        }else {
+            $subComments = $subComments->orderBy('id', 'desc');
         }
-        $total = SubComment::selectRaw('count(*) as COUNT');
+        $total = SubComment::selectRaw('count(*) as COUNT')
+            ->where('comment_id', $args['comment_id']);
         if (!empty($args['name'])) {
             $subComments = $subComments->where('name', 'like', "%{$args['name']}%");
             $total = $total->where('name', 'like', "%{$args['name']}%");
         }
+        $subComments = $subComments->where('comment_id', $args['comment_id']);
+
         $total = $total->first()->COUNT;
         $isPrev = $currentPage == 1 ? false : true;
         $isNext = false;

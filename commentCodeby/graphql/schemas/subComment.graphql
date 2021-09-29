@@ -5,7 +5,7 @@ extend type Mutation {
 }
 
 extend type Query {
-    list_subComment(name: String, args:JSON): ListSubComment @field(resolver: "App\\GraphQL\\Queries\\SubCommentQueries@listSubComment")
+    list_subComment(name: String, comment_id: ID!, args:JSON): ListSubComment @field(resolver: "App\\GraphQL\\Queries\\SubCommentQueries@listSubComment")
     detail_subComment(id:ID!): SubComment @field(resolver: "App\\GraphQL\\Queries\\SubCommentQueries@detailSubComment")
 }
 
