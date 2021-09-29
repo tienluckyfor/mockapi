@@ -9,15 +9,17 @@ class CommentQueries
     public function listComment($_, array $args)
     {
         $comments = Comment::select('*');
-        $perPage = $args['args']['per_page'] && is_numeric($args['args']['per_page'])
+        $perPage = isset($args['args']) && $args['args']['per_page'] && is_numeric($args['args']['per_page'])
             ? abs((int)$args['args']['per_page']) : 20;
-        $currentPage = $args['args']['current_page'] && is_numeric($args['args']['current_page']) && $args['args']['current_page'] >= -1
+        $currentPage = isset($args['args']) && $args['args']['current_page'] && is_numeric($args['args']['current_page']) && $args['args']['current_page'] >= -1
             ? (int)$args['args']['current_page'] : 1;
         $offset = $perPage == -1 ? 0 : $perPage * ($currentPage - 1);
         $perPage += 1;
         if (isset($args['args']['sort'])) {
             $sort = $args['args']['sort'];
             $comments = $comments->orderBy($sort[0], $sort[1]);
+        } else {
+            $comments = $comments->orderBy('id', 'desc');
         }
         $total = Comment::selectRaw('count(*) as COUNT');
         if (!empty($args['name'])) {

@@ -20,6 +20,12 @@ type Comment{
     created_at: DateTime!
     updated_at: DateTime!
     subComment: [SubComment]
+    subInfo: SubInfo
+    total_subs: Int
+}
+type SubInfo{
+    data:[SubComment]
+    pageInfo: JSON
 }
 input UpsertCommentInput{
     id: ID

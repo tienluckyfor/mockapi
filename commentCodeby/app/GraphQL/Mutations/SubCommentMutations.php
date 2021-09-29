@@ -27,17 +27,18 @@ class SubCommentMutations
         if (isset($args['comment_id'])) {
             $commentId = $args['comment_id'];
         }
-        if (isset($args['unique_id'])) {
-            try {
-                $commentId = Comment::where('app_id', $args['app_id'])
-                    ->where('unique_id', $args['unique_id'])
-                    ->first()
-                    ->id;
-            } catch (Exception $e) {
-            }
-        }
+//        if (isset($args['unique_id'])) {
+//            try {
+//                $commentId = Comment::where('app_id', $args['app_id'])
+//                    ->where('unique_id', $args['unique_id'])
+//                    ->first()
+//                    ->id;
+//            } catch (Exception $e) {
+//            }
+//        }
+//        dd($commentId);
         if (!$commentId) {
-            throw new Error('Comment_id or Unique_id are required!');
+            throw new Error('Comment_id is required!');
         }
 
         // People
