@@ -27,7 +27,7 @@ type SubComment{
 input UpsertSubCommentInput{
     id: ID
     app_id: ID!
-    comment_id: ID
+    comment_id: ID!
     unique_id: ID
     content: String!
     people:JSON!
