@@ -24,7 +24,6 @@ class People extends Model
         'more' => 'array',
     ];
 
-
     public function app(): BelongsTo
     {
         return $this->belongsTo(App::class);

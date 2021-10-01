@@ -1,0 +1,36 @@
+extend type Mutation {
+    upsert_like(input: UpsertLikeInput! @spread): Like @field(resolver: "App\\GraphQL\\Mutations\\LikeMutations@upsertLike")
+#    delete_like(input: DeleteLikeInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\LikeMutations@deleteLike")
+#    duplicate_like(input: DeleteLikeInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\LikeMutations@duplicateLike")
+}
+
+extend type Query {
+    list_like(likeable_type: String!, likeable_id:ID!, args:JSON): ListLike @field(resolver: "App\\GraphQL\\Queries\\LikeQueries@listLike")
+#    detail_like(id:ID!): Like @field(resolver: "App\\GraphQL\\Queries\\LikeQueries@detailLike")
+}
+
+type ListLike{
+    data: [Like],
+    pageInfo: JSON
+}
+type Like{
+    id: ID
+    people: People
+    is_like:Boolean
+    is_dislike:Boolean
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+input UpsertLikeInput{
+    id: ID
+    app_id: ID!
+    likeable_type: String!
+    likeable_id: ID!
+    is_like: Boolean
+    is_dislike: Boolean
+    people:JSON!
+}
+input DeleteLikeInput{
+    id: ID
+    ids: [ID]
+}

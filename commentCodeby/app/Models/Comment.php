@@ -46,4 +46,30 @@ class Comment extends Model
             ->where('comment_id', $this->id)
             ->count();
     }
+
+    public function getTotalLikeAttribute()
+    {
+        return Like::selectRaw('count(*) as COUNT')
+            ->where('likeable_type', 'App\\Models\\Comment')
+            ->where('likeable_id', $this->id)
+            ->where('is_like', true)
+            ->first()
+            ->COUNT;
+    }
+
+    public function getTotalDislikeAttribute()
+    {
+        return Like::selectRaw('count(*) as COUNT')
+            ->where('likeable_type', 'App\\Models\\Comment')
+            ->where('likeable_id', $this->id)
+            ->where('is_dislike', true)
+            ->first()
+            ->COUNT;
+    }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable')
+            ->orderBy('id', 'desc');
+    }
 }

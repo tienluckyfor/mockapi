@@ -22,6 +22,9 @@ type Comment{
     subComment: [SubComment]
     subInfo: SubInfo
     total_subs: Int
+    total_like: Int
+    total_dislike: Int
+    likes: [Like]
 }
 type SubInfo{
     data:[SubComment]
@@ -32,7 +35,7 @@ input UpsertCommentInput{
     app_id: ID!
     unique_id: ID!
     content: String!
-    people:JSON
+    people:JSON!
 }
 input DeleteCommentInput{
     id: ID

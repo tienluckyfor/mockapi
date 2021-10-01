@@ -20,6 +20,9 @@ type SubComment{
     comment:Comment
     created_at: DateTime!
     updated_at: DateTime!
+    total_like: Int
+    total_dislike: Int
+    likes:[Like]
 }
 input UpsertSubCommentInput{
     id: ID
@@ -27,7 +30,7 @@ input UpsertSubCommentInput{
     comment_id: ID
     unique_id: ID
     content: String!
-    people:JSON
+    people:JSON!
 }
 input DeleteSubCommentInput{
     id: ID

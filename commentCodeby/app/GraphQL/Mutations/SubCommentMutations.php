@@ -4,9 +4,8 @@
 namespace App\GraphQL\Mutations;
 
 
-use App\Models\Comment;
-use App\Models\People;
 use App\Models\SubComment;
+use App\Repositories\PeopleRepository;
 use App\Services\StringService;
 use GraphQL\Error\Error;
 
@@ -14,46 +13,22 @@ class SubCommentMutations
 {
 
     private $string_service;
+    private $people_repository;
 
-    public function __construct(StringService $stringService)
-    {
+    public function __construct(
+        StringService $stringService,
+        PeopleRepository $peopleRepository
+    ) {
+        $this->people_repository = $peopleRepository;
         $this->string_service = $stringService;
     }
 
     public function upsertSubComment($_, array $args)
     {
-        // Comment
-        $commentId = null;
-        if (isset($args['comment_id'])) {
-            $commentId = $args['comment_id'];
-        }
-//        if (isset($args['unique_id'])) {
-//            try {
-//                $commentId = Comment::where('app_id', $args['app_id'])
-//                    ->where('unique_id', $args['unique_id'])
-//                    ->first()
-//                    ->id;
-//            } catch (Exception $e) {
-//            }
-//        }
-//        dd($commentId);
-        if (!$commentId) {
-            throw new Error('Comment_id is required!');
-        }
-
-        // People
         if (!isset($args['people']['unique_id'])) {
             throw new Error('People are required!');
         }
-        $people = People::updateOrCreate(
-            [
-                'app_id'    => @$args['app_id'],
-                'unique_id' => @$args['people']['unique_id'],
-            ],
-            $args['people']
-        );
-        $args['people_id'] = $people->id;
-        $args['comment_id'] = $commentId;
+        $args['people_id'] = $this->people_repository->upsertByAppId($args['app_id'], $args['people'])->id;
         $subComment = SubComment::updateOrCreate(
             ['id' => @$args['id']],
             $args
