@@ -21,7 +21,12 @@ class CommentQueries
         } else {
             $comments = $comments->orderBy('id', 'desc');
         }
-        $total = Comment::selectRaw('count(*) as COUNT');
+        $total = Comment::selectRaw('count(*) as COUNT')
+            ->where('app_id', $args['app_id'])
+            ->where('unique_id', $args['unique_id']);
+        $comments = $comments
+            ->where('app_id', $args['app_id'])
+            ->where('unique_id', $args['unique_id']);
         if (!empty($args['name'])) {
             $comments = $comments->where('name', 'like', "%{$args['name']}%");
             $total = $total->where('name', 'like', "%{$args['name']}%");
