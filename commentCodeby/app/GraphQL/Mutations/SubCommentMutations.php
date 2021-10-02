@@ -29,7 +29,6 @@ class SubCommentMutations
             throw new Error('People are required!');
         }
         $args['people_id'] = $this->people_repository->upsertByAppId($args['app_id'], $args['people'])->id;
-        \Illuminate\Support\Facades\Log::channel('single')->info('$args', [$args]);
 
         $subComment = SubComment::updateOrCreate(
             ['id' => @$args['id']],
