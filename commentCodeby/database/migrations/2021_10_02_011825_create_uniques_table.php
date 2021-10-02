@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration
+class CreateUniquesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('uniques', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('app_id')->nullable();
-            $table->unsignedBigInteger('people_id')->nullable();
-            $table->unsignedBigInteger('unique_id')->nullable();
-            $table->string('content')->nullable();
-            $table->json('contents')->nullable();
+            $table->string('special_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +29,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('uniques');
     }
 }

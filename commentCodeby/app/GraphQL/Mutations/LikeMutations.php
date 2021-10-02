@@ -25,7 +25,7 @@ class LikeMutations
 
     public function upsertLike($_, array $args)
     {
-        if (!isset($args['people']['unique_id'])) {
+        if (!isset($args['people']['special_id'])) {
             throw new Error('People are required!');
         }
         $args['people_id'] = $this->people_repository->upsertByAppId($args['app_id'], $args['people'])->id;

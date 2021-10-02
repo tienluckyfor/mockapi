@@ -8,7 +8,7 @@ class CommentQueries
 {
     public function listComment($_, array $args)
     {
-        $comments = Comment::select('*');
+        $comments = Comment::selectRaw('comments.*');
         $perPage = isset($args['args']['per_page']) && is_numeric($args['args']['per_page'])
             ? abs((int)$args['args']['per_page']) : 20;
         $currentPage = isset($args['args']['current_page']) && is_numeric($args['args']['current_page']) && $args['args']['current_page'] >= -1
@@ -22,11 +22,13 @@ class CommentQueries
             $comments = $comments->orderBy('id', 'desc');
         }
         $total = Comment::selectRaw('count(*) as COUNT')
-            ->where('app_id', $args['app_id'])
-            ->where('unique_id', $args['unique_id']);
+            ->join('uniques', 'uniques.id', '=', 'comments.unique_id')
+            ->where('comments.app_id', $args['app_id'])
+            ->where('special_id', $args['unique']['special_id']);
         $comments = $comments
-            ->where('app_id', $args['app_id'])
-            ->where('unique_id', $args['unique_id']);
+            ->join('uniques', 'uniques.id', '=', 'comments.unique_id')
+            ->where('comments.app_id', $args['app_id'])
+            ->where('special_id', $args['unique']['special_id']);
         if (!empty($args['name'])) {
             $comments = $comments->where('name', 'like', "%{$args['name']}%");
             $total = $total->where('name', 'like', "%{$args['name']}%");

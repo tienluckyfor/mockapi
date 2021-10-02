@@ -14,7 +14,8 @@ class People extends Model
 
     protected $fillable = [
         'app_id',
-        'unique_id',
+        'special_id',
+        'profile_url',
         'name',
         'avatar',
         'more',

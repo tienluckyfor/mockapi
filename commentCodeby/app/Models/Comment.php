@@ -34,6 +34,10 @@ class Comment extends Model
     {
         return $this->belongsTo(App::class);
     }
+    public function unique(): BelongsTo
+    {
+        return $this->belongsTo(Unique::class);
+    }
 
     public function subComment(): HasMany
     {

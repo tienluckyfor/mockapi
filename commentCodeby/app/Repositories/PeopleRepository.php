@@ -10,7 +10,7 @@ class PeopleRepository
         $usPeople = People::updateOrCreate(
             [
                 'app_id'    => $appId,
-                'unique_id' => $people['unique_id'],
+                'special_id' => $people['special_id'],
             ],
             $people
         );

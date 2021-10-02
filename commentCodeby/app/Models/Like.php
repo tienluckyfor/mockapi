@@ -33,4 +33,10 @@ class Like extends Model
     {
         return $this->belongsTo(People::class);
     }
+
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable')
+            ->orderBy('id', 'desc');
+    }
 }
