@@ -13,6 +13,7 @@ class Unique extends Model
     protected $fillable = [
         'app_id',
         'special_id',
+        'view_count',
     ];
 
     public function getTotalLikeAttribute()

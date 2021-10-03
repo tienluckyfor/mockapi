@@ -17,6 +17,7 @@ class CreateUniquesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('app_id')->nullable();
             $table->string('special_id')->nullable();
+            $table->integer('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

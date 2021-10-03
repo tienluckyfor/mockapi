@@ -1,0 +1,34 @@
+extend type Mutation {
+    upsert_unique(input: UpsertUniqueInput! @spread): Unique @field(resolver: "App\\GraphQL\\Mutations\\UniqueMutations@upsertUnique")
+    delete_unique(input: DeleteUniqueInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\UniqueMutations@deleteUnique")
+    duplicate_unique(input: DeleteUniqueInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\UniqueMutations@duplicateUnique")
+}
+
+extend type Query {
+    list_unique(app_id: ID!, special_id: ID, args:JSON): ListUnique @field(resolver: "App\\GraphQL\\Queries\\UniqueQueries@listUnique")
+    detail_unique(id:ID!): Unique @field(resolver: "App\\GraphQL\\Queries\\UniqueQueries@detailUnique")
+    detail_unique_special_id(app_id: ID!, special_id: ID!): Unique @field(resolver: "App\\GraphQL\\Queries\\UniqueQueries@detailUniqueSpecialId")
+}
+
+type ListUnique{
+    data: [Unique],
+    pageInfo: JSON
+}
+type Unique{
+    id: ID
+    created_at: DateTime!
+    updated_at: DateTime!
+    total_like: Int
+    total_dislike: Int
+    view_count: Int
+    likes:[Like]
+}
+input UpsertUniqueInput{
+    id: ID
+    app_id: ID!
+    unique: JSON!
+}
+input DeleteUniqueInput{
+    id: ID
+    ids: [ID]
+}
