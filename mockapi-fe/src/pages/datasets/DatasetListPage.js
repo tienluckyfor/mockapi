@@ -1,5 +1,5 @@
 import {Tooltip, Button, Divider, Popconfirm, Badge, Table, Dropdown, Menu,} from 'antd';
-import {MoreOutlined,} from '@ant-design/icons';
+import {MoreOutlined, ExportOutlined} from '@ant-design/icons';
 import {useEffect,} from 'react';
 import moment from "moment"
 import "moment-timezone"
@@ -26,6 +26,7 @@ import AppHelmet from "shared/AppHelmet";
 import {rallydatasSelector, setRallydataMerge} from "slices/rallydatas";
 import FindReplaceRallydata from "pages/rallydatas/FindReplaceRallydata";
 import {ShareAvatars} from "components/AntdComponent";
+import {Link} from "react-router-dom";
 
 const DatasetListPage = () => {
     moment.tz.setDefault(process.env.REACT_APP_TIME_ZONE)
@@ -117,6 +118,18 @@ const DatasetListPage = () => {
                                 loading={fdDataset?.dataset?.id === dataset.id}
                             >Force Delete</Button>
                         </Popconfirm>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={`${process.env.REACT_APP_URL}/api/dataset_backup/export?dataset_id=${dataset.id}`}>
+                        <Button
+                            size={`small`}
+                            type="link"
+                            // onClick={(e) => dispatch(setRallydataMerge(`fRallydata`, {isOpen: true, dataset}))}
+                            icon={<ExportOutlined />}
+                        >
+                            Export
+                        </Button>
+                        </Link>
                     </Menu.Item>
                 </>
                 }

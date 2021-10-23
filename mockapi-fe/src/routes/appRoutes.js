@@ -7,6 +7,7 @@ const RallydataPage = React.lazy(() => import('pages/rallydatas/RallydataPage'))
 const UserPage = React.lazy(() => import('pages/users/UserPage'))
 const BackupPage = React.lazy(() => import('pages/users/BackupPage'))
 const SidebarPage = React.lazy(() => import('pages/SidebarPage'))
+const TestPage = React.lazy(() => import('pages/test/TestPage'))
 
 export default [
     { path: '/RallydataPage', component: RallydataPage },
@@ -17,4 +18,5 @@ export default [
     { path: '/BackupPage', component: BackupPage },
     { path: '/SidebarPage', component: SidebarPage },
     { path: '/DragSortingTable', component: DragSortingTable },
+    { path: '/TestPage', component: TestPage },
 ]

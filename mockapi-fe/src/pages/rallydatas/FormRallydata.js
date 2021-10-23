@@ -51,8 +51,7 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                 >
                                     <ReactQuillCustom
                                         name={`${from}-${name}`}
-                                        onChange={(html) => {
-                                        }}
+                                        onChange={(html) => { }}
                                     />
                                 </Form.Item>)
                                 break;

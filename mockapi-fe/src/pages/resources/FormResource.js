@@ -1,12 +1,19 @@
 import {Button, Form, Input, Select, Space, Switch, Checkbox} from "antd";
-import {PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined}
-    from '@ant-design/icons'
+import {
+    PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined,
+    MenuOutlined
+} from '@ant-design/icons'
 import {endpoints, fakerList, fieldTypes} from "./configResource";
 import {useSelector} from "react-redux";
 import {apisSelector} from "slices/apis";
 import {useEffect, useState} from "react";
+import {sortableContainer, sortableElement, sortableHandle} from "react-sortable-hoc";
 
 const {Option, OptGroup} = Select;
+
+const SortableContainer = sortableContainer(({children}) => <ul className="">{children}</ul>);
+const SortableItem = sortableElement(({ children }) => <li className="list-none">{children}</li>);
+const DragHandle = sortableHandle(() => <MenuOutlined style={{cursor: 'grab', color: '#999'}}/>);
 
 const FormResource = ({formValue, resourceName}) => {
     // console.log('formValue', formValue)
@@ -61,73 +68,80 @@ const FormResource = ({formValue, resourceName}) => {
                 <Form.List
                     name="fields"
                 >
-                    {(fields, {add, remove}) => (
-                        <>
+                    {(fields, {add, remove, move}) => (
+                        <SortableContainer
+                            lockAxis="y"
+                            useDragHandle
+                            onSortEnd={({oldIndex, newIndex}) => move(oldIndex, newIndex)}
+                        >
                             {fields.map(({key, name, fieldKey, ...restField}) => {
                                 let field = {}
                                 try {
                                     field = formValue?.fields[name]
                                 } catch (e) {
                                 }
-                                const isDisabled = field?.name == 'id' || field?.type=='Authentication'
+                                const isDisabled = field?.name == 'id' || field?.type == 'Authentication'
                                 return (
-                                    <Space
-                                        key={key}
-                                        className={`h-10`}
-                                        style={{display: 'flex', marginBottom: 8}}
-                                        align="baseline"
-                                    >
-                                        <Form.Item
-                                            rules={[{required: true, message: `Name is required`}]}
-                                            name={[name, `name`]}
-                                            fieldKey={[fieldKey, 'name']}
+                                    <SortableItem key={key} index={name}>
+                                        <Space
+                                            key={key}
+                                            className={`h-10`}
+                                            style={{display: 'flex', marginBottom: 8}}
+                                            align="baseline"
                                         >
-                                            <Input
-                                                disabled={isDisabled}
-                                                placeholder="Name"
-                                                autoFocus
-                                            />
-                                        </Form.Item>
-                                        <Form.Item
-                                            rules={[{required: true, message: `Type is required`}]}
-                                            name={[name, `type`]}
-                                            fieldKey={[fieldKey, 'type']}
-                                        >
-                                            <Select
-                                                style={{width: 150}}
-                                                disabled={isDisabled}
-                                                showSearch
+                                            <Form.Item
+                                                rules={[{required: true, message: `Name is required`}]}
+                                                name={[name, `name`]}
+                                                fieldKey={[fieldKey, 'name']}
                                             >
-                                                {fieldTypes.map((type, k) =>
-                                                    <Option value={type}>{type}</Option>
-                                                )}
-                                            </Select>
-                                        </Form.Item>
-                                        {field?.type === `Faker.js` && field?.name !== `id` &&
-                                        <Form.Item
-                                            rules={[{required: true, message: `Fakerjs is required`}]}
-                                            name={[name, `fakerjs`]}
-                                            fieldKey={[fieldKey, 'fakerjs']}
-                                        >
-                                            <Select
-                                                showSearch
-                                                style={{width: 150}}
+                                                <Input
+                                                    disabled={isDisabled}
+                                                    placeholder="Name"
+                                                    autoFocus
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                rules={[{required: true, message: `Type is required`}]}
+                                                name={[name, `type`]}
+                                                fieldKey={[fieldKey, 'type']}
                                             >
-                                                {fakerList.map((faker, k) =>
-                                                    <OptGroup label={faker.name} className={`uppercase`}>
-                                                        {Object.entries(faker.list).map(([key, item], i) =>
-                                                            <Option value={key}>{item}</Option>
-                                                        )}
-                                                    </OptGroup>
-                                                )}
-                                            </Select>
-                                        </Form.Item>
-                                        }
-                                        {!isDisabled &&
-                                        <Button danger type="link" onClick={() => remove(name)}
-                                                icon={<MinusCircleOutlined/>}/>
-                                        }
-                                    </Space>
+                                                <Select
+                                                    style={{width: 150}}
+                                                    disabled={isDisabled}
+                                                    showSearch
+                                                >
+                                                    {fieldTypes.map((type, k) =>
+                                                        <Option value={type}>{type}</Option>
+                                                    )}
+                                                </Select>
+                                            </Form.Item>
+                                            {field?.type === `Faker.js` && field?.name !== `id` &&
+                                            <Form.Item
+                                                rules={[{required: true, message: `Fakerjs is required`}]}
+                                                name={[name, `fakerjs`]}
+                                                fieldKey={[fieldKey, 'fakerjs']}
+                                            >
+                                                <Select
+                                                    showSearch
+                                                    style={{width: 150}}
+                                                >
+                                                    {fakerList.map((faker, k) =>
+                                                        <OptGroup label={faker.name} className={`uppercase`}>
+                                                            {Object.entries(faker.list).map(([key, item], i) =>
+                                                                <Option value={key}>{item}</Option>
+                                                            )}
+                                                        </OptGroup>
+                                                    )}
+                                                </Select>
+                                            </Form.Item>
+                                            }
+                                            {!isDisabled &&
+                                            <Button danger type="link" onClick={() => remove(name)}
+                                                    icon={<MinusCircleOutlined/>}/>
+                                            }
+                                            <DragHandle/>
+                                        </Space>
+                                    </SortableItem>
                                 )
                             })}
                             <Space>
@@ -138,7 +152,7 @@ const FormResource = ({formValue, resourceName}) => {
                                     Add relative
                                 </Button>*/}
                             </Space>
-                        </>
+                        </SortableContainer>
                     )}
                 </Form.List>
             </section>

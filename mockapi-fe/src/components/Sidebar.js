@@ -1,16 +1,18 @@
-import {Menu, Badge, PageHeader, Space, Divider, Tooltip} from 'antd';
-import {CrownOutlined, ShareAltOutlined} from '@ant-design/icons';
+import {Menu, Badge, PageHeader, Space, Divider, Tooltip, Button, Modal} from 'antd';
+import {CrownOutlined, ShareAltOutlined, SearchOutlined} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react"
 import {queryMe, usersSelector} from "slices/users";
 import Avatar from "react-avatar";
-import {getFirstThumb, getURLParams, } from "services";
+import {getFirstThumb, getURLParams,} from "services";
 import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
 import {ShareAvatars} from "./AntdComponent";
+
+const MAX_LENGTH = 5
 
 const Sidebar = (props) => {
     const {qMe} = useSelector(usersSelector)
@@ -42,6 +44,47 @@ const Sidebar = (props) => {
         setMenuSelected(menuSelected)
     }, [location])
 
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const RenderModal = ({}) => {
+        return (
+            <Modal title="Basic Modal"
+                   visible={true}
+                   onOk={() => setIsModalVisible(false)}
+                   onCancel={() => setIsModalVisible(false)}>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+            </Modal>
+        )
+    }
+
+    const RenderMenuItem = ({dataset}) => {
+        const isOwner = qMe?.data?.id == dataset?.user?.id
+        return (
+            <Tooltip title={dataset.name}>
+                <Link
+                    onClick={() => {
+                        dispatch(setRallydata({
+                            dataset_id_RD: dataset.id,
+                            resource_id_RD: dataset.resources[0]?.id,
+                        }))
+                    }}
+                    className="flex items-center space-x-1"
+                    to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
+                    <Space>
+                        {isOwner &&
+                        <CrownOutlined/>
+                        }
+                        {!isOwner &&
+                        <ShareAltOutlined/>
+                        }
+                        <p className="w-32 truncate">{dataset.name}</p>
+                    </Space>
+                    <ShareAvatars shares={dataset?.shares} user={qMe?.data}/>
+                </Link>
+            </Tooltip>)
+    }
+
     const RenderMenu = () => {
         return (
             <Menu
@@ -60,36 +103,23 @@ const Sidebar = (props) => {
                     </Menu.Item>
                 )}
                 <Menu.ItemGroup key="g1" title="Rallydata">
-                    {(qMe?.data?.datasets || []).map((dataset, key) => {
-                        // if (key >= 5) return;
-                        const isOwner = qMe?.data?.id == dataset?.user?.id
-                        return (<Menu.Item key={dataset.id}>
-                            <Tooltip title={dataset.name}>
-                                <Link
-                                    onClick={() => {
-                                        dispatch(setRallydata({
-                                            dataset_id_RD: dataset.id,
-                                            resource_id_RD: dataset.resources[0]?.id,
-                                        }))
-                                    }}
-                                    className="flex items-center space-x-1"
-                                    to={`/RallydataPage?dataset_id_RD=${dataset.id}&resource_id_RD=${dataset.resources[0]?.id}`}>
-                                    <Space>
-                                        {isOwner &&
-                                        <CrownOutlined/>
-                                        }
-                                        {!isOwner &&
-                                        <ShareAltOutlined/>
-                                        }
-                                        <p className="w-32 truncate">{dataset.name}</p>
-                                    </Space>
-                                    <ShareAvatars shares={dataset?.shares} user={qMe?.data}/>
-                                </Link>
-                            </Tooltip>
-
-
-                        </Menu.Item>)
+                    {((qMe?.data?.datasets ?? []).filter((item) => item.id == menuSelected)).map((dataset, key) => {
+                        return <Menu.Item key={dataset.id}>
+                            <RenderMenuItem dataset={dataset}/>
+                        </Menu.Item>
                     })}
+                    {(qMe?.data?.datasets ?? []).map((dataset, key) => {
+                        if (key >= MAX_LENGTH || dataset.id == menuSelected) return;
+                        return <Menu.Item key={dataset.id}>
+                            <RenderMenuItem dataset={dataset}/>
+                        </Menu.Item>
+                    })}
+                    {(qMe?.data?.datasets ?? []).length >= MAX_LENGTH &&
+                    <Menu.Item>
+                        <Button type="dashed" block onClick={() => setIsModalVisible(true)}>
+                            Show more ({(qMe?.data?.datasets || []).length - MAX_LENGTH})</Button>
+                    </Menu.Item>
+                    }
                 </Menu.ItemGroup>
             </Menu>
         )
@@ -97,6 +127,9 @@ const Sidebar = (props) => {
 
     return (
         <aside {...props}>
+            {isModalVisible &&
+            <RenderModal/>
+            }
             {!isMobile &&
             <section className="relative" style={{width: 256}}>
                 <div className="fixed top-0" style={{width: 256}}>
@@ -118,7 +151,7 @@ const Sidebar = (props) => {
                         ]}
                     />
                     <Divider className="my-1"/>
-                    {RenderMenu()}
+                    <RenderMenu/>
                 </div>
             </section>
             }
@@ -143,7 +176,7 @@ const Sidebar = (props) => {
                         ]}
                     />
                     <Divider className="my-3"/>
-                    {RenderMenu()}
+                    <RenderMenu/>
                 </div>
             </>
             }

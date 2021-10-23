@@ -73,11 +73,6 @@ const DragSortingTable = ({columns, dataSource, onChange, isLoading}) => {
         [data],
     );
 
-    /* useEffect(() => {
-         const originalIds = data.map((item)=>item.originalId)
-         console.log('originalIds', originalIds)
-     }, [data])*/
-
     return (
         <DndProvider backend={HTML5Backend}>
             <Table
@@ -96,5 +91,4 @@ const DragSortingTable = ({columns, dataSource, onChange, isLoading}) => {
     );
 };
 
-// ReactDOM.render(<DragSortingTable />, mountNode);
 export default DragSortingTable
