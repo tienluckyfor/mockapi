@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Button, Divider, List, Modal, Tabs} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, setDatasetMerge} from "slices/datasets";
@@ -11,6 +11,10 @@ const InfoDatasetModal = () => {
     const dispatch = useDispatch()
     const {modalDataset,} = useSelector(datasetsSelector)
     const listData = [
+        {
+            title: `Token`,
+            text: modalDataset?.dataset?.postman?.token,
+        },
         {
             title: `Postman Collection`,
             url: modalDataset?.dataset?.postman?.collection ?? ``,
@@ -31,21 +35,24 @@ const InfoDatasetModal = () => {
         </a>
     }
 
-    const PostmanList = () => {
+    const GeneralList = () => {
         return <List
             dataSource={listData}
             renderItem={(item, i) => <List.Item>
                 <div className="space-y-2 w-full">
+                    {item.url &&
                     <LinkButton item={item}/>
-                    {/*<a href={item.url} target={`_blank`} className="block">
-                        {item.title}
-                    </a>*/}
+                    }
+                    {item.text &&
+                    <Button className="px-0" type="link" danger>{item.title}</Button>
+                    }
                     <CopyBlock
-                        text={item.url}
+                        text={item.url ?? item.text}
                         theme={dracula}
                         showLineNumbers={false}
                         language="javascript"
                     />
+
                 </div>
             </List.Item>
             }
@@ -80,6 +87,34 @@ const InfoDatasetModal = () => {
         </ul>
     }
 
+    const Laravel = () => {
+        return <ul className="space-y-4">
+            <li className="space-y-2">
+                <LinkButton item={{
+                    url: "https://www.npmjs.com/package/react-api-codeby",
+                    title: "Composer package"
+                }}/>
+                <CopyBlock
+                    text={`composer require laravel-api-codeby`}
+                    theme={dracula}
+                    showLineNumbers={false}
+                    language="javascript"
+                />
+            </li>
+            <li className="space-y-2">
+                <p className="text-gray-600">src/configs/apiCodeby.js</p>
+                <CopyBlock
+                    text={apiCodeby(modalDataset?.dataset?.postman?.token)}
+                    theme={dracula}
+                    showLineNumbers={false}
+                    language="javascript"
+                    codeBlock
+                />
+            </li>
+
+        </ul>
+    }
+
     return (<Modal
         title={modalDataset?.dataset?.name}
         visible={modalDataset?.visible}
@@ -94,12 +129,15 @@ const InfoDatasetModal = () => {
             shareable_type="App\Models\DataSet"
             shareable_id={modalDataset?.dataset?.id}/>
         <Divider/>
-        <Tabs defaultActiveKey="Postman">
-            <Tabs.TabPane tab="Postman" key="Postman">
-                <PostmanList/>
+        <Tabs defaultActiveKey="General">
+            <Tabs.TabPane tab="General" key="General">
+                <GeneralList/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="ReactJs" key="ReactJs">
                 <ReactJs/>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Laravel" key="Laravel">
+                <Laravel/>
             </Tabs.TabPane>
         </Tabs>
     </Modal>)

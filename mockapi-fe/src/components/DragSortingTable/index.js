@@ -4,6 +4,7 @@ import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import './index.css';
+const uuid = require('react-uuid')
 
 const type = 'DraggableBodyRow';
 
@@ -36,6 +37,7 @@ const DraggableBodyRow = ({index, moveRow, className, style, ...restProps}) => {
 
     return (
         <tr
+            key={uuid()}
             ref={ref}
             className={`${className}${isOver ? dropClassName : ''}`}
             style={{cursor: 'move', ...style}}

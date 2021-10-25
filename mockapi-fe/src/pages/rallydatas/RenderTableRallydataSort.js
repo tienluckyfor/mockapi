@@ -1,4 +1,4 @@
-import {Button, Checkbox, Dropdown, Image, Menu, Popconfirm, Space, Table, Tooltip} from "antd";
+import {Button, Checkbox, Dropdown, Image, Menu, Popconfirm, Space, Tooltip} from "antd";
 import {EyeOutlined, PushpinOutlined, EyeInvisibleOutlined} from '@ant-design/icons';
 import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} from "slices/commons";
 import {
@@ -38,7 +38,7 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
                     size={`small`}
                     type="link"
                     onClick={(e) => {
-                        dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata, firstCount:0}))
+                        dispatch(setRallydataMerge('eRallydata', {isOpen: true, rallydata, firstCount: 0}))
                     }}
                 >
                     Edit
@@ -68,7 +68,8 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
 
     let columns = [];
     let childFields = {};
-    (fieldsRallydata ?? []).map((field) => {
+    (fieldsRallydata ?? []).forEach((field) => {
+        // (fieldsRallydata ?? []).map((field) => {
         const iType = getItype(field.type, field.fakerjs)
         if (iType === 'Object ID') {
             columns.push({
@@ -144,6 +145,7 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
                     </Tooltip>
                 }
                 if (!val || val && !(val ?? 0).toString().length)
+                    // if ((val ?? 0).toString().length)
                     return <Tooltip title={val}>
                         <p className={`text-gray-500`}>-</p>
                     </Tooltip>
@@ -176,7 +178,7 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
                                             // src={medium.thumb_image}
                                             src={getFirstThumb(medium)}
                                         />
-                                    return <a key={key} target="_blank" href={medium.file}>
+                                    return <a key={key} target="_blank" rel="noreferrer" href={medium.file}>
                                         <Image
                                             preview={false}
                                             height={30}

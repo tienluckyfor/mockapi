@@ -112,7 +112,7 @@ export function deleteMedia(mediaIds) {
 }
 
 export function myMediaList(dataset_id) {
-    // console.log('myMediaList dataset_id', dataset_id)
+    console.log('myMediaList dataset_id', dataset_id)
     return async (dispatch, getState) => {
         const {mlMedia} = getState().media
         if (mlMedia.isLoading) return;
@@ -150,25 +150,38 @@ export function myMediaList(dataset_id) {
 
 export function uploadMediaPaste(name) {
     return async (dispatch, getState) => {
-        dispatch(setMerge({pMedia:{isLoading: true}}))
+        console.log('1')
+        dispatch(setMerge({pMedia: {isLoading: true}}))
         const {pMedia,} = getState().media
         const {dataset_id_RD,} = getState().rallydatas
         const {checkedList} = getState().commons
 
         let promises = []
-        pMedia.files.map((file) => {
+        (pMedia.files ?? []).forEach(file => {
             const formData = new FormData()
             formData.append('file', file)
             formData.append('dataset_id', dataset_id_RD)
             formData.append('source', 'ant-upload')
             promises.push(resfulClient.post('/api/media', formData))
         })
+
+        // pMedia.files.map((file) => {
+        //     const formData = new FormData()
+        //     formData.append('file', file)
+        //     formData.append('dataset_id', dataset_id_RD)
+        //     formData.append('source', 'ant-upload')
+        //     promises.push(resfulClient.post('/api/media', formData))
+        // })
         Promise.all(promises).then(values => {
             let cl = checkedList[name] ? JSON.parse(JSON.stringify(checkedList[name])) : []
-            values.map((res) => {
+            (values ?? []).forEach(res => {
                 cl = [...cl, res?.data?.id.toString()]
-            })
+            });
+            // values.map((res) => {
+            //     cl = [...cl, res?.data?.id.toString()]
+            // })
             dispatch(setCommonMerge('checkedList', {[name]: cl}))
+            console.log('2')
             dispatch(setMerge({
                 pMedia: {files: [], isLoading: false},
                 mlMedia: {isRefresh: true}

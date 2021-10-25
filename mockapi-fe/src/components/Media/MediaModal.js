@@ -39,7 +39,7 @@ export const MediaModal = () => {
     useEffect(() => {
         if (dataset_id ?? dataset_id_RD)
             dispatch(myMediaList(dataset_id ?? dataset_id_RD))
-    }, [dataset_id, mMedia])
+    }, [dataset_id, mMedia, dataset_id_RD, dispatch])
 
     useEffect(() => {
         setDataset_id(dataset_id_RD)
@@ -52,7 +52,7 @@ export const MediaModal = () => {
         }
         const plainOptions = (mlMedia.data ?? []).map((medium) => medium.id)
         setPlainOptions(plainOptions)
-    }, [mlMedia])
+    }, [mlMedia, dispatch, dataset_id])
 
     useEffect((e) => {
         function onMediaUpload(e) {
@@ -64,6 +64,7 @@ export const MediaModal = () => {
                 if (item.kind === 'file')
                     files.push(item.getAsFile())
             }
+            console.log('3')
             dispatch(setMediaMerge('pMedia', {files}))
             dispatch(uploadMediaPaste(mMedia.name))
         }
@@ -71,7 +72,7 @@ export const MediaModal = () => {
         return () => {
             window.removeEventListener('paste', onMediaUpload)
         }
-    }, [mMedia])
+    }, [mMedia, dispatch])
 
     const gridView = () => {
         return (
@@ -97,7 +98,7 @@ export const MediaModal = () => {
                             />
                             }
                             {medium.file_type !== `image` &&
-                            <a target="_blank" href={medium.file}>
+                            <a target="_blank" rel="noreferrer" href={medium.file}>
                                 <Image
                                     preview={false}
                                     height={90}
@@ -139,7 +140,7 @@ export const MediaModal = () => {
                                     />
                                     }
                                     {medium.file_type !== `image` &&
-                                    <a target="_blank" href={medium.file}>
+                                    <a target="_blank" rel="noreferrer" href={medium.file}>
                                         <Image
                                             preview={false}
                                             height={60}

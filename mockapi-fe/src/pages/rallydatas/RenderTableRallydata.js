@@ -54,7 +54,8 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
 
     let columns = [];
     let childFields = {};
-    (fieldsRallydata ?? []).map((field) => {
+    (fieldsRallydata ?? []).forEach(field => {
+    // (fieldsRallydata ?? []).map((field) => {
         const iType = getItype(field.type, field.fakerjs)
         if (iType === 'Object ID') {
             columns.push({
@@ -116,7 +117,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         <p className={val ? `text-indigo-700` : `text-red-700`}>{val1}</p>
                     </Tooltip>
                 }
-                if (!val || val && !(val ?? 0).toString().length)
+                if ((val ?? 0).toString().length)
                     return <Tooltip title={val}>
                         <p className={`text-gray-500`}>-</p>
                     </Tooltip>
@@ -149,7 +150,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                                             // src={medium.thumb_image}
                                             src={getFirstThumb(medium)}
                                         />
-                                    return <a key={key} target="_blank" href={medium.file}>
+                                    return <a key={key} target="_blank" rel="noreferrer" href={medium.file}>
                                         <Image
                                             preview={false}
                                             height={30}

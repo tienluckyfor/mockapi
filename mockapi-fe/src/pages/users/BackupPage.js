@@ -1,6 +1,6 @@
-import {Table, Button, Input, Form, Menu, Popconfirm, Dropdown} from "antd";
+import {Table, Button, Input, Form, Menu, Dropdown} from "antd";
 import {MoreOutlined,} from '@ant-design/icons'
-import React, {useEffect, useState} from "react";
+import React, {useEffect,} from "react";
 import UserLayout from "pages/layouts/UserLayout";
 import moment from "moment";
 import "moment-timezone"
@@ -17,12 +17,12 @@ const BackupPage = () => {
 
     useEffect(() => {
         dispatch(BackupImportList())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (ilBackup.isRefresh)
             dispatch(BackupImportList())
-    }, [ilBackup])
+    }, [ilBackup, dispatch])
 
     const RenderForm = () => {
         return <Form

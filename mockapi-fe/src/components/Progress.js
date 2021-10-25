@@ -13,7 +13,7 @@ export const Progress = () => {
             const id = setInterval(timer, 10);
             return () => clearInterval(id);
         },
-        [percent]
+        [percent, timer]
     );
 
     return (

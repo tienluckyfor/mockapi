@@ -1,4 +1,4 @@
-import {Breadcrumb, Button, Menu, Select, Space} from 'antd';
+import {Breadcrumb, Button, Select, Space} from 'antd';
 import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined, MenuOutlined} from '@ant-design/icons';
 import {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
@@ -35,13 +35,13 @@ const HeaderRallydata = () => {
     useEffect(() => {
         if (dataset_id_RD)
             dispatch(detailRallydata(dataset_id_RD))
-    }, [dataset_id_RD])
+    }, [dataset_id_RD, dispatch])
 
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD)) return;
         history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
-    }, [dataset_id_RD, resource_id_RD])
+    }, [dataset_id_RD, resource_id_RD, history])
 
     const url = getURLParams()
     useEffect(() => {
@@ -49,7 +49,7 @@ const HeaderRallydata = () => {
             dataset_id_RD: url.dataset_id_RD,
             resource_id_RD: url.resource_id_RD,
         }))
-    }, [])
+    }, [dispatch, url])
 
     const RenderBreadcrumb = () => {
 

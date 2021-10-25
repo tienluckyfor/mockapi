@@ -16,19 +16,19 @@ const RallydataPage = () => {
 
     useEffect(() => {
         dispatch(setFieldsRallydata())
-    }, [deRallydata, resource_id_RD])
+    }, [deRallydata, resource_id_RD, dispatch])
 
     useEffect(() => {
         if (dataset_id_RD && resource_id_RD) {
             dispatch(myRallydataListSort())
         }
-    }, [dataset_id_RD, resource_id_RD])
+    }, [dataset_id_RD, resource_id_RD, dispatch])
 
     useEffect(() => {
         if (dataset_id_RD && resource_id_RD && mlDRRallydata.isRefresh) {
             dispatch(myRallydataListSort(false))
         }
-    }, [mlDRRallydata])
+    }, [mlDRRallydata, dispatch, dataset_id_RD, resource_id_RD])
 
     const [seoTitle, setSeoTitle] = useState()
     useEffect(() => {

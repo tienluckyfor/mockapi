@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useRef} from "react";
 import AceEditor from "react-ace";
 import {Button} from "antd";
 
@@ -8,7 +8,6 @@ export const ControlledAceEditor = (props) => {
         aceEditor.current.editor.resize();
         aceEditor.current.editor.renderer.updateFull();
     }
-
     return (
         <>
             <AceEditor

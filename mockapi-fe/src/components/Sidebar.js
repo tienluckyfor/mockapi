@@ -1,5 +1,5 @@
 import {Menu, Badge, PageHeader, Space, Divider, Tooltip, Button, Modal} from 'antd';
-import {CrownOutlined, ShareAltOutlined, SearchOutlined} from '@ant-design/icons';
+import {CrownOutlined, ShareAltOutlined, } from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,6 +11,7 @@ import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
 import {ShareAvatars} from "./AntdComponent";
+const uuid = require('react-uuid')
 
 const MAX_LENGTH = 5
 
@@ -27,11 +28,11 @@ const Sidebar = (props) => {
 
     useEffect(() => {
         dispatch(queryMe(window.location.href))
-    }, [])
+    }, [dispatch])
     useEffect(() => {
         if (qMe.isRefresh)
             dispatch(queryMe(window.location.href))
-    }, [qMe])
+    }, [qMe, dispatch])
 
     const url = getURLParams()
     const history = useHistory();
@@ -42,18 +43,28 @@ const Sidebar = (props) => {
             menuSelected = url.dataset_id_RD
         }
         setMenuSelected(menuSelected)
-    }, [location])
+    }, [location, url])
 
     const [isModalVisible, setIsModalVisible] = useState(false)
-    const RenderModal = ({}) => {
+    const RenderModal = () => {
         return (
-            <Modal title="Basic Modal"
+            <Modal title="Rallydata"
                    visible={true}
                    onOk={() => setIsModalVisible(false)}
                    onCancel={() => setIsModalVisible(false)}>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <Menu
+                    selectedKeys={[menuSelected]}
+                    value={menuSelected}
+                    mode="vertical"
+                    theme="light"
+                    className="border-none"
+                >
+                    {(qMe?.data?.datasets ?? []).map((dataset, key) => {
+                        return <Menu.Item key={dataset.id}>
+                            <RenderMenuItem dataset={dataset}/>
+                        </Menu.Item>
+                    })}
+                </Menu>
             </Modal>
         )
     }
@@ -108,6 +119,7 @@ const Sidebar = (props) => {
                             <RenderMenuItem dataset={dataset}/>
                         </Menu.Item>
                     })}
+                    {/*// {(qMe?.data?.datasets  ?? []).forEach((key, dataset) => {*/}
                     {(qMe?.data?.datasets ?? []).map((dataset, key) => {
                         if (key >= MAX_LENGTH || dataset.id == menuSelected) return;
                         return <Menu.Item key={dataset.id}>
@@ -115,7 +127,7 @@ const Sidebar = (props) => {
                         </Menu.Item>
                     })}
                     {(qMe?.data?.datasets ?? []).length >= MAX_LENGTH &&
-                    <Menu.Item>
+                    <Menu.Item key="more">
                         <Button type="dashed" block onClick={() => setIsModalVisible(true)}>
                             Show more ({(qMe?.data?.datasets || []).length - MAX_LENGTH})</Button>
                     </Menu.Item>
@@ -133,13 +145,11 @@ const Sidebar = (props) => {
             {!isMobile &&
             <section className="relative" style={{width: 256}}>
                 <div className="fixed top-0" style={{width: 256}}>
-                    {/*<div className="w-px bg-gray-200 absolute top-0 h-screen right-0"></div>*/}
                     <PageHeader
                         className="px-3 py-0 border-r"
-                        // onBack={() => history.goBack()}
                         title="ApiCodeby"
                         extra={[
-                            <Link to={`/UserPage`} className="flex items-center">
+                            <Link key={uuid()} to={`/UserPage`} className="flex items-center">
                                 <Avatar
                                     className="rounded-full"
                                     size="30"

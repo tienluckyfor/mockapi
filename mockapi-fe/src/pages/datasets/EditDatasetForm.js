@@ -26,7 +26,7 @@ const EditDatasetForm = ({visible, onCreate, onCancel}) => {
         form.setFieldsValue({
             count_change_rally: countChangeRally
         })
-    }, [countChangeRally])
+    }, [countChangeRally, form])
 
     useEffect(() => {
         const dataset = eDataset?.dataset
@@ -36,7 +36,7 @@ const EditDatasetForm = ({visible, onCreate, onCancel}) => {
             amounts1[rally.resource_id] = rally.count
         })
         dispatch(setDataset({amounts: amounts1}))
-    }, [eDataset, mlDataset])
+    }, [eDataset, mlDataset, dispatch])
 
     useEffect(() => {
         if (mlDataset.isRefresh) {

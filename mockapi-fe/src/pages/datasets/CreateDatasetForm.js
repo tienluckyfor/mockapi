@@ -13,11 +13,11 @@ const CreateDatasetForm = () => {
 
     useEffect(() => {
         dispatch(listApi())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(listResource(apiId))
-    }, [apiId])
+    }, [apiId, dispatch])
 
     useEffect(() => {
         if(eDataset.isOpen) return;
@@ -26,7 +26,7 @@ const CreateDatasetForm = () => {
             amounts[resource.id] = 0
         })
         dispatch(setDataset({amounts}))
-    }, [cDataset, eDataset])
+    }, [cDataset, eDataset, dispatch])
 
     const [form] = Form.useForm()
     form.setFieldsValue({

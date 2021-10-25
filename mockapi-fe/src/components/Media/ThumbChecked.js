@@ -19,6 +19,7 @@ export const ThumbChecked = ({name}) => {
                 if (item.kind === 'file')
                     files.push(item.getAsFile())
             }
+            console.log('4')
             dispatch(setMediaMerge('pMedia', {files}))
             // dispatch(uploadMediaPaste(mMedia.name))
         }
@@ -37,10 +38,10 @@ export const ThumbChecked = ({name}) => {
         return () => {
             window.removeEventListener('paste', onMediaUpload)
         }
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
-        if (!mMedia.visible)
+        if (!mMedia.visible && pMedia.files.length)
             dispatch(setMediaMerge('pMedia', {files: []}))
     }, [mMedia])
 

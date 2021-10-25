@@ -1,4 +1,4 @@
-import {Form, Input, Button, Divider, PageHeader} from "antd";
+import {Form, Input, Button, } from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {authRegister, authsSelector} from "slices/auths";
 import {Link, useHistory} from "react-router-dom";

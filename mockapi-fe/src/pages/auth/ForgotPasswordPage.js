@@ -2,7 +2,7 @@ import {Form, Input, Button, Modal} from "antd";
 import {CheckCircleOutlined} from '@ant-design/icons';
 import {useDispatch, useSelector} from "react-redux";
 import {authForgotPassword, authsSelector} from "slices/auths";
-import {Link, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import AuthLayout from "pages/layouts/AuthLayout";
 import {error, getURLParams, objToUrlParams,} from "services";
 import {useEffect} from "react";
@@ -12,6 +12,7 @@ const ForgotPasswordPage = () => {
     const {foAuth} = useSelector(authsSelector)
     const {ref} = getURLParams()
     const history = useHistory();
+    const [form] = Form.useForm()
 
     useEffect(() => {
         if(!foAuth?.data) return;
@@ -30,9 +31,8 @@ const ForgotPasswordPage = () => {
             return;
         }
         error(foAuth?.data?.message)
-    }, [foAuth])
+    }, [foAuth, form, history, ref])
 
-    const [form] = Form.useForm()
     return (
         <AuthLayout
             onBack={() => history.goBack()}

@@ -1,4 +1,4 @@
-import {Upload, Upload as UploadAnt} from 'antd';
+import {Upload as UploadAnt} from 'antd';
 import {useState, useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector} from "slices/rallydatas";
@@ -64,19 +64,20 @@ const UploadMedia = ({listType, children, plainOptions}) => {
     }
 
     const uploadProps = {
+        accept: `*`,
         multiple: true,
         listType,
         name: 'file',
-        onChange,
-        customRequest,
+        onChange: onChange,
+        customRequest: customRequest,
         showUploadList: {showPreviewIcon: false, showRemoveIcon: false},
     }
 
     return (
         <>
-            <Upload {...uploadProps} fileList={fileList1}>
+            <UploadAnt {...uploadProps} fileList={fileList1}>
                 {children}
-            </Upload>
+            </UploadAnt>
         </>
     )
 }

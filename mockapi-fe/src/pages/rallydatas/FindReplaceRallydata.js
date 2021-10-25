@@ -20,14 +20,14 @@ const FindReplaceRallydata = ({visible, onCreate, onCancel}) => {
     // edit
     useEffect(() => {
         dispatch(setFieldsRallydata())
-    }, [deRallydata])
+    }, [deRallydata, dispatch])
+
     useEffect(() => {
         dispatch(detailRallydata(fRallydata?.dataset.id))
         dispatch(setRallydata({
             dataset_id_RD: fRallydata?.dataset.id,
         }))
-    }, [])
-    // end-edit
+    }, [dispatch, fRallydata])
 
     const debounceFetch = debounce(name => {
         dispatch(findRallydata(fRallydata?.dataset.id, name))
@@ -35,12 +35,12 @@ const FindReplaceRallydata = ({visible, onCreate, onCancel}) => {
 
     useEffect(() => {
         dispatch(findRallydata(fRallydata?.dataset.id, ''))
-    }, [])
+    }, [dispatch, fRallydata])
 
     useEffect(() => {
         if (fRallydata.isRefresh)
             dispatch(findRallydata(fRallydata?.dataset.id, fRallydata.find))
-    }, [fRallydata])
+    }, [dispatch, fRallydata])
 
     const RenderTableSelect = () => {
         const [selectedRowKeys, setSelectedRowKeys] = useState([])

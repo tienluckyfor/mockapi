@@ -29,7 +29,7 @@ const ResetPasswordPage = () => {
             return;
         }
         error(reAuth?.data?.message)
-    }, [reAuth])
+    }, [reAuth, history, ref])
 
     const [form] = Form.useForm()
     form.setFieldsValue({

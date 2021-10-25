@@ -15,11 +15,11 @@ const CreateResourceForm = () => {
     useEffect(() => {
         dispatch(listApi())
         setFormValue({fields, endpoints})
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         form.setFieldsValue(formValue)
-    }, [formValue])
+    }, [formValue, form])
 
     return (
         <Form
@@ -33,10 +33,12 @@ const CreateResourceForm = () => {
             layout={`vertical`}
             onFieldsChange={(changedFields, allFields) => {
                 let formValue = {}
-                allFields.map((item) => {
+                (allFields ?? []).forEach((item, k) => {
+                // allFields.map((item) => {
                     formValue[item.name] = item.value
                 })
-                changedFields.map((item) => {
+                (changedFields ?? []).forEach((item, k) => {
+                // changedFields.map((item) => {
                     if (item.name.indexOf('is_authentication') != -1 && item.value) {
                         formValue.fields = [...authFields, ...formValue.fields]
                     }

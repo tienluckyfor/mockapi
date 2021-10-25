@@ -13,16 +13,12 @@ const EditResourceForm = () => {
     const [rName, setRName] = useState()
     const [formValue, setFormValue] = useState({})
     const [form] = Form.useForm()
-    // const [endpoints, setEndpoints] = useState([])
-    // const [fields, setFields] = useState([])
 
     useEffect(() => {
         dispatch(listApi())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
-        // setEndpoints(eResource?.resource?.endpoints)
-        // setFields(eResource?.resource?.fields)
         let api = (lApi.data ?? []).filter((api) => api?.id == eResource?.resource?.api_id)
         api = api[0] ?? {}
         const obj = {
@@ -32,7 +28,6 @@ const EditResourceForm = () => {
             field_template: eResource?.resource?.field_template,
             fields: eResource?.resource?.fields,
             endpoints: eResource?.resource?.endpoints,
-            // is_authentication: (eResource?.resource?.fields ?? []).filter(item => item.type == 'Authentication')
         }
         obj.is_authentication = (obj.fields ?? []).filter(item => item.type == 'Authentication').length!=0
         form.setFieldsValue(obj);
@@ -41,11 +36,11 @@ const EditResourceForm = () => {
             endpoints: obj.endpoints
         })
         setRName(eResource?.resource?.name)
-    }, [eResource, lApi])
+    }, [eResource, lApi, form, ])
 
     useEffect(() => {
         form.setFieldsValue(formValue)
-    }, [formValue])
+    }, [formValue, form])
 
     return (
         <Modal
@@ -76,10 +71,12 @@ const EditResourceForm = () => {
                 layout="vertical"
                 onFieldsChange={(changedFields, allFields) => {
                     let formValue = {}
-                    allFields.map((item) => {
+                    (allFields ?? []).forEach(item => {
+                    // allFields.map((item) => {
                         formValue[item.name] = item.value
                     })
-                    changedFields.map((item) => {
+                    (changedFields ?? []).forEach(item => {
+                    // changedFields.map((item) => {
                         if (item.name.indexOf('is_authentication') != -1 && item.value) {
                             formValue.fields = [...authFields, ...formValue.fields]
                         }

@@ -24,7 +24,7 @@ const EditParentResourceForm = ({visible, onCreate, onCancel}) => {
                 value: item.id
             }
         }))
-    }, [])
+    }, [lResource, epResource, ])
 
     return (
         <Modal

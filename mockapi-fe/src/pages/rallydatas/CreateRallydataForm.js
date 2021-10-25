@@ -26,7 +26,7 @@ const CreateRallydataForm = ({fields}) => {
             dispatch(setCommon({checkedList: {}}))
             dispatch(setRallydata({cbRallydata: {}}))
         }
-    }, [cRallydata])
+    }, [cRallydata, dispatch])
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
@@ -36,7 +36,8 @@ const CreateRallydataForm = ({fields}) => {
             "resource_id": resource_id_RD,
             "data": {}
         };
-        (fields ?? []).map((field) => {
+        (fields ?? []).forEach((field) => {
+            // (fields ?? []).map((field) => {
             const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             if (iType === `Date`) {
@@ -44,12 +45,13 @@ const CreateRallydataForm = ({fields}) => {
             }
         })
         form.setFieldsValue(fieldsValue)
-    }, [dataset_id_RD, resource_id_RD, fields])
+    }, [dataset_id_RD, resource_id_RD, fields, form])
+    const [childResources, setChildResources] = useState([])
 
     useEffect(() => {
         // media
         const fmedia = (fields ?? []).filter((field) => {
-            const {name, type, fakerjs} = field
+            const {type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             return iType === "Media"
         })
@@ -82,13 +84,12 @@ const CreateRallydataForm = ({fields}) => {
             })
         }
         form.setFieldsValue(fieldsValue)
-    }, [checkedList, mlMedia])
+    }, [checkedList, mlMedia, dispatch, fields, form, mRallydataData, childResources])
 
-    const [childResources, setChildResources] = useState([])
     useEffect(() => {
         const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
-    }, [deRallydata])
+    }, [deRallydata, resource_id_RD])
 
     return (
         <Form

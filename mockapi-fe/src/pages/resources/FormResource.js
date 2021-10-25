@@ -8,6 +8,7 @@ import {useSelector} from "react-redux";
 import {apisSelector} from "slices/apis";
 import {useEffect, useState} from "react";
 import {sortableContainer, sortableElement, sortableHandle} from "react-sortable-hoc";
+const uuid = require('react-uuid')
 
 const {Option, OptGroup} = Select;
 
@@ -37,7 +38,7 @@ const FormResource = ({formValue, resourceName}) => {
                     autoFocus
                 >
                     {(lApi.data ?? []).map((api, key) =>
-                        <Option value={api.id}>{api.name}</Option>
+                        <Option key={uuid()} value={api.id}>{api.name}</Option>
                     )}
                 </Select>
             </Form.Item>
@@ -46,7 +47,7 @@ const FormResource = ({formValue, resourceName}) => {
                 label="Name"
                 rules={[{required: true},
                     {
-                        pattern: /^[a-zA-Z0-9_\-]+$/,
+                        pattern: /^[a-zA-Z0-9_-]+$/,
                         message: "Must contain only letters, numbers or the underscore!",
                     },]}
             >
@@ -70,6 +71,7 @@ const FormResource = ({formValue, resourceName}) => {
                 >
                     {(fields, {add, remove, move}) => (
                         <SortableContainer
+                            key={uuid()}
                             lockAxis="y"
                             useDragHandle
                             onSortEnd={({oldIndex, newIndex}) => move(oldIndex, newIndex)}
@@ -111,7 +113,7 @@ const FormResource = ({formValue, resourceName}) => {
                                                     showSearch
                                                 >
                                                     {fieldTypes.map((type, k) =>
-                                                        <Option value={type}>{type}</Option>
+                                                        <Option key={uuid()} value={type}>{type}</Option>
                                                     )}
                                                 </Select>
                                             </Form.Item>
@@ -126,9 +128,9 @@ const FormResource = ({formValue, resourceName}) => {
                                                     style={{width: 150}}
                                                 >
                                                     {fakerList.map((faker, k) =>
-                                                        <OptGroup label={faker.name} className={`uppercase`}>
+                                                        <OptGroup key={uuid()} label={faker.name} className={`uppercase`}>
                                                             {Object.entries(faker.list).map(([key, item], i) =>
-                                                                <Option value={key}>{item}</Option>
+                                                                <Option key={uuid()} value={key}>{item}</Option>
                                                             )}
                                                         </OptGroup>
                                                     )}
@@ -162,9 +164,9 @@ const FormResource = ({formValue, resourceName}) => {
                     Endpoints</p>
                 <Form.List name="endpoints" initialValue={endpoints}>
                     {(fields, {add, remove}) => (
-                        <>
+                        <section key={uuid()}>
                             {fields.map(({key, name, fieldKey, ...restField}) => (
-                                <>
+                                <div key={uuid()}>
                                     <div className="flex items-center space-x-2 mb-1">
                                         <Form.Item
                                             className={`mb-0`}
@@ -198,9 +200,9 @@ const FormResource = ({formValue, resourceName}) => {
                                     >
                                         <Input/>
                                     </Form.Item>
-                                </>
+                                </div>
                             ))}
-                        </>
+                        </section>
                     )}
                 </Form.List>
             </section>

@@ -2,7 +2,7 @@ import {Button, Menu, PageHeader} from "antd";
 import AppHelmet from "shared/AppHelmet";
 import {useHistory} from "react-router-dom";
 import {authLogout, authsSelector} from "slices/auths";
-import React, {useEffect} from "react";
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {usersSelector} from "slices/users";
 

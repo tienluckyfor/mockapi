@@ -16,12 +16,12 @@ const FormDataset = ({apiId, setApiId, }) => {
 
     useEffect(() => {
         dispatch(listApi())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (!apiId) return;
         dispatch(listResource(apiId))
-    }, [apiId])
+    }, [apiId, dispatch])
 
     const renderTable = () => {
         const columns = [

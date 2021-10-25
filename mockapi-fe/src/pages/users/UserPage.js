@@ -1,4 +1,4 @@
-import {Button, Form, Input, Space, Checkbox, Image, } from 'antd';
+import {Button, Form, Input,} from 'antd';
 import React, {useEffect} from 'react';
 import {MediaModal, ThumbChecked} from "components";
 import {mediaSelector, myMediaList, setMediaMerge} from "slices/media";
@@ -10,26 +10,33 @@ import UserLayout from "pages/layouts/UserLayout";
 const UserPage = () => {
     const {qMe} = useSelector(usersSelector)
     const dispatch = useDispatch()
-    const {mlMedia, mMedia, cbMedia} = useSelector(mediaSelector)
+    const {mlMedia,} = useSelector(mediaSelector)
     const {checkedList,} = useSelector(commonsSelector)
     const {eUser,} = useSelector(usersSelector)
 
     useEffect(() => {
         dispatch(myMediaList())
-    }, []);
+    });
 
     const [form] = Form.useForm()
     useEffect(() => {
+        // const handleChange = () => {
+        //     form.setFieldsValue(qMe?.data)
+        //     dispatch(setCommonMerge('checkedList', {[name]: [qMe?.data?.medium?.id]}))
+        // }
+        // if (!qMe.isLoading) {
+        //     handleChange()
+        // }
         if (!qMe.isLoading) {
             form.setFieldsValue(qMe?.data)
             dispatch(setCommonMerge('checkedList', {[name]: [qMe?.data?.medium?.id]}))
         }
-    }, [qMe]);
+    }, [qMe, dispatch, form])
 
     useEffect(() => {
         if (eUser.status)
             dispatch(queryMe())
-    }, [eUser]);
+    }, [eUser, dispatch]);
 
     useEffect(() => {
         // media
@@ -42,7 +49,7 @@ const UserPage = () => {
             fieldsValue[f.name] = mediaR.map((medium) => medium.id)
         }
         form.setFieldsValue(fieldsValue);
-    }, [mlMedia, checkedList]);
+    }, [mlMedia, checkedList, dispatch, form]);
 
     const name = 'avatar';
     return (

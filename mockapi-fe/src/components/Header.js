@@ -5,7 +5,7 @@ import {useState, useEffect, useRef} from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import {apisSelector, listApi, setApiMerge} from "slices/apis"
 import {resourcesSelector, listResource, setResourceMerge} from "slices/resources"
-import {datasetsSelector, listDataset,  setDatasetMerge} from "slices/datasets";
+import {datasetsSelector, listDataset, setDatasetMerge} from "slices/datasets";
 import {usersSelector} from "slices/users";
 import {Link} from "react-router-dom";
 
@@ -15,7 +15,8 @@ const Header = ({page}) => {
     const {lResource, cResource} = useSelector(resourcesSelector)
     const {lDataset, cDataset} = useSelector(datasetsSelector)
     const {qMe} = useSelector(usersSelector)
-    const [isMenu, setIsMenu] = useState(false)
+    // const [isMenu, setIsMenu] = useState(false)
+    const isMenu = false;
     const [isSearch, setIsSearch] = useState(false)
     const [show, setShow] = useState({
         search: true,
@@ -60,22 +61,27 @@ const Header = ({page}) => {
                     return;
                 }
                 break;
+            default:
+                break;
         }
         for (const i in show) {
             show1[i] = true;
         }
         setShow(show1)
-    }, [cApi, cResource, cDataset, isMenu, isSearch])
+    }, [cApi, cResource, cDataset, isMenu, isSearch, ])
+
     useEffect(() => {
         if (show.search && isSearch) {
             searchRef.current.focus({cursor: 'end'});
         }
-    }, [show])
+    }, [show, isSearch])
+
     useEffect(() => {
         if (!isSearch) {
             onSearch(``)
         }
     }, [isSearch])
+
     const antIcon = <LoadingOutlined style={{fontSize: 18}} spin/>;
 
     const [search, setSearch] = useState(``)
@@ -95,6 +101,8 @@ const Header = ({page}) => {
                 dispatch(setDatasetMerge(`lDataset`, {search: {name: value}}))
                 // dispatch(myDatasetList())
                 dispatch(listDataset())
+                break;
+            default:
                 break;
         }
     }
@@ -132,10 +140,13 @@ const Header = ({page}) => {
                     cIsLoading: cDataset?.isLoading,
                 })
                 break;
+            default:
+                break;
         }
     }, [lApi, cApi, lResource, cResource, lDataset, cDataset, qMe])
 
     const onAdd = () => {
+        console.log('page', page)
         switch (page) {
             case 'ApiListPage':
                 dispatch(setApiMerge(`cApi`, {isOpen: !cApi?.isOpen}))
@@ -184,6 +195,7 @@ const Header = ({page}) => {
                         />
                     </>
                     }
+
                     {show.add &&
                     <Button
                         onClick={(e) => onAdd()}

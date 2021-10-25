@@ -1,6 +1,6 @@
 import {Button, Popconfirm, Form, List, Select, Space} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Avatar from "react-avatar";
 import {queryMe, shareSearchUsers, usersSelector} from "slices/users";
 import {createShare, deleteShare, shareList, sharesSelector} from "slices/shares";
@@ -30,36 +30,35 @@ export const Share = ({shareable_type, shareable_id, data}) => {
         const debounceFetch = debounce(name => {
             dispatch(shareSearchUsers(shareable_type, shareable_id, name))
         }, 500);
+        const [form] = Form.useForm()
 
-        React.useEffect(() => {
-            if (cShare?.data) {
+        useEffect(() => {
+            if (cShare.data) {
                 form.setFieldsValue({user_invite_id: null});
             }
-        }, [cShare])
+        }, [cShare, form])
 
-        React.useEffect(() => {
-            if (cShare?.data || dShare?.status) {
+        useEffect(() => {
+            if (cShare.data || dShare.status) {
                 if (shareable_type.match(/Api/gi))
                     dispatch(listApi())
                 if (shareable_type.match(/Dataset/gi))
                     dispatch(myDatasetList())
             }
+        }, [cShare, dShare, dispatch, shareable_type])
 
-        }, [cShare, dShare])
-
-        React.useEffect(() => {
+        useEffect(() => {
             if (lShare.isRefresh && shareable_id) {
                 dispatch(queryMe())
                 dispatch(shareList(shareable_type, shareable_id))
             }
-        }, [lShare, shareable_id])
+        }, [lShare, shareable_id, dispatch, shareable_type])
 
-        React.useEffect(() => {
+        useEffect(() => {
             if (shareable_id)
                 dispatch(shareList(shareable_type, shareable_id))
-        }, [shareable_id])
+        }, [shareable_id, dispatch])
 
-        const [form] = Form.useForm()
         form.setFieldsValue({
             shareable_type,
             shareable_id,

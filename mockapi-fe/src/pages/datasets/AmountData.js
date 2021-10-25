@@ -3,7 +3,7 @@ import {DownloadOutlined, UploadOutlined} from '@ant-design/icons';
 import {useState, useRef, useEffect} from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {datasetsSelector, myDatasetList, setDataset} from "slices/datasets";
-import {objToUrlParams, resfulClient} from "services";
+import {objToUrlParams, } from "services";
 import {myRallydataList, rallydatasSelector} from "slices/rallydatas";
 import {mediaSelector, uploadFile} from "slices/media";
 
@@ -45,14 +45,14 @@ export const ParentAmountData = ({resource}) => {
         const amount = amounts && amounts[resource.id] ? amounts[resource.id] : 0;
         setAmount(amount)
         // const amount = cDataset?.amounts && cDataset?.amounts[resource.id] ? cDataset?.amounts[resource.id] : 0;
-    }, [amounts])
+    }, [amounts, resource])
 
     useEffect(() => {
         if(uMedia.data){
             dispatch(myDatasetList())
             dispatch(myRallydataList(false))
         }
-    }, [uMedia])
+    }, [uMedia, dispatch])
 
 
     const UploadFile = ({children, ...props}) => {
