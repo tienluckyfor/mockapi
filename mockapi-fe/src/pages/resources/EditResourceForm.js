@@ -3,7 +3,7 @@ import {Modal, Form,} from 'antd';
 import {useDispatch, useSelector} from "react-redux";
 import {editResource, resourcesSelector, setResourceMerge,} from "slices/resources";
 import {apisSelector, listApi} from "slices/apis";
-import FormResource from "./FormResource";
+import FormResource, {resourceFieldsChange} from "./FormResource";
 import {authFields} from "./configResource";
 
 const EditResourceForm = () => {
@@ -69,14 +69,12 @@ const EditResourceForm = () => {
             <Form
                 form={form}
                 layout="vertical"
-                onFieldsChange={(changedFields, allFields) => {
-                    let formValue = {}
+                onFieldsChange={(f, allFields) => {
+                    /*let formValue = {};
                     (allFields ?? []).forEach(item => {
-                    // allFields.map((item) => {
                         formValue[item.name] = item.value
                     })
-                    (changedFields ?? []).forEach(item => {
-                    // changedFields.map((item) => {
+                    (f ?? []).forEach(item => {
                         if (item.name.indexOf('is_authentication') != -1 && item.value) {
                             formValue.fields = [...authFields, ...formValue.fields]
                         }
@@ -84,7 +82,8 @@ const EditResourceForm = () => {
                             formValue.fields = (formValue.fields ?? []).filter((item) => item.type != 'Authentication')
                         }
                     })
-                    setFormValue(formValue)
+                    setFormValue(formValue)*/
+                    resourceFieldsChange(f, allFields, setFormValue)
                 }}
             >
                 <FormResource formValue={formValue} resourceName={rName}/>

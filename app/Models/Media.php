@@ -20,27 +20,27 @@ class Media extends Model
         'name_upload',
         'file_type',
         'file_name',
-        'thumbs',
+//        'thumbs',
         'view',
         'stage',
     ];
 
     protected $casts = [
-        'thumbs' => 'array',
+//        'thumbs' => 'array',
     ];
 
-    protected $appends = ['file', 'thumb_files'];
+    protected $appends = ['file'];
 
     public function getFileAttribute()
     {
         return asset('storage') . '/' . $this->file_name;
     }
 
-    public function getThumbFilesAttribute()
+    /*public function getThumbFilesAttribute()
     {
         return collect($this->thumbs)->map(function ($item){
             return asset('storage') . '/' . $item;
         });
-    }
+    }*/
 
 }

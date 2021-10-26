@@ -11,7 +11,7 @@ class _slice_common {
     }
 
     static setMerge(initialState, state, payload) {
-        console.log('setMerge', {initialState, state, payload});
+        // console.log('setMerge', {initialState, state, payload});
         (Object.entries(initialState) ?? []).forEach(([key, value]) => {
             // Object.entries(initialState).map(([key, value], i) => {
             if (typeof payload[key] !== "undefined") {

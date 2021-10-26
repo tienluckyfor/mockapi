@@ -82,8 +82,9 @@ class RallydataHelper
 
         $mediaIds = $this->rallydata_repository->getMediaIds($rallydatasCurrent);
         $media = Media::whereIn('id', $mediaIds)->get();
-        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
-        $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media, $thumbSizes);
+//        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+//        $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media, $thumbSizes);
+        $rallydatasCurrent = $this->rallydata_repository->mappingMedia($rallydatasCurrent, $media);
         return $rallydatasCurrent;
     }
 

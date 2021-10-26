@@ -28,7 +28,7 @@ type Medium{
     updated_at: DateTime!
     image: String!
     file: String!
-    thumb_files: JSON
+#    thumb_files: JSON
 }
 #
 #input CreateMediaInput{

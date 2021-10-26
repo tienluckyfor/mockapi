@@ -166,7 +166,7 @@ export const MediaModal = () => {
         return (<section className={`lg:flex block items-center justify-between space-x-3 `}>
             <Space size={`middle`}>
                 {checkedList[mMedia.name] && checkedList[mMedia.name]?.length !== 0 &&
-                <span className="">{checkedList[mMedia.name]?.length} selected</span>
+                <span>{checkedList[mMedia.name]?.length} selected</span>
                 }
                 <Checkbox
                     indeterminate={indeterminate}
@@ -266,7 +266,7 @@ export const MediaModal = () => {
 
             <div className="h-96 overflow-y-auto ">
                 {mlMedia?.isLoading && <Spin/>}
-                <div className="">
+                <div>
                     <CheckboxGroup
                         value={checkedList[mMedia.name]}
                         onChange={(list) =>

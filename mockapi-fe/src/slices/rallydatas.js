@@ -265,7 +265,6 @@ export function detailRallydata(dataset_id) {
             medium{
                 id
                 file
-                thumb_files
             }
         }
         postman{

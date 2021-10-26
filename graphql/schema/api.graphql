@@ -17,7 +17,7 @@ extend type Query {
 type Api{
     id: ID
     name: String
-    thumb_sizes: JSON
+#    thumb_sizes: JSON
     user: User!
     created_at: DateTime!
     updated_at: DateTime!
@@ -26,13 +26,13 @@ type Api{
 
 input CreateApiInput{
     name: String! @rules(apply:["required"])
-    thumb_sizes: JSON
+#    thumb_sizes: JSON
 }
 
 input EditApiInput{
     id: ID! @rules(apply: ["required","App\\Rules\\OwnerCheckApi"])
     name: String! @rules(apply:["required"])
-    thumb_sizes: JSON
+#    thumb_sizes: JSON
 }
 
 input DeleteApiInput{

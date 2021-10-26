@@ -94,14 +94,14 @@ const ApiListPage = () => {
                     </Tooltip>
                 },
             },
-            {
+            /*{
                 title: 'Thumb sizes',
                 dataIndex: 'thumb_sizes',
                 ellipsis: true,
                 render: (text, api, index) => {
                     return <Tooltip title={objToString(text)}>{objToString(text)}</Tooltip>
                 },
-            },
+            },*/
             {
                 title: 'Last updated',
                 ellipsis: true,

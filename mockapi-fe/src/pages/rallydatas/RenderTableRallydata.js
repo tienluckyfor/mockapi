@@ -129,7 +129,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                             danger
                             className={`px-1`}
                         >
-                            <span className="">{val}</span>
+                            <span>{val}</span>
                         </Button>
                     </Dropdown>
                 if (iType === 'Date')

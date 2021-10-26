@@ -348,33 +348,33 @@ class RallydataRepository
      * @param Media $media
      * @return mixed
      */
-    protected function _handleMediumItem($mediaId, $media, $thumbSizes)
+    protected function _handleMediumItem($mediaId, $media)//, $thumbSizes)
     {
         $file = asset("storage/filldata-media/{$mediaId}.jpg");
         $fileType = 'image';
-        $thumbs = [];
-        foreach ($thumbSizes as $size) {
-            $thumbs[$size['width']] = $this->media_service->get_thumb($file, $size);
-        }
+//        $thumbs = [];
+//        foreach ($thumbSizes as $size) {
+//            $thumbs[$size['width']] = $this->media_service->get_thumb($file, $size);
+//        }
         $medium = $media->where('id', $mediaId)->first();
         if ($mediaId > 0 && $medium) {
             $file = $medium->file;
             $fileType = $medium->file_type;
-            $thumbs = $medium->thumb_files;
+//            $thumbs = $medium->thumb_files;
         }
 
         $item = [
             'id'          => $mediaId,
             'file_type'   => $fileType,
             'file'        => $file,
-            'thumb_files' => $thumbs,
+//            'thumb_files' => $thumbs,
         ];
         return $item;
     }
 
-    public function mappingMedia($rallydatas, $media, $thumbSizes = null)
+    public function mappingMedia($rallydatas, $media)//, $thumbSizes = null)
     {
-        $datasetId = null;
+//        $datasetId = null;
 
         foreach ($rallydatas as &$rallydata) {
             foreach ($rallydata as &$rallydatum) {
@@ -382,29 +382,28 @@ class RallydataRepository
                     continue;
                 }
                 // thumbSizes
-                if (!$thumbSizes && !$datasetId) {
-                    if (isset($rallydatum['media_ids'])) {
-                        $datasetId = $rallydata['dataset_id'];
-                    }
-                    foreach ($rallydatum as &$item0) {
-                        if (!is_array($item0)) {
-                            continue;
-                        }
-                        foreach ($item0 as &$item) {
-                            if (isset($item['media_ids'])) {
-                                $datasetId = $rallydatum['dataset_id'];
-                            }
-                        }
-                    }
-
-                    $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
-                }
+//                if (!$thumbSizes && !$datasetId) {
+//                    if (isset($rallydatum['media_ids'])) {
+//                        $datasetId = $rallydata['dataset_id'];
+//                    }
+//                    foreach ($rallydatum as &$item0) {
+//                        if (!is_array($item0)) {
+//                            continue;
+//                        }
+//                        foreach ($item0 as &$item) {
+//                            if (isset($item['media_ids'])) {
+//                                $datasetId = $rallydatum['dataset_id'];
+//                            }
+//                        }
+//                    }
+//                    $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+//                }
 
                 // restful
                 if (isset($rallydatum['media_ids'])) {
                     $rallydatum = array_merge($rallydatum, ['media' => []]);
                     foreach ($rallydatum['media_ids'] as $mediaId) {
-                        $rallydatum['media'][] = $this->_handleMediumItem($mediaId, $media, $thumbSizes);
+                        $rallydatum['media'][] = $this->_handleMediumItem($mediaId, $media);//, $thumbSizes);
                     }
                     continue;
                 }
@@ -418,7 +417,7 @@ class RallydataRepository
                         if (isset($item['media_ids'])) {
                             $item = array_merge($item, ['media' => []]);
                             foreach ($item['media_ids'] as $mediaId) {
-                                $item['media'][] = $this->_handleMediumItem($mediaId, $media, $thumbSizes);
+                                $item['media'][] = $this->_handleMediumItem($mediaId, $media);//, $thumbSizes);
                             }
                         }
                     }

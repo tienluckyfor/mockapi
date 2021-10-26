@@ -1,18 +1,35 @@
 import {Form, Input, Button, Space, InputNumber} from 'antd';
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {useSelector} from "react-redux";
+import {apisSelector} from "slices/apis";
 
 const FormApi = () => {
+    const {lApi,} = useSelector(apisSelector)
+
+    const existsValidation = (rule, value, callback) => {
+        const names = (lApi.data ?? []).map(item => item.name);
+        const regex = new RegExp(`^${value.trim()}$`, "i")
+        const withSameValue = names.filter((e) => regex.test(e))
+        if (withSameValue.length != 0) {
+            rule.message = "API name already exists!";
+            callback(rule);
+        }
+        callback();
+    }
+
     return (
         <>
             <Form.Item
                 name="name"
                 label="Name"
-                rules={[{required: true}]}
+                rules={[
+                    {required: true},
+                    {validator: existsValidation},
+                ]}
             >
                 <Input autoFocus/>
             </Form.Item>
-
-            <section className="">
+            {/*<section>
                 <p className="mb-2">Media thumb sizes (px)</p>
 
                 <Form.List
@@ -49,7 +66,7 @@ const FormApi = () => {
                                     </Form.Item>
                                     <Button type="link" danger onClick={() => remove(name)}
                                             icon={<MinusCircleOutlined/>}/>
-                                    {/*<MinusCircleOutlined onClick={() => remove(name)}/>*/}
+                                    <MinusCircleOutlined onClick={() => remove(name)}/>
                                 </Space>
                             ))}
 
@@ -59,7 +76,7 @@ const FormApi = () => {
                         </>
                     )}
                 </Form.List>
-            </section>
+            </section>*/}
         </>
     );
 };

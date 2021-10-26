@@ -33,7 +33,7 @@ const ModalChildRallydata = () => {
         width={1000}
     >
         <div className="h-96 overflow-y-auto ">
-            <div className="">
+            <div>
                 <CheckboxGroup
                     value={checkedList[mRallydata?.resource?.fName]}
                     onChange={(list) => {

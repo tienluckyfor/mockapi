@@ -1,5 +1,5 @@
-import {Menu, Badge, PageHeader, Space, Divider, Tooltip, Button, Modal} from 'antd';
-import {CrownOutlined, ShareAltOutlined, } from '@ant-design/icons';
+import {Menu, Badge, PageHeader, Space, Divider, Tooltip, Button, Modal, Input} from 'antd';
+import {CrownOutlined, ShareAltOutlined,} from '@ant-design/icons';
 import React, {useState} from 'react';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,7 +11,10 @@ import {isMobile} from 'react-device-detect';
 import AppHelmet from "shared/AppHelmet";
 import {setRallydata} from "slices/rallydatas";
 import {ShareAvatars} from "./AntdComponent";
+import debounce from "lodash/debounce"
+
 const uuid = require('react-uuid')
+const {Search} = Input;
 
 const MAX_LENGTH = 5
 
@@ -47,19 +50,35 @@ const Sidebar = (props) => {
 
     const [isModalVisible, setIsModalVisible] = useState(false)
     const RenderModal = () => {
+        const [search, setSearch] = useState("");
+        const [listSearch, setListSearch] = useState([]);
+        const debounceFetch = debounce(value => {
+            setSearch(value)
+        }, 500)
+
+        useEffect(() => {
+            const re = new RegExp(search, "gim");
+            setListSearch((qMe?.data?.datasets ?? []).filter((dataset) => dataset.name.match(re)))
+        }, [search])
+
+        useEffect(() => {
+            setListSearch((qMe?.data?.datasets ?? []))
+        }, [qMe])
+
         return (
-            <Modal title="Rallydata"
+            <Modal title={`Rallydata (${(qMe?.data?.datasets ?? []).length})`}
                    visible={true}
                    onOk={() => setIsModalVisible(false)}
                    onCancel={() => setIsModalVisible(false)}>
+                <Search placeholder="search" onChange={(e) => debounceFetch(e.target.value)}/>
                 <Menu
                     selectedKeys={[menuSelected]}
                     value={menuSelected}
                     mode="vertical"
                     theme="light"
-                    className="border-none"
+                    className="border-none -mx-4"
                 >
-                    {(qMe?.data?.datasets ?? []).map((dataset, key) => {
+                    {listSearch.map((dataset, key) => {
                         return <Menu.Item key={dataset.id}>
                             <RenderMenuItem dataset={dataset}/>
                         </Menu.Item>
@@ -75,6 +94,7 @@ const Sidebar = (props) => {
             <Tooltip title={dataset.name}>
                 <Link
                     onClick={() => {
+                        setIsModalVisible(false)
                         dispatch(setRallydata({
                             dataset_id_RD: dataset.id,
                             resource_id_RD: dataset.resources[0]?.id,

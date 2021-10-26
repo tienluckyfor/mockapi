@@ -120,7 +120,6 @@ export function shareList(shareable_type, shareable_id) {
       medium {
         id
         file
-        thumb_files
       }
     }
   }

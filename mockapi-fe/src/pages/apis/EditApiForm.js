@@ -11,7 +11,7 @@ const EditApiForm = ({visible,}) => {
     form.setFieldsValue({
         "id": eApi?.api.id,
         "name": eApi?.api.name,
-        "thumb_sizes": eApi?.api.thumb_sizes ?? [],
+        // "thumb_sizes": eApi?.api.thumb_sizes ?? [],
     });
 
     return (

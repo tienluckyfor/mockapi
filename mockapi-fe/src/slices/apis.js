@@ -49,16 +49,14 @@ export function createApi(variables) {
         dispatch(setMerge({cApi: {isLoading: true}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($name: String!, $thumb_sizes:JSON){
+            mutation($name: String!){
   create_api(
     input: {
       name: $name,
-      thumb_sizes: $thumb_sizes,
     }
   ) {
     id
     name
-    thumb_sizes
     created_at
     updated_at
   }
@@ -87,17 +85,15 @@ export function editApi(api) {
         dispatch(setData({eApi: {isLoading: true, api}}))
         const mutationAPI = () => {
             const mutation = gql`
-            mutation($id: ID!, $name: String!, $thumb_sizes: JSON){
+            mutation($id: ID!, $name: String!){
   edit_api(
     input: {
       id: $id,
       name: $name,
-      thumb_sizes: $thumb_sizes,
     }
   ) {
     id
     name
-    thumb_sizes
     created_at
     updated_at
   }
@@ -166,7 +162,6 @@ export function listApi() {
   apis(name:$name) {
             id
             name
-            thumb_sizes
             updated_at
     shares{
         user_invite{
@@ -175,7 +170,6 @@ export function listApi() {
             medium {
                 id
                 file
-                thumb_files
             }
         }
     }
@@ -185,7 +179,6 @@ export function listApi() {
         medium{
             id
             file
-            thumb_files
         }
     }
   }

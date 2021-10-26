@@ -264,7 +264,6 @@ export function listResource(api_id = null) {
           id
           name
           updated_at
-          thumb_sizes
     shares{
         user_invite{
             id
@@ -272,7 +271,6 @@ export function listResource(api_id = null) {
             medium {
                 id
                 file
-                thumb_files
             }
         }
     }
@@ -282,7 +280,6 @@ export function listResource(api_id = null) {
         medium{
             id
             file
-            thumb_files
         }
     }
       }

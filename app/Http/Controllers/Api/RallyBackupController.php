@@ -60,8 +60,9 @@ class RallyBackupController extends Controller
 
         $mediaIds = $this->rallydata_repository->getMediaIds($ralliesD);
         $media = $this->media_repository->getByIds($mediaIds);
-        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
-        $ralliesM = $this->rallydata_repository->mappingMedia($ralliesD, $media, $thumbSizes);
+//        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+//        $ralliesM = $this->rallydata_repository->mappingMedia($ralliesD, $media, $thumbSizes);
+        $ralliesM = $this->rallydata_repository->mappingMedia($ralliesD, $media);
         $resource = $this->resource_repository
             ->findByid($resourceId);
         [$cols] = $this->_getColsFields($resource);
@@ -188,12 +189,13 @@ class RallyBackupController extends Controller
             ->filter()
             ->toArray();
         $iMedia = [];
-        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
+//        $thumbSizes = @DataSet::find($datasetId)->api->thumb_sizes ?? [];
         foreach ($aMedia as $url) {
             $rMedia = $this->_findMediaByUrl($url, $media);
             if($rMedia) continue;
             $count['outside_media']++;
-            [$convertStatus, $result] = $this->media_service->getViaUrl($url, $thumbSizes);
+//            [$convertStatus, $result] = $this->media_service->getViaUrl($url, $thumbSizes);
+            [$convertStatus, $result] = $this->media_service->getViaUrl($url);
             if ($convertStatus) {
                 $media = array_merge($request->all(), $result);
                 $create = Media::create($media);

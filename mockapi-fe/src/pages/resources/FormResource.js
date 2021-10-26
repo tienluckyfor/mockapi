@@ -3,27 +3,31 @@ import {
     PlusOutlined, CloseOutlined, CheckOutlined, ArrowRightOutlined, MinusCircleOutlined,
     MenuOutlined
 } from '@ant-design/icons'
-import {endpoints, fakerList, fieldTypes} from "./configResource";
+import {authFields, endpoints, fakerList, fieldTypes} from "./configResource";
 import {useSelector} from "react-redux";
 import {apisSelector} from "slices/apis";
 import {useEffect, useState} from "react";
 import {sortableContainer, sortableElement, sortableHandle} from "react-sortable-hoc";
+import debounce from "lodash/debounce"
+
 const uuid = require('react-uuid')
 
 const {Option, OptGroup} = Select;
-
-const SortableContainer = sortableContainer(({children}) => <ul className="">{children}</ul>);
-const SortableItem = sortableElement(({ children }) => <li className="list-none">{children}</li>);
+const SortableContainer = sortableContainer(({children}) => <ul>{children}</ul>);
+const SortableItem = sortableElement(({children}) => <li className="list-none">{children}</li>);
 const DragHandle = sortableHandle(() => <MenuOutlined style={{cursor: 'grab', color: '#999'}}/>);
 
 const FormResource = ({formValue, resourceName}) => {
-    // console.log('formValue', formValue)
     const {lApi} = useSelector(apisSelector)
     const [rName, setRName] = useState()
 
     useEffect(() => {
         setRName(resourceName)
     }, [resourceName])
+
+    const debounceChange = debounce(value => {
+        setRName(value)
+    }, 500)
 
     return (
         <>
@@ -35,7 +39,6 @@ const FormResource = ({formValue, resourceName}) => {
                 <Select
                     showSearch
                     optionFilterProp="children"
-                    autoFocus
                 >
                     {(lApi.data ?? []).map((api, key) =>
                         <Option key={uuid()} value={api.id}>{api.name}</Option>
@@ -52,10 +55,11 @@ const FormResource = ({formValue, resourceName}) => {
                     },]}
             >
                 <Input
-                    onChange={(e) => setRName(e.target.value)}
+                    // onChange={(e) => setRName(e.target.value)}
+                    onChange={(e) => debounceChange(e.target.value)}
                 />
             </Form.Item>
-            <section className="">
+            <section>
                 <p className="mb-1">
                     <span className="text-red-500 mr-2 text-sm">*</span>
                     Fields</p>
@@ -99,7 +103,6 @@ const FormResource = ({formValue, resourceName}) => {
                                                 <Input
                                                     disabled={isDisabled}
                                                     placeholder="Name"
-                                                    autoFocus
                                                 />
                                             </Form.Item>
                                             <Form.Item
@@ -128,7 +131,8 @@ const FormResource = ({formValue, resourceName}) => {
                                                     style={{width: 150}}
                                                 >
                                                     {fakerList.map((faker, k) =>
-                                                        <OptGroup key={uuid()} label={faker.name} className={`uppercase`}>
+                                                        <OptGroup key={uuid()} label={faker.name}
+                                                                  className={`uppercase`}>
                                                             {Object.entries(faker.list).map(([key, item], i) =>
                                                                 <Option key={uuid()} value={key}>{item}</Option>
                                                             )}
@@ -185,10 +189,10 @@ const FormResource = ({formValue, resourceName}) => {
                                         <>
                                             <ArrowRightOutlined/>
                                             {(endpoints[fieldKey]?.type === `get_id` || endpoints[fieldKey]?.type === `delete_id`) &&
-                                            <span className="">/{rName}/id</span>
+                                            <span>/{rName}/id</span>
                                             }
                                             {!(endpoints[fieldKey]?.type === `get_id` || endpoints[fieldKey]?.type === `delete_id`) &&
-                                            <span className="">/{rName}</span>
+                                            <span>/{rName}</span>
                                             }
                                         </>
                                         }
@@ -211,3 +215,21 @@ const FormResource = ({formValue, resourceName}) => {
 }
 
 export default FormResource
+
+export const resourceFieldsChange = (f, allFields, setFormValue) => {
+    const fName = f[0].name[0]
+    if (fName == 'is_authentication' || fName == 'fields') {
+        let formValue = {};
+        (allFields ?? []).forEach(item => {
+            formValue[item.name] = item.value
+        });
+        let fields = formValue.fields;
+        if (fName == 'is_authentication' && f[0].value) {
+            fields = [...authFields, ...formValue.fields]
+        }
+        if (fName == 'is_authentication' && !f[0].value) {
+            fields = (formValue.fields ?? []).filter((item) => item.type != 'Authentication')
+        }
+        setFormValue({fields})
+    }
+}

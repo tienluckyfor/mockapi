@@ -163,7 +163,7 @@ export const Share = ({shareable_type, shareable_id, data}) => {
     }
 
     return (
-        <section className="">
+        <section>
             {RenderForm()}
             {RenderList()}
         </section>

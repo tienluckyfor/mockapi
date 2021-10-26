@@ -19,30 +19,30 @@ class MediaService
         return $imagePath;
     }
 
-    public function convertThumbs($path, $filePath, $fileName, $sizes)
-    {
-        $thumbs = [];
-        foreach ($sizes as $size) {
-            try {
-                $thumbPath = self::get_thumb($filePath, $size);
-                $thumbName = self::get_thumb($fileName, $size);
-                $thumbs[$size['width']] = $thumbName;
-                if (isset($size['height'])) {
-                    Image::make($path)
-                        ->fit($size['width'], $size['height'])
-                        ->save($thumbPath, 100);
-                } else {
-                    Image::make($path)
-                        ->resize($size['width'], null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        })
-                        ->save($thumbPath, 100);
-                }
-            } catch (NotReadableException $e) {
-            }
-        }
-        return $thumbs;
-    }
+//    public function convertThumbs($path, $filePath, $fileName, $sizes)
+//    {
+//        $thumbs = [];
+//        foreach ($sizes as $size) {
+//            try {
+//                $thumbPath = self::get_thumb($filePath, $size);
+//                $thumbName = self::get_thumb($fileName, $size);
+//                $thumbs[$size['width']] = $thumbName;
+//                if (isset($size['height'])) {
+//                    Image::make($path)
+//                        ->fit($size['width'], $size['height'])
+//                        ->save($thumbPath, 100);
+//                } else {
+//                    Image::make($path)
+//                        ->resize($size['width'], null, function ($constraint) {
+//                            $constraint->aspectRatio();
+//                        })
+//                        ->save($thumbPath, 100);
+//                }
+//            } catch (NotReadableException $e) {
+//            }
+//        }
+//        return $thumbs;
+//    }
 
     public function jcphp01_generate_webp_image($file, $outputFile, $compression_quality = 80)
     {
@@ -95,10 +95,10 @@ class MediaService
 
     public function classify($file, $datasetId)
     {
-        if ($datasetId) {
-            $thumbSizes = DataSet::find($datasetId)->api->thumb_sizes;
-        }
-        $thumbSizes = $thumbSizes ?? [['width' => 90, 'height' => 90]];
+//        if ($datasetId) {
+//            $thumbSizes = DataSet::find($datasetId)->api->thumb_sizes;
+//        }
+//        $thumbSizes = $thumbSizes ?? [['width' => 90, 'height' => 90]];
         $convertStatus = true;
         $extension = $file->extension();
         switch ($file->getMimeType()) {
@@ -107,10 +107,10 @@ class MediaService
                 $fileName = 'media/videos/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                 $filePath = storage_path() . "/app/public";
                 $file->move($filePath . '/media/videos', $fileName);
-                $thumbs = [];
-                foreach ($thumbSizes as $size) {
-                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
-                }
+//                $thumbs = [];
+//                foreach ($thumbSizes as $size) {
+//                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
+//                }
                 break;
             case (preg_match('#image#', $file->getMimeType()) ? true : false):
                 $fileType = 'image';
@@ -118,7 +118,7 @@ class MediaService
                 $fileName = 'media/images/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.wepb';
                 $filePath = storage_path() . "/app/public/$fileName";
                 $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
-                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
+//                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
                 if ($convertStatus == 'NOT_SUPPORT') {
                     $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                     $filePath = storage_path() . "/app/public";
@@ -134,10 +134,10 @@ class MediaService
                 $file->move($filePath . '/media/files', $fileName);
 //                $fileThumb = 'api/media?text=' . urlencode($file->getClientOriginalName());
 //                $thumbs = handleThumbs($thumbSizes, $fileThumb, $fileType);
-                $thumbs = [];
-                foreach ($thumbSizes as $size) {
-                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
-                }
+//                $thumbs = [];
+//                foreach ($thumbSizes as $size) {
+//                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($file->getClientOriginalName());
+//                }
                 break;
         }
         $result = [
@@ -145,14 +145,14 @@ class MediaService
             'name_upload' => $file->getClientOriginalName(),
             'file_type'   => @$fileType,
             'file_name'   => @$fileName,
-            'thumbs'      => @$thumbs,
+//            'thumbs'      => @$thumbs,
             'user_id'     => Auth::id(),
             'stage'       => 'first upload',
         ];
         return [$convertStatus, $result];
     }
 
-    public function getViaUrl($fileUrl, $thumbSizes)
+    public function getViaUrl($fileUrl)//, $thumbSizes)
     {
         $convertStatus = true;
         $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
@@ -173,10 +173,10 @@ class MediaService
 //                $file->move($filePath . '/media/videos', $fileName);
                 file_put_contents($filePath . '/media/videos/' . $fileName, $contents);
 //                $fileThumb = 'api/media?text=' . urlencode($originalName);
-                $thumbs = [];
-                foreach ($thumbSizes as $size) {
-                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
-                }
+//                $thumbs = [];
+//                foreach ($thumbSizes as $size) {
+//                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
+//                }
                 break;
             case (preg_match('#image#', $mime_type) ? true : false):
                 $fileType = 'image';
@@ -187,7 +187,7 @@ class MediaService
                 $convertStatus = $this->jcphp01_generate_webp_image($path, $filePath);
 //                $this->thumb_image($path, $filePath);
 //                $fileThumb = $this->get_thumb($fileName);
-                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
+//                $thumbs = $this->convertThumbs($path, $filePath, $fileName, $thumbSizes);
                 if ($convertStatus == 'NOT_SUPPORT') {
                     $fileName = 'media/images_NOT_SUPPORT/' . date('Y-m-d') . '-' . time() . '-' . rand() . '-' . Auth::id() . '.' . $extension;
                     $filePath = storage_path() . "/app/public";
@@ -203,10 +203,10 @@ class MediaService
 //                $file->move($filePath . '/media/files', $fileName);
                 file_put_contents($filePath . '/media/files/' . $fileName, $contents);
 //                $fileThumb = 'api/media?text=' . urlencode($originalName);
-                $thumbs = [];
-                foreach ($thumbSizes as $size) {
-                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
-                }
+//                $thumbs = [];
+//                foreach ($thumbSizes as $size) {
+//                    $thumbs[$size['width']] = 'api/media?text=' . urlencode($originalName);
+//                }
                 break;
         }
         $result = [
@@ -214,7 +214,7 @@ class MediaService
             'file_type'   => @$fileType,
             'file_name'   => @$fileName,
 //            'file_thumb'  => @$fileThumb,
-            'thumbs'      => @$thumbs,
+//            'thumbs'      => @$thumbs,
             'user_id'     => Auth::id(),
             'stage'       => 'first upload',
         ];

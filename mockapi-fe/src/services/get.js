@@ -14,15 +14,14 @@ export const getURLParams = () => {
 // };
 
 export const getFirstThumb = (medium) => {
-    try {
+    return '/assets/images/default.jpeg'
+
+    /*try {
         const {file, thumb_files} = medium;
         if (Object.keys(thumb_files).length)
             return thumb_files[Object.keys(thumb_files)[0]];
         return file;
     } catch (e) {
         return '/assets/images/default.jpeg'
-    }
-    // if (medium)
-    //     return thumb_image
-    // return '/assets/images/default.jpeg'
+    }*/
 };

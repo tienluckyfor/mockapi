@@ -14,7 +14,6 @@ const CreateApiForm = () => {
             layout={`vertical`}
         >
             <FormApi/>
-
             <div className="flex items-center justify-end mt-3 ">
                 <Button
                     onClick={(e) => dispatch(setApiMerge(`cApi`, {isOpen: false}))}
@@ -31,7 +30,7 @@ const CreateApiForm = () => {
                 </Button>
             </div>
         </Form>
-    );
-};
+    )
+}
 
 export default CreateApiForm
