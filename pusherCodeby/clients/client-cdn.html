@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://cdn.socket.io/4.3.1/socket.io.min.js"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
+<script type="text/javascript">
+    // var socket = io.connect('http://localhost:3003', { transports : ['websocket'] });
+    // var socket = io('http://localhost:3003', { transports : ['polling'] });
+    var socket = io('http://localhost:3003', {
+        extraHeaders: {
+            'authorization': 'data.valid_jwt.token'
+        },
+        // transportOptions: {
+        //     polling: {
+        //         extraHeaders: {
+        //             'x-auth-token': 'data.valid_jwt.token'
+        //         }
+        //     }
+        // },
+        // 'force new connection': true
+    });
+    const handleErrors = (err) => {
+        console.log('err', err)
+        console.log(err instanceof Error); // true
+        console.log(err.message); // not authorized
+        console.log(err.data); // { content: "Please retry later" }
+    }
+    socket.on('update', data => console.log(data));
+
+    socket.on('connect_error', err => handleErrors(err));
+    socket.on('connect_failed', err => handleErrors(err));
+    socket.on('disconnect', err => handleErrors(err));
+    var room = "room_1";
+
+    // socket.on("connect_error", err => {
+    // });
+
+    socket.on('connect', function () {
+        // Connected, let's sign-up for to receive messages for this room
+        const a = socket.emit('room', room);
+        console.log('a', a)
+    });
+    socket.on('connect_failed', function () {
+        console.log('Connection Failed');
+    });
+    socket.on('message', function (data) {
+        console.log('Incoming message:', data);
+    });
+    socket.onAny((event, ...args) => {
+        console.log("onAny", {event, args});
+    });
+    /*socket.on('connect', function() {
+        console.log('Successful connected to server');
+        console.log('Your id number is: ' + socket.id);
+
+        socket.emit("update item", "1", { name: "updated" }, (response) => {
+            console.log(response.status); // ok
+        });
+    });
+    socket.on('join', (room) => {
+        console.log(`Socket ${socket.id} joining ${room}`);
+        socket.join(room);
+    });
+    socket.emit("update item", "2", { name: "updated" }, (response) => {
+        console.log(response.status); // ok
+    });
+
+    socket.join('game').onAny(function (data) {
+        console.log("in game onAny", {data});
+    });
+
+    socket.onAny(function (data) {
+        console.log("onAny", {data});
+    });
+
+    socket.onAny((event, ...args) => {
+        console.log("onAny", {event, args});
+    });*/
+
+</script>

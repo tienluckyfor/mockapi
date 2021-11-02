@@ -11,8 +11,24 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Pusher\Pusher;
 
 
+Route::get('/test_pusher', function () {
+
+    $pusher = new Pusher('app-key', 'app-secret', 'app-id', [
+        'host' => '159.223.87.219',
+//        'host' => 'host.docker.internal',
+        'port' => 6001,
+        'scheme' => 'http',
+        'encrypted' => true,
+        'useTLS' => false,
+    ]);
+    $payload['message'] = 'PPE realtime';
+
+    $trigger = $pusher->trigger('chat-room', 'message', $payload);
+    dd($trigger);
+});
 Route::get('/', function () {
 
 //    $resource = \App\Models\Resource::find(1);
