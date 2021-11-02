@@ -6,10 +6,9 @@
     "start": "node ./bin/www",
     "nodemon-start": "nodemon ./bin/www",
     "local": "cross-env NODE_ENV=local nodemon ./bin/www",
-    "local-socket": "cross-env NODE_ENV=local nodemon appSocket.js",
-    "dev-socket": "cross-env NODE_ENV=dev nodemon appSocket.js",
-    "dev": "cross-env NODE_ENV=dev node ./bin/www",
-    "fdev": "forever stopall; forever start /var/www/mockapi/apiCodeby-express/bin/www"
+    "local-socket": "cross-env NODE_ENV=local nodemon ./appSocket.js",
+    "dev-socket": "cross-env NODE_ENV=dev nodemon ./appSocket.js",
+    "dev": "cross-env NODE_ENV=dev node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
