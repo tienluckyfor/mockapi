@@ -46,10 +46,10 @@
   },
   "scripts": {
     "start": "PORT=3011 react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=4096 build",
     "after-build": "rm -rf after_build; mv build after_build",
     "build:local": "env-cmd -f .env.local npm run-script build; npm run-script after-build",
-    "build:dev": "env-cmd -f .env.dev npm run-script --max_old_space_size=4096 build; npm run-script after-build",
+    "build:dev": "env-cmd -f .env.dev npm run-script build; npm run-script after-build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
