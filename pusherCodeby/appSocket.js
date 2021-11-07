@@ -57,9 +57,14 @@ io.sockets.on('connection', function (socket) {
     socket.on('room', function (room) {
         socket.join(room);
     });
+    // socket.on('leave', function (room) {
+    //     socket.leave(room);
+    // });
     socket.on('emitRoom', function ({event, data, room}) {
-        console.log('{event, data, room}', {event, data, room})
-        io.sockets.in(room).emit(event, data)
+        // console.log('{event, data, room}', {event, data, room})
+        // io.sockets.in(room).emit(event, data)
+        socket.broadcast.to(room).emit(event, data)
+        socket.leave(room);
     })
     socket.on('emit', function ({event, data}) {
         io.sockets.emit(event, data)
@@ -73,9 +78,11 @@ io.sockets.on('connection', function (socket) {
 io.of("/").adapter.on("create-room", (room) => {
     console.log(`room ${room} was created`);
 });
-
 io.of("/").adapter.on("join-room", (room, id) => {
     console.log(`socket ${id} has joined room ${room}`);
+});
+io.of("/").adapter.on("leave-room", (room, id) => {
+    console.log(`socket ${id} has leave room ${room}`);
 });
 
 httpServer.listen(config.PORT, () => {
