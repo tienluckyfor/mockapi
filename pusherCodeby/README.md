@@ -6,7 +6,10 @@ curl "https://be-mockapi.codeby.com/pusherCodeby/socket.io/?EIO=4&transport=poll
 # forever
 sudo kill -9 $(sudo lsof -t -i:3003)
 sudo kill -9 `sudo lsof -t -i:3003`;
-cd /var/www/mockapi/pusherCodeby;forever restartall;forever start -c "npm run dev-socket" ./
+- update
+cd /var/www/mockapi/pusherCodeby; git pull; forever restartall;
+- new
+cd /var/www/mockapi/pusherCodeby; git pull; sudo kill -9 `sudo lsof -t -i:3003`; forever start -c "npm run dev-socket" ./
 
 # nginx 
 vi /etc/nginx/sites-enabled/be-mockapi.codeby.com.conf
