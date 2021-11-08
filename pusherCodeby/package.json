@@ -7,7 +7,7 @@
     "nodemon-start": "nodemon ./bin/www",
     "local": "cross-env NODE_ENV=local nodemon ./bin/www",
     "local-socket": "cross-env NODE_ENV=local nodemon ./appSocket.js",
-    "dev-socket": "cross-env NODE_ENV=dev nodemon ./appSocket.js",
+    "dev-socket": "sudo kill -9 `sudo lsof -t -i:3003`;cross-env NODE_ENV=dev nodemon ./appSocket.js",
     "dev": "cross-env NODE_ENV=dev node ./bin/www"
   },
   "dependencies": {
