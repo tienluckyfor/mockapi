@@ -171,7 +171,7 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
                                     if (medium.file_type === 'image')
                                         return <Image
                                             key={key}
-                                            preview={{src: medium.file, mask: <EyeOutlined/>}}
+                                            preview={{src: getFirstThumb(medium), mask: <EyeOutlined/>}}
                                             height={30}
                                             width={30}
                                             style={{objectFit: "cover"}}

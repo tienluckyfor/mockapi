@@ -46,7 +46,7 @@ export function setCommonMerge(key, item) {
 
 // checkbox
 export function commonOnCheck(name, plainOptions, listValue) {
-    console.log('{name, plainOptions, listValue}', {name, plainOptions, listValue})
+    // console.log('{name, plainOptions, listValue}', {name, plainOptions, listValue})
     return async (dispatch, getState) => {
         // const {plainOptions, checkedList} = getState().commons
         dispatch(setMerge({checkedList: {[name]: listValue}}))

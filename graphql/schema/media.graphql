@@ -28,6 +28,7 @@ type Medium{
     updated_at: DateTime!
     image: String!
     file: String!
+    thumb:String
 #    thumb_files: JSON
 }
 #

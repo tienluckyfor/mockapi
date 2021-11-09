@@ -1,6 +1,6 @@
 import {Breadcrumb, Button, Select, Space} from 'antd';
 import {PlusOutlined, CloseOutlined, InfoOutlined, FormOutlined, MenuOutlined} from '@ant-design/icons';
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useHistory, } from "react-router-dom";
 import InfoDatasetModal from "pages/datasets/InfoDatasetModal";
@@ -40,16 +40,32 @@ const HeaderRallydata = () => {
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD)) return;
-        history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
-    }, [dataset_id_RD, resource_id_RD, history])
+        // setTimeout(()=>{
+            history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
+        // }, 1000)
+        // historyReplaceBack()
+    }, [dataset_id_RD, resource_id_RD, ])
+
+    // const historyReplaceBack = useCallback(() => {
+    //
+    //         history.push(`/RallydataPage?dataset_id_RD=${dataset_id_RD}&resource_id_RD=${resource_id_RD}`)
+    //         // console.log('dataset_id_RD', dataset_id_RD)
+    //         // console.log('resource_id_RD', resource_id_RD)
+    //     // history.replace({
+    //     //     pathname: USER_HOME,
+    //     // });
+    // }, [dataset_id_RD, resource_id_RD, history]);
 
     const url = getURLParams()
     useEffect(() => {
+        if(dataset_id_RD && resource_id_RD) return;
+        console.log('url', url)
+        console.log('dataset_id_RD', dataset_id_RD)
         dispatch(setRallydata({
             dataset_id_RD: url.dataset_id_RD,
             resource_id_RD: url.resource_id_RD,
         }))
-    }, [dispatch, url])
+    }, [url])
 
     const RenderBreadcrumb = () => {
 

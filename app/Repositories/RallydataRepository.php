@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\DataSet;
 use App\Models\Media;
 use App\Models\RallyData;
 use App\Services\ArrService;
@@ -25,7 +24,7 @@ class RallydataRepository
         ResourceRepository $resourceRepository,
         MediaService $media_service
     ) {
-        $this->arr_service=$arrService;
+        $this->arr_service = $arrService;
         $this->resource_repository = $resourceRepository;
         $this->media_service = $media_service;
     }
@@ -352,6 +351,7 @@ class RallydataRepository
     {
         $file = asset("storage/filldata-media/{$mediaId}.jpg");
         $fileType = 'image';
+        $thumb = $file;
 //        $thumbs = [];
 //        foreach ($thumbSizes as $size) {
 //            $thumbs[$size['width']] = $this->media_service->get_thumb($file, $size);
@@ -360,13 +360,15 @@ class RallydataRepository
         if ($mediaId > 0 && $medium) {
             $file = $medium->file;
             $fileType = $medium->file_type;
+            $thumb = $medium->thumb;
 //            $thumbs = $medium->thumb_files;
         }
 
         $item = [
-            'id'          => $mediaId,
-            'file_type'   => $fileType,
-            'file'        => $file,
+            'id'        => $mediaId,
+            'file_type' => $fileType,
+            'file'      => $file,
+            'thumb'     => $thumb,
 //            'thumb_files' => $thumbs,
         ];
         return $item;

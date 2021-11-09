@@ -14,7 +14,14 @@ export const getURLParams = () => {
 // };
 
 export const getFirstThumb = (medium) => {
-    return '/assets/images/default.jpeg'
+    console.log('medium', medium)
+    try {
+        return medium.thumb;
+    } catch (e) {
+        return '/assets/images/default.jpeg'
+    }
+    // console.log('medium', medium)
+    // return '/assets/images/default.jpeg'
 
     /*try {
         const {file, thumb_files} = medium;

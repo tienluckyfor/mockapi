@@ -101,6 +101,7 @@ const CreateRallydataForm = ({fields}) => {
                     error('The JSON field is not a valid format!')
                     return
                 }
+                console.log('vals', vals)
                 dispatch(createRallydata(vals))
             }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"

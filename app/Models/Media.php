@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\URL;
 
 class Media extends Model
 {
@@ -34,6 +33,14 @@ class Media extends Model
     public function getFileAttribute()
     {
         return asset('storage') . '/' . $this->file_name;
+    }
+
+    public function getThumbAttribute()
+    {
+        if ($this->file_type == 'image') {
+            return $this->file;
+        }
+        return url('') . '/api/media?text=' . $this->name_upload;
     }
 
     /*public function getThumbFilesAttribute()

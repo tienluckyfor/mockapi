@@ -20,9 +20,10 @@ export const getRallyData = (mRallydataData, resource_id) => {
 }
 
 export const handleValues = (fields, values) => {
-    let data = {}
-    let errCount = 0
-    (Object.entries(values.data) ?? []).forEach((item, key) => {
+    let data = {};
+    let errCount = 0;
+    (Object.entries(values.data) ?? []).forEach(([key, item]) => {
+        // console.log('item, key', item, key)
         // Object.entries(values.data).map(([key, item], i) => {
         let field = fields.filter((item1) => item1.name == key)
         field = field[0] ? field[0] : {}
