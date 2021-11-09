@@ -123,6 +123,7 @@ class RallydataRepository
                     'data'        => json_encode($data),
                     'created_at'  => Carbon::now()->toDateTimeString(),
                     'updated_at'  => Carbon::now()->toDateTimeString(),
+                    'is_show'     => true,
                 ];
                 return $payload;
             }, $rallyDatas);
@@ -349,7 +350,7 @@ class RallydataRepository
      */
     protected function _handleMediumItem($mediaId, $media)//, $thumbSizes)
     {
-        $file = asset("storage/filldata-media/{$mediaId}.jpg");
+        $file = asset('storage') . "/filldata-media/{$mediaId}.jpg";
         $fileType = 'image';
         $thumb = $file;
 //        $thumbs = [];

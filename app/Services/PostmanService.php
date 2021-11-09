@@ -188,10 +188,6 @@ class PostmanService
                 ];
             }
 
-            $data[] = [
-                "name" => $resource['name'] . '/auth',
-                "item" => $items,
-            ];
 // nFieldStr
             $nFields = array_map(function ($field) {
                 return $field['name'];
