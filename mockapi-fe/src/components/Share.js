@@ -110,7 +110,7 @@ export const Share = ({shareable_type, shareable_id, data}) => {
     }
 
     const RenderList = () => {
-        console.log('lShare?.data?.shares', lShare?.data?.shares)
+        // console.log('lShare?.data?.shares', lShare?.data?.shares)
         return (
             <List
                 loading={lShare.isLoading}

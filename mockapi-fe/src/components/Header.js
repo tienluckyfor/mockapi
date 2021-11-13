@@ -146,7 +146,7 @@ const Header = ({page}) => {
     }, [lApi, cApi, lResource, cResource, lDataset, cDataset, qMe])
 
     const onAdd = () => {
-        console.log('page', page)
+        // console.log('page', page)
         switch (page) {
             case 'ApiListPage':
                 dispatch(setApiMerge(`cApi`, {isOpen: !cApi?.isOpen}))

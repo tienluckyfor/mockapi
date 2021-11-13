@@ -26,7 +26,7 @@ const CreateRallydataForm = ({fields}) => {
             dispatch(setCommon({checkedList: {}}))
             dispatch(setRallydata({cbRallydata: {}}))
         }
-    }, [cRallydata, dispatch])
+    }, [cRallydata])
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
@@ -36,8 +36,7 @@ const CreateRallydataForm = ({fields}) => {
             "resource_id": resource_id_RD,
             "data": {}
         };
-        (fields ?? []).forEach((field) => {
-            // (fields ?? []).map((field) => {
+        (fields ?? []).map((field) => {
             const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             if (iType === `Date`) {
@@ -45,13 +44,12 @@ const CreateRallydataForm = ({fields}) => {
             }
         })
         form.setFieldsValue(fieldsValue)
-    }, [dataset_id_RD, resource_id_RD, fields, form])
-    const [childResources, setChildResources] = useState([])
+    }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
         // media
         const fmedia = (fields ?? []).filter((field) => {
-            const {type, fakerjs} = field
+            const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             return iType === "Media"
         })
@@ -84,12 +82,13 @@ const CreateRallydataForm = ({fields}) => {
             })
         }
         form.setFieldsValue(fieldsValue)
-    }, [checkedList, mlMedia, dispatch, fields, form, mRallydataData, childResources])
+    }, [checkedList, mlMedia])
 
+    const [childResources, setChildResources] = useState([])
     useEffect(() => {
         const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
-    }, [deRallydata, resource_id_RD])
+    }, [deRallydata])
 
     return (
         <Form
@@ -101,7 +100,6 @@ const CreateRallydataForm = ({fields}) => {
                     error('The JSON field is not a valid format!')
                     return
                 }
-                console.log('vals', vals)
                 dispatch(createRallydata(vals))
             }}
             className="border border-indigo-200 p-4 mt-4 rounded-sm"

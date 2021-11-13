@@ -59,8 +59,6 @@ const HeaderRallydata = () => {
     const url = getURLParams()
     useEffect(() => {
         if(dataset_id_RD && resource_id_RD) return;
-        console.log('url', url)
-        console.log('dataset_id_RD', dataset_id_RD)
         dispatch(setRallydata({
             dataset_id_RD: url.dataset_id_RD,
             resource_id_RD: url.resource_id_RD,

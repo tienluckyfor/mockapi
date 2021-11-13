@@ -1,4 +1,4 @@
-import {useEffect, useState,} from 'react'
+import React, {useEffect, useState,} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {rallydatasSelector, setFieldsRallydata, myRallydataListSort,} from "slices/rallydatas";
 import {Loading} from "components";
@@ -29,7 +29,6 @@ const RallydataPage = () => {
             dispatch(myRallydataListSort(false))
         }
     }, [mlDRRallydata, dispatch, dataset_id_RD, resource_id_RD])
-
     const [seoTitle, setSeoTitle] = useState()
     useEffect(() => {
         const datasets = (qMe?.data?.datasets ?? []).filter((item) => item.id == dataset_id_RD)
@@ -47,7 +46,7 @@ const RallydataPage = () => {
             }
             {!(mlDRRallydata.isLoading && mlDRRallydata.data) &&
             <>
-                {cRallydata['isOpen'] &&
+                {cRallydata['isOpen'] && fieldsRallydata[resource_id_RD] &&
                 <CreateRallydataForm fields={fieldsRallydata[resource_id_RD]}/>
                 }
                 {eRallydata.isOpen &&
@@ -66,3 +65,4 @@ const RallydataPage = () => {
     )
 }
 export default RallydataPage
+// export default React.memo(RallydataPage)

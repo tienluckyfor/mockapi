@@ -13,13 +13,13 @@ export const ThumbChecked = ({name}) => {
 
     useEffect(() => {
         function onMediaUpload(e) {
-            console.log('FormRallydata onMediaUpload')
+            // console.log('FormRallydata onMediaUpload')
             let files = [];
             for (let item of e.clipboardData.items) {
                 if (item.kind === 'file')
                     files.push(item.getAsFile())
             }
-            console.log('4')
+            // console.log('4')
             dispatch(setMediaMerge('pMedia', {files}))
             // dispatch(uploadMediaPaste(mMedia.name))
         }

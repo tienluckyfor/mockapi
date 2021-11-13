@@ -24,7 +24,7 @@ const Handle = SortableHandle(({ tabIndex }) => (
 
 const SortableItem = SortableElement(props => {
     const { value: item } = props;
-    console.log(props);
+    // console.log(props);
     return (
         <div>
             <div className="content">

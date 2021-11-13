@@ -1,3 +1,4 @@
+import React from 'react'
 import {Button, Checkbox, Dropdown, Image, Menu, Popconfirm, Space, Tooltip} from "antd";
 import {EyeOutlined, PushpinOutlined, EyeInvisibleOutlined} from '@ant-design/icons';
 import {commonsSelector, handleMenuClick, handleVisibleChange, setCommonMerge} from "slices/commons";
@@ -236,4 +237,4 @@ const RenderTableRallydataSort = ({mlDRRallydata, fieldsRallydata, typeShow = nu
     )
 }
 
-export default RenderTableRallydataSort
+export default React.memo(RenderTableRallydataSort)

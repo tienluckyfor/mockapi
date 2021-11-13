@@ -6,7 +6,6 @@ import {rallydatasSelector, setRallydataMerge,} from "slices/rallydatas";
 import {mediaSelector, } from "slices/media";
 import RenderTableRallydata from "./RenderTableRallydata";
 import {ControlledAceEditor, ReactQuillCustom, ThumbChecked} from "components";
-const uuid = require('react-uuid')
 
 const {Option} = Select;
 
@@ -28,7 +27,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
             </Space>
             <Form.List name="data">
                 {(afields, {add, remove}) => (
-                    // (fields ?? []).forEach((field) => {
                     (fields ?? []).map((field) => {
                         const {name, type, fakerjs} = field
                         if (type === 'Resource') return;
@@ -38,16 +36,15 @@ const FormRallydata = ({fields, from, childResources,}) => {
                             case `Array`:
                                 return (
                                     <Form.Item
-                                        key={uuid()}
                                         name={name}
                                         label={<span className="capitalize">{name}</span>}
                                         initialValue={"{\n\t\n}"}
                                     >
                                         <ControlledAceEditor/>
                                     </Form.Item>)
+                                break;
                             case `LongText`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                     initialValue=""
@@ -57,56 +54,57 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                         onChange={(html) => { }}
                                     />
                                 </Form.Item>)
+                                break;
                             case `Media`:
                                 const fName = `${from}-${name}`
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <ThumbChecked name={fName}/>
                                 </Form.Item>)
+                                break;
                             case `Date`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <DatePicker/>
                                 </Form.Item>)
+                                break;
                             case `String`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Input/>
                                 </Form.Item>)
+                                break;
                             case `Text`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Input.TextArea/>
                                 </Form.Item>)
+                                break;
                             case `Number`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <InputNumber/>
                                 </Form.Item>)
+                                break;
                             case `Boolean`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     valuePropName="checked"
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Switch/>
                                 </Form.Item>)
+                                break;
                             case `Select`:
                                 let selectKeys = (rallies ?? [])
                                     .map((rally) => rally?.data && rally?.data[name] ? rally?.data[name] : false)
@@ -114,7 +112,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                     .flat()
                                 selectKeys = [...new Set(selectKeys)];
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
@@ -124,15 +121,15 @@ const FormRallydata = ({fields, from, childResources,}) => {
                                         )}
                                     </Select>
                                 </Form.Item>)
+                                break;
                             case `Authentication`:
                                 return (<Form.Item
-                                    key={uuid()}
                                     name={name}
                                     label={<span className="capitalize">{name}</span>}
                                 >
                                     <Input/>
                                 </Form.Item>)
-                            default:break;
+                                break;
                         }
                     })
                 )}
@@ -143,7 +140,6 @@ const FormRallydata = ({fields, from, childResources,}) => {
                         const {name, id,} = resource
                         const fName = `${from}-${name}`
                         return (<Form.Item
-                            key={uuid()}
                             name={name}
                             label={<span className="capitalize">{name}</span>}
                         >

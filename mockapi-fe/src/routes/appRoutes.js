@@ -9,6 +9,7 @@ const BackupPage = React.lazy(() => import('pages/users/BackupPage'))
 const SidebarPage = React.lazy(() => import('pages/SidebarPage'))
 const TestPage = React.lazy(() => import('pages/test/TestPage'))
 const TestUpload = React.lazy(() => import('pages/test/TestUpload'))
+const TestFormPage = React.lazy(() => import('pages/test/TestFormPage'))
 
 const routes = [
     { path: '/RallydataPage', component: RallydataPage },
@@ -21,6 +22,7 @@ const routes = [
     { path: '/DragSortingTable', component: DragSortingTable },
     { path: '/TestPage', component: TestPage },
     { path: '/TestUpload', component: TestUpload },
+    { path: '/TestFormPage', component: TestFormPage },
 ]
 
 export default routes

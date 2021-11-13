@@ -27,7 +27,7 @@ const QuoteList = ({ quotes, setData }) => {
     return (
         <Form.List name="array" initialValue={quotes}>
             {(fields, { add, move }) => {
-                console.log("f", fields);
+                // console.log("f", fields);
                 return (
                     <Form.Item>
                         <ReactSortable

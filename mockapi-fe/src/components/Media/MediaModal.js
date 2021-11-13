@@ -1,3 +1,4 @@
+import React from 'react'
 import {Modal, Input, Space, Image, Radio, Checkbox, Select, Button, List, Spin, Alert, Tooltip} from 'antd';
 import {BorderInnerOutlined, UnorderedListOutlined, DeleteOutlined, EyeOutlined, UploadOutlined}
     from '@ant-design/icons';
@@ -64,7 +65,7 @@ export const MediaModal = () => {
                 if (item.kind === 'file')
                     files.push(item.getAsFile())
             }
-            console.log('3')
+            // console.log('3')
             dispatch(setMediaMerge('pMedia', {files}))
             dispatch(uploadMediaPaste(mMedia.name))
         }
@@ -281,4 +282,4 @@ export const MediaModal = () => {
     </Modal>)
 }
 
-export default MediaModal
+export default React.memo(MediaModal)

@@ -25,8 +25,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         if (eRallydata.firstCount == 0) {
             const rally = eRallydata.rallydata
             let fieldsValue = {id: rally.originalId, data: {}, is_show: rally._is_show, is_pin: rally._is_pin,};
-            // (fields ?? []).map((field) => {
-            (fields ?? []).forEach((field) => {
+            (fields ?? []).map((field) => {
                 const {name, type, fakerjs} = field
                 const iType = getItype(type, fakerjs)
                 fieldsValue.data[name] = rally[name]
@@ -52,7 +51,7 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
         if (!eRallydata.isOpen) {
             form.resetFields();
         }
-    }, [eRallydata, dispatch, form, fields])
+    }, [eRallydata])
 
     useEffect(() => {
         if (!(dataset_id_RD && resource_id_RD && fields)) return;
@@ -62,14 +61,12 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             "data": {}
         };
         form.setFieldsValue(fieldsValue)
-    }, [dataset_id_RD, resource_id_RD, fields, form])
-
-    const [childResources, setChildResources] = useState([])
+    }, [dataset_id_RD, resource_id_RD, fields])
 
     useEffect(() => {
         // media
         const fmedia = (fields ?? []).filter((field) => {
-            const {type, fakerjs} = field
+            const {name, type, fakerjs} = field
             const iType = getItype(type, fakerjs)
             return iType === "Media"
         })
@@ -101,12 +98,13 @@ const EditRallydataForm = ({fields, visible, onCreate, onCancel}) => {
             })
         }
         form.setFieldsValue(fieldsValue)
-    }, [checkedList, mlMedia, dispatch, fields, form, mRallydataData, childResources ])
+    }, [checkedList, mlMedia])
 
+    const [childResources, setChildResources] = useState([])
     useEffect(() => {
         const resources = (deRallydata?.data?.resources ?? []).filter((item) => (item?.parents ?? []).indexOf(parseInt(resource_id_RD)) !== -1)
         setChildResources(resources)
-    }, [deRallydata, resource_id_RD])
+    }, [deRallydata])
 
     return (
         <Modal

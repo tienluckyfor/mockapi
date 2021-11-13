@@ -14,7 +14,7 @@ export const getURLParams = () => {
 // };
 
 export const getFirstThumb = (medium) => {
-    console.log('medium', medium)
+    // console.log('medium', medium)
     try {
         return medium.thumb;
     } catch (e) {
