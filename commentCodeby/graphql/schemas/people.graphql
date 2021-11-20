@@ -16,6 +16,7 @@ type ListPeople{
 type People{
     id: ID
     unique_id: ID
+    special_id: ID
     profile_url: String
     name: String
     avatar: String
