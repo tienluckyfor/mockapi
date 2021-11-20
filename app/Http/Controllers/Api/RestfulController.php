@@ -114,8 +114,8 @@ class RestfulController extends Controller
         $r = $request->input('_restful');
         $resource = $r['resource'];//$this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
         $rallydata = $this->rallydata_repository->findByDataId($r['dataset_id'], $resource['id'], $dataId);
-        dd($rallydata);
-        $isDelete = RallyData::where('id', $rallydata['id'])
+//        $isDelete = false;
+        $isDelete = RallyData::where('id', @$rallydata['id'])
             ->delete();
         return response()->json([
             'status' => (bool)$isDelete,
