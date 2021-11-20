@@ -100,7 +100,7 @@ class RestfulController extends Controller
             ]);
         }
         $data = array_merge($rallydata['data'], $newData);
-        dd($newData, $data, $rallydata);
+        dd($dataId, $newData, $data, $rallydata);
         $isUpdate = RallyData::where('id', $rallydata['id'])
             ->update([
                 'data' => $data,
