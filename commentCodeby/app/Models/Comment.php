@@ -17,6 +17,7 @@ class Comment extends Model
         'app_id',
         'people_id',
         'unique_id',
+        'type',
         'content',
         'contents',
     ];

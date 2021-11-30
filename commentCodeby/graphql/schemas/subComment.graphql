@@ -16,6 +16,7 @@ type ListSubComment{
 type SubComment{
     id: ID
     people: People
+    type:String
     content:String
     comment:Comment
     created_at: DateTime!
@@ -29,6 +30,7 @@ input UpsertSubCommentInput{
     app_id: ID!
     comment_id: ID!
     unique_id: ID
+    type: String!
     content: String!
     people:JSON!
 }

@@ -12,6 +12,7 @@ class SubComment extends Model
     protected $fillable = [
         'comment_id',
         'people_id',
+        'type',
         'content',
         'contents',
     ];

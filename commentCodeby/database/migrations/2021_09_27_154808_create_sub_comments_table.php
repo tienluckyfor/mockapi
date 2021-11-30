@@ -17,6 +17,7 @@ class CreateSubCommentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('comment_id')->nullable();
             $table->unsignedBigInteger('people_id')->nullable();
+            $table->string('type')->nullable();
             $table->string('content')->nullable();
             $table->json('contents')->nullable();
             $table->timestamps();
