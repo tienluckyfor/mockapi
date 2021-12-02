@@ -55,12 +55,12 @@ export const ParentAmountData = ({resource}) => {
     }, [uMedia, dispatch])
 
 
-    const UploadFile = ({children, ...props}) => {
+    const UploadFile = ({children, resource_id, ...props}) => {
         const customRequest = async (options) => {
             const formData = new FormData()
             formData.append('file', options.file)
             formData.append('dataset_id', eDataset?.dataset?.id)
-            formData.append('resource_id', resource_id_RD)
+            formData.append('resource_id', resource_id)
             formData.append('source', 'ant-upload')
             formData.append('uid', options.file.uid)
             dispatch(uploadFile(formData));
@@ -86,6 +86,9 @@ export const ParentAmountData = ({resource}) => {
 
     return (
         <section className={`flex items-center space-x-3 `}>
+            {/*<pre className="text-sm">
+                {JSON.stringify(resource, null, '  ')}
+            </pre>*/}
             <Popover content={content} title={`Fields (${resource.fields.length})`}>
                 <div>
                     <p className={`w-36 truncate`}>{resource.name}</p>
@@ -124,7 +127,7 @@ export const ParentAmountData = ({resource}) => {
                             // window.open(url, '_blank')
                             window.location.assign(url)
                         }}/>
-                <UploadFile accept=".csv">
+                <UploadFile accept=".csv" resource_id={resource.id}>
                     <Button type="dashed" danger icon={<UploadOutlined/>}
                             loading={uMedia.isLoading}/>
                 </UploadFile>

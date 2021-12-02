@@ -139,7 +139,13 @@ class RallyBackupController extends Controller
             ->getByDatasetIdResourceId($datasetId, $resourceId);
         $resource = $this->resource_repository
             ->findByid($resourceId);
+//        dd($resource);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$resource', [$resource]);
+        
         [$cols, $fields] = $this->_getColsFields($resource);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$data[0]', [$data[0]]);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$cols', [$cols]);
+
         if ($data[0] !== $cols) {
             throw ValidationException::withMessages([
                 'file' => ['Fields does\'nt match'],
