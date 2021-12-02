@@ -36,28 +36,4 @@ class LikeMutations
         return $like;
     }
 
-//    public function deleteLike($_, array $args)
-//    {
-//        if (isset($args['ids'])) {
-//            return Like::whereIn('id', $args['ids'])
-//                ->delete();
-//        }
-//        return Like::where('id', $args['id'])
-//            ->delete();
-//    }
-//
-//    public function duplicateLike($_, array $args)
-//    {
-//        $like = Like::find($args['id']);
-//        if (!$like) {
-//            throw new Error('Like not found');
-//        }
-//        $like = $like->toArray();
-//        $like['name'] = $this->string_service->duplicate($like['name']);
-//        if (Like::create($like)) {
-//            return true;
-//        }
-//        return false;
-//    }
-
 }

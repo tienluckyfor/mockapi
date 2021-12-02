@@ -1,0 +1,30 @@
+extend type Mutation {
+    upsert_chat(input: UpsertChatInput! @spread): Chat @field(resolver: "App\\GraphQL\\Mutations\\ChatMutations@upsertChat")
+    delete_chat(input: DeleteChatInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\ChatMutations@deleteChat")
+    duplicate_chat(input: DeleteChatInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\ChatMutations@duplicateChat")
+}
+
+extend type Query {
+#    unread_comment_chat(app_id: ID!, unique:JSON!, people:JSON!): ListChat @field(resolver: "App\\GraphQL\\Queries\\ChatQueries@unreadCommentChat")
+    detail_chat(app_id: ID!, unique:JSON!, people:JSON!): Chat @field(resolver: "App\\GraphQL\\Queries\\ChatQueries@detailChat")
+}
+
+type ListChat{
+    data: [Chat],
+    pageInfo: JSON
+}
+type Chat{
+    id: ID
+    count_read_comment: Int
+}
+input UpsertChatInput{
+    id: ID
+    app_id: ID!
+    read_comment_id: Int
+    people:JSON!
+    unique:JSON!
+}
+input DeleteChatInput{
+    id: ID
+    ids: [ID]
+}
