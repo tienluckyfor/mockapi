@@ -156,7 +156,7 @@ export function uploadMediaPaste(name) {
         const {dataset_id_RD,} = getState().rallydatas
         const {checkedList} = getState().commons
 
-        let promises = []
+        let promises = [];
         (pMedia.files ?? []).forEach(file => {
             const formData = new FormData()
             formData.append('file', file)
