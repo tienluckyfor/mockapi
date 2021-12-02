@@ -23,26 +23,26 @@ class ChatQueries
 
     public function detailChat($_, array $args)
     {
-        $unique_id = @$this->unique_repository->findByAppId($args['app_id'], $args['unique'])->id;
-        $people_id = @$this->people_repository->findByAppId($args['app_id'], $args['people'])->id;
+        $unique_id = $this->unique_repository->upsertByAppId($args['app_id'], $args['unique'])->id;
+        $people_id = $this->people_repository->upsertByAppId($args['app_id'], $args['people'])->id;
         $chat = Chat::where([
             'app_id'    => $args['app_id'],
             'unique_id' => $unique_id,
             'people_id' => $people_id,
         ])->first();
-        if (!$chat) {
-            $count_read_comment = 0;
-        } else {
+//        if (!$chat) {
+//            $count_read_comment = 0;
+//        } else {
             $count_read_comment = Comment::selectRaw("count(*) as COUNT")
                 ->where([
                     'app_id'    => $args['app_id'],
                     'unique_id' => $unique_id,
 //                'people_id' => $people_id,
                 ])
-                ->where('id', '>', $chat->read_comment_id)
+                ->where('id', '>', $chat->read_comment_id ?? 0)
                 ->first()
                 ->COUNT;
-        }
+//        }
         return [
             "count_read_comment" => $count_read_comment
         ];

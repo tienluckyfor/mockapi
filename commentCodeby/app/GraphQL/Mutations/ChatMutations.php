@@ -35,8 +35,8 @@ class ChatMutations
         if (!isset($args['people']['special_id'])) {
             throw new Error('People are required!');
         }
-        $args['unique_id'] = $this->unique_repository->findByAppId($args['app_id'], $args['unique'])->id;
-        $args['people_id'] = $this->people_repository->findByAppId($args['app_id'], $args['people'])->id;
+        $args['unique_id'] = $this->unique_repository->upsertByAppId($args['app_id'], $args['unique'])->id;
+        $args['people_id'] = $this->people_repository->upsertByAppId($args['app_id'], $args['people'])->id;
         $chat = Chat::updateOrCreate(
             array_intersect_key($args, array_flip(['app_id', 'unique_id', 'people_id'])),
             $args
