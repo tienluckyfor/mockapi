@@ -16,6 +16,7 @@ type ListUnique{
 }
 type Unique{
     id: ID
+    special_id: ID
     created_at: DateTime!
     updated_at: DateTime!
     total_like: Int

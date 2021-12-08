@@ -7,11 +7,24 @@ extend type Mutation {
 extend type Query {
 #    unread_comment_chat(app_id: ID!, unique:JSON!, people:JSON!): ListChat @field(resolver: "App\\GraphQL\\Queries\\ChatQueries@unreadCommentChat")
     detail_chat(app_id: ID!, unique:JSON!, people:JSON!): Chat @field(resolver: "App\\GraphQL\\Queries\\ChatQueries@detailChat")
+    list_chat(app_id: ID!, people:JSON!): [ChatComment] @field(resolver: "App\\GraphQL\\Queries\\ChatQueries@listChat")
 }
 
-type ListChat{
-    data: [Chat],
-    pageInfo: JSON
+type ChatComment{
+    id: ID
+    people: People
+    other: People
+    type:String
+    content:String
+    created_at: DateTime!
+    updated_at: DateTime!
+    count_read_comment: Int
+#    subComment: [SubComment]
+#    subInfo: SubInfo
+#    total_subs: Int
+#    total_like: Int
+#    total_dislike: Int
+#    likes: [Like]
 }
 type Chat{
     id: ID

@@ -1,0 +1,46 @@
+extend type Mutation {
+    upsert_chat_room(input: UpsertChatRoomInput! @spread): ChatRoom @field(resolver: "App\\GraphQL\\Mutations\\ChatRoomMutations@upsertChatRoom")
+    delete_chat_room(input: DeleteChatRoomInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\ChatRoomMutations@deleteChatRoom")
+    duplicate_chat_room(input: DeleteChatRoomInput! @spread): Boolean @field(resolver: "App\\GraphQL\\Mutations\\ChatRoomMutations@duplicateChatRoom")
+}
+
+extend type Query {
+    #    unread_comment_chat_room(app_id: ID!, unique:JSON!, people:JSON!): ListChatRoom @field(resolver: "App\\GraphQL\\Queries\\ChatRoomQueries@unreadCommentChatRoom")
+    detail_chat_room(app_id: ID!, unique:JSON!, people:JSON!): ChatRoom @field(resolver: "App\\GraphQL\\Queries\\ChatRoomQueries@detailChatRoom")
+    list_chat_room(app_id: ID!, people:JSON!): [ChatRoom] @field(resolver: "App\\GraphQL\\Queries\\ChatRoomQueries@listChatRoom")
+}
+
+#type ListChatRoom{
+#    id: ID
+#    people: People
+#    other: People
+#    type:String
+#    content:String
+#    created_at: DateTime!
+#    updated_at: DateTime!
+#    count_read_comment: Int
+##    subComment: [SubComment]
+##    subInfo: SubInfo
+##    total_subs: Int
+##    total_like: Int
+##    total_dislike: Int
+##    likes: [Like]
+#}
+type ChatRoom{
+    id: ID
+    people_list: [People]
+    other_list: [People]
+    other: People
+    comment_last: Comment
+    unique: Unique
+}
+input UpsertChatRoomInput{
+    id: ID
+    app_id: ID!
+    people_list:[JSON]
+    unique:JSON!
+}
+input DeleteChatRoomInput{
+    id: ID
+    ids: [ID]
+}

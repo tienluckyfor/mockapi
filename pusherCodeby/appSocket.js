@@ -3,6 +3,8 @@ const http = require('http')
 const app = express()
 const httpServer = http.createServer(app)
 const config = require('./config.js');
+require('log-timestamp');
+
 const io = (require("socket.io"))(httpServer, {
     allowRequest: (req, callback) => {
         const isOriginValid = true;//check(req);
@@ -41,7 +43,7 @@ io.use((socket, next) => {
     // } else {
     //   next(new Error("invalid"));
     // }
-});
+})
 
 app.get('/', (req, res) => {
     res.send("server is up and running");
@@ -60,10 +62,19 @@ io.sockets.on('connection', function (socket) {
     // socket.on('leave', function (room) {
     //     socket.leave(room);
     // });
-    socket.on('emitRoom', function ({event, data, room}) {
-        // console.log('{event, data, room}', {event, data, room})
+    socket.on('castRoom', function ({event, data, room}) {
+        console.log('castRoom', {event, data, room})
         // io.sockets.in(room).emit(event, data)
         socket.broadcast.to(room).emit(event, data)
+        socket.leave(room);
+    })
+    socket.on('cast', function ({event, data}) {
+        io.sockets.broadcast.emit(event, data)
+    })
+    socket.on('emitRoom', function ({event, data, room}) {
+        console.log('emitRoom', {event, data, room})
+        io.sockets.in(room).emit(event, data)
+        // socket.broadcast.to(room).emit(event, data)
         socket.leave(room);
     })
     socket.on('emit', function ({event, data}) {
