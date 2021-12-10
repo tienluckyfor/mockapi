@@ -1,0 +1,39 @@
+{
+  "name": "express",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "nodel-local": "NODE_ENV=.env.local node index.js",
+    "nodemon-local": "NODE_ENV=.env.local nodemon index.js",
+    "migrate-local": "npx sequelize-cli db:migrate:undo:all --env=.env.local; npx sequelize-cli db:migrate --env=.env.local",
+    "dev-nodemon": "NODE_ENV=.env.dev nodemon index.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^10.0.0",
+    "ejs": "~2.6.1",
+    "env-cmd": "^10.1.0",
+    "express": "~4.16.1",
+    "express-async-handler": "^1.2.0",
+    "express-mung": "^0.5.1",
+    "express-session": "^1.17.1",
+    "http-errors": "~1.6.3",
+    "joi": "^17.4.2",
+    "lodash": "^4.17.21",
+    "log-timestamp": "^0.3.0",
+    "mariadb": "^2.5.5",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.15",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "rootpath": "^0.1.2",
+    "sequelize": "^6.9.0"
+  },
+  "devDependencies": {
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize-cli": "^6.3.0"
+  }
+}
