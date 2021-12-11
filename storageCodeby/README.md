@@ -7,6 +7,7 @@ node server.js
 npx sequelize-cli init
 npx sequelize-cli model:generate --force --name User --attributes firstName:string,lastName:string,email:string,username:string,password:string,phone:string,token:text
 npx sequelize-cli model:generate --force --name Post --attributes user_id:string,title:string,description:string
+npx sequelize-cli model:generate --force --name File --attributes app_id:integer,name:string,type:string,path:string
 npx sequelize-cli db:migrate
 npx sequelize-cli db:migrate:undo:all
 

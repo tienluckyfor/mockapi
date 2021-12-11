@@ -12,6 +12,7 @@ const loadEnv = (path=process.env.NODE_ENV) => {
         DB_PASSWORD: process.env.DB_PASSWORD,
         PORT: process.env.PORT,
         JWT_SECRET: process.env.JWT_SECRET,
+        BASE_URL: process.env.BASE_URL,
     }
 }
 const env = loadEnv()
