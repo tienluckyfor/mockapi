@@ -167,11 +167,17 @@ class RestfulController extends Controller
             ->getByDatasetId($r['dataset_id'])
             ->keyBy('id')
             ->toArray();
+        \Illuminate\Support\Facades\Log::channel('single')->info('6', []);
+        
         if ($request->has('_parent')) {
             $rallydatas = $this->rallydata_helper->_getParents($r['dataset_id'], $rallyIds, $resources, $rallydatas);
         }
+        \Illuminate\Support\Facades\Log::channel('single')->info('7', []);
+        
         $rallydatas = $this->rallydata_helper->_handleParentMedia($rallydatas, $r['dataset_id'], $request->fields,
             $resources);
+        \Illuminate\Support\Facades\Log::channel('single')->info('8', []);
+        
         $totalPage = ceil($total / $perPage);
         if (!($currentPage <= $totalPage && ($currentPage - 1) <= $totalPage) || $currentPage == -1) {
             $isPrev = false;
@@ -180,6 +186,8 @@ class RestfulController extends Controller
         if (isset($sorts[1])) {
             $rallydatas = $this->arrService->sort($rallydatas, $sorts[0], $sorts[1]);
         }
+        \Illuminate\Support\Facades\Log::channel('single')->info('9', []);
+        
         $res = [
             "data"       => $rallydatas,
             "pageInfo"   => [
@@ -193,6 +201,8 @@ class RestfulController extends Controller
             "sortInfo"   => $sorts,
             "searchInfo" => $searchs,
         ];
+        \Illuminate\Support\Facades\Log::channel('single')->info('10', []);
+        
         $res = array_merge($res, $this->rallydata_helper->_getSystem());
         return response()->json($res);
     }
