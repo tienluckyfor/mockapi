@@ -41,7 +41,6 @@ class RestfulTokenIsValid
             $resourceName = $request->segment(3);
             $resource = $this->resource_repository->findByNameDatasetId($resourceName, $decode['dataset_id']);
             \Illuminate\Support\Facades\Log::channel('single')->info('33', []);
-            dd($resource);
 
             if ($resource) {
                 $request->request->set('_restful', [
