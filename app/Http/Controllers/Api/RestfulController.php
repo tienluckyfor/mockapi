@@ -204,6 +204,8 @@ class RestfulController extends Controller
         \Illuminate\Support\Facades\Log::channel('single')->info('10', []);
         
         $res = array_merge($res, $this->rallydata_helper->_getSystem());
+        \Illuminate\Support\Facades\Log::channel('single')->info('11', []);
+        
         return response()->json($res);
     }
 
