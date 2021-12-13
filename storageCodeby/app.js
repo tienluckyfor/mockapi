@@ -6,6 +6,7 @@ const indexRouter = require("routes/index")
 const authRouter = require("routes/auth")
 const postsRouter = require("routes/posts")
 const filesRouter = require("routes/files")
+const testRouter = require("routes/test")
 const path = require('path')
 
 const app = express()
@@ -18,6 +19,7 @@ app.use(indexRouter)
 app.use(authRouter)
 app.use(postsRouter)
 app.use(filesRouter)
+app.use(testRouter)
 
 app.use((err, req, res, next) => {
     res.status(500);

@@ -130,21 +130,26 @@ class RestfulController extends Controller
             ? abs((int)$request->per_page) : 20;
         $currentPage = $request->current_page && is_numeric($request->current_page) && $request->current_page >= -1
             ? (int)$request->current_page : 1;
+\Illuminate\Support\Facades\Log::channel('single')->info('1', []);
 
         $sorts = ['pin_index'];
         if ($request->sort) {
             $sorts = explode(',', $request->sort);
         }
+        \Illuminate\Support\Facades\Log::channel('single')->info('2', []);
+        
         $searchs = [];
         if ($request->search) {
             $searchs = explode(',', $request->search);
         }
+\Illuminate\Support\Facades\Log::channel('single')->info('3', []);
 
         $parent = [];
         if ($request->parent) {
             $parent = explode(',', $request->parent);
         }
         $resource = $r['resource'];//$this->resource_repository->findByNameDatasetId($resourceName, $r['dataset_id']);
+\Illuminate\Support\Facades\Log::channel('single')->info('4', []);
 
         if (!empty($parent)) {
             [$rallydatas, $total, $isPrev, $isNext] = $this->rallydata_repository
@@ -155,6 +160,7 @@ class RestfulController extends Controller
                 ->getByDatasetIdResourceId($r['dataset_id'], $resource['id'],
                     [$perPage, $currentPage, $sorts, $searchs]);
         }
+\Illuminate\Support\Facades\Log::channel('single')->info('5', []);
 
         $rallyIds = collect($rallydatas)->pluck('id')->toArray();
         $resources = $this->resource_repository
