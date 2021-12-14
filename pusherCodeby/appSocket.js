@@ -82,8 +82,8 @@ io.sockets.on('connection', function (socket) {
     })
     const rooms = io.of("/").adapter.rooms;
     const sids = io.of("/").adapter.sids;
-    console.log('rooms', rooms)
-    console.log('sids', sids)
+    // console.log('rooms', rooms)
+    // console.log('sids', sids)
 });
 
 io.of("/").adapter.on("create-room", (room) => {
