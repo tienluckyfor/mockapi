@@ -262,6 +262,8 @@ class RallyBackupController extends Controller
     private function _findMediaByUrl($url, $media)
     {
         $fMedia = preg_replace('/^.+?([0-9\-]+)\.\w+$/mis', '$1', $url);
+        \Illuminate\Support\Facades\Log::channel('single')->info('$media', [$media]);
+        
         $rMedia = collect($media)->filter(function ($item1) use ($fMedia) {
             if (empty($fMedia)) {
                 return false;
