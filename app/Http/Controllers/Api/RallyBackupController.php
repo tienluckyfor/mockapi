@@ -268,7 +268,7 @@ class RallyBackupController extends Controller
             if (empty($fMedia)) {
                 return false;
             }
-            return false !== stristr(@$item1['file_name'], $fMedia);
+            return false !== stristr(@$item1->file_name, $fMedia);
         })->first();
 
         return $rMedia;
