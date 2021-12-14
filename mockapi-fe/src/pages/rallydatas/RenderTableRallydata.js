@@ -117,10 +117,6 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         <p className={val ? `text-indigo-700` : `text-red-700`}>{val1}</p>
                     </Tooltip>
                 }
-                if ((val ?? 0).toString().length)
-                    return <Tooltip title={val}>
-                        <p className={`text-gray-500`}>-</p>
-                    </Tooltip>
                 if (iType === 'Object ID')
                     return <Dropdown overlay={menu(rallydata)} arrow>
                         <Button
@@ -139,7 +135,7 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                 if (iType === 'Media') {
                     return <Image.PreviewGroup>
                         <Space size={[4, 4]} align="start" wrap>
-                            {(val.media ?? []).map((medium, key) => {
+                            {(val?.media ?? []).map((medium, key) => {
                                     if (medium.file_type === 'image')
                                         return <Image
                                             key={key}
@@ -181,6 +177,10 @@ const RenderTableRallydata = ({mlDRRallydata, fieldsRallydata, typeShow = null, 
                         </p>
                     </Tooltip>
                 }
+                if (!(val ?? '').toString().length)
+                    return <Tooltip title={val}>
+                        <p className={`text-gray-500`}>-1</p>
+                    </Tooltip>
                 return <Tooltip title={val}>
                     <p className={`truncate-2y`}>{val.toString()}</p>
                 </Tooltip>

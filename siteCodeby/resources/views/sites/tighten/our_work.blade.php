@@ -9,28 +9,36 @@
         </header>
 
         <nav class="flex flex-no-wrap justify-center overflow-x-scroll border-b-2 border-gray-200">
-            <a class="pill-grey pill-grey--selected" href="/our-work" title="Tighten Products">Products</a>
+            @php
+                $workCategory = $http->get('/work_category')->data();
+                $id = request()->id ?? \Illuminate\Support\Arr::first($workCategory)['id'];
+                $workC = collect($workCategory)->where('id', $id)->first();
+            @endphp
+            @foreach($workCategory as $key => $item)
+                <a class="pill-grey {{$item['id']==$id ? 'pill-grey--selected':''}}"
+                   href="{{$config->base_url}}/our_work?id={{$item['id']}}"
+                   title="{{$item['name']}}">{{$item['name']}}</a>
+            @endforeach
+            {{-- <a class="pill-grey pill-grey--selected" href="/our-work" title="Tighten Products">Products</a>
 
-            <a class="pill-grey" href="/our-work/open-source" title="Tighten Open Source Projects">Open Source</a>
+             <a class="pill-grey" href="/our-work/open-source" title="Tighten Open Source Projects">Open Source</a>
 
-            <a class="pill-grey" href="/our-work/podcasts" title="Tighten Podcasts">Podcasts</a>
+             <a class="pill-grey" href="/our-work/podcasts" title="Tighten Podcasts">Podcasts</a>--}}
         </nav>
 
         <div class="flex flex-col items-start xl:flex-row">
             <div class="w-full p-6 xl:w-1/3 sm:p-8">
-                <h2 class="text-left title-2">Products</h2>
-
-                <p>
-                    At any given time, we're usually working on 5 or 6 products. Here's a sampling of products we've worked on, both for our clients, and for ourselves.
-                </p>
+                <h2 class="text-left title-2">{{$workC['name']}}</h2>
+                <p>{{$workC['description']}}</p>
             </div>
 
             <div class="flex flex-col flex-wrap justify-start flex-1 w-full xl:w-2/3 md:flex-row">
-                <div class="justify-end border-white cursor-pointer tile-portfolio bg-adopt-a-drain" onclick="window.location.href='/our-work/adopt-a-drain'">
+                <div class="justify-end border-white cursor-pointer tile-portfolio bg-adopt-a-drain"
+                     onclick="window.location.href='/our-work/adopt-a-drain'">
                     <header class="tile-portfolio__header">
                         <small>Adopt-a-Drain</small>
                         <h3 class="title-3">
-                            Latitude, Longitude, <br />
+                            Latitude, Longitude, <br/>
                             and Laravel
                         </h3>
                     </header>
@@ -40,25 +48,28 @@
                     </a>
                 </div>
 
-                <div class="justify-end border-white cursor-pointer bb-1 tile-portfolio bg-genentech" onclick="window.location.href='/our-work/making-medicine'">
+                <div class="justify-end border-white cursor-pointer bb-1 tile-portfolio bg-genentech"
+                     onclick="window.location.href='/our-work/making-medicine'">
                     <header class="tile-portfolio__header">
                         <small>Genentech</small>
                         <h3 class="leading-none title-3">
-                            Making<br />
+                            Making<br/>
                             Medicine
                         </h3>
                     </header>
 
-                    <a href="/our-work/making-medicine" title="Making Medicine by Tighten" class="mt-8 text-sm btn btn-dark">
+                    <a href="/our-work/making-medicine" title="Making Medicine by Tighten"
+                       class="mt-8 text-sm btn btn-dark">
                         Read case study
                     </a>
                 </div>
 
-                <div class="justify-end border-white cursor-pointer bb-1 tile-portfolio bg-hmd" onclick="window.location.href='/our-work/telehealth'">
+                <div class="justify-end border-white cursor-pointer bb-1 tile-portfolio bg-hmd"
+                     onclick="window.location.href='/our-work/telehealth'">
                     <header class="tile-portfolio__header">
                         <small>TeleHealth Company</small>
                         <h3 class="leading-none title-3">
-                            Mobile &amp; <br />
+                            Mobile &amp; <br/>
                             Web Apps
                         </h3>
                     </header>
@@ -68,7 +79,8 @@
                     </a>
                 </div>
 
-                <div class="justify-end border-white cursor-pointer tile-portfolio bg-fieldgoal" onclick="window.location.href='https://fieldgoal.io'">
+                <div class="justify-end border-white cursor-pointer tile-portfolio bg-fieldgoal"
+                     onclick="window.location.href='https://fieldgoal.io'">
                     <header class="tile-portfolio__header">
                         <small>Form Endpoints as a Service</small>
                         <h3 class="title-3">Fieldgoal</h3>
@@ -79,11 +91,12 @@
                     </a>
                 </div>
 
-                <div class="justify-end border-white cursor-pointer tile-portfolio bg-karani" onclick="window.location.href='/our-work/karani'">
+                <div class="justify-end border-white cursor-pointer tile-portfolio bg-karani"
+                     onclick="window.location.href='/our-work/karani'">
                     <header class="tile-portfolio__header">
                         <small>Tighten</small>
                         <h3 class="leading-none title-3">
-                            Karani for <br />
+                            Karani for <br/>
                             Fundraising
                         </h3>
                     </header>
@@ -93,16 +106,18 @@
                     </a>
                 </div>
 
-                <div class="flex flex-col justify-end border-white cursor-pointer tile-portfolio bg-novapackages" onclick="window.location.href='https://novapackages.com'">
+                <div class="flex flex-col justify-end border-white cursor-pointer tile-portfolio bg-novapackages"
+                     onclick="window.location.href='https://novapackages.com'">
                     <header class="tile-portfolio__header">
                         <small>
-                            Package Directory for <br />
+                            Package Directory for <br/>
                             Laravel Nova
                         </small>
                         <h3 class="leading-none title-3">Nova Packages</h3>
                     </header>
 
-                    <a href="https://novapackages.com" title="Nova Packages by Tighten" class="mt-8 text-sm btn btn-dark">
+                    <a href="https://novapackages.com" title="Nova Packages by Tighten"
+                       class="mt-8 text-sm btn btn-dark">
                         View Product
                     </a>
                 </div>
