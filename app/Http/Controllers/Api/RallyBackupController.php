@@ -268,14 +268,9 @@ class RallyBackupController extends Controller
             if (empty($fMedia)) {
                 return false;
             }
-            \Illuminate\Support\Facades\Log::channel('single')->info('$item1', [$item1]);
-            \Illuminate\Support\Facades\Log::channel('single')->info('$item1 file_name', [$item1['file_name']]);
-            \Illuminate\Support\Facades\Log::channel('single')->info('$fMedia', [$fMedia]);
-            
             return false !== stristr(@$item1['file_name'], $fMedia);
         })->first();
-        \Illuminate\Support\Facades\Log::channel('single')->info('$rMedia', [$rMedia]);
-        
+
         return $rMedia;
     }
 
