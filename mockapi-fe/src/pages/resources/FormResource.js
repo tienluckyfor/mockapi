@@ -10,8 +10,6 @@ import {useEffect, useState} from "react";
 import {sortableContainer, sortableElement, sortableHandle} from "react-sortable-hoc";
 import debounce from "lodash/debounce"
 
-const uuid = require('react-uuid')
-
 const {Option, OptGroup} = Select;
 const SortableContainer = sortableContainer(({children}) => <ul>{children}</ul>);
 const SortableItem = sortableElement(({children}) => <li className="list-none">{children}</li>);
@@ -41,7 +39,7 @@ const FormResource = ({formValue, resourceName}) => {
                     optionFilterProp="children"
                 >
                     {(lApi.data ?? []).map((api, key) =>
-                        <Option key={uuid()} value={api.id}>{api.name}</Option>
+                        <Option value={api.id}>{api.name}</Option>
                     )}
                 </Select>
             </Form.Item>
@@ -75,7 +73,6 @@ const FormResource = ({formValue, resourceName}) => {
                 >
                     {(fields, {add, remove, move}) => (
                         <SortableContainer
-                            key={uuid()}
                             lockAxis="y"
                             useDragHandle
                             onSortEnd={({oldIndex, newIndex}) => move(oldIndex, newIndex)}
@@ -116,7 +113,7 @@ const FormResource = ({formValue, resourceName}) => {
                                                     showSearch
                                                 >
                                                     {fieldTypes.map((type, k) =>
-                                                        <Option key={uuid()} value={type}>{type}</Option>
+                                                        <Option value={type}>{type}</Option>
                                                     )}
                                                 </Select>
                                             </Form.Item>
@@ -131,10 +128,10 @@ const FormResource = ({formValue, resourceName}) => {
                                                     style={{width: 150}}
                                                 >
                                                     {fakerList.map((faker, k) =>
-                                                        <OptGroup key={uuid()} label={faker.name}
+                                                        <OptGroup label={faker.name}
                                                                   className={`uppercase`}>
                                                             {Object.entries(faker.list).map(([key, item], i) =>
-                                                                <Option key={uuid()} value={key}>{item}</Option>
+                                                                <Option value={key}>{item}</Option>
                                                             )}
                                                         </OptGroup>
                                                     )}
@@ -168,9 +165,9 @@ const FormResource = ({formValue, resourceName}) => {
                     Endpoints</p>
                 <Form.List name="endpoints" initialValue={endpoints}>
                     {(fields, {add, remove}) => (
-                        <section key={uuid()}>
+                        <section>
                             {fields.map(({key, name, fieldKey, ...restField}) => (
-                                <div key={uuid()}>
+                                <div>
                                     <div className="flex items-center space-x-2 mb-1">
                                         <Form.Item
                                             className={`mb-0`}
