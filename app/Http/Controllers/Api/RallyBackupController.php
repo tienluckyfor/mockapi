@@ -244,6 +244,7 @@ class RallyBackupController extends Controller
                 'resource_id' => $resourceId,
                 'dataset_id'  => $datasetId,
                 'data'        => $nDatum,
+                'is_show'        => true,
             ];
             if (empty($rally['data']['id'])) {
                 $maxRally = $this->rallydata_repository->findMaxByDatasetResource($rally['dataset_id'],
