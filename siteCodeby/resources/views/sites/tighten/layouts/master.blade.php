@@ -1,3 +1,10 @@
+@php
+    $con['menu'] = collect($con['menu'])->map(function($item) use($config){
+    $item['link'] = $config->base_url.$item['link'];
+    return $item;
+});
+@endphp
+
 <html lang="en">
 
 <head>
@@ -19,24 +26,24 @@
     <meta name="twitter:site" content="@TightenCo"/>
     <meta name="twitter:image:alt" content="Tighten logo"/>
 
-    <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
-    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MPWPMWX"></script>
-    <script async="" defer="" data-domain="tighten.co" src="https://plausible.io/js/plausible.js"></script>
-
-    <!-- Google Tag Manager -->
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({"gtm.start": new Date().getTime(), event: "gtm.js"});
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != "dataLayer" ? "&l=" + l : "";
-            j.async = true;
-            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, "script", "dataLayer", "GTM-MPWPMWX");
-    </script>
-    <!-- End Google Tag Manager -->
+    {{--    <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>--}}
+    {{--    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MPWPMWX"></script>--}}
+    {{--    <script async="" defer="" data-domain="tighten.co" src="https://plausible.io/js/plausible.js"></script>--}}
+    {{--
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({"gtm.start": new Date().getTime(), event: "gtm.js"});
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-MPWPMWX");
+        </script>
+        <!-- End Google Tag Manager -->--}}
 
     <link rel="home" href="/"/>
     <link rel="alternate" type="application/atom+xml" title="RSS feed for the Tighten blog" href="/blog/feed.atom"/>
@@ -1012,13 +1019,13 @@
                 @foreach($con['menu'] as $key => $item)
                     <a class="footer-nav__item" href="{{$item['link']}}" title="{{$item['name']}}">{{$item['name']}}</a>
                 @endforeach
-{{--                <a class="footer-nav__item" href="/our-work" title="Tighten Work">Our Work</a>
+                {{--                <a class="footer-nav__item" href="/our-work" title="Tighten Work">Our Work</a>
 
-                <a class="footer-nav__item" href="/our-company" title="Tighten Team">Our Company</a>
+                                <a class="footer-nav__item" href="/our-company" title="Tighten Team">Our Company</a>
 
-                <a class="footer-nav__item" href="/work-with-us" title="Work with Tighten">Work with Us</a>
+                                <a class="footer-nav__item" href="/work-with-us" title="Work with Tighten">Work with Us</a>
 
-                <a class="footer-nav__item" href="/blog" title="Tighten Blog">Blog</a>--}}
+                                <a class="footer-nav__item" href="/blog" title="Tighten Blog">Blog</a>--}}
 
                 <a class="footer-nav__item" x-data="{}" @click.prevent="$dispatch('open-contact-modal')"
                    href="#contact-us" title="Contact Tighten">Contact</a>
@@ -1033,23 +1040,23 @@
                             </svg>
                         </a>
                     @endforeach
-                   {{-- <a href="https://github.com/tighten" title="Tighten on GitHub">
-                        <svg class="social-icon-footer">
-                            <use xlink:href="#icon-github"></use>
-                        </svg>
-                    </a>
+                    {{-- <a href="https://github.com/tighten" title="Tighten on GitHub">
+                         <svg class="social-icon-footer">
+                             <use xlink:href="#icon-github"></use>
+                         </svg>
+                     </a>
 
-                    <a href="https://twitter.com/TightenCo" title="Tighten on Twitter">
-                        <svg class="social-icon-footer">
-                            <use xlink:href="#icon-twitter"></use>
-                        </svg>
-                    </a>
+                     <a href="https://twitter.com/TightenCo" title="Tighten on Twitter">
+                         <svg class="social-icon-footer">
+                             <use xlink:href="#icon-twitter"></use>
+                         </svg>
+                     </a>
 
-                    <a href="https://www.linkedin.com/company/tightenco" title="Tighten on LinkedIn">
-                        <svg class="social-icon-footer">
-                            <use xlink:href="#icon-linkedin"></use>
-                        </svg>
-                    </a>--}}
+                     <a href="https://www.linkedin.com/company/tightenco" title="Tighten on LinkedIn">
+                         <svg class="social-icon-footer">
+                             <use xlink:href="#icon-linkedin"></use>
+                         </svg>
+                     </a>--}}
                 </div>
 
                 <p class="footer-contact__address">
@@ -1057,11 +1064,13 @@
                 </p>
 
                 <p class="footer-contact__info">
-                    <a class="footer-contact__info--email" href="mailto:{{$con['contact']['mail']}}" title="Mail Tighten">
+                    <a class="footer-contact__info--email" href="mailto:{{$con['contact']['mail']}}"
+                       title="Mail Tighten">
                         {{$con['contact']['mail']}}
                     </a>
 
-                    <a class="footer-contact__info--phone" href="tel:{{$con['contact']['phone_number']}}" title="Call Tighten">
+                    <a class="footer-contact__info--phone" href="tel:{{$con['contact']['phone_number']}}"
+                       title="Call Tighten">
                         {{$con['contact']['phone_number']}}
                     </a>
                 </p>
@@ -1069,11 +1078,12 @@
         </div>
     </div>
 
+    @php $form = $con['form_text'];@endphp
     <script>
         window.contact_form_url = "https://fieldgoal.io/f/AGz9ZcOcd0nXSBLM38wsGiiTkLhuaUxZ";
     </script>
     <div class="px-4 full-screen show contact-us" x-data="{...modal(), ...contact_modal(), ...dispatch()}"
-         x-spread="{...modalSpreadBindings, ...contactModalSpreadBindings}" style="display: none;">
+         x-spread="{...modalSpreadBindings, ...contactModalSpreadBindings}" x-cloak>
         <style>
             .contact-us__form input,
             .contact-us__form textarea {
@@ -1084,18 +1094,16 @@
                 box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
             }
         </style>
-        <span class="full-screen__close" @click="close">×</span>
+        <span class="full-screen__close" @click="close">&times;</span>
         <div class="flex h-full">
             <div x-show="! submitted" class="contact-us__before-submission">
                 <div class="contact-us__header">
                     <h1 class="my-0 text-3xl tracking-wide uppercase sm:text-4xl lg:text-5xl">
-                        Got an idea? Let's talk.
+                        {{$form['title']}}
                     </h1>
 
                     <p class="px-6 my-2 text-xl text-green-300 sm:my-5">
-                        Leave us a note here, or give us a call <br class="sm:hidden"/>
-                        at <a class="text-green-300 hover:text-yellow-500" href="tel:+13124487405">(312)
-                            448-7405</a>.
+                        {{$form['description']}}
                     </p>
                 </div>
 
@@ -1103,12 +1111,11 @@
                     <div class="flex mb-4 sm:mb-5">
                         <div class="flex-1 mr-3">
                             <div class="flex justify-between mb-2">
-                                <label class="text-base label">First Name</label>
+                                <label class="text-base label">{{$form['first_name']}}</label>
 
-                                <span x-show="hasError('first_name')" class="text-sm text-yellow-500"
-                                      style="display: none;">
-                                        Required
-                                    </span>
+                                <span x-show="hasError('first_name')" class="text-sm text-yellow-500">
+                                {{$form['required_label']}}
+                            </span>
                             </div>
 
                             <input class="w-full input" :class="{ 'error': hasError('first_name') }"
@@ -1117,12 +1124,11 @@
 
                         <div class="flex-1 ml-3">
                             <div class="flex justify-between mb-2">
-                                <label class="text-base label">Last Name</label>
+                                <label class="text-base label">{{$form['last_name']}}</label>
 
-                                <span x-show="hasError('last_name')" class="text-sm text-yellow-500"
-                                      style="display: none;">
-                                        Required
-                                    </span>
+                                <span x-show="hasError('last_name')" class="text-sm text-yellow-500">
+                                {{$form['required_label']}}
+                            </span>
                             </div>
 
                             <input class="w-full input" :class="{ 'error': hasError('last_name') }"
@@ -1132,11 +1138,11 @@
 
                     <div class="mb-4 sm:mb-5">
                         <div class="flex justify-between mb-2">
-                            <label class="text-base label">Email</label>
+                            <label class="text-base label">{{$form['email']}}</label>
 
-                            <span x-show="hasError('email')" class="text-sm text-yellow-500" style="display: none;">
-                                    Required
-                                </span>
+                            <span x-show="hasError('email')" class="text-sm text-yellow-500">
+                            {{$form['required_label']}}
+                        </span>
                         </div>
 
                         <input class="w-full input" :class="{ 'error': hasError('email') }" x-model="form.email"
@@ -1145,61 +1151,72 @@
 
                     <div class="mb-4 sm:mb-5">
                         <div class="flex justify-between mb-2">
-                            <label class="text-base label">Tell us about your idea or project</label>
+                            <label class="text-base label">{{$form['idea']}}</label>
 
-                            <span x-show="hasError('message')" class="text-sm text-yellow-500"
-                                  style="display: none;">
-                                    Required
-                                </span>
+                            <span x-show="hasError('message')" class="text-sm text-yellow-500">
+                            {{$form['required_label']}}
+                        </span>
                         </div>
 
                         <textarea class="w-full h-32 resize-none input sm:h-auto"
                                   :class="{ 'error': hasError('message') }" x-model="form.message" name="message"
                                   rows="5"></textarea>
                     </div>
+                    <style>
+                        .contact-us__button-image {
+                            background-image: url("{{$config->static}}/assets/img/submit-arrow-yellow@2x.png");
+                        }
 
+                        .contact-us__button-text {
+                            font-size: 100%;
+                        }
+                    </style>
                     <div class="text-center sm:mt-8">
                         <button class="contact-us__button" @click.prevent="submitForm">
                             <span class="contact-us__button-image"></span>
-
-                            <span class="contact-us__button-text">Submit</span>
+                            <span class="contact-us__button-text">{{$form['submit_button_txt']}}</span>
                         </button>
                     </div>
                 </form>
             </div>
 
-            <div x-show="submitted" class="items-center contact-us__after-submission" style="display: none;">
+            <div x-show="submitted" class="items-center contact-us__after-submission">
                 <div class="contact-us__header">
-                    <h1 class="text-5xl">Thank you.</h1>
+                    <h1 class="text-5xl">{{$form['thank']}}</h1>
 
                     <p class="text-xl">
-                        We appreciate your interest. <br class="sm:hidden"/>
-                        We will get right back to you.
+                        {{$form['we_interest']}}
                     </p>
                 </div>
 
                 <div class="contact-us__button" @click="close">
                     <span class="contact-us__button-image contact-us__button-image--back"></span>
 
-                    <span class="contact-us__button-text">Back</span>
+                    <span class="contact-us__button-text">{{$form['back_button_txt']}}</span>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 <div class="full-screen show mobile-nav" x-data="{...mobile_nav(), ...dispatch()}" x-spread="{...mobileNavSpread}"
      style="display: none;">
     <span class="full-screen__close" @click="close">×</span>
 
     <div class="flex flex-col items-center justify-center h-full">
-        <a class="mb-4 text-4xl mobile-nav__item" href="/our-work" title="Our Work">Our Work</a>
+        @foreach($con['menu'] as $key => $item)
+            <a class="mb-4 text-4xl mobile-nav__item" href="{{$item['link']}}"
+               title="{{$item['name']}}">{{$item['name']}}</a>
+
+        @endforeach
+        {{--<a class="mb-4 text-4xl mobile-nav__item" href="/our-work" title="Our Work">Our Work</a>
 
         <a class="mb-4 text-4xl mobile-nav__item" href="/our-company" title="Our Company">Our Company</a>
 
         <a class="mb-4 text-4xl mobile-nav__item" href="/work-with-us" title="Work with Us">Work with Us</a>
 
         <a class="mb-4 text-4xl mobile-nav__item" href="/blog" title="Tighten Blog">Blog</a>
-
+--}}
         <a class="mb-4 text-4xl mobile-nav__item" href="#contact-us" @click.prevent="navigateToContact"
            title="Contact Tighten">Contact</a>
     </div>
