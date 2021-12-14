@@ -155,6 +155,7 @@ class MediaService
         $file_info = new finfo(FILEINFO_MIME_TYPE);
         $mime_type = $file_info->buffer($contents);
         $originalName = substr($fileUrl, strrpos($fileUrl, '/') + 1);
+\Illuminate\Support\Facades\Log::channel('single')->info('$originalName', [$originalName]);
 
         switch ($mime_type) {
             case (preg_match('#video#', $mime_type) ? true : false):

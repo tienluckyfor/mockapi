@@ -971,7 +971,11 @@
 
                     <a class="primary-nav__item" href="/our-company" title="Our Company">Our Company</a>--}}
                 </div>
-
+                <style>
+                    .primary-nav__logo img{
+                        height: 44px;
+                    }
+                </style>
                 <div class="flex-none order-first mr-3 sm:mx-6 xl:mx-8 sm:order-second">
                     <a class="primary-nav__logo" href="/" title="Tighten">
                         {{--<svg class="hidden sm:block">
