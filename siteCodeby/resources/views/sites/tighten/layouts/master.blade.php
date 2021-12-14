@@ -972,8 +972,13 @@
                     <a class="primary-nav__item" href="/our-company" title="Our Company">Our Company</a>--}}
                 </div>
                 <style>
-                    .primary-nav__logo img{
-                        height: 44px;
+                    .primary-nav__logo img {
+                        height: 70px;
+                    }
+                    @media screen and (max-width: 767px) {
+                        .primary-nav__logo img {
+                            height: 44px;
+                        }
                     }
                 </style>
                 <div class="flex-none order-first mr-3 sm:mx-6 xl:mx-8 sm:order-second">
