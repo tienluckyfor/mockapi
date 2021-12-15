@@ -16,7 +16,7 @@
             @endphp
             @foreach($works as $key => $item)
                 <a class="pill-grey {{$item['id']==$id ? 'pill-grey--selected':''}}"
-                   href="{{$config->base_url}}/our_work?id={{$item['id']}}"
+                   href="{{$config->base_url}}/our-work?id={{$item['id']}}"
                    title="{{$item['name']}}">{{$item['name']}}</a>
             @endforeach
         </nav>
