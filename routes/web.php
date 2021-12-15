@@ -15,7 +15,7 @@ use Pusher\Pusher;
 
 
 Route::get('/', function () {
-    return ['status'=>true];
+    return response()->json(['status'=>true]);
 });
 Route::get('/test_pusher', function () {
 
