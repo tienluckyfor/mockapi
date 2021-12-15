@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 use Pusher\Pusher;
 
 
+Route::get('/', function () {
+    return ['status'=>true];
+});
 Route::get('/test_pusher', function () {
 
     $pusher = new Pusher('app-key', 'app-secret', 'app-id', [
