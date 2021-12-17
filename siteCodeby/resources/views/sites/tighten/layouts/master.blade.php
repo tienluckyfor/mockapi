@@ -1173,6 +1173,7 @@
                                   :class="{ 'error': hasError('message') }" x-model="form.message" name="message"
                                   rows="5"></textarea>
                     </div>
+
                     <style>
                         .contact-us__button-image {
                             background-image: url("{{$config->static}}/assets/img/submit-arrow-yellow@2x.png");
