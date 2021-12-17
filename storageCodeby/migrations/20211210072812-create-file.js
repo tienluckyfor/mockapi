@@ -35,6 +35,15 @@ module.exports = {
       size: {
         type: Sequelize.INTEGER
       },
+      view: {
+        type: Sequelize.INTEGER
+      },
+      cloud: {
+        type: Sequelize.JSON
+      },
+      platform: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

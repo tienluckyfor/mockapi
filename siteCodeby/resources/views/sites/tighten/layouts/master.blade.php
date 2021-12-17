@@ -961,16 +961,7 @@
     <div class="mx-auto shadow-md max-w-7xl">
         <header class="primary-header" role="banner">
             <div class="flex items-center justify-between px-4 py-3 sm:px-8 sm:py-5 md:py-7 sm:items-end">
-                <div class="justify-around flex-1 hidden text-center sm:flex primary-nav__group sm:order-first">
-                    @foreach($con['menu'] as $key => $item)
-                        @if($key>=2) @continue @endif
-                        <a class="primary-nav__item" href="{{$item['link']}}"
-                           title-="{{$item['name']}}">{{$item['name']}}</a>
-                    @endforeach
-                    {{--<a class="primary-nav__item" href="/our-work" title-="Our Work">Our Work</a>
 
-                    <a class="primary-nav__item" href="/our-company" title="Our Company">Our Company</a>--}}
-                </div>
                 <style>
                     .primary-nav__logo img {
                         height: 70px;
@@ -982,6 +973,7 @@
                     }
                 </style>
                 <div class="flex-none order-first mr-3 sm:mx-6 xl:mx-8 sm:order-second">
+
                     <a class="primary-nav__logo" href="{{$config->base_url}}" title="Tighten">
                         {{--<svg class="hidden sm:block">
                             <use xlink:href="#icon-tighten-logo--vertical"></use>
@@ -991,6 +983,16 @@
                         </svg>--}}
                         <img src="{{$media->set($con['logo'])->first()}}"/>
                     </a>
+                </div>
+                <div class="justify-around flex-1 hidden text-center sm:flex primary-nav__group sm:order-first">
+                    @foreach($con['menu'] as $key => $item)
+                        @if($key>=2) @continue @endif
+                        <a class="primary-nav__item" href="{{$item['link']}}"
+                           title-="{{$item['name']}}">{{$item['name']}}</a>
+                    @endforeach
+                    {{--<a class="primary-nav__item" href="/our-work" title-="Our Work">Our Work</a>
+
+                    <a class="primary-nav__item" href="/our-company" title="Our Company">Our Company</a>--}}
                 </div>
 
                 <div class="justify-around flex-1 hidden text-center sm:flex primary-nav__group sm:order-third">

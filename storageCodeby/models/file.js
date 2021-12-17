@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     filename: DataTypes.STRING,
     path: DataTypes.STRING,
     size: DataTypes.INTEGER,
+    view: DataTypes.INTEGER,
+    cloud: DataTypes.JSON,
+    platform: DataTypes.STRING,
     original_file: {
       type:DataTypes.VIRTUAL,
       get(){
@@ -37,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
       get(){
         const path = this.getDataValue('path');
         const id = this.getDataValue('id');
-        return `${env.BASE_URL}/files/${id}`
+        const platform = this.getDataValue('platform');
+        return `${env.BASE_URL}/${platform}/${id}`
       }
     }
   }, {

@@ -5,7 +5,8 @@ const responseFormat = require('middleware/responseFormat')
 const indexRouter = require("routes/index")
 const authRouter = require("routes/auth")
 const postsRouter = require("routes/posts")
-const filesRouter = require("routes/files")
+const fileLocalRouter = require("routes/file_local")
+const fileS3Router = require("routes/file_s3")
 const testRouter = require("routes/test")
 const path = require('path')
 
@@ -18,7 +19,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(indexRouter)
 app.use(authRouter)
 app.use(postsRouter)
-app.use(filesRouter)
+app.use(fileLocalRouter)
+app.use(fileS3Router)
 app.use(testRouter)
 
 app.use((err, req, res, next) => {
