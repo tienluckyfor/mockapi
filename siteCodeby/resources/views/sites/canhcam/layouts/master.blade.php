@@ -367,7 +367,6 @@
         </div>
     </div>
 </footer>
-<script async="" defer="" src="{{$config->static}}/theme/js/home.min.js"></script>
 <!--
 
 <script async="" defer="">

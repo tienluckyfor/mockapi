@@ -15,25 +15,30 @@
         }
     </style>--}}
     <main>
+        <pre>## post web-1</pre>
+
+        @php
+            $web1 = $http->get('/posts', ['search'=>'position,web-1'])->data();
+            $web1 = \Illuminate\Support\Arr::first($web1);
+        @endphp
         <section class="service-english-banner">
             <div class="banner-wrap">
                 <div class="banner-img">
-                    <img class="lazyload srcset lazyloaded" sizes="100vw" src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-top-banner-min-1024.jpg" alt="Giúp web của bạn bán hàng và thu hút khách hàng hiệu quả!" />
+                    @php
+                            $img = preg_replace('/^.+?src="([^"]+)".+?$/mis', '$1', $web1['sub_title']);
+                            @endphp
+                    <img class="lazyload srcset lazyloaded" sizes="100vw" src="{{$img}}" alt="Giúp web của bạn bán hàng và thu hút khách hàng hiệu quả!" />
                 </div>
                 <div class="banner-caption-overlay">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="content leading-snug">
-                                    <div class="title"><h2>Giúp web của bạn bán hàng và thu hút khách hàng hiệu quả</h2></div>
+                                    <div class="title"><h2>{{strip_tags($web1['title'])}}</h2></div>
                                     <div class="desc">
-                                        <p>
-                                            Dịch vụ thiết kế website Bán Hàng CHUẨN SEO TPHCM<br />
-                                            ☎️ 0286 273 0815 ✔️✔️ không chỉ đẹp mắt mà còn mang về nhiều lượt truy cập, nhiều đơn hàng. <br />
-                                            Đội ngũ thiết kế web luôn chăm chút từ nội dung, chức năng đến cả cách thức vận hành.
-                                        </p>
+                                        {{strip_tags($web1['description'])}}
                                     </div>
-                                    <a class="btn btn-icon-right" id="service-first-phone-call" href="tel:028 6273 0815"><span>Gọi cho chúng tôi</span><em class="lnr lnr-arrow-right"></em></a>
+                                    <a class="btn btn-icon-right" id="service-first-phone-call" href="tel:{{$con['contact']['phone_number']}}"><span>Gọi cho chúng tôi</span><em class="lnr lnr-arrow-right"></em></a>
                                 </div>
                             </div>
                         </div>
@@ -41,65 +46,48 @@
                 </div>
             </div>
         </section>
+        <pre>## post web-2</pre>
 
+        @php
+            $web2 = $http->get('/posts', ['search'=>'position,web-2'])->data();
+            $web2 = \Illuminate\Support\Arr::first($web2);
+        @endphp
         <section class="service-vietnamse-2 section">
             <div class="container">
                 <div class="row justify-center no-gutter">
                     <div class="col-lg-12">
-                        <h1 class="section-title text-center">Dịch vụ thiết kế website chuyên nghiệp - Cánh Cam</h1>
+                        <h1 class="section-title text-center">
+                            {{strip_tags($web2['title'])}}
+                        </h1>
                         <div class="section-desc text-center leading-snug">
-                            <p>
+                            {!! $web2['sub_title'] !!}
+                            {{--<p>
                                 Khám phá cách <b>Công ty thiết kế website trọn gói chuẩn seo</b> Cánh Cam giúp khách hàng bán hàng trực tuyến hiệu quả<br />
                                 và tạo ấn tượng thương hiệu tốt hơn qua các dự án nổi bật dưới đây.
-                            </p>
+                            </p>--}}
                         </div>
                         <div class="divider-line"></div>
                     </div>
                 </div>
+                <pre>## sub_post web-2</pre>
+
                 <div class="list-item">
+                    @php
+                        $subPosts2 = $http->get('/sub_posts', ['search'=>'post,web-2'])->data();
+                    @endphp
+                    @foreach($subPosts2 as $key => $item)
                     <div class="item">
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="img text-center"><img class="lazyload lazyloaded" src="{{$config->static}}/assets/images/uploaded/banner/1.png" alt="" /></div>
+                                <div class="img text-center"><img class="lazyload lazyloaded" src="{{$media->set($item['image'])->first()}}" alt="" /></div>
                             </div>
                             <div class="col-lg-6">
-                                <h4 class="title"><b>Nâng cao uy tín thương hiệu</b></h4>
-                                <div class="brief leading-snug">
-                                    Xây dựng thương hiệu, nâng cao giá trị uy tín thương hiệu luôn là mục tiêu hàng đầu trong bản kế hoạch marketing của mỗi công ty. Và <b>thiết kế website chuẩn seo</b> chính là một trong những việc đầu tiên sẽ
-                                    phải xúc tiến nếu muốn chương trình truyền thông của doanh nghiệp mình đạt hiệu quả cao.
-                                </div>
+                                <h4 class="title"><b>{{$item['name']}}</b></h4>
+                                <div class="brief leading-snug">{{$item['description']}}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="img text-center"><img class="lazyload" src="{{$config->static}}/assets/images/uploaded/banner/2.png" alt="" /></div>
-                            </div>
-                            <div class="col-lg-6">
-                                <h4 class="title"><b>Gia tăng hiệu quả kinh doanh</b></h4>
-                                <div class="brief leading-snug">
-                                    Với <b>thiết kế website bán hàng</b> tuỳ biến, Cánh Cam luôn đảm bảo doanh nghiệp của bạn sẽ không bỏ lỡ bất kì cơ hội nào để có thêm khách hàng và gia tăng doanh thu. Việc đăng sản phẩm mới có thể tiến hành
-                                    ở nhiều địa điểm chỉ cần có smartphone, laptop hay tablet. Việc tiếp nhận, xử lí đơn hàng, trả lời phản hồi khách hàng sẽ được thông báo với bạn ngay lập tức để giải quyết kịp thời.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="img text-center"><img class="lazyload" src="{{$config->static}}/assets/images/uploaded/banner/3.png" alt="" /></div>
-                            </div>
-                            <div class="col-lg-6">
-                                <h4 class="title"><b>Website hoạt động thông minh</b></h4>
-                                <div class="brief leading-snug">
-                                    Tính thẩm mỹ trong lĩnh vực <b>thiết kế website&nbsp;trọn gói</b> thôi vẫn chưa đủ. Tại Công ty Cánh Cam, tính bảo mật và tốc độ truy cập luôn là mối quan tâm hàng đầu của các developer khi tạo ra một sản
-                                    phẩm website. Do đó, chúng tôi định hướng lựa chọn nền tảng web ổn định, thông minh, bảo mật cao và được sử dụng rộng rãi trên toàn cầu. Gia tăng doanh số và xác lập vị thế là những gì bạn có thể nhận được
-                                    khi lựa chọn dịch vụ <b>thiết kế web trọn gói</b> chuẩn seo chuyên nghiệp của Cánh Cam.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -108,58 +96,30 @@
                 color: #fff;
             }
         </style>--}}
-        <section class="section service-english-3">
+        @php
+            $web3 = $http->get('/posts', ['search'=>'position,web-3'])->data();
+            $web3 = \Illuminate\Support\Arr::first($web3);
+            $img = preg_replace('/^.+?src="([^"]+)".+?$/mis', '$1', $web3['sub_title']);
+        @endphp
+        <section class="section service-english-3" style="background-image:url({{$img}})">
             <div class="container">
-                <h2 class="section-title text-white text-center">Dịch vụ thiết kế website tại Cánh Cam có gì nổi bật?</h2>
+                <h2 class="section-title text-white text-center">{{strip_tags($web3['title'])}}</h2>
                 <div class="list-item">
                     <div class="row row-lg-5 row-sm-2">
-                        <div class="w-100">
-                            <div class="item">
-                                <div class="icon"><img class="lazyload" src="{{$config->static}}/theme/custom/img/service-english/ic-shake-hand.png" /></div>
-                                <div class="caption text-center">
-                                    <h5 class="title">Tương thích mọi thiết bị</h5>
-                                    <div class="brief"><b>Thiết kế web trọn gói chuẩn seo</b>&nbsp;với công nghệ responsive giúp website có thể tự động thích ứng trên mọi thiết bị, phát huy hết sức mạnh của nó. ☎️ 0286 273 0815</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100">
-                            <div class="item">
-                                <div class="icon"><img class="lazyload" src="{{$config->static}}/theme/custom/img/service-english/ic-quote.png" /></div>
-                                <div class="caption text-center">
-                                    <h5 class="title">Quản lý đơn giản</h5>
-                                    <div class="brief">Hệ thống quản lý nội dung hiện đại, tiện lợi, đồng thời tối ưu dữ liệu để phù hợp hơn với mọi thiết bị. Giúp dễ dàng cập nhật và quản lý nội dung trên website của bạn.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100">
-                            <div class="item">
-                                <div class="icon"><img class="lazyload" src="{{$config->static}}/theme/custom/img/service-english/ic-lock.png" /></div>
-                                <div class="caption text-center">
-                                    <h5 class="title">Chi phí hiệu quả</h5>
-                                    <div class="brief">
-                                        Cho dù nhu cầu thiết kế web trọn gói như thế nào thì động cơ quyết định vẫn là tiết kiệm nhiều chi phí. Nhiều đãi đi kèm giúp hạn chế mức chi phí bỏ ra của doanh nghiệp nhưng vẫn thu về hiệu quả cao nhất.
+                        @php
+                            $subPosts3 = $http->get('/sub_posts', ['search'=>'post,web-3'])->data();
+                        @endphp
+                        @foreach($subPosts3 as $key => $item)
+                            <div class="w-100">
+                                <div class="item">
+                                    <div class="icon"><img src="{{$media->set($item['image'])->first()}}" /></div>
+                                    <div class="caption text-center">
+                                        <h5 class="title">{{$item['name']}}</h5>
+                                        <div class="brief">{{$item['description']}}</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-100">
-                            <div class="item">
-                                <div class="icon"><img class="lazyload" src="{{$config->static}}/theme/custom/img/service-english/ic-optimizing.png" /></div>
-                                <div class="caption text-center">
-                                    <h5 class="title">Tối ưu hoá SEO</h5>
-                                    <div class="brief">Bố cục, cấu trúc trang tối ưu, mang lại hiệu quả trong việc SEO trên mọi thiết bị, giúp website có thứ hạng cao trên các công cụ tìm kiếm.</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="w-100">
-                            <div class="item">
-                                <div class="icon"><img class="lazyload" src="{{$config->static}}/theme/custom/img/service-english/ic-optimizing.png" src="{{$config->static}}/assets/img/deafault-image_40x40.jpg" /></div>
-                                <div class="caption text-center">
-                                    <h5 class="title">Nâng cao trải nghiệm</h5>
-                                    <div class="brief">Chúng tôi luôn thiết kế những website hướng đến sự thân thiện với người dùng, giúp tối đa hoá tỉ lệ chuyển đổi và gia tăng doanh số cho doanh nghiệp của bạn.</div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

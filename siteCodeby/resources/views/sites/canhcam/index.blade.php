@@ -260,4 +260,5 @@
             </div>
         </section>
     </main>
+    <script async="" defer="" src="{{$config->static}}/theme/js/home.min.js"></script>
 @endsection
