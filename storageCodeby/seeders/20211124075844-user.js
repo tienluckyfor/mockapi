@@ -1,4 +1,5 @@
 'use strict';
+const {jwtEncode} = require("helpers/jwt")
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
