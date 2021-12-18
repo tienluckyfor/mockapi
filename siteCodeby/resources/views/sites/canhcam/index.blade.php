@@ -56,7 +56,10 @@
                     {!! $homePost2['sub_title'] !!}
                 </div>
                 <div class="row feature-list">
-                    @foreach($homePost2['sub_posts'] as $key => $item)
+                    @php
+                        $subPosts2 = $http->get('/sub_posts', ['search'=>'post,home-2'])->data();
+                    @endphp
+                    @foreach($subPosts2 as $key => $item)
                         <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
                             <figure>
                                 <img class="lazyload" data-src="{{$media->set($item['image'])->first()}}"
@@ -68,78 +71,6 @@
                             </figure>
                         </div>
                     @endforeach
-                    {{--<div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/1.png"
-                                 alt="THIẾT KẾ WEBSITE"/>
-                            <figcaption>
-                                <h3><a href="/thiet-ke-website">THIẾT KẾ WEBSITE</a></h3>
-                                <p>Công nghệ thiết kế web tùy biến, ngôn ngữ lập trình tối ưu dễ thay đổi bố cục các
-                                    khối thông tin giúp website linh họat với mọi thiết bị.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/2.png"
-                                 alt="VIẾT NỘI DUNG WEB"/>
-                            <figcaption>
-                                <h3><a href="/viet-noi-dung-web">VIẾT NỘI DUNG WEB</a></h3>
-                                <p>Website hoàn chỉnh đủ nội dung chuẩn SEO gồm từ khóa chuyên ngành được cập nhật đều
-                                    đặn để giữ chân, thu hút khách hàng quay trở lại.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/3.png"
-                                 alt="E-COMMERCE"/>
-                            <figcaption>
-                                <h3><a href="/e-commerce">E-COMMERCE</a></h3>
-                                <p>
-                                    Với giải pháp thương mại điện tử hàng đầu, sản phẩm cuối cùng Cánh Cam trao cho bạn
-                                    là vị thế trên thị trường và doanh số<br/>
-                                    bán hàng.
-                                </p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="300">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/4.png"
-                                 alt="LẬP TRÌNH APP WEB"/>
-                            <figcaption>
-                                <h3><a href="/lap-trinh-app-web">LẬP TRÌNH APP WEB</a></h3>
-                                <p>Cánh Cam tạo ra thiết kế &amp; lập trình App chuyên biệt với mục tiêu mang đến người
-                                    dùng trải nghiệm đầy lôi cuốn, ấn tượng trên thiết bị di động.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="300">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/5.png"
-                                 alt="CHIẾN DỊCH QUẢNG CÁO"/>
-                            <figcaption>
-                                <h3><a href="/chien-dich-quang-cao">CHIẾN DỊCH QUẢNG CÁO</a></h3>
-                                <p>Chiến dịch quảng cáo hấp dẫn ứng dụng công nghệ mới là phương thức tối ưu đưa bạn
-                                    nhanh chóng đến gần khách hàng mục tiêu.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="300">
-                        <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/6.png"
-                                 alt="HOSTING, TÊN MIỀN"/>
-                            <figcaption>
-                                <h3><a href="/hosting-ten-mien">HOSTING, TÊN MIỀN</a></h3>
-                                <p>Bảo vệ thương hiệu khi đăng ký tên miền đồng thời lưu trữ, phát triển web với dịch vụ
-                                    hosting chất lượng cao, ổn định.</p>
-                            </figcaption>
-                        </figure>
-                    </div>--}}
                 </div>
             </div>
         </section>
