@@ -1,47 +1,50 @@
 @php
     $con['menu'] = collect($con['menu'])->map(function($item) use($config){
     $item['link'] = $config->base_url.$item['link'];
+    if(isset($item['sub_menu'])){
+        $item['sub_menu'] = collect($item['sub_menu'])->map(function($item1) use($config){
+            $item1['link'] = $config->base_url.$item1['link'];
+            return $item1;
+        });
+    }
     return $item;
 });
 @endphp
-<!DOCTYPE html>
+        <!DOCTYPE html>
 
 <html lang="vi">
 
 <head>
-    <title>Công Ty Thiết Kế Website Chuyên Nghiệp, Uy Tín Tại TP. HCM</title>
-    <meta charset="utf-8" />
+    <title>{{@$seo['title']}}</title>
+    <meta charset="utf-8"/>
     <meta name="description"
-          content="Công ty chuyên thiết kế website cao cấp  ☎️ 028 6273 0815, dịch vụ thiết kế website chuyên nghiệp, chuẩn SEO ✅✅ uy tín hàng đầu trong lĩnh vực thiết kế web." />
-    <meta name="keywords" content="Công Ty Thiết Kế Website Chuyên Nghiệp, Uy Tín Tại TP. HCM" />
-    <meta name="generator" content="canhcam.vn" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+          content="{{@$seo['description']}}"/>
+    <meta name="keywords" content="Công Ty Thiết Kế Website Chuyên Nghiệp, Uy Tín Tại TP. HCM"/>
+    <meta name="generator" content="canhcam.vn"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"/>
 
     <meta property="og:image"
-          content="https://www.canhcam.vn/content/images/uploaded/thiet-ke-website-canh-cam-ads.jpg" />
-    <meta name="google-site-verification" content="OFXnpPG5dTA4edzJXCsyp7tPoaKn05gs1AJfS1QefiQ" />
-    <meta name="google-site-verification" content="fTReXXEJ8FVA-ORR6K1b-DsBM5peY1PX5lf2zuVkzMM" />
-    <meta property="og:image"
-          content="https://www.canhcam.vn/assets/images/uploaded/thiet-ke-website-canh-cam-ads.jpg" />
+          content="{{$config->static}}/assets/images/uploaded/thiet-ke-website-canh-cam-ads.jpg"/>
+    <meta name="google-site-verification" content=""/>
     <!--
-    <script src="https://static.zdassets.com/ekr/snippet.js?key=84856f78-8c67-4a35-a8d3-1133e8020950" id="ze-snippet"
-        async="" type="text/javascript"></script>
-    <script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script>
-    <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
-    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-NDTL4Q"></script>
-    <script
-        type="application/ld+json">{"@context":"https://schema.org/","@type":"Book","name":"Công ty Cánh Cam","description":"Công Ty Thiết Kế Website Chuyên Nghiệp, Uy Tín Tại TP. HCM","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","bestRating":"5","ratingCount":"1679"}}</script> -->
+   <script src="https://static.zdassets.com/ekr/snippet.js?key=84856f78-8c67-4a35-a8d3-1133e8020950" id="ze-snippet"
+       async="" type="text/javascript"></script>
+   <script async="" src="https://connect.facebook.net/en_US/fbevents.js"></script>
+   <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
+   <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-NDTL4Q"></script>
+   <script
+       type="application/ld+json">{"@context":"https://schema.org/","@type":"Book","name":"Công ty Cánh Cam","description":"Công Ty Thiết Kế Website Chuyên Nghiệp, Uy Tín Tại TP. HCM","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","bestRating":"5","ratingCount":"1679"}}</script> -->
 
-    <meta http-equiv="content-language" content="vi-VN" />
-    <link rel="alternate" hreflang="vi-VN" href="http://www.canhcam.vn/" />
-    <link rel="alternate" hreflang="en-US" href="http://www.canhcam.vn/us/" />
+    <meta http-equiv="content-language" content="vi-VN"/>
+    <link rel="alternate" hreflang="vi-VN" href="http://www.canhcam.vn/"/>
+    <link rel="alternate" hreflang="en-US" href="http://www.canhcam.vn/us/"/>
 
 <!-- <link rel="stylesheet" type="text/css" href="{{$config->static}}/theme/css/swiper.css"> -->
 
-    <link rel="canonical" href="http://www.canhcam.vn/" />
+    <link rel="canonical" href="http://www.canhcam.vn/"/>
 
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="manifest" href="/manifest.json"/>
 
     <!--
     <script>setTimeout(function () { var a = document.createElement("script"); var b = document.getElementsByTagName("script")[0]; a.src = "https://static.zdassets.com/ekr/snippet.js?key=84856f78-8c67-4a35-a8d3-1133e8020950"; a.id = "ze-snippet"; a.async = true; a.type = "text/javascript"; b.parentNode.insertBefore(a, b); setTimeout(function () { zE('webWidget', 'setLocale', 'vi'); }, 500); }, 3000);</script>
@@ -69,28 +72,31 @@
         <div class="container">
             <div class="wrapper">
                 <div class="email">
-                    <a href="mailto:info@canhcam.vn">
+                    <a href="mailto:{{$con['contact']['email']}}">
                         <em class="mdi-email"></em>
-                        info@canhcam.vn
+                        {{$con['contact']['email']}}
                     </a>
                 </div>
                 <div class="hotline">
-                    <a href="tel:028 6273 0815">
+                    <a href="tel:{{$con['contact']['phone_number']}}">
                         <em class="mdi-phone"></em>
-                        028 6273 0815
+                        {{$con['contact']['phone_number']}}
                     </a>
                 </div>
                 <div class="social">
-                    <a class="en en-US" href="http://www.canhcam.vn/us/" title="English" style="background: none;">
+                    {{--<a class="en en-US" href="http://www.canhcam.vn/us/" title="English" style="background: none;">
                         <img title="English" alt="English" src="{{$config->static}}/assets/images/flags/us.png " />
-                    </a>
-
-                    <a href="https://www.facebook.com/thietkewebsitecanhcam/" target="_blank" rel="noreferrer">
-                        <em class="mdi-facebook"></em>
-                    </a>
-                    <a href="https://www.youtube.com/user/canhcamhere" target="_blank" rel="noreferrer">
-                        <em class="mdi-youtube"></em>
-                    </a>
+                    </a>--}}
+                    @isset($con['contact']['facebook'])
+                        <a href="{{$con['contact']['facebook']}}" target="_blank" rel="noreferrer">
+                            <em class="mdi-facebook"></em>
+                        </a>
+                    @endisset
+                    @isset($con['contact']['youtube'])
+                        <a href="{{$con['contact']['youtube']}}" target="_blank" rel="noreferrer">
+                            <em class="mdi-youtube"></em>
+                        </a>
+                    @endisset
                 </div>
             </div>
         </div>
@@ -100,13 +106,37 @@
             <div class="wrapper">
                 <div class="logo-wrapper">
                     <div>
-                        <a href="{{$config->base_url}}"><img src="{{$config->static}}/assets/images/uploaded/logo-codeby.png" alt="" /></a>
+                        <a href="{{$config->base_url}}"><img
+                                    src="{{$config->static}}/assets/images/uploaded/logo-codeby.png" alt=""/></a>
                     </div>
                 </div>
                 <div class="left-header">
                     <div class="menu">
                         <ul>
-                            <li class="">
+                            @foreach($con['menu'] as $key => $item)
+                                @if(isset($item['sub_menu']))
+                                    <li class="has-sub">
+                                        <a href="javascript:void(0)">{{$item['name']}}</a>
+                                        <div class="sub-menu">
+                                            <div class="container">
+                                                <div class="sub-menu-list">
+                                                    @foreach($item['sub_menu'] as $key1 => $item1)
+                                                        <a class="" href="{{$item1['link']}}"
+                                                           title="{{$item1['name']}}">
+                                                            {{$item1['name']}}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @else
+                                    <li class="">
+                                        <a href="{{$item['link']}}" title="{{$item['name']}}">{{$item['name']}}</a>
+                                    </li>
+                                @endif
+                            @endforeach
+                            {{--<li class="">
                                 <a href="/da-thiet-ke" title="Đã thiết kế">Giới thiệu</a>
                             </li>
                             <li class="has-sub">
@@ -114,7 +144,8 @@
                                 <div class="sub-menu">
                                     <div class="container">
                                         <div class="sub-menu-list">
-                                            <a class="" href="{{$config->base_url}}/thiet-ke-website" title="Thiết kế website">
+                                            <a class="" href="{{$config->base_url}}/thiet-ke-website"
+                                               title="Thiết kế website">
                                                 Thiết kế website
                                             </a>
                                             <a class="" href="/viet-noi-dung-web" title="Viết nội dung web">
@@ -197,7 +228,7 @@
                             </li> -->
                             <li class="">
                                 <a href="/lien-lac" title="Liên lạc">Liên hệ</a>
-                            </li>
+                            </li>--}}
                         </ul>
                     </div>
 
@@ -233,15 +264,17 @@
                         <p>support@canhcam.vn</p>
                         <p>Hotline: <a style="text-decoration: none; display: inline;" href="tel:028 6273 0815">028
                                 6273 0815</a></p>
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
                         <div style="display: flex;">
                             <a href="https://www.facebook.com/thietkewebsitecanhcam/" target="_blank"
-                               rel="nofollow noopener"><img src="{{$config->static}}/assets/images/uploaded/blog/facebook.png"
-                                                            alt="" /></a>&nbsp;&nbsp;
+                               rel="nofollow noopener"><img
+                                        src="{{$config->static}}/assets/images/uploaded/blog/facebook.png"
+                                        alt=""/></a>&nbsp;&nbsp;
                             <a href="https://www.youtube.com/user/canhcamhere" target="_blank"
-                               rel="nofollow noopener"><img src="{{$config->static}}/assets/images/uploaded/blog/youtube.png"
-                                                            alt="" /></a>
+                               rel="nofollow noopener"><img
+                                        src="{{$config->static}}/assets/images/uploaded/blog/youtube.png"
+                                        alt=""/></a>
                         </div>
                         <p></p>
                         <p style="margin-top: 5px;">Giấy chứng nhận ĐKKD số 0303948883 do Sở Kế hoạch và Đầu tư
@@ -251,7 +284,7 @@
                             <img class="lazyload" style="width: 9rem; margin-top: 15px; margin-bottom: 0px;"
                                  data-src="{{$config->static}}/assets/images/uploaded/logoSaleNoti.png"
                                  src="https://www.canhcam.vn/assets/img/deafault-image_120x120.jpg"
-                                 alt="Logo bộ công thương" />
+                                 alt="Logo bộ công thương"/>
                         </a>
                     </div>
                 </div>
@@ -267,9 +300,9 @@
                         <a href="/tuyen-dung" target="_blank" rel="noopener">Tuyển dụng</a>
                     </p>
                     <p>
-                        <img src="{{$config->static}}/assets/media/logo/logo2.jpg" alt="Công ty thiết kế website" /> <a
+                        <img src="{{$config->static}}/assets/media/logo/logo2.jpg" alt="Công ty thiết kế website"/> <a
                                 href="https://www.google.com/partners/agency?id=9777635549" rel="nofollow"> <img
-                                    src="{{$config->static}}/assets/media/logo/gg.png" alt="" /> </a>
+                                    src="{{$config->static}}/assets/media/logo/gg.png" alt=""/> </a>
                     </p>
                 </div>
             </div>
@@ -295,25 +328,25 @@
                             <div class="form-group">
                                 <input id="Footer_FullName" class="validate" data-rule-required="true"
                                        data-msg-required="Vui lòng nhập họ và tên" name="Footer_FullName"
-                                       placeholder="Họ và tên" />
+                                       placeholder="Họ và tên"/>
                             </div>
                             <div class="form-group">
                                 <input id="Footer_CompanyName" class="validate" data-rule-required="true"
                                        data-msg-required="Vui lòng nhập tên công ty" name="Footer_CompanyName"
-                                       placeholder="Tên công ty" />
+                                       placeholder="Tên công ty"/>
                             </div>
                             <div class="form-group">
                                 <input id="Footer_Phone" maxlength="15" class="validate" data-rule-required="true"
                                        data-msg-required="Vui lòng nhập số điện thoại" name="Footer_Phone"
-                                       placeholder="Số điện thoại" />
+                                       placeholder="Số điện thoại"/>
                             </div>
                             <div class="frm-btnwrap">
                                 <div class="frm-btn">
-                                    <input type="submit" value="Gửi" />
+                                    <input type="submit" value="Gửi"/>
                                 </div>
                             </div>
                             <input name="__RequestVerificationToken" type="hidden"
-                                   value="CfDJ8NQdAGGgYABGrHDhz9SQscC69XGhUWxVoCl2Zw42xHoo3ZyIz-spVvilFO16b052z0pJnA737wdZF23c1vqlM-22ca748aHGNlKSFlCAem9JHVht58qomVgBI5WVLASadvW7JtLsHX-UrT_3SZqs51o" />
+                                   value="CfDJ8NQdAGGgYABGrHDhz9SQscC69XGhUWxVoCl2Zw42xHoo3ZyIz-spVvilFO16b052z0pJnA737wdZF23c1vqlM-22ca748aHGNlKSFlCAem9JHVht58qomVgBI5WVLASadvW7JtLsHX-UrT_3SZqs51o"/>
                         </form>
                     </div>
                 </div>
@@ -1000,7 +1033,10 @@
                     }
                 ]
             }
-        </script>
+
+
+
+</script>
 <!--
 <script type="text/javascript"
     id="">!function (b, e, f, g, a, c, d) { b.fbq || (a = b.fbq = function () { a.callMethod ? a.callMethod.apply(a, arguments) : a.queue.push(arguments) }, b._fbq || (b._fbq = a), a.push = a, a.loaded = !0, a.version = "2.0", a.queue = [], c = e.createElement(f), c.async = !0, c.src = g, d = e.getElementsByTagName(f)[0], d.parentNode.insertBefore(c, d)) }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js"); fbq("init", "1743036689276657"); fbq("track", "PageView");</script>

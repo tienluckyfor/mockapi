@@ -150,21 +150,12 @@ export function myMediaList(dataset_id) {
 
 export function uploadMediaPaste(name) {
     return async (dispatch, getState) => {
-        console.log('1')
         dispatch(setMerge({pMedia: {isLoading: true}}))
         const {pMedia,} = getState().media
         const {dataset_id_RD,} = getState().rallydatas
         const {checkedList} = getState().commons
 
         let promises = [];
-        (pMedia.files ?? []).forEach(file => {
-            const formData = new FormData()
-            formData.append('file', file)
-            formData.append('dataset_id', dataset_id_RD)
-            formData.append('source', 'ant-upload')
-            promises.push(resfulClient.post('/api/media', formData))
-        })
-
         // pMedia.files.map((file) => {
         //     const formData = new FormData()
         //     formData.append('file', file)
@@ -172,14 +163,59 @@ export function uploadMediaPaste(name) {
         //     formData.append('source', 'ant-upload')
         //     promises.push(resfulClient.post('/api/media', formData))
         // })
+        // async function url2blob(url) {
+        //     try {
+        //         const data = await fetch(url);
+        //         const blob = await data.blob();
+        //         await navigator.clipboard.write([
+        //             new ClipboardItem({
+        //                 [blob.type]: blob
+        //             })
+        //         ]);
+        //         console.log("Success.");
+        //     } catch (err) {
+        //         console.error(err.name, err.message);
+        //     }
+        // }
+        const getFormDataSync = (fileURL) => {
+            return new Promise((resolve, reject) => {
+                const formData = new FormData()
+                formData.append('dataset_id', dataset_id_RD)
+                formData.append('source', 'ant-upload')
+                fetch(fileURL).then(res=>{
+                    res.blob().then(blob=>{
+                        formData.append('file', blob)
+                        resolve(resfulClient.postSync('/api/media', formData))
+                        // resolve(formData)
+                    })
+                })
+                // fData.blob()
+            })
+        }
+
+        // const p = await pMedia.files.map(async (file) => {
+        //     // const formData = new FormData()
+        //     // const fData = await fetch(file)
+        //     // const blob = await fData.blob()
+        //     // formData.append('file', blob)
+        //     // formData.append('dataset_id', dataset_id_RD)
+        //     // formData.append('source', 'ant-upload')
+        //     // console.log('formData', formData)
+        //     // return resfulClient.postSync('/api/media', formData)
+        // })
+        promises.push(getFormDataSync(pMedia.files[0]))
+
+        console.log('promises', promises)
         Promise.all(promises).then(values => {
+            console.log('values', values)
             let cl = checkedList[name] ? JSON.parse(JSON.stringify(checkedList[name])) : []
-            (values ?? []).forEach(res => {
-                cl = [...cl, res?.data?.id.toString()]
-            });
-            // values.map((res) => {
+            console.log('cl', cl)
+            // (values ?? []).forEach(res => {
             //     cl = [...cl, res?.data?.id.toString()]
-            // })
+            // });
+            values.map((res) => {
+                cl = [...cl, res?.data?.id.toString()]
+            })
             dispatch(setCommonMerge('checkedList', {[name]: cl}))
             console.log('2')
             dispatch(setMerge({

@@ -62,8 +62,12 @@ export const MediaModal = () => {
             }
             let files = [];
             for (let item of e.clipboardData.items) {
-                if (item.kind === 'file')
-                    files.push(item.getAsFile())
+                if (item.kind === 'file'){
+                    let fdata = item.getAsFile()
+                    const objectURL = URL.createObjectURL(fdata)
+                    files.push(objectURL);
+                }
+                    // files.push(item.getAsFile())
             }
             // console.log('3')
             dispatch(setMediaMerge('pMedia', {files}))
@@ -73,7 +77,7 @@ export const MediaModal = () => {
         return () => {
             window.removeEventListener('paste', onMediaUpload)
         }
-    }, [mMedia, dispatch])
+    }, [mMedia])
 
     const gridView = () => {
         return (

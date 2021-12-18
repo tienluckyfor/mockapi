@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 const Joi = require('joi');
 const asyncHandler = require('express-async-handler')
-const authentication = require('middleware/authentication')
+const {authUser} = require('middleware/auth')
 const {joiValidation} = require("helpers/errorHandle")
 const Post = require("models").Post
 const User = require("models").User
 
-router.post('/posts', authentication, asyncHandler(async (request, response) => {
+router.post('/posts', authUser, asyncHandler(async (request, response) => {
     joiValidation(request, response, {
         title: Joi.string().required(),
         description: Joi.string().required(),

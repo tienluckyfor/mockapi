@@ -16,7 +16,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage});
 
 router.post('/file_local', upload.any(), asyncHandler(async (request, response) => {
-    const app_id = request.header('api_id')
+    const api_id = request.header('api_id')
     const filepath = `public/files/${app_id}`
     fs.mkdirSync(filepath, {recursive: true})
     const promises = [];

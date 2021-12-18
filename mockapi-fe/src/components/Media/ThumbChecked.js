@@ -4,6 +4,7 @@ import {mediaSelector, setMediaMerge, uploadMediaPaste,} from "slices/media";
 import {commonsSelector, setCommonMerge} from "slices/commons";
 import {useDispatch, useSelector} from "react-redux";
 import {getFirstThumb} from "services";
+import _ from "lodash";
 
 export const ThumbChecked = ({name}) => {
     const dispatch = useDispatch()
@@ -16,9 +17,22 @@ export const ThumbChecked = ({name}) => {
             // console.log('FormRallydata onMediaUpload')
             let files = [];
             for (let item of e.clipboardData.items) {
-                if (item.kind === 'file')
-                    files.push(item.getAsFile())
+                if (item.kind === 'file') {
+                    let fdata = item.getAsFile()
+                    const objectURL = URL.createObjectURL(fdata)
+// console.log('objectURL', objectURL)
+//                     return;
+//                     delete fdata.lastModifiedDate
+//                     console.log('fdata', fdata)
+                    // fdata.lastModifiedDate = _.toPlainObject(fdata.lastModifiedDate)
+                    // console.log('fdata', fdata)
+                    // const f = _.toPlainObject(fdata)
+//                     const file = {...fdata, lastModifiedDate: f.lastModifiedDate}
+// console.log('file', file)
+                    files.push(objectURL);
+                }
             }
+            console.log('files', files)
             dispatch(setMediaMerge('pMedia', {files}));
             // dispatch(uploadMediaPaste(mMedia.name))
         }

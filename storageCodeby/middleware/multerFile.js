@@ -4,7 +4,7 @@ const path = require('path')
 
 const storage = multer.diskStorage({
     destination: (request, file, cb) => {
-        const app_id = request.header('api_id')
+        const api_id = request.header('api_id')
         const path = `./public/files/${app_id}`
         fs.mkdirSync(path, {recursive: true})
         return cb(null, path)

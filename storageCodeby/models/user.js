@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const env = require("config/env")
 var _ = require('lodash');
+const {jwtEncode} = require('helpers/jwt');
 
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {
@@ -14,12 +15,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            // this.hasMany(models.Api);
         }
 
         async generateAuthToken() {
             const user = this;
             const arrToken = _.omit(user.toJSON(), ['token', 'updatedAt'])
-            const token = jwt.sign(arrToken, env.JWT_SECRET)
+            // const token = jwt.sign(arrToken, env.JWT_SECRET)
+            const token = jwtEncode(arrToken)
             user.token = token
             await user.save()
             return token

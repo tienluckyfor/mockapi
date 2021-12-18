@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      app_id: {
+      api_id: {
         type: Sequelize.INTEGER
       },
       fieldname: {

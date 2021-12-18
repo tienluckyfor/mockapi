@@ -15,10 +15,10 @@ module.exports = {
         try {
             return queryInterface.bulkInsert('Users', [{
                 name: 'Tien',
-                phone: '344703838',
+                phone: '0344703838',
                 email: 'tien.luckyfor@gmail.com',
-                password: "tien",
-                token: "tien",
+                password: "0344703838",
+                token: jwtEncode({"id": 1, "token": "token"}),
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }]);

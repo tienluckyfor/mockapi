@@ -13,10 +13,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Api, {foreignKey: 'api_id', as: 'api', });
+
     }
   };
   File.init({
-    app_id: DataTypes.INTEGER,
+    api_id: DataTypes.INTEGER,
     fieldname: DataTypes.STRING,
     originalname: DataTypes.STRING,
     encoding: DataTypes.STRING,
