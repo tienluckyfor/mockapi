@@ -15,7 +15,7 @@
     }
 
     .canhcam-banner-1 .swiper-slide {
-        height: 370px;
+        height: 400px;
     }
 
     .header-bottom .has-sub .sub-menu-list a:before {
