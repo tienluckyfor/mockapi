@@ -10,7 +10,7 @@
     return $item;
 });
 @endphp
-<!DOCTYPE html>
+        <!DOCTYPE html>
 
 <html lang="vi">
 
@@ -65,7 +65,6 @@
     </script>
      -->
 </head>
-
 <body _c_t_common="1">
 <header class="header-desktop">
     <div class="header-top">
@@ -267,18 +266,19 @@
                         <br/>
                         <br/>
                         <div style="display: flex;">
-                            <a href="https://www.facebook.com/thietkewebsitecanhcam/" target="_blank"
-                               rel="nofollow noopener"><img
-                                        src="{{$config->static}}/assets/images/uploaded/blog/facebook.png"
-                                        alt=""/></a>&nbsp;&nbsp;
-                            <a href="https://www.youtube.com/user/canhcamhere" target="_blank"
-                               rel="nofollow noopener"><img
-                                        src="{{$config->static}}/assets/images/uploaded/blog/youtube.png"
-                                        alt=""/></a>
+                            @isset($con['contact']['facebook'])
+                                <a href="{{$con['contact']['facebook']}}" target="_blank" rel="nofollow noopener">
+                                    <img src="{{$config->static}}/assets/images/uploaded/blog/facebook.png" alt=""/>
+                                </a>&nbsp;&nbsp;
+                            @endisset
+                            @isset($con['contact']['youtube'])
+                                <a href="{{$con['contact']['youtube']}}" target="_blank" rel="nofollow noopener">
+                                    <img src="{{$config->static}}/assets/images/uploaded/blog/youtube.png" alt=""/>
+                                </a>
+                            @endisset
                         </div>
                         <p></p>
-                        <p style="margin-top: 5px;">Giấy chứng nhận ĐKKD số 0303948883 do Sở Kế hoạch và Đầu tư
-                            TP.HCM cấp ngày 12/08/2005</p>
+                        <p style="margin-top: 5px;">{{$con['contact']['license']}}</p>
                         <p></p>
                         <a href="http://online.gov.vn/Home/WebDetails/78182" rel="nofollow">
                             <img class="lazyload" style="width: 9rem; margin-top: 15px; margin-bottom: 0px;"
@@ -356,7 +356,7 @@
             <div class="col-12">
                 <div class="footer-bottom">
                     <div class="copyright">
-                        <p>© 2015-2021 Công ty thiết kế website Cánh Cam</p>
+                        <p>{{$con['contact']['copyright']}}</p>
                     </div>
                     <nav class="footer-nav">
                         <a href="/dieu-khoan-su-dung">Điều khoản sử dụng</a>
@@ -1033,6 +1033,7 @@
                     }
                 ]
             }
+
 
 
 

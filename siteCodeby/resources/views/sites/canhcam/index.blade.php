@@ -25,7 +25,7 @@
                 <div class="swiper-pagination"></div>
             </div>
         </section>
-<pre>## post home-1</pre>
+        <pre>## post home-1</pre>
         @php
             $homePost1 = $http->get('/posts', ['search'=>'position,home-1'])->data();
             $homePost1 = \Illuminate\Support\Arr::first($homePost1);
@@ -132,6 +132,8 @@
             $homePost4 = \Illuminate\Support\Arr::first($homePost4);
         @endphp
         <section class="canhcam-home-4">
+            <pre>## post home-4</pre>
+
             <div class="container">
                 <div class="desc-text" data-aos="zoom-in" data-aos-duration="1000">
                     {{--<span style="font-size: 18pt;">CÔNG TY THIẾT KẾ WEBSITE</span>
@@ -140,8 +142,9 @@
                         và ngoài nước đến từ nhiều ngành nghề với quy mô lớn nhỏ khác nhau.</p>--}}
                     {!! $homePost4['title'] !!}
                 </div>
-                <div class="row brand-list">
+                <pre>## sub_post home-4</pre>
 
+                <div class="row brand-list">
                     @php
                         $subPosts4 = $http->get('/sub_posts', ['search'=>'post,home-4'])->data();
                     @endphp
@@ -158,38 +161,44 @@
                 </div>
             </div>
         </section>
+        <pre>## post home-5</pre>
+        @php
+            $homePost5 = $http->get('/posts', ['search'=>'position,home-5'])->data();
+            $homePost5 = \Illuminate\Support\Arr::first($homePost5);
+        @endphp
 
         <section class="canhcam-home-5">
             <div class="container">
                 <div class="desc-text">
-                    <h2>ẤN TƯỢNG VỀ CÁNH CAM</h2>
+                    {!! $homePost5['title'] !!}
                 </div>
+                <pre>## sub_post home-5</pre>
+
                 <div class="row">
                     <div class="col-12 testimonial-list">
-                        <div class="swiper-container swiper-container-horizontal">
+                        <div class="swiper-container">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide swiper-slide-active" style="width: 690px; margin-right: 30px;">
-                                    <div class="content">
-                                        <p>
-                                            “Sau khi hợp tác với Cánh Cam, PVOIL đã có một website vận hành rất tốt,
-                                            chúng tôi hoàn toàn hài lòng về dịch vụ của <strong>Công ty thiết kế website
-                                                Cánh Cam</strong> trong quá trình triển
-                                            khai cũng như dịch vụ hỗ trợ sau khi website vận hành chính thức. ”
-                                        </p>
+                                @php
+                                    $subPosts5 = $http->get('/sub_posts', ['search'=>'post,home-5'])->data();
+                                @endphp
+                                @foreach($subPosts5 as $key => $item)
+                                    <div class="swiper-slide">
+                                        <div class="content">
+                                            <p>{!! $item['description'] !!}</p>
+                                        </div>
+                                        <div class="info">
+                                            <h3>{!! $item['name'] !!}</h3>
+                                        </div>
                                     </div>
-                                    <div class="info">
-                                        <h3>
-                                            Ông Phạm Mạnh Cường
-                                        </h3>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide swiper-slide-next" style="width: 690px; margin-right: 30px;">
+                                @endforeach
+{{--
+                                <div class="swiper-slide">
                                     <div class="content">
                                         <p>
                                             “Hiện nay khách hàng gửi email về để hỏi thăm về sản phẩm Vĩnh Tường ngày
                                             một nhiều, cho thấy trang web mới thực sự hấp dẫn người xem và hiệu quả hơn
-                                            cho việc tương tác với khách hàng. Cảm ơn
-                                            Cánh Cam nhé.”
+                                            cho việc tương tác với khách hàng. Cảm ơn Cánh Cam
+                                            nhé.”
                                         </p>
                                     </div>
                                     <div class="info">
@@ -198,13 +207,13 @@
                                         </h3>
                                     </div>
                                 </div>
-                                <div class="swiper-slide" style="width: 690px; margin-right: 30px;">
+                                <div class="swiper-slide">
                                     <div class="content">
                                         <p>
                                             Cánh Cam đã vượt quá sự mong đợi của chúng tôi trong việc cung cấp các dịch
                                             vụ: thiết kế logo, thiết kế website, tài liệu quảng cáo và bộ office-kit.
-                                            Tiohhian mong muốn tiếp tục mối quan hệ
-                                            công việc với Công ty thiết kế website Cánh Cam.
+                                            Tiohhian mong muốn tiếp tục mối quan hệ công việc với
+                                            Công ty thiết kế website Cánh Cam.
                                         </p>
                                     </div>
                                     <div class="info">
@@ -212,49 +221,39 @@
                                             Wallenburg Dirk
                                         </h3>
                                     </div>
-                                </div>
+                                </div>--}}
                             </div>
-                            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-                                <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0"
-                                      role="button" aria-label="Go to slide 1"></span>
-                                <span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                      aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet"
-                                                                              tabindex="0" role="button"
-                                                                              aria-label="Go to slide 3"></span>
-                            </div>
-                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="feedback-img">
-                            <img alt="Công ty thiết kế website" class="lazyload" src="/assets/img/deafault-image.jpg"
-                                 data-src="{{$config->static}}/assets/media/home/antuong.jpg"/>
+                            {!! $homePost5['sub_title'] !!}
+                            {{--                            <img alt="Công ty thiết kế website" class="lazyload" src="/assets/img/deafault-image.jpg" data-src="/assets/media/home/antuong.jpg" />--}}
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
+        <pre>## post home-6</pre>
+        @php
+            $homePost6 = $http->get('/posts', ['search'=>'position,home-6'])->data();
+            $homePost6 = \Illuminate\Support\Arr::first($homePost6);
+        @endphp
         <section class="canhcam-home-6">
             <div class="container">
                 <div class="row" data-aos="flip-up" data-aos-delay="500">
                     <div class="col-lg-10">
-                        <div class="line-title">Bạn cần một thương hiệu mới</div>
+                        <div class="line-title">{!! $homePost6['title'] !!}</div>
                         <div class="content">
-                            <p>
-                                Ai cũng có thể tạo ra bộ nhận diện thương hiệu đẹp… Nhưng liệu có bao nhiêu thương hiệu
-                                được hoạch định bài bản để có thể nhận ra giữa các đối thủ trên tạp chí, ấn phẩm, trên
-                                trang web, internet, ứng dụng
-                                điện thoại thông minh, trên truyền hình hoặc trên kệ hàng… theo cách xuyên suốt và nhất
-                                quán.
-                            </p>
+                            {!! $homePost6['description'] !!}
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div id="ackIframe">&nbsp;</div>
-                        <div class="btn-wrap"><a href="https://www.canhcam.vn/thiet-ke-website" target="_blank">KHÁM PHÁ
+                        <div class="btn-wrap"><a href="{{$config->base_url.strip_tags(@$homePost6['sub_title'])}}" target="_blank">KHÁM PHÁ
                                 THÊM</a></div>
                     </div>
                 </div>
