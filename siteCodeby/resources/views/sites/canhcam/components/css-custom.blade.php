@@ -51,5 +51,7 @@
     .header-desktop .menu ul li a {
         text-align: center;
     }
-
+    .header-bottom .has-sub .sub-menu-list a{
+        font-size: 16px;
+    }
 </style>
