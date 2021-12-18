@@ -10,7 +10,7 @@
     return $item;
 });
 @endphp
-        <!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="vi">
 

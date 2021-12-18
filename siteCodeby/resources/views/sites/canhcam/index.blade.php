@@ -1,193 +1,77 @@
 @extends($config->layout.'/master')
 
 @section('main')
-    <link rel="stylesheet" type="text/css" href="{{$config->static}}/bundles/site.min.css?v=1.0.1" />
-    <link href="{{$config->static}}/theme/css/home.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{$config->static}}/bundles/site.min.css?v=1.0.1"/>
+    <link href="{{$config->static}}/theme/css/home.min.css" rel="stylesheet" type="text/css"/>
     @include($config->view.'/components/css-custom')
 
     <main>
         <section class="canhcam-banner-1">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy" src="{{$config->static}}/assets/images/uploaded/blog/banner-noel.png?_t=1639641115"
-                            alt="Thiết kế website responsive banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner2.jpg"
-                            alt="Thiết kế website responsive banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner3.jpg"
-                            alt="Thiết kế website sáng tạo banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner4.jpg"
-                            alt="Thiết kế website Cánh Cam banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner5.jpg"
-                            alt="Website đã thiết kế banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner5.jpg"
-                            alt="Website đã thiết kế banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <img class="swiper-lazy"
-                            src="{{$config->static}}/assets/images/uploaded/banner/thiet-ke-website-canh-cam-home-banner5.jpg"
-                            alt="Website đã thiết kế banner" />
-                        <div class="swiper-lazy-preloader"></div>
-                    </div>
+                    @php
+                        $homeSlider = $http->get('/sliders', ['search'=>'position,home'])->data();
+                        $homeSlider = \Illuminate\Support\Arr::first($homeSlider);
+                        $files = $media->set($homeSlider['images'])->files();
+                    @endphp
+                    @foreach($files as $key => $item)
+                        <div class="swiper-slide">
+                            <img class="swiper-lazy"
+                                 src="{{$item}}"/>
+                            <div class="swiper-lazy-preloader"></div>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
         </section>
 
+        @php
+            $homePost1 = $http->get('/posts', ['search'=>'position,home-1'])->data();
+            $homePost1 = \Illuminate\Support\Arr::first($homePost1);
+        @endphp
         <section class="canhcam-home-1">
             <div class="container">
                 <div class="intro-text">
-                    <div class="intro-header">Giúp web của bạn <strong style="color: #ff5a00;">bán hàng </strong>và
-                        <strong style="color: #ff5a00;">thu hút khách hàng </strong>hiệu quả!
+                    <div class="intro-header">
+                        {!! $homePost1['title'] !!}
                     </div>
-                    <div class="line-title">TẠI SAO HƠN 2000 KHÁCH HÀNG ĐÃ LỰA CHỌN CÁNH CAM TRONG 14 NĂM QUA?</div>
+                    <div class="line-title">
+                        {!! $homePost1['sub_title'] !!}</div>
                     <div class="content">
-                        <p>
-                            Trang web họat động hiệu quả sẽ đảm bảo khả năng mang về <strong>nhiều truy cập, nhiều đơn
-                                hàng </strong>và hơn hết là khiến khách hàng <strong>luôn quay trở lại. </strong>Cánh
-                            Cam đã mang đến cho khách hàng
-                            trang web hoạt động hiệu quả đúng như mong đợi giúp gia tăng doanh số bán hàng. Khám phá
-                            cách <strong>Công ty thiết kế website</strong> Cánh Cam giúp khách hàng bán hàng trực tuyến
-                            hiệu quả và tạo ấn tượng
-                            thương hiệu tốt hơn qua các dự án nổi bật dưới đây.
-                        </p>
+                        {!! $homePost1['description'] !!}
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- <section class="canhcam-home-2">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6" data-aos="fade-up">
-                        <figure>
-                            <a href="/lam-web-sony-center-tang-truong-doanh-so-an-tuong">
-                                <img class="lazyloaded" src="{{$config->static}}/assets/images/thumbs/6150cc401f442a145557758a.jpeg"
-                                    alt="SONY Center tăng trưởng doanh số ấn tượng"
-                                    data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a145557758a.jpeg" />
-                            </a>
-                            <figcaption>
-                                <h2>
-                                    <a href="/lam-web-sony-center-tang-truong-doanh-so-an-tuong">SONY Center tăng trưởng
-                                        doanh số ấn tượng</a>
-                                </h2>
-                                <p><strong>Cánh Cam</strong> - <strong>Công ty thiết kế web e-commerce</strong> chuyên
-                                    nghiệp - đã hỗ trợ Sony cải tổ trang web thương mại điện tử đảm bảo mục tiêu tăng
-                                    trưởng bán hàng ngoạn mục.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-md-6" data-aos="fade-up">
-                        <figure>
-                            <a href="/tokyo-deli-lam-web-thuong-hieu">
-                                <img class="lazyloaded" src="{{$config->static}}/assets/images/thumbs/6150cc401f442a1455577597.jpeg"
-                                    alt="TOKYO DELI - Thiết kế web thương hiệu "
-                                    data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a1455577597.jpeg" />
-                            </a>
-                            <figcaption>
-                                <h2>
-                                    <a href="/tokyo-deli-lam-web-thuong-hieu">TOKYO DELI - Thiết kế web thương hiệu </a>
-                                </h2>
-                                <p>Website đã trở thành một cổng giao tiếp trực tiếp, hiệu quả với khách hàng. Tokyo
-                                    Deli <strong>thiết kế web</strong> mới để tiếp tục vững bước trên con đường chinh
-                                    phục khách hàng Việt Nam</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                        <figure>
-                            <a href="/lam-website-masteri-toa-sang-tren-thi-truong-bat-dong-san">
-                                <img class="lazyloaded" src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775b4.jpeg"
-                                    alt="MASTERI tỏa sáng trên thị trường Bất động sản "
-                                    data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775b4.jpeg" />
-                            </a>
-                            <figcaption>
-                                <h2>
-                                    <a href="/lam-website-masteri-toa-sang-tren-thi-truong-bat-dong-san">MASTERI tỏa
-                                        sáng trên thị trường Bất động sản </a>
-                                </h2>
-                                <p>Thương hiệu của Masteri được khẳng định ngày càng vững chắc, dự án của Masteri cũng
-                                    được khách hàng đánh giá xứng tầm thông qua hệ thống <strong>website được thiết kế
-                                        chuyên nghiệp</strong></p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                        <figure>
-                            <a href="/pvoil-thiet-ke-web-tap-doan-de-phuc-vu-viec-len-san-chung-khoan">
-                                <img class="lazyloaded" src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775fc.jpeg"
-                                    alt="PVOIL - Thiết kế web tập đoàn để phục vụ việc lên sàn chứng khoán"
-                                    data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775fc.jpeg" />
-                            </a>
-                            <figcaption>
-                                <h2>
-                                    <a href="/pvoil-thiet-ke-web-tap-doan-de-phuc-vu-viec-len-san-chung-khoan">PVOIL -
-                                        Thiết kế web tập đoàn để phục vụ việc lên sàn chứng khoán</a>
-                                </h2>
-                                <div style="text-align: justify;">
-                                    Tổng công ty Dầu Việt Nam - <strong>PVOIL</strong> - đối tác <strong>làm
-                                        web</strong> nhiều năm với Cánh Cam, đã chính thức lên sàn chứng khoán và gặt
-                                    hái nhiều thành tựu rực rỡ vào tháng 03/2018.
-                                </div>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                        <figure>
-                            <a href="/toshiba">
-                                <img class="lazyloaded" src="{{$config->static}}/assets/images/thumbs/6150cc481f442a1455577a8f.jpeg"
-                                    alt="TOSHIBA" data-src="{{$config->static}}/assets/images/thumbs/6150cc481f442a1455577a8f.jpeg" />
-                            </a>
-                            <figcaption>
-                                <h2>
-                                    <a href="/toshiba">TOSHIBA</a>
-                                </h2>
-                                <p>Một trong những thương hiệu hàng đầu về sản phẩm điện và điện tử gia dụng với 15 năm
-                                    hoạt động tại thị trường Việt Nam.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-                <div class="row"><a class="view-all" href="/da-thiet-ke">Xem tất cả</a></div>
-            </div>
-        </section> -->
-
+        @php
+            $homePost2 = $http->get('/posts', ['search'=>'position,home-2'])->data();
+            $homePost2 = \Illuminate\Support\Arr::first($homePost2);
+        @endphp
         <section class="canhcam-home-3">
             <div class="container">
                 <div class="desc-text" data-aos="zoom-in" data-aos-duration="1000">
-                    <h2>BÁN HÀNG &amp; THU HÚT KHÁCH HÀNG ONLINE</h2>
-                    <p>
-                        Là bạn đồng hành của bạn trong môi trường kinh doanh trực tuyến không ngừng thay đổi hàng ngày
-                        với vô vàn cơ hội và không ít thách thức, <strong>Công ty thiết kế website</strong> Cánh Cam
-                        không chỉ tư vấn mà còn
-                        trực tiếp cùng bạn đưa ra những chiến lược web toàn diện cho việc kinh doanh trở nên tốt hơn.
-                    </p>
+                    {!! $homePost2['title'] !!}
+                    {!! $homePost2['sub_title'] !!}
                 </div>
                 <div class="row feature-list">
-                    <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
+                    @foreach($homePost2['sub_posts'] as $key => $item)
+                        <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
+                            <figure>
+                                <img class="lazyload" data-src="{{$media->set($item['image'])->first()}}"
+                                     alt="{{$item['name']}}"/>
+                                <figcaption>
+                                    <h3><a href="{{$config->base_url.@$item['link']}}">{{$item['name']}}</a></h3>
+                                    <p>{{$item['description']}}</p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    @endforeach
+                    {{--<div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/1.png" alt="THIẾT KẾ WEBSITE" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/1.png"
+                                 alt="THIẾT KẾ WEBSITE"/>
                             <figcaption>
                                 <h3><a href="/thiet-ke-website">THIẾT KẾ WEBSITE</a></h3>
                                 <p>Công nghệ thiết kế web tùy biến, ngôn ngữ lập trình tối ưu dễ thay đổi bố cục các
@@ -197,7 +81,8 @@
                     </div>
                     <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/2.png" alt="VIẾT NỘI DUNG WEB" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/2.png"
+                                 alt="VIẾT NỘI DUNG WEB"/>
                             <figcaption>
                                 <h3><a href="/viet-noi-dung-web">VIẾT NỘI DUNG WEB</a></h3>
                                 <p>Website hoàn chỉnh đủ nội dung chuẩn SEO gồm từ khóa chuyên ngành được cập nhật đều
@@ -207,21 +92,23 @@
                     </div>
                     <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/3.png" alt="E-COMMERCE" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/3.png"
+                                 alt="E-COMMERCE"/>
                             <figcaption>
                                 <h3><a href="/e-commerce">E-COMMERCE</a></h3>
                                 <p>
                                     Với giải pháp thương mại điện tử hàng đầu, sản phẩm cuối cùng Cánh Cam trao cho bạn
-                                    là vị thế trên thị trường và doanh số<br />
+                                    là vị thế trên thị trường và doanh số<br/>
                                     bán hàng.
                                 </p>
                             </figcaption>
                         </figure>
                     </div>
                     <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="300">
+                         data-aos-delay="300">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/4.png" alt="LẬP TRÌNH APP WEB" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/4.png"
+                                 alt="LẬP TRÌNH APP WEB"/>
                             <figcaption>
                                 <h3><a href="/lap-trinh-app-web">LẬP TRÌNH APP WEB</a></h3>
                                 <p>Cánh Cam tạo ra thiết kế &amp; lập trình App chuyên biệt với mục tiêu mang đến người
@@ -230,9 +117,10 @@
                         </figure>
                     </div>
                     <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="300">
+                         data-aos-delay="300">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/5.png" alt="CHIẾN DỊCH QUẢNG CÁO" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/5.png"
+                                 alt="CHIẾN DỊCH QUẢNG CÁO"/>
                             <figcaption>
                                 <h3><a href="/chien-dich-quang-cao">CHIẾN DỊCH QUẢNG CÁO</a></h3>
                                 <p>Chiến dịch quảng cáo hấp dẫn ứng dụng công nghệ mới là phương thức tối ưu đưa bạn
@@ -241,16 +129,17 @@
                         </figure>
                     </div>
                     <div class="col-sm-6 col-lg-4 feature-item" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="300">
+                         data-aos-delay="300">
                         <figure>
-                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/6.png" alt="HOSTING, TÊN MIỀN" />
+                            <img class="lazyload" data-src="{{$config->static}}/assets/media/img/home/6.png"
+                                 alt="HOSTING, TÊN MIỀN"/>
                             <figcaption>
                                 <h3><a href="/hosting-ten-mien">HOSTING, TÊN MIỀN</a></h3>
                                 <p>Bảo vệ thương hiệu khi đăng ký tên miền đồng thời lưu trữ, phát triển web với dịch vụ
                                     hosting chất lượng cao, ổn định.</p>
                             </figcaption>
                         </figure>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </section>
@@ -266,11 +155,12 @@
                             </p>
                             <div class="swiper-navigation">
                                 <div class="swiper-left swiper-button-disabled" tabindex="0" role="button"
-                                    aria-label="Previous slide" aria-disabled="true"><img
-                                        src="{{$config->static}}/assets/img/swiper-left.png" alt="" /></div>
+                                     aria-label="Previous slide" aria-disabled="true"><img
+                                            src="{{$config->static}}/assets/img/swiper-left.png" alt=""/></div>
 
                                 <div class="swiper-right" tabindex="0" role="button" aria-label="Next slide"
-                                    aria-disabled="false"><img src="{{$config->static}}/assets/img/swiper-right.png" alt="" /></div>
+                                     aria-disabled="false"><img src="{{$config->static}}/assets/img/swiper-right.png"
+                                                                alt=""/></div>
                             </div>
                         </div>
                     </div>
@@ -278,107 +168,107 @@
                         <div class="swiper-container swiper-container-horizontal swiper-container-multirow">
                             <div class="swiper-wrapper" style="width: 1145px; transform: translate3d(0px, 0px, 0px);">
                                 <div class="swiper-slide swiper-slide-active" data-swiper-column="0" data-swiper-row="0"
-                                    style="order: 0; width: 221px; margin-right: 8px;">
+                                     style="order: 0; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/lam-website-masteri-toa-sang-tren-thi-truong-bat-dong-san"
-                                        title="MASTERI tỏa sáng trên thị trường Bất động sản ">
+                                       title="MASTERI tỏa sáng trên thị trường Bất động sản ">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775b4.jpeg"
-                                            alt="MASTERI tỏa sáng trên thị trường Bất động sản " />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775b4.jpeg"
+                                             alt="MASTERI tỏa sáng trên thị trường Bất động sản "/>
                                         <p class="name">MASTERI tỏa sáng trên thị trường Bất động sản</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide swiper-slide-next" data-swiper-column="0" data-swiper-row="1"
-                                    style="-webkit-box-ordinal-group: 5; order: 5; margin-top: 8px; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 5; order: 5; margin-top: 8px; width: 221px; margin-right: 8px;">
                                     <a class="img"
-                                        href="/dat-xanh-group-xay-dung-niem-tin-bat-dau-tu-xay-dung-ngoi-nha-cua-ban"
-                                        title="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN">
+                                       href="/dat-xanh-group-xay-dung-niem-tin-bat-dau-tu-xay-dung-ngoi-nha-cua-ban"
+                                       title="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775e4.jpeg"
-                                            alt="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775e4.jpeg"
+                                             alt="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN"/>
                                         <p class="name">ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ
                                             CỦA BẠN</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="1" data-swiper-row="0"
-                                    style="-webkit-box-ordinal-group: 1; order: 1; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 1; order: 1; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/cbre-viet-nam-lam-website-dich-vu-khu-dan-cu-hien-dai"
-                                        title="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại">
+                                       title="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a145557761b.jpeg"
-                                            alt="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a145557761b.jpeg"
+                                             alt="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại"/>
                                         <p class="name">CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="1" data-swiper-row="1"
-                                    style="-webkit-box-ordinal-group: 6; order: 6; margin-top: 8px; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 6; order: 6; margin-top: 8px; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/it-park-thung-lung-silicon-da-nang"
-                                        title="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG">
+                                       title="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a145557796d.jpeg"
-                                            alt="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a145557796d.jpeg"
+                                             alt="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG"/>
                                         <p class="name">IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="2" data-swiper-row="0"
-                                    style="-webkit-box-ordinal-group: 2; order: 2; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 2; order: 2; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/benh-vien-da-khoa-twg-healthcare"
-                                        title="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE">
+                                       title="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577979.jpeg"
-                                            alt="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577979.jpeg"
+                                             alt="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE"/>
                                         <p class="name">BỆNH VIỆN ĐA KHOA TWG HEALTHCARE</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="2" data-swiper-row="1"
-                                    style="-webkit-box-ordinal-group: 7; order: 7; margin-top: 8px; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 7; order: 7; margin-top: 8px; width: 221px; margin-right: 8px;">
                                     <a class="img"
-                                        href="/sunshine-equipment-giai-phap-thiet-bi-nha-bep-danh-cho-chuyen-gia"
-                                        title="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia ">
+                                       href="/sunshine-equipment-giai-phap-thiet-bi-nha-bep-danh-cho-chuyen-gia"
+                                       title="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia ">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577987.jpeg"
-                                            alt="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia " />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577987.jpeg"
+                                             alt="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia "/>
                                         <p class="name">Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên
                                             gia</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="3" data-swiper-row="0"
-                                    style="-webkit-box-ordinal-group: 3; order: 3; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 3; order: 3; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/kfc-viet-nam-lam-website-tuyen-dung-cho-rieng-minh"
-                                        title="KFC Việt Nam làm website tuyển dụng cho riêng mình">
+                                       title="KFC Việt Nam làm website tuyển dụng cho riêng mình">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577993.jpeg"
-                                            alt="KFC Việt Nam làm website tuyển dụng cho riêng mình" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577993.jpeg"
+                                             alt="KFC Việt Nam làm website tuyển dụng cho riêng mình"/>
                                         <p class="name">KFC Việt Nam làm website tuyển dụng cho riêng mình</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="3" data-swiper-row="1"
-                                    style="-webkit-box-ordinal-group: 8; order: 8; margin-top: 8px; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 8; order: 8; margin-top: 8px; width: 221px; margin-right: 8px;">
                                     <a class="img"
-                                        href="/honda-viet-nam-power-products-cong-nghe-dinh-cao-cung-nhau-phat-trien"
-                                        title="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN">
+                                       href="/honda-viet-nam-power-products-cong-nghe-dinh-cao-cung-nhau-phat-trien"
+                                       title="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779a1.jpeg"
-                                            alt="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779a1.jpeg"
+                                             alt="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN"/>
                                         <p class="name">HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU
                                             PHÁT TRIỂN</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="4" data-swiper-row="0"
-                                    style="-webkit-box-ordinal-group: 4; order: 4; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 4; order: 4; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/watami-viet-nam"
-                                        title="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ">
+                                       title="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779b9.jpeg"
-                                            alt="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779b9.jpeg"
+                                             alt="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ"/>
                                         <p class="name">WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ</p>
                                     </a>
                                 </div>
                                 <div class="swiper-slide" data-swiper-column="4" data-swiper-row="1"
-                                    style="-webkit-box-ordinal-group: 9; order: 9; margin-top: 8px; width: 221px; margin-right: 8px;">
+                                     style="-webkit-box-ordinal-group: 9; order: 9; margin-top: 8px; width: 221px; margin-right: 8px;">
                                     <a class="img" href="/toshiba" title="TOSHIBA">
                                         <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                            data-src="{{$config->static}}/assets/images/thumbs/6150cc481f442a1455577a8f.jpeg"
-                                            alt="TOSHIBA" />
+                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc481f442a1455577a8f.jpeg"
+                                             alt="TOSHIBA"/>
                                         <p class="name">TOSHIBA</p>
                                     </a>
                                 </div>
@@ -400,147 +290,157 @@
                 </div>
                 <div class="row brand-list">
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.vinasuntaxi.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/11.jpg"
-                                alt="vinasuntaxi" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/11.jpg"
+                                                         alt="vinasuntaxi"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://inspiring-asia.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/2.jpg"
-                                alt="inspiring-asia" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/2.jpg"
+                                                         alt="inspiring-asia"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.adparch.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/3.jpg" alt="adparch" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/3.jpg"
+                                                         alt="adparch"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.vstar.edu.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/4.jpg" alt="vstar" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/4.jpg"
+                                                         alt="vstar"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.toshiba.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/5.jpg" alt="toshiba" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/5.jpg"
+                                                         alt="toshiba"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.tondonga.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/6.jpg" alt="tondonga" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/6.jpg"
+                                                         alt="tondonga"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.kidofoods.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/7.jpg"
-                                alt="kidofoods" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/7.jpg"
+                                                         alt="kidofoods"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.hondapp.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/8.jpg" alt="hondapp" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/8.jpg"
+                                                         alt="hondapp"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.pandanusresort.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/9.jpg"
-                                alt="pandanusresort" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/9.jpg"
+                                                         alt="pandanusresort"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.hontamresort.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/10.jpg"
-                                alt="hontamresort" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/10.jpg"
+                                                         alt="hontamresort"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.novaland.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/111.jpg"
-                                alt="novaland" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload"
+                                                         src="{{$config->static}}/assets/Banner/111.jpg"
+                                                         alt="novaland"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.tettrungthu.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/12.jpg"
-                                alt="tettrungthu" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/12.jpg"
+                                                         alt="tettrungthu"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.sacombank.com.vn/Pages/default.aspx" title=""
-                            target="_blank" rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/13.jpg"
-                                alt="sacombank" /> </a>
+                           target="_blank" rel="noopener nofollow"> <img class="lazyload"
+                                                                         src="{{$config->static}}/assets/Banner/13.jpg"
+                                                                         alt="sacombank"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.datxanh.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/14.jpg" alt="datxanh" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/14.jpg"
+                                                         alt="datxanh"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.manulife.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/15.jpg"
-                                alt="manulife" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/15.jpg"
+                                                         alt="manulife"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.hiephoidoanhnghiep.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/16.jpg"
-                                alt="hiephoidoanhnghiep" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/16.jpg"
+                                                         alt="hiephoidoanhnghiep"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.dai-ichi-life.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/17.jpg"
-                                alt="dai ichi life" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/17.jpg"
+                                                         alt="dai ichi life"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.sacombank-sbr.com.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/18.jpg"
-                                alt="sacombank sbr" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/18.jpg"
+                                                         alt="sacombank sbr"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.anphuocgroup.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/19.jpg"
-                                alt="anphuocgroup" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/19.jpg"
+                                                         alt="anphuocgroup"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.belasspa.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/20.jpg"
-                                alt="belasspa" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/20.jpg"
+                                                         alt="belasspa"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.beton6.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/21.jpg" alt="beton6" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/21.jpg"
+                                                         alt="beton6"/>
                         </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://khudothisala.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/22.jpg"
-                                alt="khudothisala" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/22.jpg"
+                                                         alt="khudothisala"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.vinhtuong.com/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/23.jpg"
-                                alt="vinhtuong" /> </a>
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/23.jpg"
+                                                         alt="vinhtuong"/> </a>
                     </div>
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                        data-aos-delay="500">
+                         data-aos-delay="500">
                         <a class="brand-item" href="http://www.erci.edu.vn/" title="" target="_blank"
-                            rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/24.jpg" alt="erci" />
+                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/24.jpg"
+                                                         alt="erci"/>
                         </a>
                     </div>
                 </div>
@@ -604,10 +504,11 @@
                             </div>
                             <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
                                 <span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0"
-                                    role="button" aria-label="Go to slide 1"></span>
+                                      role="button" aria-label="Go to slide 1"></span>
                                 <span class="swiper-pagination-bullet" tabindex="0" role="button"
-                                    aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet"
-                                    tabindex="0" role="button" aria-label="Go to slide 3"></span>
+                                      aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet"
+                                                                              tabindex="0" role="button"
+                                                                              aria-label="Go to slide 3"></span>
                             </div>
                             <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                         </div>
@@ -617,7 +518,7 @@
                     <div class="col-12">
                         <div class="feedback-img">
                             <img alt="Công ty thiết kế website" class="lazyload" src="/assets/img/deafault-image.jpg"
-                                data-src="{{$config->static}}/assets/media/home/antuong.jpg" />
+                                 data-src="{{$config->static}}/assets/media/home/antuong.jpg"/>
                         </div>
                     </div>
                 </div>
