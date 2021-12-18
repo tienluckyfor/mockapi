@@ -25,7 +25,7 @@
                 <div class="swiper-pagination"></div>
             </div>
         </section>
-
+<pre>## post home-1</pre>
         @php
             $homePost1 = $http->get('/posts', ['search'=>'position,home-1'])->data();
             $homePost1 = \Illuminate\Support\Arr::first($homePost1);
@@ -44,6 +44,7 @@
                 </div>
             </div>
         </section>
+        <pre>## post home-2</pre>
 
         @php
             $homePost2 = $http->get('/posts', ['search'=>'position,home-2'])->data();
@@ -55,6 +56,8 @@
                     {!! $homePost2['title'] !!}
                     {!! $homePost2['sub_title'] !!}
                 </div>
+                <pre>## sub_post home-2</pre>
+
                 <div class="row feature-list">
                     @php
                         $subPosts2 = $http->get('/sub_posts', ['search'=>'post,home-2'])->data();
@@ -74,6 +77,7 @@
                 </div>
             </div>
         </section>
+        <pre>## post home-3</pre>
 
         @php
             $homePost3 = $http->get('/posts', ['search'=>'position,home-3'])->data();
@@ -98,6 +102,8 @@
                         </div>
                     </div>
                     <div class="col-lg-7 swiper-right">
+                        <pre>## sub_post home-3</pre>
+
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
                                 @php
@@ -105,181 +111,50 @@
                                 @endphp
                                 @foreach($subPosts3 as $key => $item)
                                     <div class="swiper-slide">
-                                        <a class="img" href="{{$config->base_url.@$item['link']}}" title="{{$item['name']}}">
-                                            <img class="lazyload" src="{{$config->static}}/assets/img/deafault-image_220x220.jpg" data-src="{{$media->set($item['image'])->first()}}" alt="{{$item['name']}}">
+                                        <a class="img" href="{{$config->base_url.@$item['link']}}"
+                                           title="{{$item['name']}}">
+                                            <img class="lazyload"
+                                                 src="{{$config->static}}/assets/img/deafault-image_220x220.jpg"
+                                                 data-src="{{$media->set($item['image'])->first()}}"
+                                                 alt="{{$item['name']}}">
                                             <p class="name">{{$item['name']}}</p>
                                         </a>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
         </section>
 
+        @php
+            $homePost4 = $http->get('/posts', ['search'=>'position,home-4'])->data();
+            $homePost4 = \Illuminate\Support\Arr::first($homePost4);
+        @endphp
         <section class="canhcam-home-4">
             <div class="container">
                 <div class="desc-text" data-aos="zoom-in" data-aos-duration="1000">
-                    <span style="font-size: 18pt;">CÔNG TY THIẾT KẾ WEBSITE</span>
+                    {{--<span style="font-size: 18pt;">CÔNG TY THIẾT KẾ WEBSITE</span>
                     <h2>CHO HƠN 2000 KHÁCH HÀNG TRONG 14 NĂM</h2>
                     <p>Chúng tôi tự hào được đồng hành cùng với sự phát triển lớn mạnh của hơn 2000 doanh nghiệp trong
-                        và ngoài nước đến từ nhiều ngành nghề với quy mô lớn nhỏ khác nhau.</p>
+                        và ngoài nước đến từ nhiều ngành nghề với quy mô lớn nhỏ khác nhau.</p>--}}
+                    {!! $homePost4['title'] !!}
                 </div>
                 <div class="row brand-list">
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.vinasuntaxi.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/11.jpg"
-                                                         alt="vinasuntaxi"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://inspiring-asia.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/2.jpg"
-                                                         alt="inspiring-asia"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.adparch.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/3.jpg"
-                                                         alt="adparch"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.vstar.edu.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/4.jpg"
-                                                         alt="vstar"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.toshiba.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/5.jpg"
-                                                         alt="toshiba"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.tondonga.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/6.jpg"
-                                                         alt="tondonga"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.kidofoods.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/7.jpg"
-                                                         alt="kidofoods"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.hondapp.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/8.jpg"
-                                                         alt="hondapp"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.pandanusresort.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/9.jpg"
-                                                         alt="pandanusresort"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.hontamresort.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/10.jpg"
-                                                         alt="hontamresort"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.novaland.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload"
-                                                         src="{{$config->static}}/assets/Banner/111.jpg"
-                                                         alt="novaland"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.tettrungthu.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/12.jpg"
-                                                         alt="tettrungthu"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.sacombank.com.vn/Pages/default.aspx" title=""
-                           target="_blank" rel="noopener nofollow"> <img class="lazyload"
-                                                                         src="{{$config->static}}/assets/Banner/13.jpg"
-                                                                         alt="sacombank"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.datxanh.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/14.jpg"
-                                                         alt="datxanh"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.manulife.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/15.jpg"
-                                                         alt="manulife"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.hiephoidoanhnghiep.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/16.jpg"
-                                                         alt="hiephoidoanhnghiep"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.dai-ichi-life.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/17.jpg"
-                                                         alt="dai ichi life"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.sacombank-sbr.com.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/18.jpg"
-                                                         alt="sacombank sbr"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.anphuocgroup.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/19.jpg"
-                                                         alt="anphuocgroup"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.belasspa.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/20.jpg"
-                                                         alt="belasspa"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.beton6.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/21.jpg"
-                                                         alt="beton6"/>
-                        </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://khudothisala.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/22.jpg"
-                                                         alt="khudothisala"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.vinhtuong.com/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/23.jpg"
-                                                         alt="vinhtuong"/> </a>
-                    </div>
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
-                         data-aos-delay="500">
-                        <a class="brand-item" href="http://www.erci.edu.vn/" title="" target="_blank"
-                           rel="noopener nofollow"> <img class="lazyload" src="{{$config->static}}/assets/Banner/24.jpg"
-                                                         alt="erci"/>
-                        </a>
-                    </div>
+
+                    @php
+                        $subPosts4 = $http->get('/sub_posts', ['search'=>'post,home-4'])->data();
+                    @endphp
+                    @foreach($subPosts4 as $key => $item)
+                        <div class="col-6 col-sm-4 col-md-3 col-lg-2" data-aos="zoom-in" data-aos-duration="1000"
+                             data-aos-delay="500">
+                            <a class="brand-item" href="{{@$item['link']}}" title="" target="_blank"
+                               rel="noopener nofollow">
+                                <img class="lazyload" src="{{$media->set($item['image'])->first()}}"
+                                     alt="{{@$item['name']}}"/>
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </section>
