@@ -75,15 +75,17 @@
             </div>
         </section>
 
+        @php
+            $homePost3 = $http->get('/posts', ['search'=>'position,home-3'])->data();
+            $homePost3 = \Illuminate\Support\Arr::first($homePost3);
+        @endphp
         <section class="duan-noibat">
             <div class="container">
                 <div class="row no-gutters">
                     <div class="col-lg-5 content-center">
                         <div class="content">
-                            <h3>Website vừa <strong>golive </strong>trong tháng</h3>
-                            <p>Bộ sưu tập những website mới nhất được Cánh Cam Thiết kế và đưa vào vận hành chính thức.
-                                Hãy <a href="/lien-lac">liên hệ </a>với chúng tôi để được tư vấn làm website tốt nhất.
-                            </p>
+                            {!! $homePost3['title'] !!}
+                            {!! $homePost3['sub_title'] !!}
                             <div class="swiper-navigation">
                                 <div class="swiper-left swiper-button-disabled" tabindex="0" role="button"
                                      aria-label="Previous slide" aria-disabled="true"><img
@@ -96,117 +98,21 @@
                         </div>
                     </div>
                     <div class="col-lg-7 swiper-right">
-                        <div class="swiper-container swiper-container-horizontal swiper-container-multirow">
-                            <div class="swiper-wrapper" style="width: 1145px; transform: translate3d(0px, 0px, 0px);">
-                                <div class="swiper-slide swiper-slide-active" data-swiper-column="0" data-swiper-row="0"
-                                     style="order: 0; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/lam-website-masteri-toa-sang-tren-thi-truong-bat-dong-san"
-                                       title="MASTERI tỏa sáng trên thị trường Bất động sản ">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775b4.jpeg"
-                                             alt="MASTERI tỏa sáng trên thị trường Bất động sản "/>
-                                        <p class="name">MASTERI tỏa sáng trên thị trường Bất động sản</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide swiper-slide-next" data-swiper-column="0" data-swiper-row="1"
-                                     style="-webkit-box-ordinal-group: 5; order: 5; margin-top: 8px; width: 221px; margin-right: 8px;">
-                                    <a class="img"
-                                       href="/dat-xanh-group-xay-dung-niem-tin-bat-dau-tu-xay-dung-ngoi-nha-cua-ban"
-                                       title="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a14555775e4.jpeg"
-                                             alt="ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ CỦA BẠN"/>
-                                        <p class="name">ĐẤT XANH GROUP - XÂY DỰNG NIỀM TIN BẮT ĐẦU TỪ XÂY DỰNG NGÔI NHÀ
-                                            CỦA BẠN</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="1" data-swiper-row="0"
-                                     style="-webkit-box-ordinal-group: 1; order: 1; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/cbre-viet-nam-lam-website-dich-vu-khu-dan-cu-hien-dai"
-                                       title="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc401f442a145557761b.jpeg"
-                                             alt="CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại"/>
-                                        <p class="name">CBRE Việt Nam - Làm website dịch vụ khu dân cư hiện đại</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="1" data-swiper-row="1"
-                                     style="-webkit-box-ordinal-group: 6; order: 6; margin-top: 8px; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/it-park-thung-lung-silicon-da-nang"
-                                       title="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a145557796d.jpeg"
-                                             alt="IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG"/>
-                                        <p class="name">IT PARK - THUNG LŨNG SILICON ĐÀ NẴNG</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="2" data-swiper-row="0"
-                                     style="-webkit-box-ordinal-group: 2; order: 2; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/benh-vien-da-khoa-twg-healthcare"
-                                       title="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577979.jpeg"
-                                             alt="BỆNH VIỆN ĐA KHOA TWG HEALTHCARE"/>
-                                        <p class="name">BỆNH VIỆN ĐA KHOA TWG HEALTHCARE</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="2" data-swiper-row="1"
-                                     style="-webkit-box-ordinal-group: 7; order: 7; margin-top: 8px; width: 221px; margin-right: 8px;">
-                                    <a class="img"
-                                       href="/sunshine-equipment-giai-phap-thiet-bi-nha-bep-danh-cho-chuyen-gia"
-                                       title="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia ">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577987.jpeg"
-                                             alt="Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên gia "/>
-                                        <p class="name">Sunshine Equipment - Giải pháp thiết bị nhà bếp dành cho chuyên
-                                            gia</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="3" data-swiper-row="0"
-                                     style="-webkit-box-ordinal-group: 3; order: 3; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/kfc-viet-nam-lam-website-tuyen-dung-cho-rieng-minh"
-                                       title="KFC Việt Nam làm website tuyển dụng cho riêng mình">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc461f442a1455577993.jpeg"
-                                             alt="KFC Việt Nam làm website tuyển dụng cho riêng mình"/>
-                                        <p class="name">KFC Việt Nam làm website tuyển dụng cho riêng mình</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="3" data-swiper-row="1"
-                                     style="-webkit-box-ordinal-group: 8; order: 8; margin-top: 8px; width: 221px; margin-right: 8px;">
-                                    <a class="img"
-                                       href="/honda-viet-nam-power-products-cong-nghe-dinh-cao-cung-nhau-phat-trien"
-                                       title="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779a1.jpeg"
-                                             alt="HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU PHÁT TRIỂN"/>
-                                        <p class="name">HONDA VIỆT NAM POWER PRODUCTS - CÔNG NGHỆ ĐỈNH CAO CÙNG NHAU
-                                            PHÁT TRIỂN</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="4" data-swiper-row="0"
-                                     style="-webkit-box-ordinal-group: 4; order: 4; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/watami-viet-nam"
-                                       title="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc471f442a14555779b9.jpeg"
-                                             alt="WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ"/>
-                                        <p class="name">WATAMI VIỆT NAM - NHÀ HÀNG NHẬT, ĐẲNG CẤP CHO TẤT CẢ</p>
-                                    </a>
-                                </div>
-                                <div class="swiper-slide" data-swiper-column="4" data-swiper-row="1"
-                                     style="-webkit-box-ordinal-group: 9; order: 9; margin-top: 8px; width: 221px; margin-right: 8px;">
-                                    <a class="img" href="/toshiba" title="TOSHIBA">
-                                        <img class="lazyload" src="/assets/img/deafault-image_220x220.jpg"
-                                             data-src="{{$config->static}}/assets/images/thumbs/6150cc481f442a1455577a8f.jpeg"
-                                             alt="TOSHIBA"/>
-                                        <p class="name">TOSHIBA</p>
-                                    </a>
-                                </div>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                @php
+                                    $subPosts3 = $http->get('/sub_posts', ['search'=>'post,home-3'])->data();
+                                @endphp
+                                @foreach($subPosts3 as $key => $item)
+                                    <div class="swiper-slide">
+                                        <a class="img" href="{{$config->base_url.@$item['link']}}" title="{{$item['name']}}">
+                                            <img class="lazyload" src="{{$config->static}}/assets/img/deafault-image_220x220.jpg" data-src="{{$media->set($item['image'])->first()}}" alt="{{$item['name']}}">
+                                            <p class="name">{{$item['name']}}</p>
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
-                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
                         </div>
-                    </div>
                 </div>
             </div>
         </section>
