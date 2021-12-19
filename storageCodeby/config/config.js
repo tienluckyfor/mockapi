@@ -12,6 +12,7 @@ let DBs = {};
         "dialect": "mariadb"
     }
 })
+console.log('DBs', DBs)
 module.exports = {
     ".env.local": DBs['.env.local'],
     ".env.dev": DBs['.env.dev'],
