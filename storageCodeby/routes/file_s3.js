@@ -18,15 +18,9 @@ const upload = multer({storage});
 
 router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (request, response) => {
     const {api} = request
-    // console.log('api', api)
-    // return;
-    // const api_id = request.header('api_id')
-    // const api = await Api.findByPk(api_id)
     const filepath = `public/files/${api.id}`
     fs.mkdirSync(filepath, {recursive: true})
     const promises = [];
-    // const otherFiles = [];
-    // const platform = 'file_s3';
 
     // convert
     (request.files ?? []).map(async (file, key) => {
@@ -80,7 +74,7 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
             return {...aFile, cloud}
         })
         Promise.all(payload).then(async vals => {
-            vals.map(item=>{
+            vals.map(item => {
                 fs.unlinkSync(item.path)
             })
             const files = await File.bulkCreate(vals, {returning: true})
@@ -90,25 +84,26 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
 }))
 
 router.get('/file_s3/:file_id', asyncHandler(async (request, response) => {
-    const {file_id} = request.params
+    const {file_id} = request.params;
     const file = await File.findOne({
-        id: file_id,
+        where: {id: file_id},
         include: {model: Api, as: 'api',},
     })
-    let stream;
+    let streamData;
+    const apiKeys = JSON.parse(file.api.keys)
     switch (true) {
         case ((file.mimetype ?? '').match(/image/g) ? true : false) :
-            stream = getFileStream(file.cloud.key)
-            return resImageByStream(stream, request.query, response)
+            streamData = getFileStream(file.cloud.key, apiKeys)
+            return resImageByStream(streamData, request.query, response)
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
-            const Location = getFileURL(file.cloud.key)
+            const Location = getFileURL(file.cloud.key, apiKeys)
             response.writeHead(301, {Location});
             response.end();
             break;
         default:
-            stream = getFileStream(file.cloud.key)
-            return resFileByStream(stream, response)
+            streamData = getFileStream(file.cloud.key, apiKeys)
+            return resFileByStream(streamData, response)
             break;
     }
 }))

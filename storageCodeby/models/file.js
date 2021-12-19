@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Api, {foreignKey: 'api_id', as: 'api', });
-
     }
   };
   File.init({
@@ -40,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     file: {
       type:DataTypes.VIRTUAL,
       get(){
-        const path = this.getDataValue('path');
+        // const path = this.getDataValue('path');
         const id = this.getDataValue('id');
         const platform = this.getDataValue('platform');
         return `${env.BASE_URL}/${platform}/${id}`
