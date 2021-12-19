@@ -6,7 +6,7 @@ const readEnv = (path) => {
     // dotenv.config({
     //     path
     // })
-    require('dotenv').config({path})
+    require('dotenv').config({path: `./${path}`})
     return {
         DB_HOST: process.env.DB_HOST,
         DB_DATABASE: process.env.DB_DATABASE,
