@@ -8,7 +8,10 @@
     "nodemon-local": "NODE_ENV=.env.local nodemon index.js",
     "migrate-local": "npx sequelize-cli db:migrate:undo:all --env=.env.local; npx sequelize-cli db:migrate --env=.env.local",
     "seed-local": "npx sequelize-cli db:seed:all --env=.env.local",
-    "dev-nodemon": "NODE_ENV=.env.dev nodemon index.js"
+    "nodel-dev": "NODE_ENV=.env.dev node index.js",
+    "nodemon-dev": "NODE_ENV=.env.dev nodemon index.js",
+    "migrate-dev": "npx sequelize-cli db:migrate:undo:all --env=.env.dev; npx sequelize-cli db:migrate --env=.env.dev",
+    "seed-dev": "npx sequelize-cli db:seed:all --env=.env.dev"
   },
   "dependencies": {
     "aws-sdk": "^2.1046.0",

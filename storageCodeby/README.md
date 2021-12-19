@@ -18,3 +18,6 @@ npx sequelize-cli db:seed:all
 
 # copy
 cp -fR /Users/phuocnguyen/Jobs/boilerplate/express/*  /Users/phuocnguyen/Jobs/codeby.com/mockapi/storageCodeby
+
+# run dev
+npm run migrate-dev
