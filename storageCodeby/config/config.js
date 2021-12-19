@@ -1,9 +1,9 @@
 require('rootpath')();
-const {loadEnv} = require('config/env')
+const {readEnv} = require('config/env')
 // console.log('db', loadEnv('.env.local'))
 let DBs = {};
 ['.env.local', '.env.dev'].map(item => {
-    const env = loadEnv(item)
+    const env = readEnv(item)
     DBs[item] = {
         "username": env.DB_USER,
         "password": env.DB_PASSWORD,
