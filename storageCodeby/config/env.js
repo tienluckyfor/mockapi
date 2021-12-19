@@ -1,12 +1,15 @@
 require('rootpath')();
 const dotenv = require('dotenv');
+const {resolve} = require('path')
 
 const readEnv = (path) => {
-    console.log('readEnv path', path)
+    // console.log('readEnv path', path)
     // dotenv.config({
     //     path
     // })
-    require('dotenv').config({path: `./${path}`})
+    // path:__dirname+'/./../../.env'
+    require('dotenv').config({path: resolve(__dirname, `../${path}`), debug: true})
+    // console.log('111', __dirname + `/../${path}`)
     return {
         DB_HOST: process.env.DB_HOST,
         DB_DATABASE: process.env.DB_DATABASE,

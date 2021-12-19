@@ -4,15 +4,16 @@ const {readEnv} = require('config/env')
 let DBs = {};
 ['.env.local', '.env.dev'].map(item => {
     const env = readEnv(item)
+    console.log('env', {item, env})
     DBs[item] = {
         "username": env.DB_USER,
         "password": env.DB_PASSWORD,
         "database": env.DB_DATABASE,
         "host": env.DB_HOST,
-        "dialect": "mariadb"
+        "dialect": env.DB_DIALECT
     }
 })
-console.log('DBs', DBs)
+// console.log('DBs', DBs)
 module.exports = {
     ".env.local": DBs['.env.local'],
     ".env.dev": DBs['.env.dev'],
