@@ -24,8 +24,16 @@ cd /var/www/mockapi/storageCodeby
 npm run migrate-dev
 
 # nginx
+vi /etc/nginx/sites-enabled/be-mockapi.codeby.com.conf
+http://be-mockapi.codeby.com/storageCodeby
 location /storageCodeby/ {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_pass   http://localhost:3002/;
 }
+
+# forever
+- update
+cd /var/www/mockapi/storageCodeby; git pull; forever restartall;
+- new
+cd /var/www/mockapi/storageCodeby; git pull; sudo kill -9 `sudo lsof -t -i:3002`; forever start -c "npm run nodemon-dev" ./

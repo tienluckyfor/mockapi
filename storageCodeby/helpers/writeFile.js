@@ -1,4 +1,4 @@
-const ffmpeg = require('fluent-ffmpeg');
+var ffmpeg = require('fluent-ffmpeg');
 const Sharp = require('sharp');
 const fs = require('fs');
 
