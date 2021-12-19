@@ -80,6 +80,9 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
             return {...aFile, cloud}
         })
         Promise.all(payload).then(async vals => {
+            vals.map(item=>{
+                fs.unlinkSync(item.path)
+            })
             const files = await File.bulkCreate(vals, {returning: true})
             response.send(files)
         });
