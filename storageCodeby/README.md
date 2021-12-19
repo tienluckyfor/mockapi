@@ -22,3 +22,10 @@ cp -fR /Users/phuocnguyen/Jobs/boilerplate/express/*  /Users/phuocnguyen/Jobs/co
 # run dev
 cd /var/www/mockapi/storageCodeby
 npm run migrate-dev
+
+# nginx
+location /storageCodeby/ {
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_pass   http://localhost:3002/;
+}
