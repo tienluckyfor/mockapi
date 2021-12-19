@@ -11,8 +11,7 @@ function ffmpegSync(file) {
                 resolve(file)
             })
             .on('error', (err) => {
-                console.log('err', err)
-                // return reject(new Error(err))
+                return reject(new Error(err))
             })
     })
 }
