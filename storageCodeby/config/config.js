@@ -4,7 +4,7 @@ const {readEnv} = require('config/env')
 let DBs = {};
 ['.env.local', '.env.dev'].map(item => {
     const env = readEnv(item)
-    console.log('env', {item, env})
+    // console.log('env', {item, env})
     DBs[item] = {
         "username": env.DB_USER,
         "password": env.DB_PASSWORD,

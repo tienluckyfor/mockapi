@@ -8,7 +8,7 @@ const readEnv = (path) => {
     //     path
     // })
     // path:__dirname+'/./../../.env'
-    require('dotenv').config({path: resolve(__dirname, `../${path}`), debug: true})
+    require('dotenv').config({path: resolve(__dirname, `../${path}`), })
     // console.log('111', __dirname + `/../${path}`)
     return {
         DB_HOST: process.env.DB_HOST,
