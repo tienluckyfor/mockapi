@@ -83,7 +83,7 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
     })
 }))
 
-router.get('/file_s3/:file_id', asyncHandler(async (request, response) => {
+router.get('/file_s3/:file_id/:any', asyncHandler(async (request, response) => {
     const {file_id} = request.params;
     const file = await File.findOne({
         where: {id: file_id},
