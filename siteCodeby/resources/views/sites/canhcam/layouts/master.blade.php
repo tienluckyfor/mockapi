@@ -105,8 +105,11 @@
             <div class="wrapper">
                 <div class="logo-wrapper">
                     <div>
-                        <a href="{{$config->base_url}}"><img
-                                    src="{{$config->static}}/assets/images/uploaded/logo-codeby.png" alt=""/></a>
+                        <a href="{{$config->base_url}}">
+                            <img src="{{$media->set($con['logo'])->first()}}" alt="">
+                            {{--<img
+                                    src="{{$config->static}}/assets/images/uploaded/logo-codeby.png" alt=""/>--}}
+                        </a>
                     </div>
                 </div>
                 <div class="left-header">
