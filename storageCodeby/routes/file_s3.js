@@ -8,7 +8,7 @@ const fs = require('fs');
 const multer = require('multer')
 const _ = require('lodash');
 const {v4: uuidv4} = require('uuid');
-const {ffmpegSync, sharpSync, writeFileSync} = require('helpers/writeFile')
+const {ffmpegSync, sharpSync, writeFileSync, writeFileBase64Sync} = require('helpers/writeFile')
 const {resImageByStream, resFileByStream} = require('helpers/readFile')
 const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
@@ -22,11 +22,31 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
     fs.mkdirSync(filepath, {recursive: true})
     const promises = [];
 
+    // console.log('request.files', request.body);
+    const {audio_base64} = request.body
+    if (audio_base64) {
+        const buffer = audio_base64.replace(/^data:audio\/wav;base64,/, "")
+        const filePath = `${filepath}/${uuidv4()}.mp3`
+        const aFile = {
+            fieldname: 'audio_base64',
+            originalname: 'record',
+            encoding: '7bit',
+            mimetype: 'audio/mpeg',
+            size: -1,
+            path: filePath,
+            output: filePath,
+            api_id: api.id,
+            platform: api.platform
+        }
+        promises.push(writeFileBase64Sync(buffer, aFile))
+    }
+
     // convert
     (request.files ?? []).map(async (file, key) => {
         const {buffer, mimetype} = file;
         let filePath, aFile;
         aFile = _.omit(file, ['buffer'])
+        console.log('aFile', aFile)
         switch (true) {
             case (mimetype.match(/video/g) ? true : false) :
                 const filePath1 = `${filepath}/${uuidv4()}${path.extname(file.originalname)}`
@@ -97,7 +117,7 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
             return resImageByStream(streamData, request.query, response)
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
-        // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
+            // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
             const Location = getFileURL(file.cloud.key, apiKeys)
             response.writeHead(301, {Location});
             response.end();

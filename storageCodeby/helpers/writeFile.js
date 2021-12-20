@@ -40,4 +40,13 @@ function writeFileSync(buffer, file) {
     })
 }
 
-module.exports = {ffmpegSync, sharpSync, writeFileSync}
+function writeFileBase64Sync(buffer, file) {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file.output, buffer, 'base64', function (err) {
+            if (err) reject(err);
+            else resolve(file);
+        })
+    })
+}
+
+module.exports = {ffmpegSync, sharpSync, writeFileSync, writeFileBase64Sync}
