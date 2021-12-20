@@ -9,8 +9,10 @@ const fileLocalRouter = require("routes/file_local")
 const fileS3Router = require("routes/file_s3")
 const testRouter = require("routes/test")
 const path = require('path')
+const cors = require('cors')
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(responseFormat)
 
