@@ -22,7 +22,7 @@ const readEnv = (path) => {
 }
 
 const loadEnv = (path = process.env.NODE_ENV) => {
-    console.log('loadEnv path', path)
+    // console.log('loadEnv path', path)
     dotenv.config({
         path
     })
