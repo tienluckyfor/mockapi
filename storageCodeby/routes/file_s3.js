@@ -60,7 +60,8 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                     api_id: api.id,
                     platform: api.platform
                 }
-                promises.push(ffmpegSync(aFile))
+                promises.push(writeFileSync(buffer, aFile))
+                // promises.push(ffmpegSync(aFile))
                 break;
             case (mimetype.match(/image/g) ? true : false) :
                 filePath = `${filepath}/${uuidv4()}.webp`
