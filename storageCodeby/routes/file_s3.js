@@ -114,18 +114,17 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
     const apiKeys = JSON.parse(file.api.keys)
     switch (true) {
         case ((file.mimetype ?? '').match(/image/g) ? true : false) :
-            streamData = getFileStream(file.cloud.key, apiKeys)
+            streamData = getFileStream(file.cloud.Key, apiKeys)
             return resImageByStream(streamData, request.query, response)
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
             // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
-            console.log('file', file.cloud.Key, file)
-            const Location = getFileURL(file.cloud.key, apiKeys)
+            const Location = getFileURL(file.cloud.Key, apiKeys)
             response.writeHead(301, {Location});
             response.end();
             break;
         default:
-            streamData = getFileStream(file.cloud.key, apiKeys)
+            streamData = getFileStream(file.cloud.Key, apiKeys)
             return resFileByStream(streamData, response)
             break;
     }
