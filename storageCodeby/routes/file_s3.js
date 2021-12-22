@@ -119,6 +119,7 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
             // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
+            console.log('file', file)
             const Location = getFileURL(file.cloud.key, apiKeys)
             response.writeHead(301, {Location});
             response.end();
