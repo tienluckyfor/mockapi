@@ -4,7 +4,6 @@
 @php
 $home = $http->get('/home')->data();
 $home = collect($home)->groupBy('type')->toArray();
-dd($home);
 $home2 = \Illuminate\Support\Arr::first($home['home-2']);
 @endphp
     <main class="space-y-16 lg:space-y-32">
