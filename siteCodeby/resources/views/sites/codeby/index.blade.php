@@ -1,34 +1,37 @@
 @extends($config->layout.'/master')
 
 @section('main')
-@php
-$home = $http->get('/home')->data();
-$homeSub = $http->get('/home-sub')->data();
-$home = collect($home)->groupBy('type')->toArray();
-$home1 = \Illuminate\Support\Arr::first($home['home-1']);
-$home2 = \Illuminate\Support\Arr::first($home['home-2']);
-$homeSub1 = collect($homeSub)->filter(function ($item1){
-   return in_array('home-1', $item1['type']);
-})->toArray();
-//dd($homeSub1);
-@endphp
-<script>
-    function carouselData(slides) {
-        return {
-            slides,
-            activeSlide: 1,
-            goToPrevious() {
-                this.activeSlide =
-                    this.activeSlide === 1 ? this.slides.length : this.activeSlide - 1;
-            },
-            goToNext() {
-                this.activeSlide =
-                    this.activeSlide === this.slides.length ? 1 : this.activeSlide + 1;
-            }
-        };
-    }
-    const homeSub1 = {!! json_encode($homeSub1) !!};
-</script>
+    @php
+        $home = $http->get('/home')->data();
+        $homeSub = $http->get('/home-sub')->data();
+        $home = collect($home)->groupBy('type')->toArray();
+        $home1 = \Illuminate\Support\Arr::first($home['home-1']);
+        $home2 = \Illuminate\Support\Arr::first($home['home-2']);
+        $homeSub1 = collect($homeSub)->filter(function ($item1){
+           return in_array('home-1', $item1['type']);
+        })->toArray();
+        $homeSub2 = collect($homeSub)->filter(function ($item1){
+           return in_array('home-2', $item1['type']);
+        })->toArray();
+    @endphp
+    <script>
+        function carouselData(slides) {
+            return {
+                slides,
+                activeSlide: 1,
+                goToPrevious() {
+                    this.activeSlide =
+                        this.activeSlide === 1 ? this.slides.length : this.activeSlide - 1;
+                },
+                goToNext() {
+                    this.activeSlide =
+                        this.activeSlide === this.slides.length ? 1 : this.activeSlide + 1;
+                }
+            };
+        }
+
+        const homeSub1 = {!! json_encode($homeSub1) !!};
+    </script>
     <main class="space-y-16 lg:space-y-32">
         <section class="bg-indigo-100 flex justify-center ">
 
@@ -40,17 +43,19 @@ $homeSub1 = collect($homeSub)->filter(function ($item1){
                         {{--<div x-show="activeSlide === slide.id" class="p-24 font-bold text-5xl h-64 flex items-center bg-indigo-600 text-white ">
                             <span class="w-12 text-center" x-text="slide.text"></span>
                         </div>--}}
-                        <section x-show="activeSlide === slide.id"  class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
+                        <section x-show="activeSlide === slide.id"
+                                 class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
                             <div class="absolute inset-0 overflow-hidden">
                                 <img
-{{--                                     src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"--}}
-                                     x-bind:src="slide.image.media[0].file"
-                                     alt=""
-                                     class="w-full h-full object-center object-cover"/>
+                                        {{--                                     src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"--}}
+                                        x-bind:src="slide.image.media[0].file"
+                                        alt=""
+                                        class="w-full h-full object-center object-cover"/>
                             </div>
                             <div aria-hidden="true" class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
                             <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
-                                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl" x-html="slide.name">-</h2>
+                                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+                                    x-html="slide.name">-</h2>
                                 <p class="mt-3 text-xl text-white" x-html="slide.content">-</p>
                                 <a href="#"
                                    x-bind:href="'{{$config->base_url}}'+slide.more.button.link"
@@ -62,31 +67,35 @@ $homeSub1 = collect($homeSub)->filter(function ($item1){
                     </template>
 
                     <!-- Prev/Next Arrows -->
-                    <button @click="goToPrevious()" class="absolute absolute-y left-0 bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
+                    <button @click="goToPrevious()"
+                            class="absolute absolute-y left-0 bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
                         &#8592;
                     </button>
 
-                    <button @click="goToNext()" class="absolute absolute-y right-0 bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
+                    <button @click="goToNext()"
+                            class="absolute absolute-y right-0 bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
                         &#8594;
                     </button>
-                    {{--<div class="absolute inset-0 flex">
-                        <div class="flex items-center justify-start w-1/2">
-                            <button @click="goToPrevious()" class="bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
-                                &#8592;
-                            </button>
-                        </div>
+                {{--<div class="absolute inset-0 flex">
+                    <div class="flex items-center justify-start w-1/2">
+                        <button @click="goToPrevious()" class="bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
+                            &#8592;
+                        </button>
+                    </div>
 
-                        <div class="flex items-center justify-end w-1/2">
-                            <button @click="goToNext()" class="bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
-                                &#8594;
-                            </button>
-                        </div>
-                    </div>--}}
+                    <div class="flex items-center justify-end w-1/2">
+                        <button @click="goToNext()" class="bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
+                            &#8594;
+                        </button>
+                    </div>
+                </div>--}}
 
-                    <!-- Buttons -->
+                <!-- Buttons -->
                     <div class="absolute w-full flex items-center justify-center px-4 bottom-2">
                         <template x-for="slide in slides" :key="slide.id">
-                            <button @click="activeSlide = slide.id" :class="{ 'bg-indigo-800': activeSlide === slide.id, 'bg-white': activeSlide !== slide.id }" class="w-4 h-2 mt-4 mx-2 mb-0 rounded-full overflow-hidden transition-colors duration-200 ease-out hover:bg-indigo-600 hover:shadow-lg focus:outline-none"></button>
+                            <button @click="activeSlide = slide.id"
+                                    :class="{ 'bg-indigo-800': activeSlide === slide.id, 'bg-white': activeSlide !== slide.id }"
+                                    class="w-4 h-2 mt-4 mx-2 mb-0 rounded-full overflow-hidden transition-colors duration-200 ease-out hover:bg-indigo-600 hover:shadow-lg focus:outline-none"></button>
                         </template>
                     </div>
                 </div>
@@ -95,27 +104,27 @@ $homeSub1 = collect($homeSub)->filter(function ($item1){
         </section>
 
         <!-- This example requires Tailwind CSS v2.0+ -->
-        {{--<section class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
-            <div class="absolute inset-0 overflow-hidden">
-                <img src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"
-                     alt=""
-                     class="w-full h-full object-center object-cover">
-            </div>
-            <div aria-hidden="true" class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
-            <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
-                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Long-term thinking</h2>
-                <p class="mt-3 text-xl text-white">We're committed to responsible, sustainable, and ethical
-                    manufacturing.
-                    Our small-scale approach allows us to focus on quality and reduce our impact. We're doing our best
-                    to
-                    delay the inevitable heat-death of the universe.</p>
-                <a href="#"
-                   class="mt-8 w-full block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto">Read
-                    our story</a>
-            </div>
-        </section>--}}
+    {{--<section class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
+        <div class="absolute inset-0 overflow-hidden">
+            <img src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"
+                 alt=""
+                 class="w-full h-full object-center object-cover">
+        </div>
+        <div aria-hidden="true" class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+        <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
+            <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Long-term thinking</h2>
+            <p class="mt-3 text-xl text-white">We're committed to responsible, sustainable, and ethical
+                manufacturing.
+                Our small-scale approach allows us to focus on quality and reduce our impact. We're doing our best
+                to
+                delay the inevitable heat-death of the universe.</p>
+            <a href="#"
+               class="mt-8 w-full block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto">Read
+                our story</a>
+        </div>
+    </section>--}}
 
-        <!--
+    <!--
       This example requires Tailwind CSS v2.0+
 
       This example requires some changes to your config:
@@ -173,11 +182,31 @@ $homeSub1 = collect($homeSub)->filter(function ($item1){
                                 <rect width="404" height="384" fill="url(#64e643ad-2176-4f86-b3d7-f2c5da3b6a6d)"/>
                             </svg>
                         </div>
-                        <div class="relative max-w-md mx-auto py-12 px-4 space-y-6 sm:max-w-3xl sm:py-16 sm:px-6 lg:max-w-none lg:p-0 lg:col-start-4 lg:col-span-6">
+                        <div class="relative max-w-md mx-auto py-12 px-4 space-y-6 sm:max-w-3xl sm:py-16 sm:px-6 lg:max-w-none lg:px-0 lg:py-6 lg:col-start-4 lg:col-span-6">
                             <h2 class="text-3xl font-extrabold text-white" id="join-heading">{{$home2['name']}}</h2>
-{{--                            <p class="text-lg text-white">{{$home2['content']}}</p>--}}
+                            <ul class="text-white space-y-3" x-data="{selected:null}">
+                                @foreach($homeSub2 as $key => $item)
+                                <li class="space-y-3">
+                                    <button type="button" class="text-left w-full inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base rounded-md text-white bg-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                            @click="selected !== {{$key}} ? selected = {{$key}} : selected = null">
+                                        <svg x-show="selected!={{$key}}" class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        <svg x-show="selected=={{$key}}" class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        {{$item['name']}}
+                                    </button>
+                                    <p
+                                            class="overflow-hidden max-h-0 transition-all duration-700"
+                                            x-ref="container{{$key}}"
+                                            x-bind:style="selected == {{$key}} ? 'max-height: ' + $refs.container{{$key}}.scrollHeight + 'px' : ''"
+                                    >{{$item['content']}}</p>
+                                </li>
+                                @endforeach
+                            </ul>
                             <a class="block w-full py-3 px-5 text-center bg-white border border-transparent rounded-md shadow-md text-base font-medium text-indigo-700 hover:bg-gray-50 sm:inline-block sm:w-auto"
-                               href="{{@$home2['more']['button']['link']}}">{{@$home2['more']['button']['name']}}</a>
+                               href="{{$config->base_url}}{{@$home2['more']['button']['link']}}">{{@$home2['more']['button']['name']}}</a>
                         </div>
                     </div>
                 </div>
