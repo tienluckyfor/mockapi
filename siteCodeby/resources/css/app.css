@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* absolute */
+.absolute-y {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.absolute-x {
+    left: 50%;
+    transform: translateX(-50%);
+}
+.absolute-x.absolute-y {
+    transform: translate(-50%, -50%);
+}

@@ -3,12 +3,99 @@
 @section('main')
 @php
 $home = $http->get('/home')->data();
+$homeSub = $http->get('/home-sub')->data();
 $home = collect($home)->groupBy('type')->toArray();
+$home1 = \Illuminate\Support\Arr::first($home['home-1']);
 $home2 = \Illuminate\Support\Arr::first($home['home-2']);
+$homeSub1 = collect($homeSub)->filter(function ($item1){
+   return in_array('home-1', $item1['type']);
+})->toArray();
+//dd($homeSub1);
 @endphp
+<script>
+    function carouselData(slides) {
+        return {
+            slides,
+            activeSlide: 1,
+            goToPrevious() {
+                this.activeSlide =
+                    this.activeSlide === 1 ? this.slides.length : this.activeSlide - 1;
+            },
+            goToNext() {
+                this.activeSlide =
+                    this.activeSlide === this.slides.length ? 1 : this.activeSlide + 1;
+            }
+        };
+    }
+    const homeSub1 = {!! json_encode($homeSub1) !!};
+</script>
     <main class="space-y-16 lg:space-y-32">
+        <section class="bg-indigo-100 flex justify-center ">
+
+            <div class="w-full relative">
+                <div class="mx-auto relative w-full" x-data="carouselData(homeSub1)">
+
+                    <!-- Slides -->
+                    <template x-for="slide in slides" :key="slide.id">
+                        {{--<div x-show="activeSlide === slide.id" class="p-24 font-bold text-5xl h-64 flex items-center bg-indigo-600 text-white ">
+                            <span class="w-12 text-center" x-text="slide.text"></span>
+                        </div>--}}
+                        <section x-show="activeSlide === slide.id"  class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
+                            <div class="absolute inset-0 overflow-hidden">
+                                <img
+{{--                                     src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"--}}
+                                     x-bind:src="slide.image.media[0].file"
+                                     alt=""
+                                     class="w-full h-full object-center object-cover"/>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+                            <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
+                                <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl" x-html="slide.name">-</h2>
+                                <p class="mt-3 text-xl text-white" x-html="slide.content">-</p>
+                                <a href="#"
+                                   x-bind:href="'{{$config->base_url}}'+slide.more.button.link"
+                                   x-html="slide.more.button.name"
+                                   class="mt-8 w-full block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto">Read
+                                    our story</a>
+                            </div>
+                        </section>
+                    </template>
+
+                    <!-- Prev/Next Arrows -->
+                    <button @click="goToPrevious()" class="absolute absolute-y left-0 bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
+                        &#8592;
+                    </button>
+
+                    <button @click="goToNext()" class="absolute absolute-y right-0 bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
+                        &#8594;
+                    </button>
+                    {{--<div class="absolute inset-0 flex">
+                        <div class="flex items-center justify-start w-1/2">
+                            <button @click="goToPrevious()" class="bg-white text-gray-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 ml-6 focus:outline-none">
+                                &#8592;
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-end w-1/2">
+                            <button @click="goToNext()" class="bg-white text-indigo-500 hover:text-indigo-500 font-bold hover:shadow-lg rounded-full w-12 h-12 mr-6 focus:outline-none">
+                                &#8594;
+                            </button>
+                        </div>
+                    </div>--}}
+
+                    <!-- Buttons -->
+                    <div class="absolute w-full flex items-center justify-center px-4 bottom-2">
+                        <template x-for="slide in slides" :key="slide.id">
+                            <button @click="activeSlide = slide.id" :class="{ 'bg-indigo-800': activeSlide === slide.id, 'bg-white': activeSlide !== slide.id }" class="w-4 h-2 mt-4 mx-2 mb-0 rounded-full overflow-hidden transition-colors duration-200 ease-out hover:bg-indigo-600 hover:shadow-lg focus:outline-none"></button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
         <!-- This example requires Tailwind CSS v2.0+ -->
-        <section class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
+        {{--<section class="relative bg-gray-800 py-32 px-6 sm:py-40 sm:px-12 lg:px-16">
             <div class="absolute inset-0 overflow-hidden">
                 <img src="https://tailwindui.com/img/ecommerce-images/home-page-03-feature-section-full-width.jpg"
                      alt=""
@@ -26,7 +113,7 @@ $home2 = \Illuminate\Support\Arr::first($home['home-2']);
                    class="mt-8 w-full block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto">Read
                     our story</a>
             </div>
-        </section>
+        </section>--}}
 
         <!--
       This example requires Tailwind CSS v2.0+
