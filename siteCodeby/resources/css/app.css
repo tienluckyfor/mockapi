@@ -48,3 +48,53 @@
     url(data:image/gif;base64,R0lGODdhEAAQAPEAAADw/wDx/xXy/////ywAAAAAEAAQAAACIZyPKckYDQFsb6ZqD85jZ2+BkwiRFKehhqQCQgDHcgwEBQA7)
     repeat 0 0;
 }
+
+/* image */
+.pb-6x1 {
+    padding-bottom: 16.66%;
+}
+.pb-5x1 {
+    padding-bottom: 20%;
+}
+.pb-4x1 {
+    padding-bottom: 25%;
+}
+.pb-3x1 {
+    padding-bottom: 33.33%;
+}
+.pb-3x1 {
+    padding-bottom: 33.33%;
+}
+.pb-16x9 {
+    padding-bottom: 56.25%;
+}
+.pb-9x16 {
+    padding-bottom: 177.77%;
+}
+.pb-4x3 {
+    padding-bottom: 75%;
+}
+.pb-3x4 {
+    padding-bottom: 133.33%;
+}
+.pb-6x4 {
+    padding-bottom: 66.6%;
+}
+.pb-4x6 {
+    padding-bottom: 150%;
+}
+.pb-8x5 {
+    padding-bottom: 62.5%;
+}
+.pb-5x8 {
+    padding-bottom: 160%;
+}
+.pb-7x5 {
+    padding-bottom: 71.42%;
+}
+.pb-5x7 {
+    padding-bottom: 140%;
+}
+.pb-1x1 {
+    padding-bottom: 100%;
+}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "209c6c02a52e56cf94e2572cdf8ee9f9",
+    "content-hash": "fcc3e332d24b7f07473a21e0ac889e0e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -128,12 +128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tienluckyfor/laravel-api.git",
-                "reference": "2acd0036c7461bb4392f4799c7db3fb68e13523a"
+                "reference": "7606599"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tienluckyfor/laravel-api/zipball/2acd0036c7461bb4392f4799c7db3fb68e13523a",
-                "reference": "2acd0036c7461bb4392f4799c7db3fb68e13523a",
+                "url": "https://api.github.com/repos/tienluckyfor/laravel-api/zipball/7606599",
+                "reference": "7606599",
                 "shasum": ""
             },
             "require": {
@@ -178,7 +178,7 @@
                 "issues": "https://github.com/tienluckyfor/laravel-api/issues",
                 "source": "https://github.com/tienluckyfor/laravel-api/tree/master"
             },
-            "time": "2021-11-20T09:49:12+00:00"
+            "time": "2021-12-25T05:07:17+00:00"
         },
         {
             "name": "defuse/php-encryption",
