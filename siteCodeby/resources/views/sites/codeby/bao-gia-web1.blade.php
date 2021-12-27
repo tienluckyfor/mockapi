@@ -141,11 +141,11 @@
                     @foreach($bgw_cn['more'] as $key => $item)
                         <tr>
                             <th class="py-5 px-6 text-sm font-normal text-gray-500 text-left" scope="row">
-                                @if(@$item['isLarge'])
+                                {{--@if(@$item['isLarge'])
                                     <p class="text-3xl font-extrabold text-gray-900 text-center ">{{$item['name']}}</p>
-                                @else
+                                @else--}}
                                     {{$item['name']}}
-                                @endif
+{{--                                @endif--}}
 
                             </th>
                             @foreach($bgw_g as $key1 => $item1)
