@@ -47,7 +47,7 @@
                                 alt=""
                                 class="w-full h-full object-center object-cover"/>
                     </div>
-                    <div x-show="!slide.more.isLight" aria-hidden="true" class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+                    <div x-show="!slide.more.isLight" aria-hidden="true" class="absolute inset-0 bg-gray-900 "></div>
                     <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
                         <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
                             x-html="slide.name">-</h2>
