@@ -168,7 +168,10 @@
                         <img class="h-12 w-auto" src="{{$files[1]}}"
                              alt="">
                         <blockquote class="mt-6 text-white">
-                            <p class="text-xl font-medium sm:text-2xl">{{$home4['content']}}</p>
+                            <p class="text-xl font-medium sm:text-2xl">
+{{--                                {{$home4['content']}}--}}
+                                {!! nl2br(e($home4['content']))  !!}
+                            </p>
                             <footer class="mt-6">
                                 <p class="flex flex-col font-medium">
                                     <span>{{$home4['more']['name']}}</span>
