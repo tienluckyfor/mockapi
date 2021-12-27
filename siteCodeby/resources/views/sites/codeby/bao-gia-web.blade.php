@@ -15,9 +15,9 @@
     @endphp
     <main class="space-y-16">
 
-        <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32">
+        <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-16">
             <div class="sm:flex sm:flex-col sm:align-center">
-                <h1 class="text-5xl font-extrabold text-gray-900 sm:text-center">{{$bgw_cn['name']}}</h1>
+                <h1 class="text-5xl font-bold text-gray-900 sm:text-center">{{$bgw_cn['name']}}</h1>
                 <p class="mt-5 text-xl text-gray-500 sm:text-center">{{$bgw_cn['name-sub']}}</p>
             </div>
         </section>
@@ -96,18 +96,18 @@
 
             <!-- lg+ -->
             <div class="hidden lg:block">
-                <table class="w-full h-px table-fixed">
+                <table class="w-full h-px table-fixed text-center">
                     <caption class="sr-only">
                         Pricing plan comparison
                     </caption>
                     <thead>
                     <tr class="text-xl">
-                        <th class="pb-4 px-6 text-gray-900 text-left" scope="col">
+                        <th class="pb-4 px-6 text-gray-900 " scope="col">
                             <span class="sr-only">Feature by</span>
                             <span>{{@$bgw_cn['content']}}</span>
                         </th>
                         @foreach($bgw_g as $key => $item)
-                            <th class="w-1/{{count($bgw_g)+1}} pb-4 px-6 leading-6 text-gray-900 text-left"
+                            <th class="w-1/{{count($bgw_g)+1}} pb-4 px-6 leading-6 text-gray-900"
                                 scope="col">
                                 {{$item['name']}}
                             </th>
@@ -116,7 +116,7 @@
                     </thead>
                     <tbody class="border-t border-gray-200 divide-y divide-gray-200">
                     <tr>
-                        <th class="py-8 px-6 text-sm font-medium text-gray-900 text-left align-top" scope="row">
+                        <th class="py-8 px-6 text-sm font-medium text-gray-900 align-top" scope="row">
                             Giá dịch vụ
                         </th>
 
@@ -140,14 +140,19 @@
 
                     @foreach($bgw_cn['more'] as $key => $item)
                         <tr>
-                            <th class="py-5 px-6 text-sm font-normal text-gray-500 text-left" scope="row">
-                                {{$item['name']}}
+                            <th class="py-1 px-6 text-sm font-normal text-gray-500 text-left" scope="row">
+                                @if(@$item['isLarge'])
+                                    <p class="text-3xl font-extrabold text-gray-900 text-center ">{{$item['name']}}</p>
+                                @else
+                                    {{$item['name']}}
+                                @endif
+
                             </th>
                             @foreach($bgw_g as $key1 => $item1)
                                 @php
                                     $item2 = collect($item1['more'])->where('key', $item['key'])->first();
                                 @endphp
-                                <td class="py-5 px-6 text-sm font-normal text-gray-900 text-left">
+                                <td class="py-1 px-6 text-sm font-normal text-gray-900 text-left">
                                     <!-- Heroicon name: solid/check -->
                                     {{--<svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg"
                                          viewBox="0 0 20 20"
@@ -157,7 +162,7 @@
                                               clip-rule="evenodd"/>
                                     </svg>--}}
                                     <span class="sr-only">{{@$item2['name']??'-'}}</span>
-                                    <span>{{@$item2['name']??'-'}}</span>
+                                    <p class="text-center">{{@$item2['name']??'-'}}</p>
                                 </td>
                             @endforeach
                         </tr>
