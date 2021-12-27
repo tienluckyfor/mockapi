@@ -22,7 +22,8 @@
         </section>
 
         <section
-                class="max-w-7xl mx-auto bg-white sm:px-6 lg:px-8 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+                class="max-w-7xl mx-auto px-4 bg-white sm:px-6 lg:px-8 ">
+            <div class="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
             @foreach($bgl_g as $key => $item)
 
                 <div class="relative p-8 bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col">
@@ -61,9 +62,11 @@
                     @endif
                 </div>
             @endforeach
+            </div>
+
         </section>
 
-        <section class="max-w-7xl mx-auto bg-white sm:px-6 lg:px-8 ">
+        <section class="max-w-7xl mx-auto px-4 bg-white sm:px-6 lg:px-8 ">
             <div class="xl:grid xl:grid-cols-3 xl:gap-x-8">
                 <div>
                     <h2 class="text-base font-semibold text-indigo-600 tracking-wide uppercase">{{$bgl_pt['name-sub']}}</h2>
