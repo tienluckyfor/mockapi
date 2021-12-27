@@ -170,7 +170,7 @@
                         <blockquote class="mt-6 text-white">
                             <p class="text-xl font-medium sm:text-2xl">
 {{--                                {{$home4['content']}}--}}
-                                {!! nl2br(e($home4['content']))  !!}
+                                {!! $home4['content'] !!}
                             </p>
                             <footer class="mt-6">
                                 <p class="flex flex-col font-medium">
