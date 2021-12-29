@@ -1,27 +1,27 @@
 @php
-    $tkw = $http->get('/thiet-ke-web')->data();
+    $tkw = $http->get('/thiet-ke-logo')->data();
     $tkw = collect($tkw)->groupBy('type')->toArray();
-    $tkw2 = \Illuminate\Support\Arr::first($tkw['thiet-ke-web-2']);
-    $tkw3 = \Illuminate\Support\Arr::first($tkw['thiet-ke-web-3']);
-    $tkw4 = \Illuminate\Support\Arr::first($tkw['thiet-ke-web-4']);
-    $tkwSub = $http->get('/thiet-ke-web-sub')->data();
+    $tkw2 = \Illuminate\Support\Arr::first($tkw['thiet-ke-logo-2']);
+    $tkw3 = \Illuminate\Support\Arr::first($tkw['thiet-ke-logo-3']);
+    $tkw4 = \Illuminate\Support\Arr::first($tkw['thiet-ke-logo-4']);
+    $tkwSub = $http->get('/thiet-ke-logo-sub')->data();
     $tkwSub1 = collect($tkwSub)->filter(function ($item1){
-       return in_array('thiet-ke-web-1', $item1['type']);
+       return in_array('thiet-ke-logo-1', $item1['type']);
     })
     ->values()
     ->toArray();
     $tkwSub2 = collect($tkwSub)->filter(function ($item1){
-       return in_array('thiet-ke-web-2', $item1['type']);
+       return in_array('thiet-ke-logo-2', $item1['type']);
     })
     ->values()
     ->toArray();
     $tkwSub3 = collect($tkwSub)->filter(function ($item1){
-       return in_array('thiet-ke-web-3', $item1['type']);
+       return in_array('thiet-ke-logo-3', $item1['type']);
     })
     ->values()
     ->toArray();
     $tkwSub4 = collect($tkwSub)->filter(function ($item1){
-       return in_array('thiet-ke-web-4', $item1['type']);
+       return in_array('thiet-ke-logo-4', $item1['type']);
     })
     ->values()
     ->toArray();
