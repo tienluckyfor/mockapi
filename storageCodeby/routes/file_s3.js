@@ -61,6 +61,7 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                     platform: api.platform
                 }
                 console.log('file', file)
+                console.log('path.extname(file.originalname)', path.extname(file.originalname))
                 if(file.originalname=='mp4')
                     promises.push(writeFileSync(buffer, aFile))
                 else
