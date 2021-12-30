@@ -72,6 +72,16 @@ class Comment extends Model
             ->COUNT;
     }
 
+//    public function getCountUnreadAttribute()
+//    {
+//        return Like::selectRaw('count(*) as COUNT')
+//            ->where('likeable_type', 'App\\Models\\Comment')
+//            ->where('likeable_id', $this->id)
+//            ->where('is_dislike', true)
+//            ->first()
+//            ->COUNT;
+//    }
+
     public function likes()
     {
         return $this->morphMany(Like::class, 'likeable')
