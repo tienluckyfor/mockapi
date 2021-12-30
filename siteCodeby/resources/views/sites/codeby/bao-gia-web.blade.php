@@ -142,11 +142,14 @@
                         <tr>
                             <th class="py-1 px-6 text-sm font-normal text-gray-500 text-left" scope="row">
                                 @if(@$item['isLarge'])
-                                    <p class="text-3xl font-extrabold text-gray-900 text-center ">{{$item['name']}}</p>
+                                    @if(strlen($item['name'])>10)
+                                        <p class="text-xl font-extrabold text-gray-900 text-center ">{{$item['name']}}</p>
+                                    @else
+                                        <p class="text-3xl font-extrabold text-gray-900 text-center ">{{$item['name']}}</p>
+                                    @endif
                                 @else
                                     {{$item['name']}}
                                 @endif
-
                             </th>
                             @foreach($bgw_g as $key1 => $item1)
                                 @php
@@ -161,13 +164,36 @@
                                               d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                               clip-rule="evenodd"/>
                                     </svg>--}}
-                                    <span class="sr-only">{{@$item2['name']??'-'}}</span>
-                                    <p class="text-center">{{@$item2['name']??'-'}}</p>
+                                    {{--<span class="sr-only">{{@$item2['name']??'-'}}</span>
+                                    <p class="text-center">{{@$item2['name']??'-'}}</p>--}}
+                                    @if(@$item['isLarge'])
+                                        @if(strlen($item['name'])>10)
+                                            <p class="text-xl font-extrabold text-gray-900 text-center ">{{$item2['name']}}</p>
+                                        @else
+                                            <p class="text-3xl font-extrabold text-gray-900 text-center ">{{$item2['name']}}</p>
+                                        @endif
+                                    @else
+                                        {{$item2['name']}}
+                                    @endif
                                 </td>
                             @endforeach
                         </tr>
-
                     @endforeach
+                    <tr>
+                        <th class="py-1 px-6 text-sm font-normal text-gray-500 text-left" scope="row">
+                            <p class="text-3xl font-extrabold text-gray-900 text-center ">-</p>
+                        </th>
+<?php for($i=1; $i<=4; $i++){?>
+
+                        <td class="py-1 px-6 text-sm font-normal text-gray-900 text-left">
+                            <!-- Heroicon name: solid/check -->
+                            <a href="#"
+                               class=" mt-2 flex-grow block w-full bg-indigo-600 border border-transparent rounded-md 5 py-2 text-sm font-semibold text-white text-center hover:bg-indigo-700">
+                                Đăng ký</a>
+                        </td>
+                        <?php }?>
+
+                    </tr>
                     </tbody>
                 </table>
             </div>
