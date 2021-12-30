@@ -7,6 +7,18 @@
 {{--    <link href="http://site-codeby.test/css/app.css" rel="stylesheet">--}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="//unpkg.com/alpinejs" defer></script>
+
+
+    <link rel="alternate" hreflang="en" href="https://profile.oriico.dev">
+    <link rel="alternate" hreflang="ja" href="https://ja.profile.oriico.dev">
+    <link rel="alternate" hreflang="vi" href="https://vi.profile.oriico.dev">
+    <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
+    <script>
+        Weglot.initialize({
+            api_key: 'wg_6a2e8277068661ffe221742d036725642'
+        });
+    </script>
+
 </head>
 
 <body>
