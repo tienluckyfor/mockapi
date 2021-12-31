@@ -30,7 +30,6 @@ class ChatRoomQueries
                 $item->other = $item->other_list->first();
                 return $item;
             });
-//        dd($rooms);
         return $rooms;
     }
 

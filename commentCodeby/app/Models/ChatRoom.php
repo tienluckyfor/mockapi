@@ -37,12 +37,14 @@ class ChatRoom extends Model
     public function getCommentLastAttribute()
     {
         $query = "
-SELECT * FROM comments WHERE id IN
-(SELECT MAX(id) FROM comments WHERE deleted_at IS NULL AND unique_id = {$this->unique_id} GROUP BY unique_id);
+SELECT id FROM comments WHERE id =
+(SELECT MAX(id) FROM comments WHERE deleted_at IS NULL AND unique_id = {$this->unique_id} GROUP BY unique_id)
         ";
         $results = DB::select(DB::raw($query));
-        $comment = @json_decode(json_encode($results), true)[0];
-        return $comment;
+        $arr = @json_decode(json_encode($results), true)[0];
+        return Comment::find(@$arr['id']);
+//        dd($arr);
+//        return $comment;
 //        return $this->belongsToJson(People::class, "people_ids");
     }
 
