@@ -3,7 +3,8 @@ module.exports = {
         // "./resources/**/*.blade.php",
         // "./resources/**/*.js",
         // "./resources/**/*.vue",
-        "./resources/phumy/**/*.blade.php",
+        "./resources/views/sites/codeby/**/*.blade.php",
+        // "./resources/phumy/**/*.blade.php",
     ],
     theme: {
         extend: {},
