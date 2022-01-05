@@ -14,7 +14,10 @@ const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
 
 const storage = multer.memoryStorage();
-const upload = multer({storage});
+const upload = multer({
+    storage,
+    limits: {fieldSize: 200 * 1024 * 1024}
+});
 
 router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (request, response) => {
     const {api} = request
