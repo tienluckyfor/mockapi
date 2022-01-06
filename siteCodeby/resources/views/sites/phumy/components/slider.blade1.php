@@ -1,7 +1,6 @@
 @php
     if(empty($sliders))
         return;
-    $rand = rand();
 @endphp
 
 <section class="bg-indigo-100 flex justify-center ">
@@ -9,13 +8,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.pkgd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.min.css"/>
     <style>
-        .carousel-{{$rand}} {
+        .carousel {
             background: #EEE;
         }
 
-        .carousel-cell-{{$rand}} {
+        .carousel-cell {
             width: 100%;
-            height: {{$height}};
+            height: 620px;
             margin-right: 10px;
             background: #ccc;
             border-radius: 5px;
@@ -23,7 +22,7 @@
         }
 
         /* cell number */
-        .carousel-cell-{{$rand}}:before {
+        .carousel-cell:before {
             display: block;
             text-align: center;
             content: counter(gallery-cell);
@@ -32,12 +31,13 @@
             color: white;
         }
     </style>
-    <div class="w-full relative overflow-hidden " style="height:{{$height}}">
+    <div class="w-full relative overflow-hidden " style="height:550px">
         <div
-                class="carousel-{{$rand}}"
+                class="carousel"
         >
             @foreach($sliders as $key => $item)
-                <section class="carousel-cell-{{$rand}}"
+                <section
+                        class="carousel-cell  "
                 >
                     <div class="absolute inset-0 overflow-hidden"
                     >
@@ -46,13 +46,31 @@
                                 alt=""
                                 class="w-full h-full object-center object-fill"/>
                     </div>
+                  {{--  @if(!@$item['more']['isLight'])
+                        <div aria-hidden="true"
+                             class="absolute inset-0 bg-gray-900 bg-opacity-0"></div>
+                    @endif
+
+                    <div class="relative max-w-3xl mx-auto flex flex-col items-center text-center">
+                        <div class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                            {!! $item['name'] !!}</div>
+                        <p class="mt-3 text-xl text-white">
+                            {!! $item['content']!!}</p>
+                        @if(@$item['more']['button']['name'])
+                            <a
+                                    href="{{$config->base_url}}{{$item['more']['button']['link']}}"
+                                    class="mt-8 w-full block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100 sm:w-auto">
+                                {{$item['more']['button']['name']}}
+                            </a>
+                        @endif
+                    </div>--}}
                 </section>
             @endforeach
         </div>
     </div>
 
     <script>
-        var flkty = new Flickity('.carousel-{{$rand}}', {
+        var flkty = new Flickity('.carousel', {
             "pageDots": false,
             "contain": true,
             "wrapAround": true,

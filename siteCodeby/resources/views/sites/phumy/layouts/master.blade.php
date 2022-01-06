@@ -5,21 +5,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- <link href="http://site-codeby.test/css/app.css" rel="stylesheet"> --}}
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css-phumy/app.css') }}" rel="stylesheet">
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
+<style>
+    .bg-gray {
+        background: #144C4B;
+    }
 
+    .btn-gradient {
+        background: linear-gradient(90deg, #BF953F 0%, #FCF6BA 22.4%, #FBF5B7 44.27%, #B38728 60.42%, #FBF5B7 78.13%);
+    }
+</style>
 <body>
 <!-- This example requires Tailwind CSS v2.0+ -->
-<header class="relative bg-white" x-data="{ showMobileMenu: false }">
+<header class="relative bg-gray " x-data="{ showMobileMenu: false }">
     <div class="absolute inset-0 shadow z-30 pointer-events-none" aria-hidden="true"></div>
-    <div class="relative z-20">
-        <div
-                class="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
+    <div class="relative z-20 ">
+        <div class="max-w-7xl h-20 mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8 md:space-x-10">
             <div>
-                <a href="{{$config->base_url}}/" class="flex">
+                <a href="{{$config->base_url}}/" class="flex flex-shrink-0">
                     <span class="sr-only">Workflow</span>
-                    <img class="h-8 w-auto sm:h-10" src="{{$media->set($con['logo'])->first()}}" alt="">
+                    <img class="h-12 w-auto " src="{{$media->set($con['logo'])->first()}}" alt="">
                     {{--                    <img class="h-8 w-auto sm:h-10" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="">--}}
                 </a>
             </div>
@@ -36,8 +43,8 @@
                     </svg>
                 </button>
             </div>
-            <div class="hidden md:flex-1 md:flex md:items-center md:justify-between">
-                <nav class="flex space-x-10">
+            <div class="hidden md:flex">
+                <nav class="flex space-x-8 items-center">
                     @php
                         $menu = $http->get('/menu')->data();
                         $menuSub = $http->get('/menu-sub')->data();
@@ -48,16 +55,16 @@
                                return in_array($item['name'], $item1['category']);
                             })->toArray();
                         @endphp
-                        @if($menuSub1)
+                        {{--@if($menuSub1)
                             <div x-data="{ show: false }" @click.away="show = false">
-                                <button type="button" @click="show = ! show" x-bind:class="show ? 'text-gray-900' : ''"
-                                        class="text-gray-500 group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                <button type="button" @click="show = ! show"
+                                        class="text-gray-500 group bg-white rounded-md inline-flex items-center text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         aria-expanded="false">
                                     <span>{{$item['name']}}</span>
-                                    <svg x-bind:class="show ? 'text-gray-600' : ''"
-                                         class="text-gray-400 ml-2 h-5 w-5 group-hover:text-gray-500"
-                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                         aria-hidden="true">
+                                    <svg
+                                            class=" ml-2 h-5 w-5 "
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
                                         <path fill-rule="evenodd"
                                               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                               clip-rule="evenodd"/>
@@ -82,12 +89,12 @@
                                                     <span
                                                             class="inline-flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white sm:h-12 sm:w-12">
                                                         <!-- Heroicon name: outline/chart-bar -->
-                                                        {{--<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        --}}{{--<svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                              viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                   stroke-width="2"
                                                                   d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                        </svg>--}}
+                                                        </svg>--}}{{--
                                                         <img class="h-6 w-6"
                                                              src="{{$media->set($item1['image'])->first()}}"/>
                                                     </span>
@@ -167,36 +174,16 @@
                                     </div>
                                 </div>
                             </div>
-                        @else
-                            <a href="{{$config->base_url}}{{$item['link']}}"
-                               class="text-base font-medium text-gray-500 hover:text-gray-900">
-                                {{$item['name']}}
-                            </a>
-                        @endif
+                        @else--}}
+                        <a href="{{$config->base_url}}{{$item['link']}}"
+                           class="text-base font-medium text-white relative group">
+                            {{$item['name']}}
+                            <div class="group-hover:block hidden border-b-4 border-white absolute inset-0 -mb-3"></div>
+                        </a>
+                        {{--                        @endif--}}
                     @endforeach
-
+                    <button class="btn-gradient h-9 px-3 rounded-lg">LIÊN HỆ: 0935 68 79 85</button>
                 </nav>
-                <div class="flex items-center md:ml-12">
-                    {{--<a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">
-                        Đăng Nhập
-                    </a>
-                    <a href="#"
-                       class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                        Đăng ký
-                    </a>--}}
-                    <a href="#" class="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <!-- Heroicon name: outline/plus-sm -->
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                        </svg>
-                    </a>
-                    <a href="#" class="ml-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                        <!-- Heroicon name: outline/plus-sm -->
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                        </svg>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -305,16 +292,22 @@
                                    class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                                     Đăng ký
                                 </a>--}}
-                                <a href="#" class="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="#"
+                                   class="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <!-- Heroicon name: outline/plus-sm -->
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
                                     </svg>
                                 </a>
-                                <a href="#" class="ml-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                <a href="#"
+                                   class="ml-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                     <!-- Heroicon name: outline/plus-sm -->
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
                                     </svg>
                                 </a>
                             </div>
@@ -360,6 +353,7 @@
   }
   ```
 -->
+{{--
 <footer class="bg-gray-800 mt-16 lg:mt-32" aria-labelledby="footer-heading">
     <h2 id="footer-heading" class="sr-only">Footer</h2>
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
@@ -618,7 +612,67 @@
         </div>
     </div>
 </footer>
+--}}
 
+<footer class="bg-gray">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+        <!-- grid -->
+        <div class="grid grid-cols-12 gap-32 py-6">
+            <div class="col-span-4 space-y-6 ">
+                <img class="" src="{{$config->static}}/assets/images/PHUMYcopy.png" alt="">
+                <p class="text-white text-xl text-center">Cổng thông tin cập nhật dự án Khu đô thị Phú Mỹ - Quảng
+                    Ngãi</p>
+            </div>
+            <div class="col-span-4 text-center">
+                <form action="" class="space-y-3">
+                    <h4 class="text-white text-xl">NHẬN THÔNG TIN DỰ ÁN</h4>
+                    @php
+                        $fields = [
+                            [
+                                'name' => "ho-ten",
+                                'hint' => "*Họ và tên"
+                            ],
+                            [
+                                'name' => "email",
+                                'type' => "email",
+                                'hint' => "Email"
+                            ],
+                            [
+                                'name' => "sdt",
+                                'type' => "tel",
+                                'hint' => "*Số điện thoại"
+                            ]
+                        ];
+                    @endphp
+                    @foreach($fields as $key => $item)
+                        <label class="block w-2/3 mx-auto">
+                            <input type="{{$item['type']??'text'}}"
+                                   name="{{$item['name']}}"
+                                   placeholder="{{$item['hint']}}"
+                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 ">
+                        </label>
+                    @endforeach
+
+                    <button class="btn-gradient h-9 px-3 flex-shrink-0" type="submit">
+                        Đăng ký ngay
+                    </button>
+                </form>
+            </div>
+            <div class="col-span-4 text-white space-y-3">
+                <h4 class="text-white text-xl">THÔNG TIN LIÊN HỆ</h4>
+                <p class="">PHÒNG KINH DOANH</p>
+                <p class="">Hotline: 0935 687 985
+                    0708 082 298</p>
+                <p class="">Địa chỉ: Khu đô thị Phú Mỹ, Phường Nghĩa Chánh,
+                    Tp Quảng Ngãi</p>
+            </div>
+        </div>
+    </div>
+    <hr class="">
+    <p class="text-center text-white py-4 text-xl">
+        Copyright © khudothiphumy. 2022.
+    </p>
+</footer>
 </body>
 
 </html>
