@@ -14,7 +14,7 @@ const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
 
 const storage = multer.memoryStorage();
-const maxSize = 200 * 1024 * 1024;
+const maxSize = 2000 * 1024 * 1024;
 const upload = multer({
     storage,
     limits: {fileSize: maxSize}
