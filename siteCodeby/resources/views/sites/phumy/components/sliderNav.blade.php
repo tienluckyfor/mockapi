@@ -41,7 +41,7 @@
 
     </style>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <!-- Flickity HTML init -->
         <div class="carousel-{{$rand}} carousel-main-{{$rand}}" >
             @foreach($sliders as $key => $item)
