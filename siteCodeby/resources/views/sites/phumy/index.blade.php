@@ -174,17 +174,17 @@
         <section class="text-center my-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
                 <ul class="flex items-center">
-                    <li class="w-7/12">
-                        <div class="aspect-w-6 aspect-h-4">
+                    <li class="w-6/12">
+                        <div class="aspect-w-4 aspect-h-3">
                             <img src="{{$media->set($slidersHome3[0]['image'])->first()}}"
                                  class="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
                         </div>
                     </li>
-                    <li class="w-5/12">
+                    <li class="w-6/12">
                         @php
                             array_shift($slidersHome3);
                         @endphp
-                        @include($config->view.'/components/slider', ['sliders'  => $slidersHome3, 'height'=>'450px'])
+                        @include($config->view.'/components/slider', ['sliders'  => $slidersHome3, 'height'=>'455px'])
                     </li>
                 </ul>
             </div>
