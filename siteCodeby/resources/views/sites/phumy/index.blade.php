@@ -12,6 +12,11 @@
         })
         ->values()
         ->toArray();
+        $slidersMHome1 = collect($sliders)->filter(function ($item1){
+           return in_array('m-home-1', $item1['position']);
+        })
+        ->values()
+        ->toArray();
         $slidersHome2 = collect($sliders)->filter(function ($item1){
            return in_array('home-2', $item1['position']);
         })
@@ -31,11 +36,43 @@
     <main class="">
 
         {{-- home-1 --}}
-        @include($config->view.'/components/slider', ['sliders'=>$slidersHome1, 'height'=>'620px'])
+        <section class="hidden lg:block">
+            @include($config->view.'/components/slider', ['sliders'=>$slidersHome1, 'height'=>'620px'])
+        </section>
+
+        <section class="block lg:hidden">
+            @include($config->view.'/components/slider', ['sliders'=>$slidersMHome1, 'height'=>'320px'])
+        </section>
 
         {{-- home-2 --}}
-        <section class="bg-gray ">
-        @if(request()->has('showModal'))
+        <section class="bg-gray">
+        @php
+            $fields = [
+                [
+                    'name' => "ho-ten",
+                    'hint' => "*Họ và tên",
+                    "message"=>"*Họ và tên không được để trống"
+                ],
+                [
+                    'name' => "email",
+                    'type' => "email",
+                    'hint' => "Email"
+                ],
+                [
+                    'name' => "sdt",
+                    'type' => "tel",
+                    'hint' => "*Số điện thoại",
+                    "message"=>"*Số điện thoại không được để trống"
+                ]
+            ];
+            $errors = [];
+            foreach($fields as $key => $item){
+                $val = request()->query($item['name']);
+                if(request()->has('showModal') && isset($item['message']) && empty($val))
+                    $errors[$item['name']] = $item['message'];
+            }
+        @endphp
+        @if(request()->has('showModal') && empty($errors))
             <!-- This example requires Tailwind CSS v2.0+ -->
                 <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
                      aria-modal="true">
@@ -104,38 +141,28 @@
         @endif
         <!-- grid -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                <form class="h-28 flex items-center justify-between space-x-3">
-                    <span class="text-white flex-shrink-0 font-semibold">Nhận báo giá</span>
-                    @php
-                        $fields = [
-                            [
-                                'name' => "ho-ten",
-                                'hint' => "*Họ và tên"
-                            ],
-                            [
-                                'name' => "email",
-                                'type' => "email",
-                                'hint' => "Email"
-                            ],
-                            [
-                                'name' => "sdt",
-                                'type' => "tel",
-                                'hint' => "*Số điện thoại"
-                            ]
-                        ];
-                    @endphp
+                <form class="m-0 h-auto lg:h-28 block lg:flex items-center justify-between space-y-3 lg:space-x-3 py-3 lg:py-0">
+                    <p class="flex-shrink-0  text-center lg:text-left text-2xl lg:text-lg">
+                        <span class="text-white font-semibold">Nhận báo giá</span>
+                    </p>
+
                     @foreach($fields as $key => $item)
-                        <label>
+                        <label class="block w-full relative">
                             <input type="{{$item['type']??'text'}}"
                                    name="{{$item['name']}}"
                                    placeholder="{{$item['hint']}}"
+                                   autofocus="{{request()->has('showModal')}}"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 ">
-                            <p class="text-red-500">*Họ và tên không được để trống</p>
+                            @isset($errors[$item['name']])
+                                <p class="text-red-500 absolute bottom-0 -mb-6 text-sm">{{$errors[$item['name']]}}</p>
+                            @endif
                         </label>
                     @endforeach
-                    <button class="btn-gradient h-9 px-3 flex-shrink-0" type="submit">
-                        Đăng ký ngay
-                    </button>
+                    <div class="text-center flex-shrink-0">
+                        <button class="btn-gradient h-9 px-3" type="submit">
+                            Đăng ký ngay
+                        </button>
+                    </div>
                     <input type="hidden" name="showModal">
                 </form>
             </div>
@@ -144,14 +171,14 @@
         {{-- home-3 --}}
         <section class="bg-gray">
             <!-- grid -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-7xl flex justify-between ">
+            <div class="max-w-7xl mx-auto px-0 lg:px-8">
+                <div class="max-w-7xl block lg:flex justify-between ">
                     <?php for($i = 0; $i <= 2; $i++){
-                    $w = 27;
-                    if ($i == 0) $w = 35;
-                    if ($i == 2) $w = 38;
+                    $w = 'lg:w-[27%]';
+                    if ($i == 0) $w = 'lg:w-[35%]';
+                    if ($i == 2) $w = 'lg:w-[38%]';
                     ?>
-                    <img style="width:{{$w}}%" class=" h-full object-center object-fill"
+                    <img class="w-full {{$w}} h-auto lg:h-full object-center object-fill"
                          src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                     <?php }?>
                 </div>
@@ -172,15 +199,15 @@
 
         {{-- home-5 --}}
         <section class="text-center my-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                <ul class="flex items-center">
-                    <li class="w-6/12">
+            <div class="max-w-7xl mx-auto px-0 lg:px-8 ">
+                <ul class="block lg:flex items-center space-y-3 lg:space-x-3">
+                    <li class="w-full lg:w-6/12">
                         <div class="aspect-w-4 aspect-h-3">
                             <img src="{{$media->set($slidersHome3[0]['image'])->first()}}"
                                  class="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
                         </div>
                     </li>
-                    <li class="w-6/12">
+                    <li class="w-full lg:w-6/12">
                         @php
                             array_shift($slidersHome3);
                         @endphp
@@ -191,7 +218,7 @@
         </section>
 
         {{-- home-6 --}}
-        <section class="my-10 bg-fixed bg-center relative"
+        <section class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
                  style="background-image: url({{$media->set($slidersHome4[0]['image'])->first()}})">
             @php
                 $arr = [
@@ -230,9 +257,9 @@
                     ],
                     ];
             @endphp
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                <ul class="flex items-center space-x-5">
-                    <li class="w-5/12 bg-black bg-opacity-50 p-4 block my-10" style="width: 507px">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <ul class="block lg:flex items-center space-y-3 lg:space-x-5">
+                    <li class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10" >
                         <h4 class="text-yellow-400 text-2xl font-bold">TỔNG QUANG DỰ ÁN</h4>
                         <ul class="text-white space-y-2 mt-4">
                             @foreach($arr as $key => $item)
@@ -243,7 +270,7 @@
                         </ul>
                     </li>
 
-                    <li class="w-7/12">
+                    <li class="w-full lg:w-7/12">
                         @php
                             array_shift($slidersHome4);
                         @endphp
@@ -294,7 +321,7 @@
                 <h4 class="font-semibold text-2xl text-yellow-400">1. ĐẦU TƯ THÔNG MINH</h4>
                 <!-- grid -->
                 <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-7 ">
+                    <div class="col-span-12 lg:col-span-7 ">
                         Đầu tư thông minh tức là bạn đầu tư vào một nơi cực
                         kỳ an toàn tuy nhiên mang lại lợi nhuận cao.<br/>
                         Khu đô thị Phú Mỹ Quảng Ngãi là một điểm đến phù
@@ -314,7 +341,7 @@
                         đầu tiên tại Quảng Ngãi , công viên nước quy mô đến 10ha (lớn nhất Quảng Ngãi), tuyến đường
                         chính 50m cùng nhiều công viên cây xanh… giúp cho cơ hội sinh lời tại nơi đây là cực kỳ to lớn.
                     </div>
-                    <div class="col-span-5 ">
+                    <div class="col-span-12 lg:col-span-5 ">
                         <img class="" src="{{$config->static}}/assets/images/Chinh sach.png" alt="">
                     </div>
                 </div>
@@ -343,13 +370,13 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-2xl text-yellow-400">3. NHÀ Ở XÃ HỘI ĐẦU TIÊN TẠI TRUNG TÂM TP QUẢNG
                     NGÃI</h4>
-                <ul class="flex">
-                    <li class="w-8/12">
+                <ul class="block lg:flex">
+                    <li class="w-full lg:w-8/12">
                         <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                             <img class="" src="{{$config->static}}/assets/images/1.png" alt="">
                         </div>
                     </li>
-                    <li class="w-4/12 bg-gray-700 text-white px-5 py-4">
+                    <li class="w-full lg:w-4/12 bg-gray-700 text-white px-5 py-4">
                         Chủ trương xây dựng nhà ở xã hội đầu tiên trên địa bàng tỉnh Quảng Ngãi là quyết định từ phía
                         chủ đầu tư là công ty đầu tư phát triển nhà và đô thị HUD và được sự đồng thuận lớn từ UBND tỉnh
                         Quảng Ngãi.<br/>
@@ -363,33 +390,34 @@
                 </ul>
             </div>
         </section>
+
         {{-- home-5 --}}
         <section class="my-10 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-2xl text-yellow-400">4. TIỆN ÍCH
                 </h4>
                 <ul class="bg-gray space-y-6">
-                    <li class="flex">
-                        <div class="w-4/12 text-white px-5 py-4">
+                    <li class="block lg:flex">
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Tiện ích ngoại khu</h5>
                             <p class="">Nằm trong lòng thành phố ngay cửa ngõ phí nam vào thành phố Quảng Ngãi, khu đô
                                 thị Phú Mỹ Quảng Ngãi ở vị trí tuận lợi với nhiều tiện ích xung quanh như Siêu thị Go,
                                 bệnh viện Phúc Hưng, bến xe Quảng Ngãi, trường đại học, Vincom….
                             </p>
                         </div>
-                        <div class="w-8/12">
+                        <div class="w-full lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
                     </li>
-                    <li class="flex">
-                        <div class="w-8/12">
+                    <li class="block lg:flex">
+                        <div class="w-full lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
-                        <div class="w-4/12 text-white px-5 py-4">
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Tiện ích nội khu</h5>
                             <p class="">
                                 Với không gian dự án cực lớn cùng vị trí đắc địa bao bọc bởi sông Bàu Giang, là nền tảng
@@ -405,8 +433,8 @@
                             </p>
                         </div>
                     </li>
-                    <li class="flex pb-6">
-                        <div class="w-4/12 text-white px-5 py-4">
+                    <li class="block lg:flex pb-6">
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Công viên nước 10ha lớn nhất Tp Quảng
                                 Ngãi
                             </h5>
@@ -420,7 +448,7 @@
                                 gian thoáng mát mang đến cuộc sống thoải mái cho cư dân nơi đây.
                             </p>
                         </div>
-                        <div class="w-8/12">
+                        <div class="w-full lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/BDS5.png" alt="">
                             </div>
@@ -429,6 +457,7 @@
                 </ul>
             </div>
         </section>
+
         {{-- home-5 --}}
         <section class="my-10 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
@@ -437,7 +466,7 @@
 
                 <!-- grid -->
                 <div class="grid grid-cols-12 gap-3">
-                    <div class="col-span-7 space-y-2">
+                    <div class="col-span-12 lg:col-span-7 space-y-2">
                         <b>- 580 tỷ đồng xây dựng công viên thiên bút 2021-2025</b>
                         <p class="">
                             Ngày 24.12.2021, lãnh đạo UBND TP.Quảng Ngãi xác nhận, UBND tỉnh Quảng Ngãi có công văn gửi
@@ -456,10 +485,10 @@
                         </p>
                         <img class="" src="{{$config->static}}/assets/images/thienbut.png" alt="">
                     </div>
-                    <div class="col-span-5 ">
+                    <div class="col-span-12 lg:col-span-5 ">
                         <img class="shadow-lg" src="{{$config->static}}/assets/images/hopdongthienbut.png" alt="">
                     </div>
-                    <div class="col-span-6 space-y-2">
+                    <div class="col-span-12 lg:col-span-6 space-y-2">
                         <b>- 300 tỷ xây dựng Trung Tâm Hội Nghị và Triển Lãm</b>
                         <p class="">Theo văn bản số 1750/SXD-QHKT được sở Xây dựng quảng ngãi gửi UBND tỉnh quảng ngãi
                             về việc quy hoạch phân khu đô thị trung tâm thành phố quảng ngãi để thực hiện dự án Trung
@@ -470,14 +499,14 @@
                             xe.
                         </p>
                     </div>
-                    <div class="col-span-6 ">
+                    <div class="col-span-12 lg:col-span-6 ">
                         <img class="" src="{{$config->static}}/assets/images/10.png" alt="">
                     </div>
                     <div class="col-span-12">
                         <ul class="flex justify-center space-x-3">
                             <?php for($i = 1; $i <= 3; $i++){?>
                             <li class="">
-                                <div class="aspect-w-1 aspect-h-1 w-56 shadow">
+                                <div class="w-24 lg:w-56 aspect-w-1 aspect-h-1 shadow">
                                     <img class="w-full h-full object-center object-cover"
                                          src="{{$config->static}}/assets/images/hopdongthienbut.png" alt="">
                                 </div>
@@ -500,7 +529,7 @@
                             hoàn, tạo sự kết nối mạnh mẽ giữa trung tâm TP hiện hữu với khu vực ven biển.
                         </p>
                     </div>
-                    <div class="col-span-9 space-y-3 pt-3">
+                    <div class="col-span-12 lg:col-span-9 space-y-3 pt-3">
                         <b class="">
                             Một vấn đề được nhiều người quan tâm, nhất là giới đầu tư khi TP Quảng Ngãi bị “ách” bởi
                             đường
@@ -531,7 +560,7 @@
                             bầu giang giúp cho không khí trong lành mát mẻ.
                         </p>
                     </div>
-                    <div class="col-span-3">
+                    <div class="col-span-12 lg:col-span-3">
                         <div class="aspect-w-1 aspect-h-1 w-full shadow">
                             <img class="w-full h-full object-center object-cover"
                                  src="{{$config->static}}/assets/images/hopdongthienbut.png" alt="">

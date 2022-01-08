@@ -32,7 +32,7 @@
             </div>
             <div class="-mr-2 -my-2 md:hidden">
                 <button type="button" @click="showMobileMenu = ! showMobileMenu"
-                        class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                        class=" rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                         aria-expanded="false">
                     <span class="sr-only">Open menu</span>
                     <!-- Heroicon name: outline/menu -->
@@ -182,7 +182,9 @@
                         </a>
                         {{--                        @endif--}}
                     @endforeach
-                    <button class="btn-gradient h-9 px-3 rounded-lg">LIÊN HỆ: 0935 68 79 85</button>
+                    <a href="tel:0935 68 79 85" class="btn-gradient h-9 px-3 rounded-lg flex items-center ">
+                        <span class="">LIÊN HỆ: 0935 68 79 85</span>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -192,7 +194,7 @@
     -->
     <div x-show="showMobileMenu" @click.away="showMobileMenu = false"
          class="absolute z-30 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
-        <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+        <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-gray divide-y-2 divide-gray-50">
             <div class="pt-5 pb-6 px-5 sm:pb-8">
                 <div class="flex items-center justify-between">
                     <div>
@@ -201,7 +203,7 @@
                     </div>
                     <div class="-mr-2">
                         <button type="button" @click="showMobileMenu = ! showMobileMenu"
-                                class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                class="rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                             <span class="sr-only">Close menu</span>
                             <!-- Heroicon name: outline/x -->
                             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -278,20 +280,24 @@
                                 @else
                                     <a href="{{$config->base_url}}{{$item['link']}}"
                                        class="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50">
-                                        <div class="text-base font-medium text-gray-900">
+                                        <div class="text-base font-medium text-white">
                                             {{$item['name']}}
                                         </div>
                                     </a>
                                 @endif
                             @endforeach
-                            <div class="flex items-center md:ml-12">
-                                {{--<a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">
+
+                            <a href="tel:0935 68 79 85" class="btn-gradient h-9 px-3 rounded-lg flex items-center w-56">
+                                <span class="">LIÊN HỆ: 0935 68 79 85</span>
+                            </a>
+                            {{--<div class="flex items-center md:ml-12">
+                                --}}{{--<a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">
                                     Đăng Nhập
                                 </a>
                                 <a href="#"
                                    class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                                     Đăng ký
-                                </a>--}}
+                                </a>--}}{{--
                                 <a href="#"
                                    class="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <!-- Heroicon name: outline/plus-sm -->
@@ -310,7 +316,7 @@
                                               d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
                                     </svg>
                                 </a>
-                            </div>
+                            </div>--}}
                             {{--<a href="{{$config->base_url}}"
                                class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                                 Đăng ký
@@ -617,13 +623,13 @@
 <footer class="bg-gray">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <!-- grid -->
-        <div class="grid grid-cols-12 gap-3 py-6">
-            <div class="col-span-4 space-y-6 ">
+        <div class="grid grid-cols-12 gap-y-8 lg:gap-3 py-6">
+            <div class="col-span-12 lg:col-span-4 space-y-6 ">
                 <img class="" src="{{$config->static}}/assets/images/PHUMYcopy.png" alt="">
                 <p class="text-white text-xl text-center">Cổng thông tin cập nhật dự án Khu đô thị Phú Mỹ - Quảng
                     Ngãi</p>
             </div>
-            <div class="col-span-4 text-center">
+            <div class="col-span-12 lg:col-span-4 text-center">
                 <form action="" class="space-y-3">
                     <h4 class="text-white text-xl">NHẬN THÔNG TIN DỰ ÁN</h4>
                     @php
@@ -658,7 +664,7 @@
                     </button>
                 </form>
             </div>
-            <div class="col-span-4 text-white space-y-3">
+            <div class="col-span-12 lg:col-span-4 text-white space-y-3">
                 <h4 class="text-white text-xl">THÔNG TIN LIÊN HỆ</h4>
                 <p class="">PHÒNG KINH DOANH</p>
                 <p class="">Hotline: 0935 687 985
@@ -669,7 +675,7 @@
         </div>
     </div>
     <hr class="">
-    <p class="text-center text-white py-4 text-xl">
+    <p class="text-center text-white py-4 text-lg lg:text-xl">
         Copyright © khudothiphumy. 2022.
     </p>
 </footer>
