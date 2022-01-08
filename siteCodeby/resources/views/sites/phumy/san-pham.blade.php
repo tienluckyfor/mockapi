@@ -6,7 +6,84 @@
     @endphp
     <main class="">
         {{-- san-pham-1 --}}
-        @include($config->view.'/components/breadcrumbs', ['breadcrumbs'=>[['/', 'Trang chủ'], ['/san-pham', 'Sản phẩm']]])
+        <section class="relative max-w-7xl mx-auto ">
+            @include($config->view.'/components/breadcrumbs', ['breadcrumbs'=>[['/', 'Trang chủ'], ['/san-pham', 'Sản phẩm']]])
+            {{--<button class="py-1 px-3 border border-black rounded-lg absolute top-0 right-0 mr-8">
+                <span class="">Sản phẩm đã lưu</span>
+                <span class="absolute top-0 right-0 -mt-3 -mr-2 h-6 w-6 rounded-full text-xs font-medium bg-red-600 text-white">
+                    <span class="absolute absolute-x absolute-y">1</span>
+                </span>
+            </button>--}}
+            <section class="absolute top-0 right-0 mr-8" x-data="{ show: true }" @click.away="show = false">
+                <!-- This example requires Tailwind CSS v2.0+ -->
+                <div class="relative inline-block text-left">
+                    <div>
+                        {{--<button type="button" @click="show = ! show"
+                                class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                id="menu-button" aria-expanded="true" aria-haspopup="true">
+                            Options
+                            <!-- Heroicon name: solid/chevron-down -->
+                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                 fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </button>--}}
+                        <button @click="show = ! show"
+                                class="py-1 px-3 border border-black rounded-lg ">
+                            <span class="">Sản phẩm đã lưu</span>
+                            <span class="absolute top-0 right-0 -mt-3 -mr-2 h-6 w-6 rounded-full text-xs font-medium bg-red-600 text-white">
+                    <span class="absolute absolute-x absolute-y">1</span>
+                </span>
+                        </button>
+                    </div>
+
+                    <!--
+                      Dropdown menu, show/hide based on menu state.
+
+                      Entering: "transition ease-out duration-100"
+                        From: "transform opacity-0 scale-95"
+                        To: "transform opacity-100 scale-100"
+                      Leaving: "transition ease-in duration-75"
+                        From: "transform opacity-100 scale-100"
+                        To: "transform opacity-0 scale-95"
+                    -->
+                    <div  x-show="show" x-transition:enter="transition ease-out duration-200"
+                          x-transition:enter-start="opacity-0 -translate-y-1"
+                          x-transition:enter-end="opacity-100 translate-y-0"
+                          x-transition:leave="transition ease-in duration-150"
+                          x-transition:leave-start="opacity-100 translate-y-0"
+                          x-transition:leave-end="opacity-0 -translate-y-1"
+                          class="origin-top-right absolute right-0 mt-2 w-[539px] rounded border border-[#C4C4C4] bg-white  divide-y divide-gray-100 focus:outline-none"
+                         role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                        <div class="px-4 py-3" role="none">
+                            <p class="text-center font-semibold" role="none">
+                                Sản phẩm đã lưu
+                            </p>
+                        </div>
+                        <div class="py-1" role="none">
+                            <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                               id="menu-item-0">Account settings</a>
+                            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                               id="menu-item-1">Support</a>
+                            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                               id="menu-item-2">License</a>
+                        </div>
+                        <div class="py-1" role="none">
+                            <form method="POST" action="#" role="none">
+                                <button type="submit" class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
+                                        role="menuitem" tabindex="-1" id="menu-item-3">
+                                    Sign out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </section>
 
         {{-- san-pham-2 --}}
         <section class="my-3 ">
@@ -40,9 +117,9 @@
                             <a href="{{$config->base_url}}/chi-tiet?id={{$item['id']}}" class="flex ">
                                 <div class="hidden lg:block flex-shrink-0">
                                     <div class="aspect-w-1 aspect-h-1 w-24 lg:w-[252px]">
-                                    <img src="{{$media->set($item['images'])->first()}}"
-                                         alt="Front side of mint cotton t-shirt with wavey lines pattern."
-                                         class=" object-center object-cover ">
+                                        <img src="{{$media->set($item['images'])->first()}}"
+                                             alt="Front side of mint cotton t-shirt with wavey lines pattern."
+                                             class=" object-center object-cover ">
                                     </div>
                                 </div>
 

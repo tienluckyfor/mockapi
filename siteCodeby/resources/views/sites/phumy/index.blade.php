@@ -207,11 +207,17 @@
                                  class="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
                         </div>
                     </li>
-                    <li class="w-full lg:w-6/12">
+                    <li class="hidden lg:block lg:w-6/12">
                         @php
                             array_shift($slidersHome3);
                         @endphp
                         @include($config->view.'/components/slider', ['sliders'  => $slidersHome3, 'height'=>'455px'])
+                    </li>
+                    <li class="block lg:hidden lg:w-6/12">
+                        @php
+                            array_shift($slidersHome3);
+                        @endphp
+                        @include($config->view.'/components/slider', ['sliders'  => $slidersHome3, 'height'=>'255px'])
                     </li>
                 </ul>
             </div>
@@ -269,12 +275,17 @@
                             @endforeach
                         </ul>
                     </li>
-
-                    <li class="w-full lg:w-7/12">
+                    <li class="hidden lg:block lg:w-7/12">
                         @php
                             array_shift($slidersHome4);
                         @endphp
                         @include($config->view.'/components/slider', ['sliders'  => $slidersHome4, 'height'=>'450px'])
+                    </li>
+                    <li class="block lg:hidden lg:w-7/12">
+                        @php
+                            array_shift($slidersHome4);
+                        @endphp
+                        @include($config->view.'/components/slider', ['sliders'  => $slidersHome4, 'height'=>'250px'])
                     </li>
                 </ul>
             </div>
@@ -412,7 +423,7 @@
                         </div>
                     </li>
                     <li class="block lg:flex">
-                        <div class="w-full lg:w-8/12">
+                        <div class="hidden lg:block lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
@@ -431,6 +442,12 @@
                                 Một mảng xanh thiên nhiên hiền hòa giữa cây cỏ, mặt nước và bầu trời đầy thơ mộng,
                                 dịu mát.
                             </p>
+                        </div>
+
+                        <div class="block lg:hidden">
+                            <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
+                                <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
+                            </div>
                         </div>
                     </li>
                     <li class="block lg:flex pb-6">
