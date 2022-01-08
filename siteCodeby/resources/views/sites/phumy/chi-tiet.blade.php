@@ -11,13 +11,20 @@
         @include($config->view.'/components/breadcrumbs', ['breadcrumbs'=>[['/', 'Trang chủ'], ['/san-pham', 'Sản phẩm'], ['/san-pham', 'Bài viết']]])
 
         {{-- chi-tiet-2 --}}
-        <section class=" mt-5">
-            @include($config->view.'/components/sliderNav',
-        [
-        'sliders'=>$images,
-        'height'=>'620px',
-        'nav'=>['w'=>'298px', 'h'=>'298px']
-        ])
+        <section class="hidden lg:block mt-5">
+            @include($config->view.'/components/sliderNav', [
+                'sliders'=>$images,
+                'height'=>'620px',
+                'nav'=>['w'=>'298px', 'h'=>'298px']
+            ])
+        </section>
+
+        <section class="block lg:hidden mt-5">
+            @include($config->view.'/components/sliderNav', [
+                'sliders'=>$images,
+                'height'=>'320px',
+                'nav'=>['w'=>'40px', 'h'=>'40px']
+            ])
         </section>
 
         <section class="my-10 ">
