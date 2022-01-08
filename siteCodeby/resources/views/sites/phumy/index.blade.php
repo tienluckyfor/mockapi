@@ -218,7 +218,7 @@
         </section>
 
         {{-- home-6 --}}
-        <section class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
+        <section id="tong-quan" class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
                  style="background-image: url({{$media->set($slidersHome4[0]['image'])->first()}})">
             @php
                 $arr = [
@@ -260,7 +260,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="block lg:flex items-center space-y-3 lg:space-x-5">
                     <li class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10" >
-                        <h4 class="text-yellow-400 text-2xl font-bold">TỔNG QUANG DỰ ÁN</h4>
+                        <h4 class="text-yellow-400 text-2xl font-bold">TỔNG QUAN DỰ ÁN</h4>
                         <ul class="text-white space-y-2 mt-4">
                             @foreach($arr as $key => $item)
                                 <li class="">
@@ -297,7 +297,7 @@
         </section>
 
         {{-- home-5 --}}
-        <section class="text-center my-10">
+        <section id="vi-tri" class="text-center my-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-3xl text-yellow-400">VỊ TRÍ KHU ĐÔ THỊ PHÚ MỸ</h4>
                 <div class="aspect-w-16 aspect-h-9 ">
@@ -308,7 +308,7 @@
         </section>
 
         {{-- home-5 --}}
-        <section class="text-center my-10">
+        <section id="dau-tu" class="text-center my-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-3xl text-yellow-400">05 LÝ DO NÊN ĐẦU TƯ TẠI KHU ĐÔ THỊ PHÚ MỸ QUẢNG
                     NGÃI</h4>
@@ -392,7 +392,7 @@
         </section>
 
         {{-- home-5 --}}
-        <section class="my-10 ">
+        <section id="tien-ich" class="my-10 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-2xl text-yellow-400">4. TIỆN ÍCH
                 </h4>
