@@ -54,7 +54,7 @@
 
                                         <img src="{{$media->set($item['images'])->first()}}"
                                              alt="Front side of mint cotton t-shirt with wavey lines pattern."
-                                             class=" object-center object-cover ">
+                                             class="block lg:hidden object-center object-cover ">
 
                                         <ul class="flex space-x-3 text-gray-600">
                                             <li class="font-semibold">{{$item['price']}}</li>
