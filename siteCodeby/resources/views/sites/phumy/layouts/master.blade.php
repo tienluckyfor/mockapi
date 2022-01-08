@@ -617,7 +617,7 @@
 <footer class="bg-gray">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <!-- grid -->
-        <div class="grid grid-cols-12 gap-32 py-6">
+        <div class="grid grid-cols-12 gap-3 py-6">
             <div class="col-span-4 space-y-6 ">
                 <img class="" src="{{$config->static}}/assets/images/PHUMYcopy.png" alt="">
                 <p class="text-white text-xl text-center">Cổng thông tin cập nhật dự án Khu đô thị Phú Mỹ - Quảng
