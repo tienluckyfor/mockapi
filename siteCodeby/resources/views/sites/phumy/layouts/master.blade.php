@@ -279,7 +279,7 @@
                                     </div>
                                 @else
                                     <a href="{{$config->base_url}}{{$item['link']}}"
-                                       class="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-50">
+                                       class="-m-3 flex items-center p-3 rounded-lg hover:bg-gray-900">
                                         <div class="text-base font-medium text-white">
                                             {{$item['name']}}
                                         </div>
