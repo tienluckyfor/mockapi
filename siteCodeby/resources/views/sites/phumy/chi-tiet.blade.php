@@ -12,7 +12,7 @@
 
         {{-- chi-tiet-2 --}}
         <section class="hidden lg:block mt-5">
-            @include($config->view.'/components/sliderNav', [
+            @include($config->view.'/components/sliderNavVertical', [
                 'sliders'=>$images,
                 'height'=>'620px',
                 'nav'=>['w'=>'298px', 'h'=>'298px']

@@ -46,11 +46,11 @@
         <div class="carousel-{{$rand}} carousel-main-{{$rand}}" >
             @foreach($sliders as $key => $item)
                 <div class="carousel-cell">
-                    <div class="aspect-w-1 aspect-h-1 w-full h-full">
+{{--                    <div class="aspect-w-1 aspect-h-1 w-full h-full">--}}
                         <img src="{{$item}}"
                              alt="Front side of mint cotton t-shirt with wavey lines pattern."
                              class=" object-center object-fill h-full w-full">
-                    </div>
+{{--                    </div>--}}
                 </div>
             @endforeach
         </div>
