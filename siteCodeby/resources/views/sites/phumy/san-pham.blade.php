@@ -60,7 +60,8 @@
                                 <button
 {{--                                        x-show="!$store.favorites.items[{{$item['id']}}]"--}}
                                         x-effect="console.log('1', !$store.favorites.items[{{$item['id']}}])"
-                                        @click="$store.favorites.add(sanphamObj[{{$item['id']}}]); $event.preventDefault()"
+                                        @click="alert(1)"
+{{--                                        @click="$store.favorites.add(sanphamObj[{{$item['id']}}]); $event.preventDefault()"--}}
                                         {{--$event.preventDefault()"--}}
                                         class="rounded-lg border border-black py-1 px-4 ">
                                     Lưu <span class="hidden lg:inline">thông tin thửa đất</span>
