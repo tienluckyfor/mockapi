@@ -58,7 +58,7 @@
                             <div class="ml-4">
 
                                 <button
-                                        x-show="!$store.favorites.items[{{$item['id']}}]"
+{{--                                        x-show="!$store.favorites.items[{{$item['id']}}]"--}}
                                         x-effect="console.log('1', !$store.favorites.items[{{$item['id']}}])"
                                         @click="$store.favorites.add(sanphamObj[{{$item['id']}}]); $event.preventDefault()"
                                         {{--$event.preventDefault()"--}}
