@@ -10,7 +10,7 @@
         <section class="relative max-w-7xl mx-auto ">
             @include($config->view.'/components/breadcrumbs', ['breadcrumbs'=>[['/', 'Trang chủ'], ['/san-pham', 'Sản phẩm']]])
 
-            <section class="absolute top-0 right-0 mr-8" x-data="{ show: true }" @click.away="show = false">
+            <section class="absolute top-0 right-0 mr-3 -mt-1" x-data="{ show: false }" @click.away="show = false">
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.min.js"></script>
 
@@ -18,8 +18,8 @@
                 <div class="relative inline-block text-left">
                     <div>
                         <button @click="show = ! show"
-                                class="py-1 px-3 border border-black rounded-lg ">
-                            <span class="">Sản phẩm đã lưu</span>
+                                class="py-px px-3 border border-black rounded-lg ">
+                            <span class=""><span class="hidden lg:block">Sản phẩm</span> đã lưu</span>
                             <span class="absolute top-0 right-0 -mt-3 -mr-2 h-6 w-6 rounded-full text-xs font-medium bg-red-600 text-white">
                                 <span class="absolute absolute-x absolute-y"
                                       x-text="Object.keys($store.favorites.items).length">-</span>
@@ -33,7 +33,7 @@
                          x-transition:leave="transition ease-in duration-150"
                          x-transition:leave-start="opacity-100 translate-y-0"
                          x-transition:leave-end="opacity-0 -translate-y-1"
-                         class="origin-top-right absolute right-0 mt-2 w-[539px] rounded border border-[#C4C4C4] bg-white  divide-y divide-[#C4C4C4] focus:outline-none shadow-md"
+                         class="z-10 origin-top-right absolute right-0 mt-2 w-[300px] lg:w-[539px] rounded border border-[#C4C4C4] bg-white  divide-y divide-[#C4C4C4] focus:outline-none shadow-md"
                          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                         <div class="px-4 py-3" role="none">
                             <p class="text-center font-semibold" role="none">
