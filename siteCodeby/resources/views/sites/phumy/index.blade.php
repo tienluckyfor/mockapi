@@ -172,31 +172,37 @@
         <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 
         {{-- home-3 --}}
-        <section class="bg-gray" data-scene data-scene-duration="20%" >
+        <section class="bg-gray" data-scene data-scene-duration="5%">
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
                     <?php for($i = 0; $i <= 2; $i++){?>
                     @switch($i)
                         @case(0)
-                            <img data-animate data-animate-from-x="-200" data-animate-to-x="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
-                                 class="w-full lg:w-[35%] h-auto lg:h-full object-center object-fill"
-                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        <img data-animate data-animate-from-x="-200" data-animate-to-x="0" data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1"
+                             class="w-full lg:w-[35%] h-auto lg:h-full object-center object-fill"
+                             src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(1)
-                            <img data-animate data-animate-from-y="200" data-animate-to-y="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
-                                 class="w-full lg:w-[27%] h-auto lg:h-full object-center object-fill"
-                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        <img data-animate data-animate-from-y="200" data-animate-to-y="0" data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1"
+                             class="w-full lg:w-[27%] h-auto lg:h-full object-center object-fill"
+                             src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(2)
-                            <img data-animate data-animate-from-x="200" data-animate-to-x="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
-                                 class="w-full lg:w-[38%] h-auto lg:h-full object-center object-fill"
-                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        <img data-animate data-animate-from-x="200" data-animate-to-x="0" data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1"
+                             class="w-full lg:w-[38%] h-auto lg:h-full object-center object-fill"
+                             src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                     @endswitch
-                   {{-- <img data-animate data-animate-from-x="0" data-animate-to-x="200"
-                         class="w-full {{$w}} h-auto lg:h-full object-center object-fill"
-                         src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">--}}
+                    {{-- <img data-animate data-animate-from-x="0" data-animate-to-x="200"
+                          class="w-full {{$w}} h-auto lg:h-full object-center object-fill"
+                          src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">--}}
                     <?php }?>
                 </div>
             </div>
