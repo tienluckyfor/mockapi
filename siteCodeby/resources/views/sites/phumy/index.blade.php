@@ -168,18 +168,35 @@
             </div>
         </section>
 
+        <script src="https://unpkg.com/gsap/dist/gsap.min.js"></script>
+        <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
+
         {{-- home-3 --}}
-        <section class="bg-gray">
+        <section class="bg-gray" data-scene data-scene-duration="20%" >
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
-                    <?php for($i = 0; $i <= 2; $i++){
-                    $w = 'lg:w-[27%]';
-                    if ($i == 0) $w = 'lg:w-[35%]';
-                    if ($i == 2) $w = 'lg:w-[38%]';
-                    ?>
-                    <img class="w-full {{$w}} h-auto lg:h-full object-center object-fill"
-                         src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                    <?php for($i = 0; $i <= 2; $i++){?>
+                    @switch($i)
+                        @case(0)
+                            <img data-animate data-animate-from-x="-200" data-animate-to-x="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
+                                 class="w-full lg:w-[35%] h-auto lg:h-full object-center object-fill"
+                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        @break
+                        @case(1)
+                            <img data-animate data-animate-from-y="200" data-animate-to-y="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
+                                 class="w-full lg:w-[27%] h-auto lg:h-full object-center object-fill"
+                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        @break
+                        @case(2)
+                            <img data-animate data-animate-from-x="200" data-animate-to-x="0" data-animate-from-alpha="0" data-animate-to-alpha="1"
+                                 class="w-full lg:w-[38%] h-auto lg:h-full object-center object-fill"
+                                 src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
+                        @break
+                    @endswitch
+                   {{-- <img data-animate data-animate-from-x="0" data-animate-to-x="200"
+                         class="w-full {{$w}} h-auto lg:h-full object-center object-fill"
+                         src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">--}}
                     <?php }?>
                 </div>
             </div>
@@ -197,6 +214,11 @@
             </div>
         </section>
 
+        <script>
+            new ScrollXP({
+                container: document.body,
+            });
+        </script>
         {{-- home-5 --}}
         <section class="text-center my-10">
             <div class="max-w-7xl mx-auto px-0 lg:px-8 ">
@@ -265,7 +287,7 @@
             @endphp
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="block lg:flex items-center space-y-3 lg:space-x-5">
-                    <li class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10" >
+                    <li class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10">
                         <h4 class="text-yellow-400 text-2xl font-bold">TỔNG QUAN DỰ ÁN</h4>
                         <ul class="text-white space-y-2 mt-4">
                             @foreach($arr as $key => $item)
