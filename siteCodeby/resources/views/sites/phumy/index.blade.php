@@ -172,28 +172,28 @@
         <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 
         {{-- home-3 --}}
-        <section class="bg-gray" data-scene data-scene-duration="5%">
+        <section class="bg-gray" data-scene data-scene-duration="10%">
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
                     <?php for($i = 0; $i <= 2; $i++){?>
                     @switch($i)
                         @case(0)
-                        <img data-animate data-animate-from-x="-200" data-animate-to-x="0" data-animate-from-alpha="0"
+                        <img data-animate data-animate-from-x="-50" data-animate-to-x="0" data-animate-from-alpha="0.7"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[35%] h-auto lg:h-full object-center object-fill"
                              src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(1)
-                        <img data-animate data-animate-from-y="200" data-animate-to-y="0" data-animate-from-alpha="0"
+                        <img data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0.7"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[27%] h-auto lg:h-full object-center object-fill"
                              src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(2)
-                        <img data-animate data-animate-from-x="200" data-animate-to-x="0" data-animate-from-alpha="0"
+                        <img data-animate data-animate-from-x="50" data-animate-to-x="0" data-animate-from-alpha="0.7"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[38%] h-auto lg:h-full object-center object-fill"
@@ -209,9 +209,14 @@
         </section>
 
         {{-- home-4 --}}
-        <section class="text-center my-10">
+        <section class="text-center my-10" data-scene data-scene-duration="5%">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                <h4 class="font-semibold text-3xl text-yellow-400">MỞ BÁN MỚI PHÂN KHU PHÚ GIA RIVERSIDE VIEW
+                <h4 class="font-semibold text-3xl text-yellow-400"
+                    data-animate data-animate-from-y="50"
+                    data-animate-to-y="0"
+                    data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">MỞ BÁN MỚI PHÂN KHU PHÚ GIA RIVERSIDE VIEW
                     SÔNG</h4>
                 <div class="text-xl space-y-1 mt-3">
                     <p class="">Hạ tầng hoàn thiện 100%, thanh toán linh hoạt - ngân hàng hỗ trợ đến 70%</p>

@@ -56,7 +56,8 @@
             "pageDots": false,
             "contain": true,
             "wrapAround": true,
-            "autoPlay": true
+            "autoPlay": true,
+            pauseAutoPlayOnHover: false
         });
     </script>
 </section>
