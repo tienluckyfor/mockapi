@@ -114,11 +114,10 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                 fs.unlinkSync(item.path)
             })
             const files = await File.bulkCreate(vals, {returning: true, updateOnDuplicate: ['cloud', 'progress']})
-            response.send(files)
+            // response.send(files)
         });
     })
     response.send(filesDB)
-
 }))
 
 router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => {
