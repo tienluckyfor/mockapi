@@ -3,13 +3,13 @@
         return;
     $rand = rand();
 @endphp
-
-<section class="bg-indigo-100 flex justify-center h-screen">
+{{--
+<section class="bg-indigo-100 flex justify-center " style="height: {{$height}}">
 </section>
 @php
     return;
-@endphp
-<section class="bg-indigo-100 flex justify-center h-screen">
+@endphp--}}
+<section class="bg-indigo-100 flex justify-center ">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.pkgd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.min.css"/>

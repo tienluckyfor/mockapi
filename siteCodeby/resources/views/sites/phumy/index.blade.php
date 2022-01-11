@@ -172,7 +172,8 @@
         <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 
         {{-- home-3 --}}
-        <section class="bg-gray" data-scene data-scene-duration="5%">
+        <section class="bg-gray" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                 >
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
@@ -209,7 +210,7 @@
         </section>
 
         {{-- home-4 --}}
-        <section class="text-center my-10" data-scene data-scene-duration="5%">
+        <section class="text-center my-10" data-scene data-scene-duration="10%" data-scene-hook="onEnter">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
                 <h4 class="font-semibold text-3xl text-yellow-400"
                     data-animate data-animate-from-y="50"
@@ -225,11 +226,6 @@
             </div>
         </section>
 
-        <script>
-            new ScrollXP({
-                container: document.body,
-            });
-        </script>
         {{-- home-5 --}}
         <section class="text-center my-10">
             <div class="max-w-7xl mx-auto px-0 lg:px-8 ">
@@ -257,7 +253,9 @@
         </section>
 
         {{-- home-6 --}}
-        <section id="tong-quan" class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
+        <section id="tong-quan" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                 
+                 class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
                  style="background-image: url({{$media->set($slidersHome4[0]['image'])->first()}})">
             @php
                 $arr = [
@@ -298,7 +296,10 @@
             @endphp
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ul class="block lg:flex items-center space-y-3 lg:space-x-5">
-                    <li class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10">
+                    <li data-animate data-animate-from-x="-150" data-animate-to-x="0" data-animate-from-alpha="0"
+                        data-animate-to-alpha="1"
+                        data-animate-momentum="1"
+                        class="w-full lg:w-[507px] bg-black bg-opacity-50 p-4 block my-0 lg:my-10">
                         <h4 class="text-yellow-400 text-2xl font-bold">TỔNG QUAN DỰ ÁN</h4>
                         <ul class="text-white space-y-2 mt-4">
                             @foreach($arr as $key => $item)
@@ -326,9 +327,14 @@
 
 
         {{-- home-5 --}}
-        <section class="text-center my-10">
+        <section class="text-center my-10" data-scene data-scene-duration="10%" data-scene-hook="onEnter">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-3xl text-yellow-400">VIDEO CẬP NHẬT DỰ ÁN PHÚ MỸ QUẢNG NGÃI</h4>
+                <h4 class="font-semibold text-3xl text-yellow-400"
+                    data-animate data-animate-from-y="50"
+                    data-animate-to-y="0"
+                    data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">VIDEO CẬP NHẬT DỰ ÁN PHÚ MỸ QUẢNG NGÃI</h4>
                 <div class="aspect-w-16 aspect-h-9 ">
                     <iframe
                             class="rounded"
@@ -341,94 +347,144 @@
         </section>
 
         {{-- home-5 --}}
-        <section id="vi-tri" class="text-center my-10">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+        <section id="vi-tri" class="text-center my-10" data-scene data-scene-duration="10%" data-scene-hook="onEnter">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3" data-animate data-animate-from-y="50"
+                 data-animate-to-y="0"
+                 data-animate-from-alpha="0"
+                 data-animate-to-alpha="1"
+                 data-animate-momentum="1">
                 <h4 class="font-semibold text-3xl text-yellow-400">VỊ TRÍ KHU ĐÔ THỊ PHÚ MỸ</h4>
                 <div class="aspect-w-16 aspect-h-9 ">
                     <img src="{{$config->static}}/assets/images/BandoQUangNgai.png" alt="">
-
                 </div>
             </div>
         </section>
 
         {{-- home-5 --}}
-        <section id="dau-tu" class="text-center my-10">
+        <section id="dau-tu" class="text-center my-10" data-scene data-scene-duration="10%" data-scene-hook="onEnter">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-3xl text-yellow-400">05 LÝ DO NÊN ĐẦU TƯ TẠI KHU ĐÔ THỊ PHÚ MỸ QUẢNG
+                <h4 class="font-semibold text-3xl text-yellow-400" data-animate data-animate-from-y="50"
+                    data-animate-to-y="0"
+                    data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">05 LÝ DO NÊN ĐẦU TƯ TẠI KHU ĐÔ THỊ PHÚ MỸ QUẢNG
                     NGÃI</h4>
             </div>
         </section>
 
-        {{-- home-5 --}}
-        <section class="my-10 ">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400">1. ĐẦU TƯ THÔNG MINH</h4>
-                <!-- grid -->
-                <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-12 lg:col-span-7 ">
-                        Đầu tư thông minh tức là bạn đầu tư vào một nơi cực
-                        kỳ an toàn tuy nhiên mang lại lợi nhuận cao.<br/>
-                        Khu đô thị Phú Mỹ Quảng Ngãi là một điểm đến phù
-                        hợp cho việc đầu tư thông minh cả trong ngắn và dài hạng.<br/>
-                        Về an toàn 100% đất nền tại khu đô thị Phú Mỹ Quảng Ngãi đã có sổ đỏ từng lô với pháp lý rõ ràng
-                        và được bảo hộ bới chủ đầu tư là công ty Đầu tư phát triển nhà và đô thị HUD trực thuộc bộ xây
-                        dựng cực kỳ minh bạch và rõ ràng, dự án còn được đảm bảo từ phía nhiều ngân hàng lớn như
-                        Vietcombank , TP bank …. hỗ trợ cho vay đến 70% giá trị đất cho bạn thấy sự minh bạch và an toàn
-                        tuyệt đối khi đầu tư tại khu đô thị Phú Mỹ Quảng Ngãi.<br/>
-                        Về Lợi nhuận cao: chủ trương của UBND Tỉnh Quảng Ngãi rất rõ ràng là phát triển thành phố Quảng
-                        Ngãi theo hướng biển, điều này giúp cho Khu đô thị Phú Mỹ trở thành trung tâm lớn của thành phố
-                        Quảng Ngãi. Để bổ sung cho Nghị quyết này rất nhiều quyết định xung quanh đã được ký như: 580 tỷ
-                        đồng xây dựng công viên thiên bút, 300 tỷ đồng xây dựng trung tâm hội nghị và triển lãm tỉnh
-                        Quảng Ngãi…<br/>
-                        Ngoài ra khu đô thị Phú Mỹ Quảng Ngãi sở hữu quỹ đất vàng ven sông bầu giang ngay tại trung tâm
-                        thành phố Quảng Ngãi với việc đầu tư cơ sở hạ tầng chất lượng trong đó nổi bật là nhà ở xã hội
-                        đầu tiên tại Quảng Ngãi , công viên nước quy mô đến 10ha (lớn nhất Quảng Ngãi), tuyến đường
-                        chính 50m cùng nhiều công viên cây xanh… giúp cho cơ hội sinh lời tại nơi đây là cực kỳ to lớn.
-                    </div>
-                    <div class="col-span-12 lg:col-span-5 ">
-                        <img class="" src="{{$config->static}}/assets/images/Chinh sach.png" alt="">
+        <div class="" data-scene data-scene-duration="10%" data-scene-hook="onEnter">
+
+            {{-- home-5 --}}
+            <section class="my-10 " data-animate data-animate-from-y="50"
+                     data-animate-to-y="0"
+                     data-animate-from-alpha="0"
+                     data-animate-to-alpha="1"
+                     data-animate-momentum="1">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+                    <h4 class="font-semibold text-2xl text-yellow-400">1. ĐẦU TƯ THÔNG MINH</h4>
+                    <!-- grid -->
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 lg:col-span-7 ">
+                            Đầu tư thông minh tức là bạn đầu tư vào một nơi cực
+                            kỳ an toàn tuy nhiên mang lại lợi nhuận cao.<br/>
+                            Khu đô thị Phú Mỹ Quảng Ngãi là một điểm đến phù
+                            hợp cho việc đầu tư thông minh cả trong ngắn và dài hạng.<br/>
+                            Về an toàn 100% đất nền tại khu đô thị Phú Mỹ Quảng Ngãi đã có sổ đỏ từng lô với pháp lý rõ
+                            ràng
+                            và được bảo hộ bới chủ đầu tư là công ty Đầu tư phát triển nhà và đô thị HUD trực thuộc bộ
+                            xây
+                            dựng cực kỳ minh bạch và rõ ràng, dự án còn được đảm bảo từ phía nhiều ngân hàng lớn như
+                            Vietcombank , TP bank …. hỗ trợ cho vay đến 70% giá trị đất cho bạn thấy sự minh bạch và an
+                            toàn
+                            tuyệt đối khi đầu tư tại khu đô thị Phú Mỹ Quảng Ngãi.<br/>
+                            Về Lợi nhuận cao: chủ trương của UBND Tỉnh Quảng Ngãi rất rõ ràng là phát triển thành phố
+                            Quảng
+                            Ngãi theo hướng biển, điều này giúp cho Khu đô thị Phú Mỹ trở thành trung tâm lớn của thành
+                            phố
+                            Quảng Ngãi. Để bổ sung cho Nghị quyết này rất nhiều quyết định xung quanh đã được ký như:
+                            580 tỷ
+                            đồng xây dựng công viên thiên bút, 300 tỷ đồng xây dựng trung tâm hội nghị và triển lãm tỉnh
+                            Quảng Ngãi…<br/>
+                            Ngoài ra khu đô thị Phú Mỹ Quảng Ngãi sở hữu quỹ đất vàng ven sông bầu giang ngay tại trung
+                            tâm
+                            thành phố Quảng Ngãi với việc đầu tư cơ sở hạ tầng chất lượng trong đó nổi bật là nhà ở xã
+                            hội
+                            đầu tiên tại Quảng Ngãi , công viên nước quy mô đến 10ha (lớn nhất Quảng Ngãi), tuyến đường
+                            chính 50m cùng nhiều công viên cây xanh… giúp cho cơ hội sinh lời tại nơi đây là cực kỳ to
+                            lớn.
+                        </div>
+                        <div class="col-span-12 lg:col-span-5 " data-animate data-animate-from-x="50"
+                             data-animate-to-x="0" data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1">
+                            <img class="" src="{{$config->static}}/assets/images/Chinh sach.png" alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        {{-- home-5 --}}
-        <section class="my-10 ">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400">2. GIÁ ĐẤT</h4>
-                <div class="">Việc đầu tư bất động sản nói chung và đầu tư bất động sản ở Quảng Ngãi
-                    nói riêng thì việc vị thế mua rất quan trọng, thời điểm hiện tại khách hàng đầu tư tại khu đô thị
-                    Phú Mỹ Quảng Ngãi sẽ được mua với giá gốc từ công ty cùng với chiết khấu cao & được hỗ trợ rất nhiều
-                    từ phía chủ dự án.<br/>
-                    Tính đến thời điểm tháng 1/2022, giá được công ty đưa ra rất phù hợp để thị trường Bất động sản ở
-                    Quảng Ngãi có thể hấp thụ và sinh lời trong ngắn hạn.<br/>
-                    Bởi lẻ, so với thị trường của khu vực xung
-                    quanh giá đất ở đây (kể cả các vị trí view công viên) chỉ bằng mua đất Quảng Ngãi trong các hẻm
-                    đường lớn như Quang Trung và Lê Lợi chật chội và không nhiều tiện ích.
+            {{-- home-5 --}}
+            <section class="my-10 " data-animate data-animate-from-y="50"
+                     data-animate-to-y="0"
+                     data-animate-from-alpha="0"
+                     data-animate-to-alpha="1"
+                     data-animate-momentum="1">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+                    <h4 class="font-semibold text-2xl text-yellow-400">2. GIÁ ĐẤT</h4>
+                    <div class="">Việc đầu tư bất động sản nói chung và đầu tư bất động sản ở Quảng Ngãi
+                        nói riêng thì việc vị thế mua rất quan trọng, thời điểm hiện tại khách hàng đầu tư tại khu đô
+                        thị
+                        Phú Mỹ Quảng Ngãi sẽ được mua với giá gốc từ công ty cùng với chiết khấu cao & được hỗ trợ rất
+                        nhiều
+                        từ phía chủ dự án.<br/>
+                        Tính đến thời điểm tháng 1/2022, giá được công ty đưa ra rất phù hợp để thị trường Bất động sản
+                        ở
+                        Quảng Ngãi có thể hấp thụ và sinh lời trong ngắn hạn.<br/>
+                        Bởi lẻ, so với thị trường của khu vực xung
+                        quanh giá đất ở đây (kể cả các vị trí view công viên) chỉ bằng mua đất Quảng Ngãi trong các hẻm
+                        đường lớn như Quang Trung và Lê Lợi chật chội và không nhiều tiện ích.
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
+
 
         {{-- home-5 --}}
-        <section class="my-10 ">
+        <section class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                 >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400">3. NHÀ Ở XÃ HỘI ĐẦU TIÊN TẠI TRUNG TÂM TP QUẢNG
+                <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50"
+                    data-animate-to-y="0"
+                    data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">3. NHÀ Ở XÃ HỘI ĐẦU TIÊN TẠI TRUNG TÂM TP QUẢNG
                     NGÃI</h4>
                 <ul class="block lg:flex">
-                    <li class="w-full lg:w-8/12">
+                    <li class="w-full lg:w-8/12" data-animate data-animate-from-x="-50" data-animate-to-x="0"
+                        data-animate-from-alpha="0"
+                        data-animate-to-alpha="1"
+                        data-animate-momentum="1">
                         <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                             <img class="" src="{{$config->static}}/assets/images/1.png" alt="">
                         </div>
                     </li>
-                    <li class="w-full lg:w-4/12 bg-gray-700 text-white px-5 py-4">
-                        Chủ trương xây dựng nhà ở xã hội đầu tiên trên địa bàng tỉnh Quảng Ngãi là quyết định từ phía
-                        chủ đầu tư là công ty đầu tư phát triển nhà và đô thị HUD và được sự đồng thuận lớn từ UBND tỉnh
+                    <li class="w-full lg:w-4/12 bg-gray-700 text-white px-5 py-4" data-animate data-animate-from-x="50"
+                        data-animate-to-x="0" data-animate-from-alpha="0"
+                        data-animate-to-alpha="1"
+                        data-animate-momentum="1">
+                        Chủ trương xây dựng nhà ở xã hội đầu tiên trên địa bàng tỉnh Quảng Ngãi là quyết định từ
+                        phía
+                        chủ đầu tư là công ty đầu tư phát triển nhà và đô thị HUD và được sự đồng thuận lớn từ UBND
+                        tỉnh
                         Quảng Ngãi.<br/>
                         Việc xây dựng nhà ở xã hội trong khuân viên khu đô thị phú mỹ quảng ngãi càng khẳng
-                        định chủ trương thành phố hướng biển của UBND Tỉnh Quảng Ngãi, đây là cơ hội tuyệt vời giúp cho
+                        định chủ trương thành phố hướng biển của UBND Tỉnh Quảng Ngãi, đây là cơ hội tuyệt vời giúp
+                        cho
                         khu đô thị phú mỹ nhanh chóng trở thành trung tâm thành phố trong tương lai gần.<br/>
-                        Dự kiến, trong đầu năm 2022 chủ đầu sẽ triển khai xây dựng nhà ở xã hội nay cùng với đẩy mạnh
-                        đầu tư cơ sở hạ tầng, công viên cũng như các hạng mục khác nhằm phục vụ và đạt được sự hài lòng
+                        Dự kiến, trong đầu năm 2022 chủ đầu sẽ triển khai xây dựng nhà ở xã hội nay cùng với đẩy
+                        mạnh
+                        đầu tư cơ sở hạ tầng, công viên cũng như các hạng mục khác nhằm phục vụ và đạt được sự hài
+                        lòng
                         lớn nhất từ các cư dân của khu đô thị Phú Mỹ.
                     </li>
                 </ul>
@@ -436,41 +492,60 @@
         </section>
 
         {{-- home-5 --}}
-        <section id="tien-ich" class="my-10 ">
+        <section id="tien-ich" class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                 >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400">4. TIỆN ÍCH
+                <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50"
+                    data-animate-to-y="0"
+                    data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">4. TIỆN ÍCH
                 </h4>
                 <ul class="bg-gray space-y-6">
-                    <li class="block lg:flex">
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
+                    <li class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                         >
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50" data-animate-to-x="0"
+                             data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Tiện ích ngoại khu</h5>
-                            <p class="">Nằm trong lòng thành phố ngay cửa ngõ phí nam vào thành phố Quảng Ngãi, khu đô
-                                thị Phú Mỹ Quảng Ngãi ở vị trí tuận lợi với nhiều tiện ích xung quanh như Siêu thị Go,
+                            <p class="">Nằm trong lòng thành phố ngay cửa ngõ phí nam vào thành phố Quảng Ngãi, khu
+                                đô
+                                thị Phú Mỹ Quảng Ngãi ở vị trí tuận lợi với nhiều tiện ích xung quanh như Siêu thị
+                                Go,
                                 bệnh viện Phúc Hưng, bến xe Quảng Ngãi, trường đại học, Vincom….
                             </p>
                         </div>
-                        <div class="w-full lg:w-8/12">
-                            <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
+                        <div class="w-full lg:w-8/12" >
+                            <div class="aspect-w-16 aspect-h-9 lg:aspect-none" >
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
                     </li>
-                    <li class="block lg:flex">
+                    <li class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                         >
                         <div class="hidden lg:block lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="50" data-animate-to-x="0"
+                             data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Tiện ích nội khu</h5>
                             <p class="">
-                                Với không gian dự án cực lớn cùng vị trí đắc địa bao bọc bởi sông Bàu Giang, là nền tảng
+                                Với không gian dự án cực lớn cùng vị trí đắc địa bao bọc bởi sông Bàu Giang, là nền
+                                tảng
                                 để xây dựng nên những tiện ích nội khu tuyệt vời trong tương lai như trường mầm non,
-                                trường tiểu học, các công viên tiểu cảnh ở các cụm dân cư thuộc dự án và các tiện ích
+                                trường tiểu học, các công viên tiểu cảnh ở các cụm dân cư thuộc dự án và các tiện
+                                ích
                                 thể thao giải trí như sân bóng đá, sân tennis, sân tập golf, câu cá thư giãn.<br/>
-                                Trong đó tuyến phố trung tâm với con lươn được xây dựng trở thành tuyến công viên cây
+                                Trong đó tuyến phố trung tâm với con lươn được xây dựng trở thành tuyến công viên
+                                cây
                                 xanh trải dài từ cổng khu đô thị đến vòng xoay trung tâm kết hợp với công trình công
-                                viên hồ nước lên đến 10ha sẽ là điểm nhấn đặc biệt khi nói đến khu đô thị Phú Mỹ Quảng
+                                viên hồ nước lên đến 10ha sẽ là điểm nhấn đặc biệt khi nói đến khu đô thị Phú Mỹ
+                                Quảng
                                 Ngãi.<br/>
                                 Một mảng xanh thiên nhiên hiền hòa giữa cây cỏ, mặt nước và bầu trời đầy thơ mộng,
                                 dịu mát.
@@ -483,18 +558,27 @@
                             </div>
                         </div>
                     </li>
-                    <li class="block lg:flex pb-6">
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4">
+                    <li class="block lg:flex pb-6" class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                         >
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50" data-animate-to-x="0"
+                             data-animate-from-alpha="0"
+                             data-animate-to-alpha="1"
+                             data-animate-momentum="1">
                             <h5 class="text-yellow-400 text-xl text-semibold ">Công viên nước 10ha lớn nhất Tp Quảng
                                 Ngãi
                             </h5>
-                            <p class="">Ở khu đô thị Phú Mỹ Quảng Ngãi không thể nhắc đến công viên nước siêu lớn với
-                                tổng diện tích lên đến 10ha tạo điểm nhấn là công viên nước có diện tích lớn nhất, được
+                            <p class="">Ở khu đô thị Phú Mỹ Quảng Ngãi không thể nhắc đến công viên nước siêu lớn
+                                với
+                                tổng diện tích lên đến 10ha tạo điểm nhấn là công viên nước có diện tích lớn nhất,
+                                được
                                 đầu tư nhiều nhất từ trước đến nay tại thành phố Quảng Ngãi.<br/>
                                 Đây là sẽ là điểm tham quan
-                                hấp dẫn hàng đầu của cư dân tỉnh Quảng Ngãi nói riêng và khách vảng lai đến với Quảng
-                                Ngãi nói chung khi hoàn thiện, công viên nước trung tâm này là biểu tượng một sự tự hào
-                                của dự án Phú Mỹ Quảng Ngãi tạo nên một không gian xanh với mật độ cây xanh cao, không
+                                hấp dẫn hàng đầu của cư dân tỉnh Quảng Ngãi nói riêng và khách vảng lai đến với
+                                Quảng
+                                Ngãi nói chung khi hoàn thiện, công viên nước trung tâm này là biểu tượng một sự tự
+                                hào
+                                của dự án Phú Mỹ Quảng Ngãi tạo nên một không gian xanh với mật độ cây xanh cao,
+                                không
                                 gian thoáng mát mang đến cuộc sống thoải mái cho cư dân nơi đây.
                             </p>
                         </div>
@@ -509,13 +593,18 @@
         </section>
 
         {{-- home-5 --}}
-        <section class="my-10 ">
+        <section class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
+                 >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400">5. THÔNG TIN QUY HOẠCH
+                <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0"
+                    data-animate-to-alpha="1"
+                    data-animate-momentum="1">5. THÔNG TIN QUY HOẠCH
                 </h4>
 
                 <!-- grid -->
-                <div class="grid grid-cols-12 gap-3">
+                <div class="grid grid-cols-12 gap-3" data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0"
+                     data-animate-to-alpha="1"
+                     data-animate-momentum="1">
                     <div class="col-span-12 lg:col-span-7 space-y-2">
                         <b>- 580 tỷ đồng xây dựng công viên thiên bút 2021-2025</b>
                         <p class="">
@@ -621,4 +710,10 @@
         </section>
     </main>
 
+
+    <script>
+        new ScrollXP({
+            container: document.body,
+        });
+    </script>
 @endsection
