@@ -4,6 +4,18 @@
     $sanpham = $http->get('/san-pham')->data();
 @endphp
 @section('list')
+    <ul x-ref="list" class="space-y-4 relative" x-data="{x: 0, y: 0}"
+        @scroll.window="x=0">
+
+        <section
+                x-effect="console.log('x, y': {x, y})"
+                class="z-20 fixed"
+                 x-show="x"
+                 @click.away="x=0"
+                :style="'left:'+x+'px; top:'+y+'px'"
+        >
+            @include($config->view.'/components/contact')
+        </section>
     @foreach($sanpham as $key => $item)
         <li class=" py-2">
             <a href="{{$config->base_url}}/chi-tiet?id={{$item['id']}}" class="flex ">
@@ -32,25 +44,17 @@
                         </ul>
                         <p class="block lg:hidden">{{$item['address']}}</p>
                         <p class="truncate-3y">{{ strip_tags($item['description']) }}</p>
-                        <div class="text-center">
-                            <button href="tel:{{$item['phone']}}"
+                        <div class="text-center relative" >
+                            <button
+                                    @click="x=$event.clientX; y=$event.clientY;  $event.preventDefault();  $event.stopPropagation()"
+
                                     class="rounded-lg bg-yellow-500 hover:bg-red-600 text-white py-2 px-4 "
-                                    type="submit">
+                            >
                                 Liên hệ ngay
                             </button>
                         </div>
                         <div class="mt-4 flex-1 flex items-end justify-between">
                             <p class="flex items-center text-sm text-gray-700 space-x-2">
-
-                                {{--<svg class="flex-shrink-0 h-5 w-5 text-green-500"
-                                     x-description="Heroicon name: solid/check"
-                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                     aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                          clip-rule="evenodd"></path>
-                                </svg>--}}
-                                {{--                                        <span>In stock</span>--}}
                                 <span class="">
                                             {{\Carbon\Carbon::parse($item['createdAt'])->format('h:i d/m/Y')}}
                                         </span>
@@ -79,5 +83,5 @@
             </a>
         </li>
     @endforeach
-
+    </ul>
 @endsection

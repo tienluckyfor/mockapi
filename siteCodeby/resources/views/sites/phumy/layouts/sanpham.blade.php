@@ -144,9 +144,7 @@
                 });
             </script>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <ul role="list" class="space-y-4">
-                    @yield('list')
-                </ul>
+                @yield('list')
             </div>
         </section>
     </main>
