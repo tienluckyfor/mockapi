@@ -109,7 +109,7 @@
         "pageDots": false,
         "contain": true,
         "wrapAround": true,
-        // "autoPlay": true
+        "autoPlay": true
     });
     var flktyNav = new Flickity('.carousel-nav-{{$rand}}', {
         "asNavFor": ".carousel-main-{{$rand}}",
