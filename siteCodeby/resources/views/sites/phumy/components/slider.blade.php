@@ -1,11 +1,15 @@
 @php
-return;
     if(empty($sliders))
         return;
     $rand = rand();
 @endphp
 
-<section class="bg-indigo-100 flex justify-center ">
+<section class="bg-indigo-100 flex justify-center h-screen">
+</section>
+@php
+    return;
+@endphp
+<section class="bg-indigo-100 flex justify-center h-screen">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.pkgd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.3.0/flickity.min.css"/>
