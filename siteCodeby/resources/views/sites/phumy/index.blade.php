@@ -179,21 +179,21 @@
                     <?php for($i = 0; $i <= 2; $i++){?>
                     @switch($i)
                         @case(0)
-                        <img data-animate data-animate-from-x="-50" data-animate-to-x="0" data-animate-from-alpha="0.7"
+                        <img data-animate data-animate-from-x="-50" data-animate-to-x="0" data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[35%] h-auto lg:h-full object-center object-fill"
                              src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(1)
-                        <img data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0.7"
+                        <img data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[27%] h-auto lg:h-full object-center object-fill"
                              src="{{$media->set($slidersHome2[$i]['image'])->first()}}" alt="">
                         @break
                         @case(2)
-                        <img data-animate data-animate-from-x="50" data-animate-to-x="0" data-animate-from-alpha="0.7"
+                        <img data-animate data-animate-from-x="50" data-animate-to-x="0" data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1"
                              class="w-full lg:w-[38%] h-auto lg:h-full object-center object-fill"
