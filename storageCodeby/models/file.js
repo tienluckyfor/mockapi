@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         view: DataTypes.INTEGER,
         cloud: DataTypes.JSON,
         platform: DataTypes.STRING,
+        progress: DataTypes.STRING,
         original_file: {
             type: DataTypes.VIRTUAL,
             get() {

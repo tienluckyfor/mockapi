@@ -30,7 +30,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       path: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
       },
       size: {
         type: Sequelize.INTEGER
@@ -42,6 +43,9 @@ module.exports = {
         type: Sequelize.JSON
       },
       platform: {
+        type: Sequelize.STRING
+      },
+      progress: {
         type: Sequelize.STRING
       },
       createdAt: {

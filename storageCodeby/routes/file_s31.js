@@ -9,7 +9,7 @@ const multer = require('multer')
 const _ = require('lodash');
 const {v4: uuidv4} = require('uuid');
 const {ffmpegSync, sharpSync, writeFileSync, writeFileBase64Sync} = require('helpers/writeFile')
-const {resImageByStream, resFileByStream, resVideoByPath} = require('helpers/readFile')
+const {resImageByStream, resFileByStream} = require('helpers/readFile')
 const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
 
@@ -25,7 +25,6 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
     const filepath = `public/files/${api.id}`
     fs.mkdirSync(filepath, {recursive: true})
     const promises = [];
-    const pData = [];
 
     // console.log('request.files', request.body);
     const {audio_base64} = request.body
@@ -43,7 +42,6 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
             api_id: api.id,
             platform: api.platform
         }
-        pData.push(aFile)
         promises.push(writeFileBase64Sync(buffer, aFile))
     }
 
@@ -66,7 +64,6 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                     api_id: api.id,
                     platform: api.platform
                 }
-                pData.push(aFile)
                 if (path.extname(file.originalname) == '.mp4')
                     promises.push(writeFileSync(buffer, aFile))
                 else
@@ -81,7 +78,6 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                     api_id: api.id,
                     platform: api.platform
                 }
-                pData.push(aFile)
                 promises.push(sharpSync(buffer, aFile))
                 break;
             default:
@@ -93,32 +89,25 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
                     api_id: api.id,
                     platform: api.platform
                 }
-                pData.push(aFile)
                 promises.push(writeFileSync(buffer, aFile))
                 break;
         }
     })
 
-    // save db
-    const payload = pData.map(item => _.merge(item, {progress: 'server'}))
-    const filesDB = await File.bulkCreate(payload, {returning: true})
-
     // s3 upload
     Promise.all(promises).then(async values => {
         const payload = values.map(async aFile => {
             const cloud = await uploadFile(aFile, api.keys)
-            return {...aFile, cloud, progress: 'cloud'}
+            return {...aFile, cloud}
         })
         Promise.all(payload).then(async vals => {
             vals.map(item => {
                 fs.unlinkSync(item.path)
             })
-            const files = await File.bulkCreate(vals, {returning: true, updateOnDuplicate: ['cloud', 'progress']})
+            const files = await File.bulkCreate(vals, {returning: true})
             response.send(files)
         });
     })
-    response.send(filesDB)
-
 }))
 
 router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => {
@@ -127,9 +116,6 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
         where: {id: file_id},
         include: {model: Api, as: 'api',},
     })
-    // console.log('file', file.toJSON())
-    // response.end();
-    // return;
     let streamData;
     const apiKeys = JSON.parse(file.api.keys)
     switch (true) {
@@ -138,9 +124,6 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
             return resImageByStream(streamData, request.query, response)
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
-            if (file.progress == 'server') {
-                return resVideoByPath('public/videos/video-uploading.mp4', request, response)
-            }
             // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
             // console.log('file', file)
             // const Location = getFileURL(file.cloud.Key, apiKeys)
