@@ -132,6 +132,8 @@
                             localStorage.setItem('favorites', JSON.stringify(this.items));
                         },
                         set(items){
+                            console.log('items', items);
+                            if(items)
                             this.items = items;
                         }
                     });
