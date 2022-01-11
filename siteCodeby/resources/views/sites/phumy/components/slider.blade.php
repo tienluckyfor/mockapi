@@ -1,4 +1,5 @@
 @php
+return;
     if(empty($sliders))
         return;
     $rand = rand();

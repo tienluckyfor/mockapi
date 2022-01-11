@@ -172,7 +172,7 @@
         <script src="https://unpkg.com/scrollxp/dist/scrollxp.min.js"></script>
 
         {{-- home-3 --}}
-        <section class="bg-gray" data-scene data-scene-duration="10%">
+        <section class="bg-gray" data-scene data-scene-duration="1%">
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
