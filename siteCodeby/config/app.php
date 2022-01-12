@@ -135,6 +135,7 @@ return [
     */
 
     'providers' => [
+        Davmixcool\MetaManager\MetaServiceProvider::class,
         Codeby\LaravelApi\APIServiceProvider::class,
 
         /*

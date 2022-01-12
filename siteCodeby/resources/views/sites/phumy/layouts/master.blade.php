@@ -7,6 +7,14 @@
     {{-- <link href="http://site-codeby.test/css/app.css" rel="stylesheet"> --}}
     <link href="{{ asset('css-phumy/app.css') }}" rel="stylesheet">
     <script src="//unpkg.com/alpinejs" defer></script>
+    <link rel="icon" type="image/png" href="{{$config->static}}/assets/images/PHUMYONE.png">
+    @if(preg_match('#san-pham#mis', request()->path()))
+        @include('meta::manager', [
+            'title'         => 'Sản phẩm đất nền dự án KĐT Phú Mỹ - Quảng Ngãi',
+            'description'   => 'Phú Mỹ - Quảng Ngãi không phải là chuyện dễ dàng, ngay cả khi bạn là người mua lần đầu hay là nhà đầu tư bất động sản chuyên nghiệp...',
+            'image'         => $config->static.'/assets/images/Slide 1.png',
+        ])
+    @endif
 </head>
 <style>
     .bg-gray {

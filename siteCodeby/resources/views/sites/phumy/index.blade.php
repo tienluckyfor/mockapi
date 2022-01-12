@@ -4,6 +4,11 @@
         text-shadow: 1px 1px #000;
     }
 </style>
+@include('meta::manager', [
+    'title'         => 'Bán đất nền dự án KĐT Phú Mỹ - Quảng Ngãi',
+    'description'   => 'Phú Mỹ - Quảng Ngãi không phải là chuyện dễ dàng, ngay cả khi bạn là người mua lần đầu hay là nhà đầu tư bất động sản chuyên nghiệp...',
+    'image'         => $config->static.'/assets/images/Slide 1.png',
+])
 @section('main')
     @php
         $sliders = $http->get('/sliders')->data();
@@ -49,7 +54,7 @@
         @php
             $fields = [
                 [
-                    'name' => "ho-ten",
+                    'name' => "hoten",
                     'hint' => "*Họ và tên",
                     "message"=>"*Họ và tên không được để trống"
                 ],
@@ -72,10 +77,12 @@
                     $errors[$item['name']] = $item['message'];
             }
         @endphp
-        @if(request()->has('showModal') && empty($errors))
-            <!-- This example requires Tailwind CSS v2.0+ -->
-                <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-                     aria-modal="true">
+        <!-- This example requires Tailwind CSS v2.0+ -->
+            <section class="" x-data x-cloak>
+                <div
+                        class=" fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+                        x-show="$store.formSubmit=='done'"
+                        aria-modal="true">
                     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                         <!--
                           Background overlay, show/hide based on modal state.
@@ -87,7 +94,14 @@
                             From: "opacity-100"
                             To: "opacity-0"
                         -->
-                        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                        <div x-show="$store.formSubmit=='done'"
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
                              aria-hidden="true"></div>
 
                         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -104,48 +118,71 @@
                             From: "opacity-100 translate-y-0 sm:scale-100"
                             To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         -->
-                        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-                            <div>
-                                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                    <!-- Heroicon name: outline/check -->
-                                    <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <div x-show="$store.formSubmit=='done'" @click.away="$store.formSubmit=false"
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div class=" sm:block absolute top-0 right-0 pt-4 pr-4">
+                                <button type="button"
+                                        @click="$store.formSubmit=false"
+                                        class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <span class="sr-only">Close</span>
+                                    <!-- Heroicon name: outline/x -->
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="sm:flex sm:items-start">
+                                <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                    <!-- Heroicon name: outline/exclamation -->
+                                    <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
                                          viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M5 13l4 4L19 7"/>
+                                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                     </svg>
                                 </div>
-                                <div class="mt-3 text-center sm:mt-5">
-                                    <p class="">
-                                        Đăng ký thành công!<br/>
-                                        Cảm ơn bạn đã gửi đăng ký.<br/>
-                                        Chúng tôi sẽ liên hệ trong thời gian sớm nhất!
-                                    </p>
-                                    {{-- <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                         Payment successful
-                                     </h3>
-                                     <div class="mt-2">
-                                         <p class="text-sm text-gray-500">
-                                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur amet labore.
-                                         </p>
-                                     </div>--}}
+                                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                        Đăng ký thành công!
+                                    </h3>
+                                    <div class="mt-2">
+                                        <p class="text-sm text-gray-500">
+                                            Cảm ơn bạn đã gửi đăng ký.
+                                            Chúng tôi sẽ liên hệ trong thời gian sớm nhất!
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            {{--<div class="mt-5 sm:mt-6">
-                                <button type="button" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm">
-                                    Go back to dashboard
-                                </button>
-                            </div>--}}
+                            {{-- <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                 <button type="button"
+                                         class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                     Deactivate
+                                 </button>
+                                 <button type="button"
+                                         class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                     Cancel
+                                 </button>
+                             </div>--}}
                         </div>
                     </div>
                 </div>
-        @endif
-        <!-- grid -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-                <form class="m-0 h-auto lg:h-28 block lg:flex items-center justify-between space-y-3 lg:space-x-3 py-3 lg:py-0">
+            </section>
+
+            <!-- grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 " x-data>
+                <form id="contact-form"
+                      class="m-0 h-auto lg:h-28 block lg:flex items-center justify-between space-y-3 lg:space-x-3 py-3 lg:py-0">
                     <p class="flex-shrink-0  text-center lg:text-left text-2xl lg:text-lg">
                         <span class="text-white font-semibold">Nhận báo giá</span>
                     </p>
-
                     @foreach($fields as $key => $item)
                         <label class="block w-full relative">
                             <input type="{{$item['type']??'text'}}"
@@ -153,18 +190,53 @@
                                    placeholder="{{$item['hint']}}"
                                    autofocus="{{request()->has('showModal')}}"
                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 ">
-                            @isset($errors[$item['name']])
-                                <p class="text-red-500 absolute bottom-0 -mb-6 text-sm">{{$errors[$item['name']]}}</p>
-                            @endif
+                            <p class="text-red-500 absolute bottom-0 -mb-6 text-sm"
+                               x-text="$store.formErrors.{{$item['name']}}"></p>
                         </label>
                     @endforeach
                     <div class="text-center flex-shrink-0">
-                        <button class="btn-gradient h-9 px-3" type="submit">
+                        <button class="btn-gradient h-9 px-3" :disabled="$store.formSubmit"
+                                :class="$store.formSubmit?'opacity-25':''">
                             Đăng ký ngay
                         </button>
                     </div>
                     <input type="hidden" name="showModal">
                 </form>
+                <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+                <script>
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.store('formErrors', {});
+                        Alpine.store('formSubmit', false);
+                    });
+                    const form = document.getElementById('contact-form');
+                    form.addEventListener('submit', function (event) {
+                        Alpine.store('formErrors', {});
+                        Alpine.store('formSubmit', true);
+                        event.preventDefault();
+                        const constraints = {
+                            hoten: {
+                                presence: {allowEmpty: false, message: "^*Họ và tên không được để trống"},
+                            },
+                            sdt: {
+                                presence: {allowEmpty: false, message: "^*Số điện thoại không được để trống"},
+                            }
+                        };
+                        const formValues = {
+                            hoten: form.elements.hoten.value,
+                            sdt: form.elements.sdt.value
+                        };
+                        const errors = validate(formValues, constraints);
+                        if (errors) {
+                            event.preventDefault();
+                            Alpine.store('formErrors', errors);
+                            Alpine.store('formSubmit', false);
+                        } else {
+                            setTimeout(() => {
+                                Alpine.store('formSubmit', 'done');
+                            }, 1000)
+                        }
+                    }, false);
+                </script>
             </div>
         </section>
 
@@ -173,7 +245,7 @@
 
         {{-- home-3 --}}
         <section class="bg-gray" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                 >
+        >
             <!-- grid -->
             <div class="max-w-7xl mx-auto px-0 lg:px-8">
                 <div class="max-w-7xl block lg:flex justify-between ">
@@ -254,7 +326,7 @@
 
         {{-- home-6 --}}
         <section id="tong-quan" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                 
+
                  class="my-10 bg-fixed bg-center relative py-4 lg:py-0"
                  style="background-image: url({{$media->set($slidersHome4[0]['image'])->first()}})">
             @php
@@ -451,7 +523,7 @@
 
         {{-- home-5 --}}
         <section class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                 >
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50"
                     data-animate-to-y="0"
@@ -493,7 +565,7 @@
 
         {{-- home-5 --}}
         <section id="tien-ich" class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                 >
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
                 <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50"
                     data-animate-to-y="0"
@@ -503,8 +575,9 @@
                 </h4>
                 <ul class="bg-gray space-y-6">
                     <li class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                         >
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50" data-animate-to-x="0"
+                    >
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50"
+                             data-animate-to-x="0"
                              data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1">
@@ -516,20 +589,21 @@
                                 bệnh viện Phúc Hưng, bến xe Quảng Ngãi, trường đại học, Vincom….
                             </p>
                         </div>
-                        <div class="w-full lg:w-8/12" >
-                            <div class="aspect-w-16 aspect-h-9 lg:aspect-none" >
+                        <div class="w-full lg:w-8/12">
+                            <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
                     </li>
                     <li class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                         >
+                    >
                         <div class="hidden lg:block lg:w-8/12">
                             <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
                                 <img class="" src="{{$config->static}}/assets/images/4.png" alt="">
                             </div>
                         </div>
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="50" data-animate-to-x="0"
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="50"
+                             data-animate-to-x="0"
                              data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1">
@@ -558,9 +632,11 @@
                             </div>
                         </div>
                     </li>
-                    <li class="block lg:flex pb-6" class="block lg:flex" data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                         >
-                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50" data-animate-to-x="0"
+                    <li class="block lg:flex pb-6" class="block lg:flex" data-scene data-scene-duration="10%"
+                        data-scene-hook="onEnter"
+                    >
+                        <div class="w-full lg:w-4/12 text-white px-5 py-4" data-animate data-animate-from-x="-50"
+                             data-animate-to-x="0"
                              data-animate-from-alpha="0"
                              data-animate-to-alpha="1"
                              data-animate-momentum="1">
@@ -594,15 +670,17 @@
 
         {{-- home-5 --}}
         <section class="my-10 " data-scene data-scene-duration="10%" data-scene-hook="onEnter"
-                 >
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0"
+                <h4 class="font-semibold text-2xl text-yellow-400" data-animate data-animate-from-y="50"
+                    data-animate-to-y="0" data-animate-from-alpha="0"
                     data-animate-to-alpha="1"
                     data-animate-momentum="1">5. THÔNG TIN QUY HOẠCH
                 </h4>
 
                 <!-- grid -->
-                <div class="grid grid-cols-12 gap-3" data-animate data-animate-from-y="50" data-animate-to-y="0" data-animate-from-alpha="0"
+                <div class="grid grid-cols-12 gap-3" data-animate data-animate-from-y="50" data-animate-to-y="0"
+                     data-animate-from-alpha="0"
                      data-animate-to-alpha="1"
                      data-animate-momentum="1">
                     <div class="col-span-12 lg:col-span-7 space-y-2">

@@ -5,11 +5,22 @@
         $chitiet = $http->get("/san-pham/".request()->id)->data();
         $images =$media->set($chitiet['images'])->files();
     @endphp
+
+    @include('meta::manager', [
+        'title'         => $chitiet['title'],
+        'description'   => strip_tags($chitiet['description']) ,
+        'image'         => $images[0],
+    ])
     <main class="">
 
         {{-- chi-tiet-1 --}}
         @include($config->view.'/components/breadcrumbs', ['breadcrumbs'=>[['/', 'Trang chủ'], ['/san-pham', 'Sản phẩm'], ['/san-pham', 'Bài viết']]])
 
+        <section class="my-10 ">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+                <h1 class="text-3xl ">{{$chitiet['title']}}</h1>
+            </div>
+        </section>
         {{-- chi-tiet-2 --}}
         <section class="hidden lg:block mt-5">
             @include($config->view.'/components/sliderNavVertical', [
@@ -27,17 +38,17 @@
             ])
         </section>
 
-        <section class="my-10 ">
+        <section class="mb-10 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-                <h1 class="text-3xl ">{{$chitiet['title']}}</h1>
+{{--                <h1 class="text-3xl ">{{$chitiet['title']}}</h1>--}}
                 <p class="font-light">{{$chitiet['address']}}</p>
                 <hr>
                 <ul class="flex space-x-3">
                     <li class="">
-                        Giá: <b class="">1.6 tỷ</b>
+                        Giá: <b class="">{{$chitiet['price']}}</b>
                     </li>
                     <li class="">
-                        Diện tích: <b class="">150 m2</b>
+                        Diện tích: <b class="">{{$chitiet['square']}}</b>
                     </li>
                 </ul>
                 <hr>

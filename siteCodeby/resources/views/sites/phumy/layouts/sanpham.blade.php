@@ -134,12 +134,12 @@
                         set(items){
                             console.log('items', items);
                             if(items)
-                            this.items = items;
+                                this.items = items;
                         }
                     });
 
                     let sanpham = localStorage.getItem('favorites');
-                    sanpham = JSON.parse(sanpham)
+                    sanpham = JSON.parse(sanpham);
                     Alpine.store('favorites').set(sanpham);
                 });
             </script>
