@@ -56,7 +56,7 @@
                 {!! $chitiet['description'] !!}
                 <h4 class="font-bold text-xl pt-5">Thông tin tổng quan dự án</h4>
                 {!! $chitiet['project_info'] !!}
-                <p class="font-bold">Liên hệ tư vấn : 0935.687.985 hoặc nhắn tin qua zalo, messager nhân viên hỗ trợ 24/7<br/>
+                <p class="font-bold">Liên hệ tư vấn : 0935 68 79 85 hoặc nhắn tin qua zalo, messager nhân viên hỗ trợ 24/7<br/>
                     Hashtag : khu đô thị phú mỹ quảng ngãi, dự án Phú Mỹ, nhà đất Quảng Ngãi, bất động sản Quảng Ngãi, đất nền Quảng Ngãi.</p>
             </div>
         </section>
