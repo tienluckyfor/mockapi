@@ -70,6 +70,59 @@ const resFileByStream = (stream, response) => {
     });
     return stream.pipe(response);
 }
+function sendFile(req, res, fn, contentType) {
+
+    contentType = contentType || "video/mp4";
+
+    fs.stat(fn, function(err, stats) {
+        var headers;
+
+        if (err) {
+            res.writeHead(404, {"Content-Type":"text/plain"});
+            res.end("Could not read file");
+            return;
+        }
+
+        var range = req.headers.range || "";
+        var total = stats.size;
+
+        if (range) {
+
+            var parts = range.replace(/bytes=/, "").split("-");
+            var partialstart = parts[0];
+            var partialend = parts[1];
+
+            var start = parseInt(partialstart, 10);
+            var end = partialend ? parseInt(partialend, 10) : total-1;
+
+            var chunksize = (end-start)+1;
+
+            headers = {
+                "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                "Accept-Ranges": "bytes",
+                "Content-Length": chunksize,
+                "Content-Type": contentType
+            };
+            res.writeHead(206, headers);
+
+        } else {
+
+            headers = {
+                "Accept-Ranges": "bytes",
+                "Content-Length": stats.size,
+                "Content-Type": contentType
+            };
+            res.writeHead(200, headers);
+
+        }
+
+        var readStream = fs.createReadStream(fn, {start:start, end:end});
+        readStream.pipe(res);
+
+    });
+
+}
+
 
 const resFileByPath = (filePath, response) => {
     fs.exists(filePath, function (exists) {
@@ -85,5 +138,6 @@ const resFileByPath = (filePath, response) => {
 module.exports = {
     resImageByPath, resImageByStream,
     resVideoByPath,
-    resFileByPath, resFileByStream
+    resFileByPath, resFileByStream,
+    sendFile
 }

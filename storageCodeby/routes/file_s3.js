@@ -9,7 +9,7 @@ const multer = require('multer')
 const _ = require('lodash');
 const {v4: uuidv4} = require('uuid');
 const {ffmpegSync, sharpSync, writeFileSync, writeFileBase64Sync} = require('helpers/writeFile')
-const {resImageByStream, resFileByStream, resVideoByPath} = require('helpers/readFile')
+const {resImageByStream, resFileByStream, resVideoByPath, sendFile} = require('helpers/readFile')
 const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
 
@@ -121,6 +121,7 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
 }))
 
 router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => {
+
     const {file_id} = request.params;
     const file = await File.findOne({
         where: {id: file_id},
@@ -138,7 +139,8 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
             if (file.progress == 'server') {
-                return resVideoByPath('public/videos/video-uploading.mp4', request, response)
+                // return resVideoByPath('public/videos/video-uploading.mp4', request, response)
+                return sendFile(request, response, 'public/videos/video-uploading.mp4' )
             }
             // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
             // console.log('file', file)
