@@ -1,16 +1,20 @@
 @extends($config->layout.'/master')
 
-@section('main')
-    @php
-        $chitiet = $http->get("/san-pham/".request()->id)->data();
-        $images =$media->set($chitiet['images'])->files();
-    @endphp
+@php
+    $chitiet = $http->get("/san-pham/".request()->id)->data();
+    $images =$media->set($chitiet['images'])->files();
+@endphp
 
+@section('meta')
     @include('meta::manager', [
         'title'         => $chitiet['title'],
         'description'   => strip_tags($chitiet['description']) ,
         'image'         => $images[0],
     ])
+@endsection
+
+@section('main')
+
     <main class="">
 
         {{-- chi-tiet-1 --}}
@@ -40,7 +44,7 @@
 
         <section class="mb-10 ">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
-{{--                <h1 class="text-3xl ">{{$chitiet['title']}}</h1>--}}
+                {{--                <h1 class="text-3xl ">{{$chitiet['title']}}</h1>--}}
                 <p class="font-light">{{$chitiet['address']}}</p>
                 <hr>
                 <ul class="flex space-x-3">
@@ -56,8 +60,10 @@
                 {!! $chitiet['description'] !!}
                 <h4 class="font-bold text-xl pt-5">Thông tin tổng quan dự án</h4>
                 {!! $chitiet['project_info'] !!}
-                <p class="font-bold">Liên hệ tư vấn : 0935 68 79 85 hoặc nhắn tin qua zalo, messager nhân viên hỗ trợ 24/7<br/>
-                    Hashtag : khu đô thị phú mỹ quảng ngãi, dự án Phú Mỹ, nhà đất Quảng Ngãi, bất động sản Quảng Ngãi, đất nền Quảng Ngãi.</p>
+                <p class="font-bold">Liên hệ tư vấn : 0935 68 79 85 hoặc nhắn tin qua zalo, messager nhân viên hỗ trợ
+                    24/7<br/>
+                    Hashtag : khu đô thị phú mỹ quảng ngãi, dự án Phú Mỹ, nhà đất Quảng Ngãi, bất động sản Quảng Ngãi,
+                    đất nền Quảng Ngãi.</p>
             </div>
         </section>
     </main>

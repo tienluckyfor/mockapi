@@ -1,14 +1,16 @@
 @extends($config->layout.'/master')
+@section('meta')
+    @include('meta::manager', [
+        'title'         => 'Bán đất nền dự án KĐT Phú Mỹ - Quảng Ngãi',
+        'description'   => 'Phú Mỹ - Quảng Ngãi không phải là chuyện dễ dàng, ngay cả khi bạn là người mua lần đầu hay là nhà đầu tư bất động sản chuyên nghiệp...',
+        'image'         => $config->static.'/assets/images/Slide 1.png',
+    ])
+@endsection
 <style>
     .text-yellow-400 {
         text-shadow: 1px 1px #000;
     }
 </style>
-@include('meta::manager', [
-    'title'         => 'Bán đất nền dự án KĐT Phú Mỹ - Quảng Ngãi',
-    'description'   => 'Phú Mỹ - Quảng Ngãi không phải là chuyện dễ dàng, ngay cả khi bạn là người mua lần đầu hay là nhà đầu tư bất động sản chuyên nghiệp...',
-    'image'         => $config->static.'/assets/images/Slide 1.png',
-])
 @section('main')
     @php
         $sliders = $http->get('/sliders')->data();
