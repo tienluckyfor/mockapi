@@ -9,7 +9,7 @@ const multer = require('multer')
 const _ = require('lodash');
 const {v4: uuidv4} = require('uuid');
 const {ffmpegSync, sharpSync, writeFileSync, writeFileBase64Sync} = require('helpers/writeFile')
-const {resImageByStream, resFileByStream, resVideoByPath, sendFile} = require('helpers/readFile')
+const {resImageByStream, resImageByPath, resFileByStream, resVideoByPath, sendFile} = require('helpers/readFile')
 const {uploadFile, getFileStream, getFileURL} = require('helpers/s3')
 const {authUser, authS3} = require('middleware/auth')
 
@@ -121,7 +121,6 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
 }))
 
 router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => {
-
     const {file_id} = request.params;
     const file = await File.findOne({
         where: {id: file_id},
@@ -130,10 +129,27 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
     // console.log('file', file.toJSON())
     // response.end();
     // return;
+    // console.log(file.api.keys);
     let streamData;
-    const apiKeys = JSON.parse(file.api.keys)
+    let apiKeys=file.api.keys;
+    try {
+        apiKeys = JSON.parse(file.api.keys);
+    }catch (e){
+        console.log(e);
+    }
+    // const apiKeys = JSON.parse(file.api.keys);
+    console.log(apiKeys);
     switch (true) {
         case ((file.mimetype ?? '').match(/image/g) ? true : false) :
+            console.log(1);
+            if (file.progress == 'server') {
+                console.log(2);
+                // return resVideoByPath('public/videos/video-uploading.mp4', request, response)
+                // return sendFile(request, response, 'public/images/image-uploading.jpg' , "image/jpg")
+
+                return resImageByPath('public/images/image-uploading.jpg', request.query, response)
+            }
+            console.log(3);
             streamData = getFileStream(file.cloud.Key, apiKeys)
             return resImageByStream(streamData, request.query, response)
             break;
