@@ -6,7 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Webkhoinghiep</title>
-    <link rel="stylesheet" href="http://site-codeby.test/css-webkhoinghiep/app.css">
+{{--    <link rel="stylesheet" href="http://site-codeby.test/css-webkhoinghiep/app.css">--}}
+    <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
+
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="h-full">
