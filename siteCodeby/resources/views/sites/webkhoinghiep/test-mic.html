@@ -11,8 +11,11 @@
       window.SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
       const speechRecognition = new SpeechRecognition();
+      speechRecognition.continuous = false;
       speechRecognition.interimResults = true;
-
+      speechRecognition.maxAlternatives = 1;
+      speechRecognition.lang = 'ja'
+      speechRecognition.interimResults = true;
       let par = document.createElement("p");
       const words = document.querySelector(".words");
       words.appendChild(par);
