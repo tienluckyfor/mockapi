@@ -1,3 +1,7 @@
+@php
+use Cknow\Money\Money;
+use App\Services\BaseService;
+@endphp
 <!doctype html>
 <html lang="en" class="h-full">
 <head>
@@ -6,16 +10,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Webkhoinghiep</title>
-{{--    <link rel="stylesheet" href="http://site-codeby.test/css-webkhoinghiep/app.css">--}}
+    {{--    <link rel="stylesheet" href="http://site-codeby.test/css-webkhoinghiep/app.css">--}}
     <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
 
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="h-full">
-
 @php
     $menu = $http->get('/menu')->data();
     $theloai = $http->get('/the-loai')->data();
+    $sanpham = $http->get('/san-pham')->data();
 @endphp
 <div class="min-h-full">
     <nav x-data="{ showMobileMenu: false }" class="bg-white border-b border-gray-200">
@@ -249,17 +253,6 @@
         </section>
 
         <section class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- This example requires Tailwind CSS v2.0+ -->
-            {{--<div class="relative">
-                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div class="w-full border-t border-gray-300"></div>
-                </div>
-                <div class="relative flex justify-start">
-                        <span class="pr-3 bg-white text-lg font-medium text-gray-900">
-                          MẪU THEME WORDPRESS VIỆT HÓA NHIỀU NGÀNH NGHỀ
-                        </span>
-                </div>
-            </div>--}}
             <div class="mt-5 -mx-px border-l border-gray-200 grid grid-cols-3 sm:mx-0 md:grid-cols-3 lg:grid-cols-6 border-t ">
                 @foreach($theloai as $key => $item)
                     <div class="group relative p-4 border-r border-b border-gray-200 ">
@@ -282,9 +275,9 @@
             </div>
         </section>
 
-        <!-- Filters -->
-        <section aria-labelledby="filter-heading" class="bg-gray-200 py-3">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div aria-labelledby="filter-heading" class="bg-gray-200 py-5">
+            <!-- Filters -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 id="filter-heading" class="sr-only">Product filters</h2>
                 <div class="flex items-center justify-between">
                     @include($config->view.'/components/dropdown', [
@@ -299,80 +292,48 @@
             ])
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Product grid -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div aria-labelledby="products-heading">
-                <h2 id="products-heading" class="sr-only">Products</h2>
-
-                <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:gap-x-8">
-                    <?php for($i = 1; $i <= 10; $i++){?>
-                    <a href="#" class="group">
-                        <div class="w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
-                            <img src="https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-01.jpg"
-                                 alt="Person using a pen to cross a task off a productivity paper card."
-                                 class="w-full h-full object-center object-cover group-hover:opacity-75">
-                        </div>
-                        <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                            <h3>
-                                Focus Paper Refill
-                            </h3>
-                            <p>
-                                $13
-                            </p>
-                        </div>
-                        <p class="mt-1 text-sm italic text-gray-500">
-                            3 sizes available
-                        </p>
-                    </a>
-                    <?php }?>
-
-                    <a href="#" class="group">
-                        <div class="w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
-                            <img src="https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-02.jpg"
-                                 alt="Paper card sitting upright in walnut card holder on desk."
-                                 class="w-full h-full object-center object-cover group-hover:opacity-75">
-                        </div>
-                        <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                            <h3>
-                                Focus Card Holder
-                            </h3>
-                            <p>
-                                $64
-                            </p>
-                        </div>
-                        <p class="mt-1 text-sm italic text-gray-500">
-                            Walnut
-                        </p>
-                    </a>
-
-                    <a href="#" class="group">
-                        <div class="w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
-                            <img src="https://tailwindui.com/img/ecommerce-images/category-page-01-image-card-03.jpg"
-                                 alt="Textured gray felt pouch for paper cards with snap button flap and elastic pen holder loop."
-                                 class="w-full h-full object-center object-cover group-hover:opacity-75">
-                        </div>
-                        <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-                            <h3>
-                                Focus Carry Pouch
-                            </h3>
-                            <p>
-                                $32
-                            </p>
-                        </div>
-                        <p class="mt-1 text-sm italic text-gray-500">
-                            Heather Gray
-                        </p>
-                    </a>
-
-                    <!-- More products... -->
+            </section>
+            <!-- Product grid -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-5">
+                <div aria-labelledby="products-heading">
+                    <h2 id="products-heading" class="sr-only">Products</h2>
+                    <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 gap-x-6 lg:grid-cols-4 xl:gap-x-4">
+                        @foreach($sanpham as $key => $item)
+                            <a href="{{$config->base_url}}/mau-web?{{BaseService::url($item['title'])}}&id={{$item['id']}}" class="group bg-white rounded-lg p-1">
+                                <div class="w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-3">
+                                    <img src="{{$media->set($item['image'])->first()}}"
+                                         alt="Person using a pen to cross a task off a productivity paper card."
+                                         class="w-full h-full object-center object-cover group-hover:opacity-75">
+                                </div>
+                                <div class="my-3 text-center ">
+                                    <h3 class="text-gray-900 text-base text-lg ">
+                                        {{$item['title']}}
+                                    </h3>
+                                    <p class="space-x-2">
+                                        @if(empty($item['price']) || empty($item['sale-price']))
+                                            <span class="font-bold text-red-500">
+                                                @if(empty($item['price']))
+                                                    @money($item['sale-price'])
+                                                @else
+                                                    @money($item['price'])
+                                                @endif
+                                            </span>
+                                        @else
+                                            <span class="line-through text-red-300">{{Money::min(Money::VND($item['price']), Money::VND($item['sale-price']))}}</span>
+                                            <span class="font-bold text-red-500">{{Money::max(Money::VND($item['price']), Money::VND($item['sale-price']))}}</span>
+                                        @endif
+                                    </p>
+                                </div>
+                                {{--<p class="mt-1 text-sm italic text-gray-500">
+                                    3 sizes available
+                                </p>--}}
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        {{--        </section>--}}
     </main>
 </div>
 
