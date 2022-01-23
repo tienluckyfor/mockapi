@@ -33,7 +33,7 @@
                         <!-- This example requires Tailwind CSS v2.0+ -->
                             <div class="relative" x-data="{ show: false }" @mouseleave="show = false">
                                 <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
-                                <button @mouseover="show = true" type="button"
+                                <a href="{{$config->base_url}}/kho-giao-dien?id=1" @mouseover="show = true" type="button"
                                         class="text-gray-500 group bg-white rounded-md inline-flex items-center text-sm font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         aria-expanded="false">
                                     <span>{{$item['name']}}</span>
@@ -49,7 +49,7 @@
                                               d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                               clip-rule="evenodd"/>
                                     </svg>
-                                </button>
+                                </a>
 
                                 <!--
                                   Flyout menu, show/hide based on flyout menu state.

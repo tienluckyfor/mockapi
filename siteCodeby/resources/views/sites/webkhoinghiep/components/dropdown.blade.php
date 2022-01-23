@@ -1,4 +1,18 @@
-<div x-data="{ show: false, list:['{!! implode("','", $list) !!}'], choose:null }" class="relative z-10 inline-block text-left">
+<script>
+    @php
+        $rand = rand();
+    @endphp
+    function dropdownFN_{{$rand}}() {
+        return {
+            show: false,
+            list: {!! json_encode($list??[]) !!},
+            links: {!! json_encode($links??[]) !!},
+            choose: null
+        }
+    }
+</script>
+<div x-data="dropdownFN_{{$rand}}()"
+     class="relative z-10 inline-block text-left">
     <div>
         <button type="button" @click="show = !show"
                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
@@ -34,15 +48,25 @@
          x-transition:enter-end="transform opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100"
-         x-transition:leave-end="transform opacity-0 scale-95" class="{{@$isRight? 'origin-top-right right-0':'origin-top-left left-0'}} absolute  z-10 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+         x-transition:leave-end="transform opacity-0 scale-95"
+         class="{{@$isRight? 'origin-top-right right-0':'origin-top-left left-0'}} absolute  z-10 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
          role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
         <div class="py-1" role="none">
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <template x-for="(item, key) in list">
                 <button @click="choose=item;show=false"
                         :class="choose==item||!choose &&key==0 ? 'bg-gray-100':''"
-                        class="block w-full px-4 py-2 text-sm font-medium text-gray-900 hover:text-gray-500 text-left" role="menuitem"
+                        class="block w-full px-4 py-2 text-sm font-medium text-gray-900 hover:text-gray-500 text-left"
+                        role="menuitem"
                         tabindex="-1" id="menu-item-0" x-text="item"></button>
+            </template>
+            <template x-for="[item, key] in links">
+                <a x-effect="console.log(key, item, Object.entries(links))"
+                   :href="key"
+                   :class="choose==item||!choose &&key==0 ? 'bg-gray-100':''"
+                   class="block w-full px-4 py-2 text-sm font-medium text-gray-900 hover:text-gray-500 text-left"
+                   role="menuitem"
+                   tabindex="-1" id="menu-item-0" x-text="item"></a>
             </template>
         </div>
     </div>
