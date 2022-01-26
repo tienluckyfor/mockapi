@@ -3,15 +3,17 @@
 @endphp
 <p class="space-x-2 {{@$css}}">
     @if(empty($item['price']) || empty($item['sale-price']))
-        <span class="font-bold text-red-500">
-            @if(empty($item['price']))
-                @money($item['sale-price'])
-            @else
-                @money($item['price'])
-            @endif
-        </span>
+        @php
+        if(empty($item['price'])) $min = Money::VND($item['sale-price']);
+        else $min = Money::VND($item['price']);
+        @endphp
+        <span class="font-bold text-red-500" x-ref="price" data-price="{{$min->formatByDecimal()}}">{{$min}}</span>
     @else
-        <span class="line-through text-red-300">{{Money::min(Money::VND($item['price']), Money::VND($item['sale-price']))}}</span>
-        <span class="font-bold text-red-500">{{Money::max(Money::VND($item['price']), Money::VND($item['sale-price']))}}</span>
+        @php
+        $max = Money::max(Money::VND($item['price']), Money::VND($item['sale-price']));
+        $min = Money::min(Money::VND($item['price']), Money::VND($item['sale-price']));
+        @endphp
+        <span class="line-through text-red-300">{{$max}}</span>
+        <span class="font-bold text-red-500" x-ref="price" data-price="{{$min->formatByDecimal()}}">{{$min}}</span>
     @endif
 </p>
