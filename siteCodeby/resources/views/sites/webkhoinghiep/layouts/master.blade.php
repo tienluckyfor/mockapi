@@ -1,5 +1,6 @@
 @php
     $menu = $http->get('/menu')->data();
+    $theloai = $http->get('/the-loai')->data();
 @endphp
 <!doctype html>
 <html lang="en" class="h-full">

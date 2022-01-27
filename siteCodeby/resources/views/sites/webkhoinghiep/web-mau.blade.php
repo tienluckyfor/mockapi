@@ -1,6 +1,4 @@
 @php
-    use Cknow\Money\Money;
-    $theloai = $http->get('/the-loai')->data();
     $chitiet = $http->get('/san-pham/'.request()->id)->data();
 @endphp
 @extends($config->layout.'/master')
@@ -29,32 +27,32 @@
                 <div class="block lg:hidden">
                     @include($config->view.'/components/breadcrumb', ['chitiet'=>$chitiet])
                 </div>
+                @php
+                    $optionPrices = [
+['label'=>'Hosting 1GB + Tên miền + Hỗ trợ kỹ thuật', 'price'=>1100000],
+['label'=>'Hosting 2GB + Tên miền + Hỗ trợ kỹ thuật', 'price'=>1500000],
+['label'=>'Chỉ mua theme, không sử dụng hosting', 'price'=>0],
+];
+                @endphp
                 <script>
                     document.addEventListener('alpine:init', () => {
-                    // function calculateMoney(){
-                    // function calculateMoney(){
                         Alpine.data('calculateMoney', () => ({
                             init(){
-                                this.price = $refs.price.dataset.price
+                                this.price = this.$refs.price.dataset.price
                             },
                             price : 0,
-                            // getPrice(){
-                            //     this.price = 111;
-                            //     // this.price = $refs.price.dataset.price;
-                            //     return this.price;
-                            // },
+                            option_prices : {!! json_encode($optionPrices) !!},
+                            choose_option : {price:0},
                             convert(money){
-                                return money.toLocaleString("vi-VN", {style: "currency", currency: "VND", minimumFractionDigits: 0});
+                                const money1 = Number(money)
+                                    .toLocaleString("vi-VN", {style: "currency", currency: "VND", minimumFractionDigits: 0})
+                                .replace(/\./g, ',');
+                                return money1;
                             },
-                            // formatCurrency: (amount) =>
-                            //     amount.toLocaleString("vi-VN", { style: 'currency', currency: 'EUR' }),
                         }))
                     })
-                    function convertM(money){
-                        return (money).toLocaleString("vi-VN", {style: "currency", currency: "VND", minimumFractionDigits: 0});
-                    }
                 </script>
-                <div class="space-y-3 mt-3 lg:mt-0" x-data="calculateMoney">
+                <div class="space-y-3 mt-3 lg:mt-0 text-auto text-center" x-data="calculateMoney">
                     <h1 class="text-2xl font-semibold">{{$chitiet['title']}}</h1>
                     <button type="button"
                             class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -68,7 +66,6 @@
                                 $arr = [
         ["image"=>$config->static."/assets/images/free.webp", "label"=>"Miễn phí cài đặt"],
         ["image"=>$config->static."/assets/images/gift-icon-1.webp", "label"=>"Hỗ trợ kỹ thuật khi có sự cố"],
-        //["image"=>$config->static."/assets/images/gift-icon-1.webp", "label"=>"Tặng ngay bộ plugin trả phí trị giá 5.000.000 đ "],
         ["image"=>$config->static."/assets/images/free.webp", "label"=>"Miễn phí bộ video hướng dẫn sử dụng website"],
     ];
                             @endphp
@@ -88,21 +85,15 @@
                             @endforeach
                         </ul>
                     </section>
-                    <section class="">
-                        @php
-                            $optionPrices = [
-['label'=>'Hosting 1GB + Tên miền + Hỗ trợ kỹ thuật', 'price'=>1100000],
-['label'=>'Hosting 2GB + Tên miền + Hỗ trợ kỹ thuật', 'price'=>1500000],
-['label'=>'Chỉ mua theme, không sử dụng hosting', 'price'=>0],
-];
-                        @endphp
-                        <label class="text-base font-medium text-gray-900">Thêm tùy chọn</label>
+                    <section class="text-left">
+                        <label class="text-base font-medium text-gray-900 ">Thêm tùy chọn</label>
                         <fieldset class="mt-4">
                             <legend class="sr-only">Notification method</legend>
                             <div class="space-y-4">
                                 @foreach($optionPrices as $key => $item)
                                     <div class="flex items-center">
-                                        <input id="{{$key}}" name="notification-method" type="radio" checked
+                                        <input id="{{$key}}" name="notification-method" type="radio"
+                                               x-on:change="choose_option=option_prices[{{$key}}]"
                                                class=" cursor-pointer focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                                         <label for="{{$key}}"
                                                class="ml-3 block text-sm font-medium text-gray-700  cursor-pointer">
@@ -113,16 +104,20 @@
                             </div>
                         </fieldset>
                     </section>
-                    <section  class="border-t pt-3 space-y-3">
+                    <section  class="border-t pt-3 space-y-3 text-gray-400">
+                        <div class="flex justify-between " x-show="choose_option.price">
+                            <span class="">PHÍ TÍNH THÊM</span>
+                            <b class="text-red-500" x-text="convert(choose_option.price)"></b>
+                        </div>
                         <div class="flex justify-between">
                             <span class="">TỔNG CỘNG</span>
-                            <b class="" x-text="formatCurrency(price)"></b>
+                            <b class="text-red-500" x-text="convert(Number(price)+Number(choose_option.price))"></b>
                         </div>
-                        <button type="button"
+                        <a href="{{$config->base_url}}/gio-hang"
                                 class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Đặt mua giao diện
-                        </button>
-                        <script>
+                        </a>
+                        {{--<script>
                             window.optionPrices = {!! json_encode($optionPrices) !!};
                             document.addEventListener('alpine:init', () => {
                                 Alpine.store('cart', {
@@ -150,7 +145,7 @@
                                 sanpham = JSON.parse(sanpham);
                                 Alpine.store('favorites').set(sanpham);
                             });
-                        </script>
+                        </script>--}}
                     </section>
 
                 </div>
