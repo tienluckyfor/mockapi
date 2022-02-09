@@ -2,8 +2,8 @@
     $menu = $http->get('/menu')->data();
     $theloai = $http->get('/the-loai')->data();
 @endphp
-<!doctype html>
-<html lang="en" class="h-full">
+        <!doctype html>
+<html lang="en" class="h-full bg-white">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -14,8 +14,21 @@
     <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
 
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="{{$config->static}}/assets/scripts/base.js"/>
+    <script>
+        function convert(money) {
+            const money1 = Number(money)
+                .toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                    minimumFractionDigits: 0
+                })
+                .replace(/\./g, ',');
+            return money1;
+        }
+    </script>
 </head>
-<body class="h-full">
+<body class="h-full " :class="$store.showCart ? 'overflow-hidden':''" x-data>
 <nav x-data="{ showMobileMenu: false }" class="bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -34,9 +47,10 @@
                         <!-- This example requires Tailwind CSS v2.0+ -->
                             <div class="relative" x-data="{ show: false }" @mouseleave="show = false">
                                 <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
-                                <a href="{{$config->base_url}}/kho-giao-dien?id=1" @mouseover="show = true" type="button"
-                                        class="text-gray-500 group bg-white rounded-md inline-flex items-center text-sm font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        aria-expanded="false">
+                                <a href="{{$config->base_url}}/kho-giao-dien?id=1" @mouseover="show = true"
+                                   type="button"
+                                   class="text-gray-500 group bg-white rounded-md inline-flex items-center text-sm font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                   aria-expanded="false">
                                     <span>{{$item['name']}}</span>
                                     <!--
                                       Heroicon name: solid/chevron-down
@@ -108,8 +122,8 @@
                 </div>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-3">
-                <button type="button"
-                        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button type="button" @click="$store.showCart=true"
+                        class="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Giỏ hàng
                     <!-- Heroicon name: solid/mail -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 -mr-1 h-5 w-5" fill="none"
@@ -117,18 +131,23 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
+                    <span
+                            x-text="$store.cartData.items.length"
+                            x-show="$store.cartData.items.length"
+                            class="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-500 text-black">0</span>
                 </button>
+
                 <!-- This example requires Tailwind CSS v2.0+ -->
                 <span class="relative z-0 inline-flex shadow-sm rounded-md">
-                      <button type="button"
-                              class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                      <a href="{{$config->base_url}}/dang-nhap"
+                         class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                         Đăng nhập
-                      </button>
-                      <button type="button"
-                              class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                      </a>
+                      <a href="{{$config->base_url}}/dang-ky"
+                         class="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                         Đăng ký
-                      </button>
-                    </span>
+                      </a>
+                </span>
             </div>
             <div class="-mr-2 flex items-center sm:hidden">
                 <!-- Mobile menu button -->
@@ -189,11 +208,11 @@
                    class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
                     Giỏ hàng
                 </a>
-                <a href="#"
+                <a href="{{$config->base_url}}/dang-nhap"
                    class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
                     Đăng nhập
                 </a>
-                <a href="#"
+                <a href="{{$config->base_url}}/dang-ky"
                    class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
                     Đăng ký
                 </a>
@@ -210,7 +229,7 @@
       Make sure you add some bottom padding to pages that include a sticky banner like this to prevent
       your content from being obscured when the user scrolls to the bottom of the page.
     -->
-    <section class="bg-indigo-600" x-data="{show:false}" >
+    <section class="bg-indigo-600" x-data="{show:false}">
         <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between flex-wrap">
                 <div class="flex-1 flex items-center">
@@ -223,7 +242,7 @@
                 </div>
                 <div class="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
                     <button @click="show=!show"
-                       class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50">
+                            class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-indigo-50">
                         ĐĂNG KÝ NGAY
                     </button>
                 </div>
@@ -289,44 +308,68 @@
                                 <form class="mt-4 space-y-4 ">
 
                                     <div>
-                                        <label for="email" class="block text-sm font-medium text-gray-700">Họ tên của bạn</label>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Họ tên của
+                                            bạn</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
-                                            <input type="email" name="email" id="email" class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md" placeholder="you@example.com" value="adamwathan" aria-invalid="true" aria-describedby="email-error">
+                                            <input type="email" name="email" id="email"
+                                                   class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                                                   placeholder="you@example.com" value="adamwathan" aria-invalid="true"
+                                                   aria-describedby="email-error">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                                 <!-- Heroicon name: solid/exclamation-circle -->
-                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg"
+                                                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd"
+                                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                          clip-rule="evenodd"/>
                                                 </svg>
                                             </div>
                                         </div>
-                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p>
+                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less
+                                            than 4 characters.</p>
                                     </div>
                                     <div>
-                                        <label for="email" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Số điện
+                                            thoại</label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
-                                            <input type="email" name="email" id="email" class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md" placeholder="you@example.com" value="adamwathan" aria-invalid="true" aria-describedby="email-error">
+                                            <input type="email" name="email" id="email"
+                                                   class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                                                   placeholder="you@example.com" value="adamwathan" aria-invalid="true"
+                                                   aria-describedby="email-error">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                                 <!-- Heroicon name: solid/exclamation-circle -->
-                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg"
+                                                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd"
+                                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                          clip-rule="evenodd"/>
                                                 </svg>
                                             </div>
                                         </div>
-                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p>
+                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less
+                                            than 4 characters.</p>
                                     </div>
                                     <div>
-                                        <label for="email" class="block text-sm font-medium text-gray-700">Lời nhắn của bạn (Nếu có)
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Lời nhắn của
+                                            bạn (Nếu có)
                                         </label>
                                         <div class="mt-1 relative rounded-md shadow-sm">
-                                            <input type="email" name="email" id="email" class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md" placeholder="you@example.com" value="adamwathan" aria-invalid="true" aria-describedby="email-error">
+                                            <input type="email" name="email" id="email"
+                                                   class="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                                                   placeholder="you@example.com" value="adamwathan" aria-invalid="true"
+                                                   aria-describedby="email-error">
                                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                                 <!-- Heroicon name: solid/exclamation-circle -->
-                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg"
+                                                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd"
+                                                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                          clip-rule="evenodd"/>
                                                 </svg>
                                             </div>
                                         </div>
-                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less than 4 characters.</p>
+                                        <p class="mt-2 text-sm text-red-600" id="email-error">Your password must be less
+                                            than 4 characters.</p>
                                     </div>
 
                                 </form>
@@ -334,12 +377,14 @@
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button type="button"
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
                             Đăng ký
                         </button>
                         <button
                                 @click="show=false"
-                                type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                type="button"
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Huỷ
                         </button>
                     </div>
@@ -410,7 +455,9 @@
             </p>
         </div>
     </section>
-
 </footer>
+@include($config->view.'/components/cart')
+
 </body>
 </html>
+

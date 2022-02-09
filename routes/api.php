@@ -30,6 +30,30 @@ Route::resource('media', MediaController::class)
     ->middleware('auth:api');
 Route::get('media', [MediaController::class, 'index']);
 
+Route::get('restful/test', function () {
+    $res = [
+        'status' => true,
+        'data' => [
+            'name'=>'Tien',
+            'date'=>'2022-11-11'
+        ],
+    ];
+    return response()->json($res);
+});
+
+Route::post('restful/test', function (Request $request) {
+//    $res = [
+//        'status' => true,
+//        'data' => [
+//            'name'=>'Tien',
+//            'date'=>'2022-11-11'
+//        ],
+//    ];
+    \Illuminate\Support\Facades\Log::channel('single')->info('$request->all()', [$request->all()]);
+    
+    return response()->json($request->all());
+});
+
 Route::group(['prefix' => 'restful/{resourceName}', 'middleware' => [RestfulTokenIsValid::class]],
     function () {
         Route::get('/auth', [RestfulController::class, 'auth'])

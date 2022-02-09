@@ -1,4 +1,5 @@
 @php
+    use App\Services\BaseService;
     $chitiet = $http->get('/san-pham/'.request()->id)->data();
 @endphp
 @extends($config->layout.'/master')
@@ -37,17 +38,33 @@
                 <script>
                     document.addEventListener('alpine:init', () => {
                         Alpine.data('calculateMoney', () => ({
-                            init(){
-                                this.price = this.$refs.price.dataset.price
+                            init() {
+                                this.initChiTiet()
                             },
-                            price : 0,
-                            option_prices : {!! json_encode($optionPrices) !!},
-                            choose_option : {price:0},
-                            convert(money){
-                                const money1 = Number(money)
-                                    .toLocaleString("vi-VN", {style: "currency", currency: "VND", minimumFractionDigits: 0})
-                                .replace(/\./g, ',');
-                                return money1;
+                            chitiet: {!! json_encode($chitiet) !!},
+                            options: {!! json_encode($optionPrices) !!},
+                            choose_option: {price: 0},
+                            initChiTiet() {
+                                let lastPrice, maxPrice;
+                                const price = this.chitiet['price'];
+                                const salePrice = this.chitiet['sale-price'];
+                                if (!price) {
+                                    lastPrice = salePrice;
+                                }
+                                if (!salePrice) {
+                                    lastPrice = price;
+                                }
+                                if (price && salePrice) {
+                                    maxPrice = price > salePrice ? price : salePrice;
+                                    lastPrice = salePrice == maxPrice ? price : salePrice;
+                                }
+                                this.chitiet = {
+                                    ...this.chitiet,
+                                    maxPrice,
+                                    lastPrice,
+                                    link: '{{$config->base_url}}/web-mau?{{BaseService::url($chitiet['title'])}}&id={{$chitiet['id']}}',
+                                    firstImage: '{{$media->set($chitiet['image'])->first()}}',
+                                }
                             },
                         }))
                     })
@@ -70,18 +87,18 @@
     ];
                             @endphp
                             @foreach($arr as $key => $item)
-                            <li class="">
-                                <figure class="flex ">
-                                    <div class="w-6">
-                                        <div class="aspect-w-1 aspect-h-1 rounded-md overflow-hidden">
-                                            <img alt=""
-                                                 src="{{$item['image']}}"
-                                                 class="w-full object-center object-cover"/>
+                                <li class="">
+                                    <figure class="flex ">
+                                        <div class="w-6">
+                                            <div class="aspect-w-1 aspect-h-1 rounded-md overflow-hidden">
+                                                <img alt=""
+                                                     src="{{$item['image']}}"
+                                                     class="w-full object-center object-cover"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <figcaption class="ml-2">{{$item['label']}}</figcaption>
-                                </figure>
-                            </li>
+                                        <figcaption class="ml-2">{{$item['label']}}</figcaption>
+                                    </figure>
+                                </li>
                             @endforeach
                         </ul>
                     </section>
@@ -93,7 +110,7 @@
                                 @foreach($optionPrices as $key => $item)
                                     <div class="flex items-center">
                                         <input id="{{$key}}" name="notification-method" type="radio"
-                                               x-on:change="choose_option=option_prices[{{$key}}]"
+                                               x-on:change="choose_option=options[{{$key}}]"
                                                class=" cursor-pointer focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
                                         <label for="{{$key}}"
                                                class="ml-3 block text-sm font-medium text-gray-700  cursor-pointer">
@@ -104,50 +121,22 @@
                             </div>
                         </fieldset>
                     </section>
-                    <section  class="border-t pt-3 space-y-3 text-gray-400">
+                    <pre style="font-size: 12px" 
+                        x-text="JSON.stringify(choose_option, null, '  ')"></pre>
+                    <section class="border-t pt-3 space-y-3 text-gray-400">
                         <div class="flex justify-between " x-show="choose_option.price">
                             <span class="">PHÍ TÍNH THÊM</span>
                             <b class="text-red-500" x-text="convert(choose_option.price)"></b>
                         </div>
                         <div class="flex justify-between">
                             <span class="">TỔNG CỘNG</span>
-                            <b class="text-red-500" x-text="convert(Number(price)+Number(choose_option.price))"></b>
+                            <b class="text-red-500" x-text="convert(Number(chitiet.lastPrice)+Number(choose_option.price))">-</b>
                         </div>
-                        <a href="{{$config->base_url}}/gio-hang"
-                                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button @click="$store.cartData.add({...chitiet, choose_option}); $store.showCart=true;"
+                           class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Đặt mua giao diện
-                        </a>
-                        {{--<script>
-                            window.optionPrices = {!! json_encode($optionPrices) !!};
-                            document.addEventListener('alpine:init', () => {
-                                Alpine.store('cart', {
-                                    items: {},
-                                    add(item) {
-                                        if (this.items[item.id]) {
-                                            delete this.items[item.id];
-                                        } else {
-                                            this.items[item.id] = item;
-                                        }
-                                        localStorage.setItem('favorites', JSON.stringify(this.items));
-                                    },
-                                    remove(id) {
-                                        delete this.items[id];
-                                        localStorage.setItem('favorites', JSON.stringify(this.items));
-                                    },
-                                    set(items){
-                                        console.log('items', items);
-                                        if(items)
-                                            this.items = items;
-                                    }
-                                });
-
-                                let sanpham = localStorage.getItem('favorites');
-                                sanpham = JSON.parse(sanpham);
-                                Alpine.store('favorites').set(sanpham);
-                            });
-                        </script>--}}
+                        </button>
                     </section>
-
                 </div>
             </div>
         </div>

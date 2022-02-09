@@ -19,7 +19,7 @@ abstract class Backup_Abstract
     public function add_dir($dName = '')
     {
         $fPath = $this->dDir . '/' . $dName;
-        if (is_dir($fPath) || mkdir($fPath)) {
+        if (is_dir($fPath) || mkdir($fPath,  0777, true)) {
             return $this;
         }
     }
