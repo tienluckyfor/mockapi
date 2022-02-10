@@ -129,6 +129,11 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
     })
     let streamData;
     let apiKeys = file.api.keys;
+    try {
+        apiKeys = JSON.parse(file.api.keys);
+    }catch (e){
+        // console.log(e);
+    }
     switch (true) {
         case ((file.mimetype ?? '').match(/image/g) ? true : false) :
             if (file.progress == 'server') {
