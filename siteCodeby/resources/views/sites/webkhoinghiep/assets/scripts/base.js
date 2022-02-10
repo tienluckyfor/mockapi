@@ -20,6 +20,15 @@ var cookie = {
     }
 }
 
+function fnErrorHandle(res) {
+    if (res.message)
+        alert(res.message);
+    res.json().then((res) => {
+        if (res.message)
+            alert(res.message);
+    })
+}
+
 class Restful {
     initialize(obj) {
         this.config = {
@@ -40,16 +49,11 @@ class Restful {
                 method: 'GET',
                 headers: this.config.headers,
             })
-                .then(res => res.json())
+                .then(res => res.ok ? res.json() : Promise.reject(res))
                 .then((res) => {
-                    if (res.status == 200) {
-                        resolve(res)
-                    }
-                    this.errorHandle(res);
-                    resolve(null);
-                }).catch(function (error) {
-                console.log('request failed', error)
-            });
+                    resolve(res)
+                })
+                .catch(fnErrorHandle);
         })
     }
 
@@ -60,23 +64,14 @@ class Restful {
                 headers: this.config.headers,
                 body: JSON.stringify(params),
             })
-                .then(res => res.json())
+                .then(res => res.ok ? res.json() : Promise.reject(res))
                 .then((res) => {
-                    if (res.status == 200) {
-                        resolve(res)
-                    }
-                    this.errorHandle(res);
-                    resolve(null);
-                }).catch(function (error) {
-                console.log('request failed', error)
-            });
+                    resolve(res)
+                })
+                .catch(fnErrorHandle);
         })
     }
 
-    errorHandle(res) {
-        if (res.message)
-            alert(res.message);
-    }
 }
 
 class Form {

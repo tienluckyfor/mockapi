@@ -193,3 +193,19 @@
         </div>
     </main>
 @endsection
+
+<script src="{{$config->static}}/assets/scripts/base.js"></script>
+<script>
+    http.initialize({
+        url: '{{$config->api_url}}',
+        token: '{{$config->token}}',
+    });
+    (async () => {
+        const get = await http.get('/test', {"a":1, "b":2});
+        // const get = await http.get('/the-loai', {"a":1, "b":2});
+        console.log('get', get);
+
+        const post = await http.post('/test', {"a":1, "b":2});
+        console.log('post', post);
+    })();
+</script>

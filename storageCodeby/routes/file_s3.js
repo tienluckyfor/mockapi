@@ -21,6 +21,7 @@ const upload = multer({
 });
 
 router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (request, response) => {
+    console.log('11')
     const {api} = request
     const filepath = `public/files/${api.id}`
     fs.mkdirSync(filepath, {recursive: true})
@@ -116,8 +117,8 @@ router.post('/file_s3', authUser, authS3, upload.any(), asyncHandler(async (requ
             const files = await File.bulkCreate(vals, {returning: true, updateOnDuplicate: ['cloud', 'progress']})
             // response.send(files)
         });
+        response.send(filesDB)
     })
-    response.send(filesDB)
 }))
 
 router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => {
@@ -126,46 +127,31 @@ router.get('/file_s3/:file_id/:any?', asyncHandler(async (request, response) => 
         where: {id: file_id},
         include: {model: Api, as: 'api',},
     })
-    // console.log('file', file.toJSON())
-    // response.end();
-    // return;
-    // console.log(file.api.keys);
     let streamData;
-    let apiKeys=file.api.keys;
-    try {
-        apiKeys = JSON.parse(file.api.keys);
-    }catch (e){
-        console.log(e);
-    }
-    // const apiKeys = JSON.parse(file.api.keys);
-    console.log(apiKeys);
+    let apiKeys = file.api.keys;
     switch (true) {
         case ((file.mimetype ?? '').match(/image/g) ? true : false) :
-            console.log(1);
             if (file.progress == 'server') {
-                console.log(2);
-                // return resVideoByPath('public/videos/video-uploading.mp4', request, response)
-                // return sendFile(request, response, 'public/images/image-uploading.jpg' , "image/jpg")
-
-                return resImageByPath('public/images/image-uploading.jpg', request.query, response)
+                return resImageByPath(file.path, request.query, response)
+                // return resImageByPath('public/images/image-uploading.jpg', request.query, response)
             }
-            console.log(3);
             streamData = getFileStream(file.cloud.Key, apiKeys)
             return resImageByStream(streamData, request.query, response)
             break;
         case ((file.mimetype ?? '').match(/video/g) ? true : false) :
             if (file.progress == 'server') {
+                return sendFile(request, response, file.path)
                 // return resVideoByPath('public/videos/video-uploading.mp4', request, response)
-                return sendFile(request, response, 'public/videos/video-uploading.mp4' )
+                // return sendFile(request, response, 'public/videos/video-uploading.mp4')
             }
-            // case ((file.mimetype ?? '').match(/audio/g) ? true : false) :
-            // console.log('file', file)
-            // const Location = getFileURL(file.cloud.Key, apiKeys)
             const {Location} = file.cloud
             response.writeHead(301, {Location});
             response.end();
             break;
         default:
+            if (file.progress == 'server') {
+                return sendFile(request, response, file.path)
+            }
             streamData = getFileStream(file.cloud.Key, apiKeys)
             return resFileByStream(streamData, response)
             break;

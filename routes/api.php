@@ -32,13 +32,11 @@ Route::get('media', [MediaController::class, 'index']);
 
 Route::get('restful/test', function () {
     $res = [
-        'status' => true,
-        'data' => [
-            'name'=>'Tien',
-            'date'=>'2022-11-11'
-        ],
+        'name' => 'Tien',
+        'date' => '2022-11-11',
+        'message' => 'Phai lam sao',
     ];
-    return response()->json($res);
+    return response()->json($res, 200);
 });
 
 Route::post('restful/test', function (Request $request) {
@@ -50,7 +48,7 @@ Route::post('restful/test', function (Request $request) {
 //        ],
 //    ];
     \Illuminate\Support\Facades\Log::channel('single')->info('$request->all()', [$request->all()]);
-    
+
     return response()->json($request->all());
 });
 

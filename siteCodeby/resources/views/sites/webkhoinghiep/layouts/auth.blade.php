@@ -8,22 +8,6 @@
     <title>Document</title>
     <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
     <script defer src="//unpkg.com/alpinejs"></script>
-    <script src="{{$config->static}}/assets/scripts/base.js"></script>
-    <script>
-        http.initialize({
-            url: '{{$config->api_url}}',
-            token: '{{$config->token}}',
-        });
-        console.log('http', http);
-        
-        (async () => {
-            // const get = await http.get('/test');
-            // console.log('get', get);
-
-            const post = await http.post('/test', {"a":1, "b":2});
-            console.log('post', post);
-        })();
-    </script>
 </head>
 <body class="h-full">
 @yield('main')

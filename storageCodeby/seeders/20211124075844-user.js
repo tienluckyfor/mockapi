@@ -18,7 +18,7 @@ module.exports = {
                 phone: '0344703838',
                 email: 'tien.luckyfor@gmail.com',
                 password: "0344703838",
-                token: jwtEncode({"id": 1, "token": "token"}),
+                token: jwtEncode({ id: 1, token: 'token' }),
                 createdAt: new Date(),
                 updatedAt: new Date(),
             }]);
