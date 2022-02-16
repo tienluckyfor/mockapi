@@ -8,6 +8,7 @@
     <title>Document</title>
     <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
     <script defer src="//unpkg.com/alpinejs"></script>
+    <script src="{{$config->static}}/assets/scripts/base.js" type="text/javascript"></script>
 </head>
 <body class="h-full">
 @yield('main')

@@ -79,7 +79,7 @@
                                                             <a :href="item.link" x-text="item.title">-</a>
                                                         </h3>
                                                         <p class="ml-4 text-red-500"
-                                                           x-text="convert(Number(item.lastPrice)+Number(item.choose_option.price))">
+                                                           x-text="Money.convert(Number(item.lastPrice)+Number(item.choose_option.price))">
                                                             -</p>
                                                     </div>
                                                 </div>
@@ -125,7 +125,7 @@
                     <div x-show="$store.cartData.items.length" class="border-t border-gray-200 py-6 px-4 sm:px-6">
                         <div class="flex justify-between text-base font-medium text-gray-900">
                             <p>Tổng cộng</p>
-                            <p class="text-red-500 font-bold" x-text="convert($store.cartData.getTotal())">-</p>
+                            <p class="text-red-500 font-bold" x-text="Money.convert($store.cartData.getTotal())">-</p>
                         </div>
 {{--                        <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>--}}
                         <div class="mt-6">

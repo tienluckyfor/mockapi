@@ -142,12 +142,18 @@
                             async function handleSubmit() {
                                 const formErrors = Alpine.store('formErrors');
                                 if (Object.keys(formErrors).length) return;
-                                const payload = Form.getPayload(form)
+                                const payload = Form.getPayload(form);
                                 console.log('payload', payload);
-                                const res = await Http.post('/tai-khoan/auth-register', payload)
-                                console.log('res', res);
-
-
+                                const res = await Restful.post('/tai-khoan/auth-register', payload)
+                                // console.log('res', res);
+                                // Rallytoken
+                                // cookie.set('Rallytoken', res['tai-khoan_token'])
+                                Cookie.set('Rallytoken', res['tai-khoan_token'])
+                                Cookie.setObj('tai-khoan', res?.data)
+                                location.assign('{{$config->base_url}}');
+                                return;
+                                // const res = await Http.post('/tai-khoan/auth-register', payload)
+                                // console.log('res', res);
                                 // const payload = new FormData(form);
                                 //
                                 // function serialize(data) {
@@ -192,20 +198,22 @@
                  alt="">
         </div>
     </main>
+    <script>
+        Restful.initialize({
+            url: '{{$config->api_url}}',
+            token: '{{$config->token}}',
+        });
+        (async () => {
+            await Restful.get('/test', {"a":1, "b":2});
+            // console.log('1', 1);
+            //
+            // const get = await http.get('/test', {"a":1, "b":2});
+            // // const get = await http.get('/the-loai', {"a":1, "b":2});
+            // console.log('get', get);
+            //
+            // const post = await http.post('/test', {"a":1, "b":2});
+            // console.log('post', post);
+        })();
+    </script>
 @endsection
 
-<script src="{{$config->static}}/assets/scripts/base.js"></script>
-<script>
-    http.initialize({
-        url: '{{$config->api_url}}',
-        token: '{{$config->token}}',
-    });
-    (async () => {
-        const get = await http.get('/test', {"a":1, "b":2});
-        // const get = await http.get('/the-loai', {"a":1, "b":2});
-        console.log('get', get);
-
-        const post = await http.post('/test', {"a":1, "b":2});
-        console.log('post', post);
-    })();
-</script>

@@ -223,10 +223,6 @@ class RestfulController extends Controller
     {
         $r = $request->input('_restful');
         $data = $request->except('_restful');
-        \Illuminate\Support\Facades\Log::channel('single')->info('$request->getContent()', [$request->getContent()]);
-        \Illuminate\Support\Facades\Log::channel('single')->info('$data', [$data]);
-        
-        dd($request->getContent());
         $resource = $r['resource'];
         $rallydata = [
             'user_id'     => $r['user_id'],

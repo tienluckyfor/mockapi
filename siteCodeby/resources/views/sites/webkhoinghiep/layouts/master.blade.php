@@ -14,22 +14,10 @@
     <link href="{{ asset('css-webkhoinghiep/app.css') }}" rel="stylesheet">
 
     <script src="//unpkg.com/alpinejs" defer></script>
-    <script src="{{$config->static}}/assets/scripts/base.js"/>
-    <script>
-        function convert(money) {
-            const money1 = Number(money)
-                .toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                    minimumFractionDigits: 0
-                })
-                .replace(/\./g, ',');
-            return money1;
-        }
-    </script>
+    <script src="{{$config->static}}/assets/scripts/base.js"></script>
 </head>
 <body class="h-full " :class="$store.showCart ? 'overflow-hidden':''" x-data>
-<nav x-data="{ showMobileMenu: false }" class="bg-white border-b border-gray-200">
+<nav x-data="{ showMobileMenu: false, taikhoan: Cookie.getObj('tai-khoan') }" class="bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
@@ -136,9 +124,29 @@
                             x-show="$store.cartData.items.length"
                             class="absolute top-0 right-0 -mt-2 -mr-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-500 text-black">0</span>
                 </button>
-
                 <!-- This example requires Tailwind CSS v2.0+ -->
-                <span class="relative z-0 inline-flex shadow-sm rounded-md">
+                <span x-show="taikhoan" x-cloak class="relative z-0 inline-flex shadow-sm rounded-md">
+                    {{--<a href="{{$config->base_url}}/dang-nhap"
+                       class="relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        Xin chào, <span x-text="taikhoan.hoten"></span>
+                      </a>--}}
+                    @include($config->view.'/components/dropdown', [
+    'btnClass'=>true,
+        'links'=>[
+            ['Trang tài khoản', $config->base_url.'/trang-tai-khoan'],
+            ['Nạp tiền đại lý', $config->base_url.'/nap-tien-dai-ly'],
+            ['Đơn hàng', $config->base_url.'/don-hang'],
+            ['Tải xuống', $config->base_url.'/tai-xuong'],
+            ['Địa chỉ', $config->base_url.'/dia-chi'],
+            ['Tài khoản', $config->base_url.'/tai-khoan'],
+            ['Điểm thưởng', $config->base_url.'/diem-thuong'],
+            ['Thoát', $config->base_url.'/thoat']
+        ],
+        'label'=>'<p class="truncate">Xin chào, <span x-text="taikhoan.hoten"></span></p>',
+        'isRight'=>true
+        ])
+                </span>
+                <span x-show="!taikhoan" x-cloak class="relative z-0 inline-flex shadow-sm rounded-md">
                       <a href="{{$config->base_url}}/dang-nhap"
                          class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
                         Đăng nhập
@@ -149,6 +157,7 @@
                       </a>
                 </span>
             </div>
+
             <div class="-mr-2 flex items-center sm:hidden">
                 <!-- Mobile menu button -->
                 <button type="button" @click="showMobileMenu = ! showMobileMenu"

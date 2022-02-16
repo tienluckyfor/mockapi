@@ -66,7 +66,7 @@ io.sockets.on('connection', function (socket) {
         console.log('castRoom', {event, data, room})
         // io.sockets.in(room).emit(event, data)
         socket.broadcast.to(room).emit(event, data)
-        socket.leave(room);
+        // socket.leave(room);
     })
     socket.on('cast', function ({event, data}) {
         io.sockets.broadcast.emit(event, data)
@@ -75,7 +75,7 @@ io.sockets.on('connection', function (socket) {
         console.log('emitRoom', {event, data, room})
         io.sockets.in(room).emit(event, data)
         // socket.broadcast.to(room).emit(event, data)
-        socket.leave(room);
+        // socket.leave(room);
     })
     socket.on('emit', function ({event, data}) {
         io.sockets.emit(event, data)
