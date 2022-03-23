@@ -8,12 +8,14 @@ const {check, validationResult} = require('express-validator')
 var router = express.Router();
 /* GET home page. */
 router.get('/',
-    createValidationFor('login'),
-    checkValidationResult,
+    // createValidationFor('login'),
+    // checkValidationResult,
     async (req, res, next) => {
+        console.log(11);
         const {url} = req.query;
+        console.log("url", url)
         const targetPath = path.join(__dirname, `../../public/images`)
-        // console.log('targetPath', targetPath, url)
+        console.log('targetPath', targetPath, url)
         let imageFile = await Screenshot.imageFiles(targetPath, req, url)
         console.log('imageFile 1', imageFile)
         if (imageFile.data) {

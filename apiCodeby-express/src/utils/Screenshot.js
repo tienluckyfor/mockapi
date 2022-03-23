@@ -56,6 +56,7 @@ class Devices {
 
 class Screenshot {
     static async takePhoto(url, targetPath) {
+        console.log("takePhoto", Devices)
         console.info(`[${time()}] Starting automated screenshot production for ${Devices.list().length} devices`);
 
         const browser = await puppeteer.launch({
@@ -103,6 +104,7 @@ class Screenshot {
         let fileList = [];
         let imageNames = Devices.imageNames(url, targetPath, req);
         let devices = Devices.list()
+        console.log("imageNames", imageNames)
         await Object.entries(imageNames.obj).map(async ([key, item], i) => {
             if (await File.exists(item.imagePath)) {
                 fileList.push({
